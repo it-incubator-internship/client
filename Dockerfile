@@ -7,12 +7,14 @@ COPY package*.json ./
 RUN pnpm install
 
 FROM node:20.11-alpine as builder
+RUN npm install -g pnpm
 WORKDIR /app
 COPY . .
 COPY --from=dependencies /app/node_modules ./node_modules
 RUN pnpm run build:production
 
 FROM node:20.11-alpine as runner
+RUN npm install -g pnpm
 WORKDIR /app
 ENV NODE_ENV production
 # If you are using a custom next.config.js file, uncomment this line.
