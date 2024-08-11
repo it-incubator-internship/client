@@ -1,11 +1,11 @@
 {
   "name": "inctagram-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:production": "pnpm build",
+    "build:production": "next build",
     "start": "next start",
     "lint": "next lint"
   },
