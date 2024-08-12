@@ -1,3 +1,7 @@
 @forward 'colors';
 @forward 'typography';
 @forward 'boilerplate';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
