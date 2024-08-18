@@ -1,10 +1,11 @@
 import Link from 'next/link'
 
+import '@robur_/ui-kit/style.css'
+
 export default function Home() {
   return (
     <main>
       <div className={'container'}>
-        <h1>Hello world</h1>
         <h2>Navigation</h2>
         <div>
           <Link href={'/sign-in'}>Sign in</Link>
