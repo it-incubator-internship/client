@@ -11,6 +11,7 @@ export default function Home() {
           <Link href={'/sign-in'}>Sign in</Link>
           <Link href={'/sign-up'}>Sign up</Link>
           <Link href={'/profile'}>Profile</Link>
+          <Link href={'/create-new-password'}>Create new password</Link>
         </div>
       </div>
     </main>
