@@ -3,14 +3,15 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run open-browser && next dev",
     "build": "next build",
     "build:production": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "open-browser": "start http://localhost:3000"
   },
   "dependencies": {
-    "@robur_/ui-kit": "^0.0.15",
+    "@robur_/ui-kit": "^0.0.17",
     "clsx": "^2.1.1",
     "next": "14.2.5",
     "react": "^18",
