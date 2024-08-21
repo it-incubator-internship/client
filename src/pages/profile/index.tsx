@@ -1,5 +1,6 @@
 import { getLayout } from '@/components/Layout/Layout'
-import { TabContent, Tabs } from '@robur_/ui-kit'
+import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
+import { ControlledInput, TabContent, Tabs } from '@robur_/ui-kit'
 
 function Profile() {
   return (
@@ -15,7 +16,9 @@ function Profile() {
         ]}
       >
         <>
-          <TabContent value={'information'}>Content about General information</TabContent>
+          <TabContent value={'information'}>
+            <ProfilePageContent />
+          </TabContent>
           <TabContent value={'devices'}>Content about Devices</TabContent>
           <TabContent value={'account'}>Content about Account Management</TabContent>
           <TabContent value={'payments'}>Content about My payments</TabContent>
