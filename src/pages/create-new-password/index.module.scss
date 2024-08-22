@@ -11,18 +11,22 @@
 }
 
 .h1 {
-  font-weight: 700;
-  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
   line-height: 36px;
   width: 215px;
   height: 36px;
   text-align: right;
-  margin: 0 auto 30px;
+  margin: 0 auto var(--line-height-l);
 }
 
 .paragraph {
   margin: 10px 0px 30px 0px;
-  color: #8d9094;
-  font-size: 14px;
+  color: var(--color-light-900);
+  font-size: var(--font-size-s);
   width: 330px;
+}
+
+.widthInput {
+  max-width: 330px;
 }
