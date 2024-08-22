@@ -1,6 +1,6 @@
 import { getLayout } from '@/components/Layout/Layout'
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
-import { ControlledInput, TabContent, Tabs } from '@robur_/ui-kit'
+import { TabContent, Tabs } from '@robur_/ui-kit'
 
 function Profile() {
   return (

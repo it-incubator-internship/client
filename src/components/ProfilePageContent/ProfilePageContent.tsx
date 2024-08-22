@@ -1,8 +1,7 @@
-import React from 'react'
 import { useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, ControlledDatePicker, ControlledInput, Select } from '@robur_/ui-kit'
+import { Button, FormDatePicker, FormInput, Select } from '@robur_/ui-kit'
 import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
@@ -42,10 +41,10 @@ export const ProfilePageContent = () => {
           </Button>
         </div>
         <div className={s.dataSection}>
-          <ControlledInput control={control} label={'Username'} name={'username'} />
-          <ControlledInput control={control} label={'Firstname'} name={'firstname'} />
-          <ControlledInput control={control} label={'Lastname'} name={'lastname'} />
-          <ControlledDatePicker control={control} label={'Date of birth'} name={'birthdate'} />
+          <FormInput control={control} label={'Username'} name={'username'} />
+          <FormInput control={control} label={'Firstname'} name={'firstname'} />
+          <FormInput control={control} label={'Lastname'} name={'lastname'} />
+          <FormDatePicker control={control} label={'Date of birth'} name={'birthdate'} />
           <div style={{ display: 'flex', gap: '24px' }}>
             <Select />
             <Select />
