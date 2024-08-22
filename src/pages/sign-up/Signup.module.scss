@@ -1,0 +1,25 @@
+.SignUpContainer{
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+.SignUpCard{
+  margin-top: 24px; // to delete after compose with layout
+  width: 378px;
+  height: 648px;
+}
+
+.SignUpCardTitle{
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 36px;
+  color: var(--color-light-100);
+  margin-bottom: 13px;
+}
+
+.SignUpCloudAuth{
+  display: flex;
+  justify-content: space-between;
+}
