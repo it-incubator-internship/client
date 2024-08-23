@@ -68,7 +68,17 @@
         line-height: 24px;
         color: var(--color-light-900);
         outline: none;
+        margin-bottom: 24px;
       }
+    }
+
+    .SignUpAgreementCheckbox {
+      background-color: var(--color-light-900);
+    }
+
+    .SignUpAgreementCheckbox {
+      display: flex;
+      //align-items: center;
     }
   }
 }
