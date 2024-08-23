@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, ControlledInput } from '@robur_/ui-kit'
+import { Button, Card, FormInput } from '@robur_/ui-kit'
 import { z } from 'zod'
 
 import styles from './index.module.scss'
@@ -43,22 +43,16 @@ export default function CreateNewPassword() {
         <div>
           <h1 className={styles.h1}>Create New Password</h1>
           <form onSubmit={handleSubmit(handleSubmitHandler)}>
-            <ControlledInput
+            <FormInput
               control={control}
               label={'New password'}
               name={'newPassword'}
-              style={{
-                width: '330px',
-              }}
               type={'password'}
             />
-            <ControlledInput
+            <FormInput
               control={control}
               label={'Password confirmation'}
               name={'confirmPassword'}
-              style={{
-                width: '330px',
-              }}
               type={'password'}
             />
             <p className={styles.paragraph}>Your password must be between 6 and 20 characters</p>
