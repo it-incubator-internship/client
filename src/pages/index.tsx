@@ -1,7 +1,5 @@
 import Link from 'next/link'
 
-import '@robur_/ui-kit/style.css'
-
 export default function Home() {
   return (
     <main>
@@ -11,6 +9,7 @@ export default function Home() {
           <Link href={'/sign-in'}>Sign in</Link>
           <Link href={'/sign-up'}>Sign up</Link>
           <Link href={'/profile'}>Profile</Link>
+          <Link href={'/forgot-password'}>Forgot-password</Link>
         </div>
       </div>
     </main>
