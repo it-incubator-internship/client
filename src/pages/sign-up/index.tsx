@@ -2,6 +2,7 @@ import clsx from "clsx";
 import {
   Card,
   FormCheckbox,
+  Checkbox,
   FormInput,
   GithubSvgrepoCom31,
   GoogleSvgrepoCom1,
@@ -77,15 +78,15 @@ export default function SignUp() {
             />
           </Label>
         </form>
-        <
-          FormCheckbox
-          control={control}
+
+        <Checkbox
+          // control={control}
           name={"SignUpAgreement"}
-          checked={true}
           id={"SignUpAgreementCheckbox"}
           labelText={"I agree to the "}
           className={s.SignUpAgreementCheckbox}
         />
+
       </Card>
     </div>
   );
