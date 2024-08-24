@@ -79,13 +79,13 @@ export default function SignUp() {
                     {/*</Label>*/}
                 </form>
 
-                <Checkbox
-                    name={"SignUpAgreement"}
+                {/*<Checkbox*/}
+                {/*    name={"SignUpAgreement"}*/}
 
-                    id={"SignUpAgreementCheckbox"}
-                    labelText={"I agree to the "}
-                    className={s.SignUpAgreementCheckbox}
-                />
+                {/*    id={"SignUpAgreementCheckbox"}*/}
+                {/*    labelText={"I agree to the "}*/}
+                {/*    className={s.SignUpAgreementCheckbox}*/}
+                {/*/>*/}
 
                 {/*<Button>123</Button>*/}
 
