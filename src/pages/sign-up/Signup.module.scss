@@ -76,6 +76,7 @@
       display: flex;
       align-items: start;
       column-gap: 5px;
+      justify-content: center;
 
       height: 48px;
       color: var(--color-success-300);
@@ -85,11 +86,11 @@
       line-height: 16px;
       color: var(--color-light-100);
 
-      & [class*="checkboxLabel"]{
+      & [class*="checkboxLabel"] {
         font-size: 12px;
       }
 
-      .SignUpAgreementSpan{
+      .SignUpAgreementSpan {
         padding-top: 4px;
       }
 
@@ -98,6 +99,27 @@
         text-decoration-line: underline;
         color: var(--color-accent-300);
       }
+    }
+
+    .SignUpButton {
+      margin-bottom: 18px;
+    }
+
+    .SignUpHaveAccountLink {
+      font-family: 'Inter';
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-light-100);
+      margin-bottom: 6px;
+    }
+
+    .SignInLink {
+      font-family: 'Inter';
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-accent-500);
     }
   }
 }

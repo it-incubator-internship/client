@@ -91,10 +91,14 @@ export default function SignUp() {
               className={s.SignUpAgreementCheckbox}
             />
             <Link className={s.SignUpAgreementLink} href={"/terms-and-conditions"}>Terms of Service</Link>
-            <span className={s.SignUpAgreementSpan}>and</span> <Link className={s.SignUpAgreementLink} href={"/privacy-policy"}>Privacy Policy</Link>
+            <span className={s.SignUpAgreementSpan}>and</span> <Link className={s.SignUpAgreementLink}
+                                                                     href={"/privacy-policy"}>Privacy Policy</Link>
           </div>
-        </form>
 
+          <Button className={s.SignUpButton} fullWidth>Sign Up</Button>
+        </form>
+        <Link className={s.SignUpHaveAccountLink} href={"/have-account"}>Do you have an account?</Link>
+        <Link className={s.SignInLink} href={"/sign-in"}>Sign In</Link>
       </Card>
     </div>
   );
