@@ -2,12 +2,13 @@ import clsx from "clsx";
 
 
 import {
+  Button,
   Card,
   FormCheckbox,
   FormInput,
   GithubSvgrepoCom31,
   GoogleSvgrepoCom1,
-  Label,
+  Label
 } from "@robur_/ui-kit";
 
 
@@ -80,15 +81,19 @@ export default function SignUp() {
               className={clsx(s.SignUpFormInput, s.BorderBack)}
             />
           </Label>
-        </form>
 
-        <FormCheckbox
-          control={control}
-          name={"SignUpAgreement"}
-          id={"SignUpAgreementCheckbox"}
-          labelText={"I agree to the "}
-          className={s.SignUpAgreementCheckbox}
-        />
+          <div className={s.CheckboxAgreementBlock}>
+            <FormCheckbox
+              control={control}
+              name={"SignUpAgreement"}
+              id={"SignUpAgreementCheckbox"}
+              labelText={"I agree to the "}
+              className={s.SignUpAgreementCheckbox}
+            />
+            <Link className={s.SignUpAgreementLink} href={"/terms-and-conditions"}>Terms of Service</Link>
+            <span className={s.SignUpAgreementSpan}>and</span> <Link className={s.SignUpAgreementLink} href={"/privacy-policy"}>Privacy Policy</Link>
+          </div>
+        </form>
 
       </Card>
     </div>
