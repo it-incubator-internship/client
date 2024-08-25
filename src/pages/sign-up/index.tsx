@@ -15,14 +15,26 @@ import {
 import s from "./Signup.module.scss";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const signUpSchema = z.object({
+  username: z.string().min(3).max(20),
+  email: z.string().email(),
+  password: z.string().min(8).max(20),
+  passwordConfirmation: z.string().min(8).max(20),
+  SignUpAgreement: z.boolean()
+});
+
+type FormValues = z.infer<typeof signUpSchema>;
 
 export default function SignUp() {
   const {
-    register,
     handleSubmit,
-    control
+    control,
+    formState: { errors }
   }
-    = useForm();
+    = useForm<FormValues>({ resolver: zodResolver(signUpSchema)});
 
   const submitForm = handleSubmit(data => {
     console.log(data);
@@ -40,7 +52,7 @@ export default function SignUp() {
             <GithubSvgrepoCom31 />
           </Link>
         </div>
-        <form className={s.SignUpForm}>
+        <form className={s.SignUpForm} onSubmit={submitForm}>
           <Label label={"Username"} className={s.SignUpFormLabel}>
             <FormInput
               type="text"
@@ -48,6 +60,7 @@ export default function SignUp() {
               rules={{ required: true }}
               className={clsx(s.SignUpFormInput, s.BorderBack)}
               name={"username"}
+              errorMsg={errors.username?.message}
             />
           </Label>
 
@@ -58,6 +71,7 @@ export default function SignUp() {
               rules={{ required: true }}
               name={"email"}
               className={clsx(s.SignUpFormInput, s.BorderBack)}
+              errorMsg={errors.email?.message}
             />
           </Label>
 
@@ -68,6 +82,7 @@ export default function SignUp() {
               rules={{ required: true }}
               name={"password"}
               className={clsx(s.SignUpFormInput, s.BorderBack)}
+              errorMsg={errors.password?.message}
             />
           </Label>
 
@@ -77,8 +92,9 @@ export default function SignUp() {
               shouldUnregister={true}
               control={control}
               rules={{ required: true }}
-              name={"password"}
+              name={"passwordConfirmation"}
               className={clsx(s.SignUpFormInput, s.BorderBack)}
+              errorMsg={errors.passwordConfirmation?.message}
             />
           </Label>
 
@@ -89,13 +105,14 @@ export default function SignUp() {
               id={"SignUpAgreementCheckbox"}
               labelText={"I agree to the "}
               className={s.SignUpAgreementCheckbox}
+              errorMsg={errors.SignUpAgreement?.message}
             />
             <Link className={s.SignUpAgreementLink} href={"/terms-and-conditions"}>Terms of Service</Link>
             <span className={s.SignUpAgreementSpan}>and</span> <Link className={s.SignUpAgreementLink}
                                                                      href={"/privacy-policy"}>Privacy Policy</Link>
           </div>
 
-          <Button className={s.SignUpButton} fullWidth>Sign Up</Button>
+          <Button type={"submit"} className={s.SignUpButton} fullWidth>Sign Up</Button>
         </form>
         <Link className={s.SignUpHaveAccountLink} href={"/have-account"}>Do you have an account?</Link>
         <Link className={s.SignInLink} href={"/sign-in"}>Sign In</Link>
