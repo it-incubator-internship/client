@@ -11,6 +11,8 @@ import {
   Label
 } from "@robur_/ui-kit";
 
+// todo куда передать тру что бы чекбокс показывал ошибку
+// todo куда передать текст ошибки в инпутах
 
 import s from "./Signup.module.scss";
 import Link from "next/link";
