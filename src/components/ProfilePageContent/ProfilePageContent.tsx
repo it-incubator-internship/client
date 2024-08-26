@@ -1,41 +1,80 @@
 import { useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, FormDatePicker, FormInput, Select } from '@robur_/ui-kit'
+import {
+  Button,
+  FormDatePicker,
+  FormInput,
+  ImageOutline,
+  Select,
+  SelectItem,
+  Textarea,
+} from '@robur_/ui-kit'
 import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
 
 const updateProfileSchema = z.object({
   birthdate: z.date({ message: 'This field is required' }),
-  firstname: z.string({ message: 'This field is required' }),
-  lastname: z.string({ message: 'This field is required' }),
-  username: z.string({ message: 'This field is required' }),
+  firstname: z.string({ message: 'This field is required' }).min(1, 'This field is required'),
+  lastname: z.string({ message: 'This field is required' }).min(1, 'This field is required'),
+  username: z.string({ message: 'This field is required' }).min(1, 'This field is required'),
 })
 
 type FormValues = z.infer<typeof updateProfileSchema>
 
+const countryOptions = [
+  {
+    label: 'England',
+    value: '1',
+  },
+  {
+    label: 'Usa',
+    value: '2',
+  },
+  {
+    label: 'Germany',
+    value: '3',
+  },
+]
+
+const cityOptions = [
+  {
+    label: 'London',
+    value: '1',
+  },
+  {
+    label: 'Paris',
+    value: '2',
+  },
+  {
+    label: 'Berlin',
+    value: '3',
+  },
+]
+
 export const ProfilePageContent = () => {
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    setError,
-  } = useForm<FormValues>({
+  const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
-      birthdate: new Date(),
-      firstname: 'John',
-      lastname: 'Doe',
-      username: 'John Doe',
+      birthdate: undefined,
+      firstname: '',
+      lastname: '',
+      username: '',
     },
     resolver: zodResolver(updateProfileSchema),
   })
 
+  const handleFormSubmit = (e: any) => {
+    console.log(e)
+  }
+
   return (
-    <form className={s.form}>
+    <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
       <div className={s.formContainer}>
         <div className={s.photoSection}>
-          <div className={s.userPhoto}></div>
+          <div className={s.userPhoto}>
+            <ImageOutline height={'48'} width={'48'} />
+          </div>
           <Button fullWidth type={'button'} variant={'outlined'}>
             Add a Profile Photo
           </Button>
@@ -46,9 +85,32 @@ export const ProfilePageContent = () => {
           <FormInput control={control} label={'Lastname'} name={'lastname'} />
           <FormDatePicker control={control} label={'Date of birth'} name={'birthdate'} />
           <div style={{ display: 'flex', gap: '24px' }}>
-            <Select />
-            <Select />
+            <div style={{ flexGrow: 1 }}>
+              <div>Select your country</div>
+              <Select placeholder={'Country'}>
+                {countryOptions.map(option => {
+                  return (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  )
+                })}
+              </Select>
+            </div>
+            <div style={{ flexGrow: 1 }}>
+              <div>Select your city</div>
+              <Select placeholder={'City'}>
+                {cityOptions.map(option => {
+                  return (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  )
+                })}
+              </Select>
+            </div>
           </div>
+          <Textarea className={s.textArea} placeholder={'Text-area'} titleLabel={'About Me'} />
         </div>
       </div>
       <Button className={s.submitBtn} type={'submit'}>

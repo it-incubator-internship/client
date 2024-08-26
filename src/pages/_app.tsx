@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app'
 
 import type { ReactElement, ReactNode } from 'react'
 
+import '@robur_/ui-kit/style.css'
 import '@/styles/index.scss'
 
 export type NextPageWithLayout<P = {}, IP = P> = {

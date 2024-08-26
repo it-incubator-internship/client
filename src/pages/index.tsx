@@ -1,8 +1,6 @@
 import { getLayout } from '@/components/Layout/Layout'
 import Link from 'next/link'
 
-import '@robur_/ui-kit/style.css'
-
 function Home() {
   return (
     <main>

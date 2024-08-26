@@ -17,6 +17,9 @@
 }
 
 .userPhoto {
+  display: grid;
+  place-items: center;
+
   width: 192px;
   height: 192px;
   margin-bottom: 24px;
@@ -27,6 +30,14 @@
 
 .dataSection {
   flex-grow: 1;
+}
+
+.textArea {
+  margin-top: 24px;
+
+  textarea {
+    height: 84px;
+  }
 }
 
 .submitBtn {
