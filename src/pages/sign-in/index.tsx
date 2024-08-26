@@ -1,4 +1,3 @@
-// import GoogleSvgrepoCom1 from '@robur_/ui-kit'
 import { useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -25,7 +24,7 @@ export default function SignIn() {
   })
 
   return (
-    <div className={s.Conteiner}>
+    <div className={s.Container}>
       <Card className={s.Card}>
         <h1 className={s.Title}>Sign in</h1>
         <form className={s.Form} onSubmit={submitForm}>
@@ -33,20 +32,13 @@ export default function SignIn() {
             <GoogleSvgrepoCom1 className={s.Svg} />
             <GithubSvgrepoCom31 className={s.Svg} />
           </div>
-          <FormInput
-            control={control}
-            error={errors?.email}
-            label={'Email'}
-            name={'email'}
-            width={'100%'}
-          />
+          <FormInput control={control} error={errors?.email} label={'Email'} name={'email'} />
           <FormInput
             control={control}
             error={errors?.password}
             label={'Password'}
             name={'password'}
             type={'password'}
-            width={'100%'}
           />
           <Button className={s.ButtonSignIn} fullWidth>
             Sign In
