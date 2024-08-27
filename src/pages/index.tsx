@@ -1,10 +1,11 @@
+import { getLayout } from '@/components/Layout/Layout'
 import Link from 'next/link'
 
-export default function Home() {
+function Home() {
   return (
     <main>
       <div className={'container'}>
-        <h2>Navigation</h2>
+        <h1>Home page</h1>
         <div>
           <Link href={'/sign-in'}>Sign in</Link>
           <Link href={'/sign-up'}>Sign up</Link>
@@ -15,3 +16,7 @@ export default function Home() {
     </main>
   )
 }
+
+Home.getLayout = getLayout
+
+export default Home
