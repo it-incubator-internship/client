@@ -10,6 +10,7 @@ function Home() {
           <Link href={'/sign-in'}>Sign in</Link>
           <Link href={'/sign-up'}>Sign up</Link>
           <Link href={'/profile'}>Profile</Link>
+          <Link href={'/link-expired'}>Link Expired</Link>
         </div>
       </div>
     </main>
