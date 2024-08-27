@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { z } from 'zod'
 
-import s from './index.module.scss'
+import s from './forgot-password.module.scss'
 
 type FlowState = 'fail' | 'initial' | 'success'
 
@@ -20,7 +20,7 @@ export default function ForgotPassword() {
   const formSubmit = handleSubmit(data => console.log(data))
 
   //state, should be change to state from redux
-  const [sendLinkState, setSendLinkState] = useState<FlowState>('initial')
+  const [sendLinkState, setSendLinkState] = useState<FlowState>('success')
 
   return (
     <div className={s.wrapper}>
@@ -39,13 +39,13 @@ export default function ForgotPassword() {
               {"User with this email doesn't exist"}
             </span>
           )}
-          <span className={s.text}>
+          <p className={s.text}>
             Enter your email address and we will send you further instructions
-          </span>
+          </p>
           {sendLinkState === 'success' && (
-            <span className={clsx(s.text, s.successText)}>
+            <p className={clsx(s.text, s.successText)}>
               The link has been sent by email. If you don’t receive an email send link again
-            </span>
+            </p>
           )}
           <Button className={s.btnSend} fullWidth>
             {sendLinkState === 'success' ? 'Send Link Again' : 'Send Link'}
