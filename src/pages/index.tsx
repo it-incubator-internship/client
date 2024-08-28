@@ -1,4 +1,4 @@
-import { getLayout } from '@/components/Layout/Layout'
+import { getSideBarLayout } from '@/components/layouts/SidebarLayout/SidebarLayout'
 import Link from 'next/link'
 
 function Home() {
@@ -10,12 +10,13 @@ function Home() {
           <Link href={'/sign-in'}>Sign in</Link>
           <Link href={'/sign-up'}>Sign up</Link>
           <Link href={'/profile'}>Profile</Link>
+          <Link href={'/forgot-password'}>Forgot-password</Link>
         </div>
       </div>
     </main>
   )
 }
 
-Home.getLayout = getLayout
+Home.getLayout = getSideBarLayout
 
 export default Home
