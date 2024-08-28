@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -15,7 +16,7 @@ const FormSchema = z.object({
   email: z.string({ message: 'This field is required' }).email({ message: 'Not valid email' }),
 })
 
-export default function ForgotPassword() {
+function ForgotPassword() {
   const { control, handleSubmit, setError } = useForm({ resolver: zodResolver(FormSchema) })
   const formSubmit = handleSubmit(data => {
     console.log(data)
@@ -56,3 +57,6 @@ export default function ForgotPassword() {
     </Card>
   )
 }
+
+ForgotPassword.getLayout = getHeaderLayout
+export default ForgotPassword

@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 
+import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { useLoginMutation } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,7 +16,7 @@ const SigninSchema = z.object({
 })
 
 type FormValues = z.infer<typeof SigninSchema>
-export default function SignIn() {
+function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
 
   const {
@@ -65,3 +66,6 @@ export default function SignIn() {
     </div>
   )
 }
+
+SignIn.getLayout = getHeaderLayout
+export default SignIn
