@@ -1,12 +1,13 @@
 import { useForm } from 'react-hook-form'
 
+import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput } from '@robur_/ui-kit'
 import { z } from 'zod'
 
 import styles from './index.module.scss'
 
-export default function CreateNewPassword() {
+function CreateNewPassword() {
   const FormSchema = z
     .object({
       confirmPassword: z
@@ -38,28 +39,29 @@ export default function CreateNewPassword() {
   }
 
   return (
-    <div className={styles.centeredContainer}>
-      <Card className={styles.cardContainer}>
-        <div>
-          <h1 className={styles.h1}>Create New Password</h1>
-          <form onSubmit={handleSubmit(handleSubmitHandler)}>
-            <FormInput
-              control={control}
-              label={'New password'}
-              name={'newPassword'}
-              type={'password'}
-            />
-            <FormInput
-              control={control}
-              label={'Password confirmation'}
-              name={'confirmPassword'}
-              type={'password'}
-            />
-            <p className={styles.paragraph}>Your password must be between 6 and 20 characters</p>
-            <Button fullWidth>Create new password</Button>
-          </form>
-        </div>
-      </Card>
-    </div>
+    <Card className={styles.cardContainer}>
+      <div>
+        <h1 className={styles.h1}>Create New Password</h1>
+        <form onSubmit={handleSubmit(handleSubmitHandler)}>
+          <FormInput
+            control={control}
+            label={'New password'}
+            name={'newPassword'}
+            type={'password'}
+          />
+          <FormInput
+            control={control}
+            label={'Password confirmation'}
+            name={'confirmPassword'}
+            type={'password'}
+          />
+          <p className={styles.paragraph}>Your password must be between 6 and 20 characters</p>
+          <Button fullWidth>Create new password</Button>
+        </form>
+      </div>
+    </Card>
   )
 }
+
+CreateNewPassword.getLayout = getHeaderLayout
+export default CreateNewPassword
