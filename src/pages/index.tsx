@@ -5,8 +5,8 @@ function Home() {
   return (
     <main>
       <div className={'container'}>
-        <h1>Home page</h1>
-        <div>
+        <h1 style={{ fontSize: 30, marginBottom: 20 }}>Home page</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
           <Link href={'/sign-in'}>Sign in</Link>
           <Link href={'/sign-up'}>Sign up</Link>
           <Link href={'/profile'}>Profile</Link>

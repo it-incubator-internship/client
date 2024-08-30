@@ -3,7 +3,6 @@ import React from 'react'
 import {
   BookmarkOutline,
   HomeOutline,
-  ItemSideBar,
   LogOut,
   MessageCircleOutline,
   Person,
@@ -13,6 +12,8 @@ import {
   TrendingUpOutline,
 } from '@robur_/ui-kit'
 
+import { SidebarItem } from './SidebarItem/SidebarItem'
+
 type Props = {
   className?: string
 }
@@ -20,17 +21,17 @@ export const Navbar = ({ className }: Props) => {
   return (
     <nav className={className}>
       <Sidebar>
-        <ItemSideBar Icon={HomeOutline} item={'Home'} />
-        <ItemSideBar Icon={PlusSquareOutline} item={'Create'} />
-        <ItemSideBar Icon={Person} item={'My profile'} />
-        <ItemSideBar Icon={MessageCircleOutline} item={'Messenger'} />
-        <ItemSideBar Icon={Search} item={'Search'} />
+        <SidebarItem Icon={HomeOutline} href={'/'} item={'Home'} />
+        <SidebarItem Icon={PlusSquareOutline} href={'/'} item={'Create'} />
+        <SidebarItem Icon={Person} href={'/sign-in'} item={'My profile'} />
+        <SidebarItem Icon={MessageCircleOutline} href={'/'} item={'Messenger'} />
+        <SidebarItem Icon={Search} href={'/'} item={'Search'} />
         <div style={{ marginTop: '60px' }}>
-          <ItemSideBar Icon={TrendingUpOutline} item={'Statistics'} />
-          <ItemSideBar Icon={BookmarkOutline} item={'Favorites'} />
+          <SidebarItem Icon={TrendingUpOutline} href={'/'} item={'Statistics'} />
+          <SidebarItem Icon={BookmarkOutline} href={'/'} item={'Favorites'} />
         </div>
         <div style={{ marginTop: '150px' }}>
-          <ItemSideBar Icon={LogOut} item={'Logout'} />
+          <SidebarItem Icon={LogOut} href={'/'} item={'Logout'} />
         </div>
       </Sidebar>
     </nav>
