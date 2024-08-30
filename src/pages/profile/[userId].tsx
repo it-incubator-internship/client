@@ -1,8 +1,12 @@
 import { getLayout } from '@/components/Layout/Layout'
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
 import { TabContent, Tabs } from '@robur_/ui-kit'
+import { useRouter } from 'next/router'
 
 function Profile() {
+  const router = useRouter()
+  const userId = router.query.userId
+
   return (
     <div className={'container'}>
       <Tabs
@@ -24,6 +28,7 @@ function Profile() {
           <TabContent value={'payments'}>Content about My payments</TabContent>
         </>
       </Tabs>
+      <p>{`userId: ${userId}`}</p>
     </div>
   )
 }

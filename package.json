@@ -8,7 +8,7 @@
     "build:production": "next build",
     "start": "next start",
     "lint": "next lint",
-    "open-browser": "start http://localhost:3000"
+    "open-browser": "node open-browser.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
