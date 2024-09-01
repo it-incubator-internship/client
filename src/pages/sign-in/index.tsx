@@ -13,7 +13,7 @@ import s from './signIn.module.scss'
 
 const SigninSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(3),
+  password: z.string().min(6).max(30),
 })
 
 type FormValues = z.infer<typeof SigninSchema>
@@ -28,7 +28,7 @@ function SignIn() {
     handleSubmit,
   } = useForm<FormValues>({
     defaultValues: {
-      email: 'liv_61@mail.ru',
+      email: 'come@mail.ru',
       password: 'StRo0NgP@SSWoRD+9_',
     },
     resolver: zodResolver(SigninSchema),
@@ -38,8 +38,8 @@ function SignIn() {
       const res = await login(data).unwrap()
 
       localStorage.setItem('accessToken', res.accessToken)
-      const tokenPayload = res.accessToken.split('.')?.[1]
-
+      // const tokenPayload = res.accessToken.split('.')?.[1]
+      const tokenPayload = 'hjhjh'
       let parserPayload
 
       try {
@@ -64,6 +64,9 @@ function SignIn() {
       }
       router.replace(`/profile/${userId}`)
     } catch (error: any) {
+      if (error.data?.statusCode === 401 && error.data?.error === 'Unauthorized') {
+        router.replace(`/sign-up`)
+      }
       console.log(error)
     }
   }
