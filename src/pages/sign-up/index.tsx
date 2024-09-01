@@ -25,10 +25,13 @@ const signUpSchema = z.object({
   username: z.string()
     .min(6, `Minimum number of characters 6`)
     .max(30, `Minimum number of characters 30`),
-  email: z.string().email('The email must match the format\nexample@example.com'),
+  email: z.string().email("The email must match the format\nexample@example.com"),
   password: z.string().min(8).max(20),
   passwordConfirmation: z.string().min(8).max(20),
-  SignUpAgreement: z.boolean()
+  SignUpAgreement: z.boolean().refine(val => val === true,
+    {
+      message: "Value must be true",
+    })
 });
 
 type FormValues = z.infer<typeof signUpSchema>;
@@ -39,7 +42,7 @@ export default function SignUp() {
     control,
     formState: { errors }
   }
-    = useForm<FormValues>({ resolver: zodResolver(signUpSchema)});
+    = useForm<FormValues>({ resolver: zodResolver(signUpSchema) });
 
   const submitForm = handleSubmit(data => {
     console.log(data);
