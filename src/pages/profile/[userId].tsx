@@ -1,5 +1,5 @@
-import { getLayout } from '@/components/Layout/Layout'
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
+import { getSideBarLayout } from '@/components/layouts/SidebarLayout/SidebarLayout'
 import { TabContent, Tabs } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
 
@@ -33,6 +33,6 @@ function Profile() {
   )
 }
 
-Profile.getLayout = getLayout
+Profile.getLayout = getSideBarLayout
 
 export default Profile
