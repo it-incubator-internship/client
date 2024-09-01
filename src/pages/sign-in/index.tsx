@@ -1,33 +1,72 @@
 import { useForm } from 'react-hook-form'
 
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
-import { useLoginMutation } from '@/services/auth/authApi'
+import { useLazyMeQuery, useLoginMutation } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
 import clsx from 'clsx'
+import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 import s from './signIn.module.scss'
 
 const SigninSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(3),
+  password: z.string().min(6).max(30),
 })
 
 type FormValues = z.infer<typeof SigninSchema>
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
+  const [getMe] = useLazyMeQuery()
+  const router = useRouter()
 
   const {
     control,
     formState: { errors },
     handleSubmit,
-  } = useForm<FormValues>({ resolver: zodResolver(SigninSchema) })
+  } = useForm<FormValues>({
+    defaultValues: {
+      email: 'come@mail.ru',
+      password: 'StRo0NgP@SSWoRD+9_',
+    },
+    resolver: zodResolver(SigninSchema),
+  })
   const handleSignIn = async (data: LoginArgs) => {
     try {
-      await login(data).unwrap()
+      const res = await login(data).unwrap()
+
+      localStorage.setItem('accessToken', res.accessToken)
+      // const tokenPayload = res.accessToken.split('.')?.[1]
+      const tokenPayload = 'hjhjh'
+      let parserPayload
+
+      try {
+        const decoderPayload = atob(tokenPayload)
+
+        parserPayload = JSON.parse(decoderPayload)
+      } catch {
+        parserPayload = {}
+      }
+
+      let userId: string | undefined
+
+      if (parserPayload?.userId) {
+        userId = parserPayload?.userId
+      } else {
+        const meRes = await getMe()
+
+        userId = meRes?.data?.userId
+      }
+      if (!userId) {
+        return
+      }
+      router.replace(`/profile/${userId}`)
     } catch (error: any) {
+      if (error.data?.statusCode === 401 && error.data?.error === 'Unauthorized') {
+        router.replace(`/sign-up`)
+      }
       console.log(error)
     }
   }

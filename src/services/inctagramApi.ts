@@ -22,4 +22,5 @@ export const inctagramApi = createApi({
   baseQuery,
   endpoints: () => ({}),
   reducerPath: 'inctagramApi',
+  tagTypes: ['Me'],
 })
