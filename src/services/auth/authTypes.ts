@@ -8,4 +8,5 @@ export type LoginResponse = {
 export type MeResponse = {
   email: string
   userId: string
+  userName: string
 }

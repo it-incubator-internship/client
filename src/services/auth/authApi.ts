@@ -23,7 +23,7 @@ const authApi = inctagramApi.injectEndpoints({
       },
       query: ({ email, password }) => ({
         body: { email, password },
-        credentials: 'same-origin',
+        credentials: 'include',
         method: 'POST',
         url: `/v1/auth/login`,
       }),
