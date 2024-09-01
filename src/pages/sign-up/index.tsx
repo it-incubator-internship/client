@@ -12,7 +12,8 @@ import {
 } from "@robur_/ui-kit";
 
 // todo куда передать тру что бы чекбокс показывал ошибку
-// todo куда передать текст ошибки в инпутах
+// todo User with this username is already registered,
+// todo
 
 import s from "./Signup.module.scss";
 import Link from "next/link";
@@ -21,8 +22,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const signUpSchema = z.object({
-  username: z.string().min(3).max(20),
-  email: z.string().email(),
+  username: z.string()
+    .min(6, `Minimum number of characters 6`)
+    .max(30, `Minimum number of characters 30`),
+  email: z.string().email('The email must match the format\nexample@example.com'),
   password: z.string().min(8).max(20),
   passwordConfirmation: z.string().min(8).max(20),
   SignUpAgreement: z.boolean()
