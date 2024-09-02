@@ -1,34 +1,29 @@
 .SignUpContainer {
-  max-width: 1280px;
-  margin: 0 auto;
   display: flex;
   justify-content: center;
-
-  .BorderBack {
-    //todo to delete
-    border: 1px solid var(--color-dark-300);
-    background-color: var(--color-dark-700);
-    border-radius: 2px;
-  }
+  max-width: 1280px;
+  margin: 0 auto;
 
   .SignUpCard {
-    margin-top: 24px; //todo to delete after compose with layout
-    max-width: 378px;
-    width: 100%;
     display: flex;
-    justify-content: start;
     flex-direction: column;
     align-items: center;
-    padding: 30px 15px 17px 32px;
+    justify-content: start;
+
+    width: 100%;
+    max-width: 378px;
+    margin-top: 24px; // todo to delete after compose with layout
+    padding: 24px;
 
 
     .SignUpCardTitle {
-      font-family: 'Inter';
-      font-weight: 700;
+      margin-bottom: 13px;
+
+      font-family: var(--font-family-primary);
       font-size: 20px;
+      font-weight: 700;
       line-height: 36px;
       color: var(--color-light-100);
-      margin-bottom: 13px;
     }
 
     .SignUpCloudAuth {
@@ -51,38 +46,34 @@
       width: 100%;
 
       .SignUpFormLabel {
-        font-family: 'Inter';
-        font-weight: 400;
         font-size: 14px;
+        font-weight: 400;
         line-height: 24px;
         color: var(--color-light-900);
       }
 
       .SignUpFormInput {
-        max-width: 330px;
         width: 100%;
         padding: 6px 12px;
-        font-family: 'Inter';
-        font-weight: 400;
+
         font-size: 16px;
+        font-weight: 400;
         line-height: 16px;
         color: var(--color-light-900);
+
         outline: none;
-        margin-bottom: 24px;
       }
     }
 
     .CheckboxAgreementBlock {
       display: flex;
-      align-items: start;
       column-gap: 5px;
-      justify-content: center;
+      align-items: start;
 
       height: 48px;
-      color: var(--color-success-300);
-      font-family: 'Inter';
-      font-weight: 400;
+
       font-size: 12px;
+      font-weight: 400;
       line-height: 16px;
       color: var(--color-light-100);
 
@@ -96,8 +87,8 @@
 
       .SignUpAgreementLink {
         padding-top: 4px;
-        text-decoration-line: underline;
         color: var(--color-accent-300);
+        text-decoration-line: underline;
       }
     }
 
@@ -106,20 +97,23 @@
     }
 
     .SignUpHaveAccountLink {
-      font-family: 'Inter';
-      font-weight: 400;
+      margin-bottom: 6px;
+
       font-size: 16px;
+      font-weight: 400;
       line-height: 24px;
       color: var(--color-light-100);
-      margin-bottom: 6px;
     }
 
     .SignInLink {
-      font-family: 'Inter';
-      font-weight: 600;
       font-size: 16px;
+      font-weight: 600;
       line-height: 24px;
       color: var(--color-accent-500);
     }
   }
+}
+
+.inputContainer {
+  margin-bottom: 24px;
 }
