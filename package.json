@@ -8,14 +8,15 @@
     "build:production": "next build",
     "start": "next start",
     "lint": "next lint",
-    "open-browser": "start http://localhost:3000"
+    "open-browser": "node open-browser.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@reduxjs/toolkit": "^2.2.7",
-    "@robur_/ui-kit": "^0.0.24",
+    "@robur_/ui-kit": "^0.0.25",
     "clsx": "^2.1.1",
     "next": "14.2.5",
+    "nprogress": "^0.2.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.2",
@@ -27,6 +28,7 @@
     "@it-incubator/prettier-config": "^0.1.2",
     "@it-incubator/stylelint-config": "^2.0.0",
     "@types/node": "^20",
+    "@types/nprogress": "^0.2.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
