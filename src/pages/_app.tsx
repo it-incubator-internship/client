@@ -6,8 +6,11 @@ import { Provider, useSelector } from 'react-redux'
 
 import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
 import { store, useAppDispatch, useAppSelector } from '@/services/store'
+import { useLoader } from '@/assets/hooks/useLoader'
+import { store } from '@/services/store'
 
 import '@/styles/index.scss'
+import '@/styles/nprogress.scss'
 import '@robur_/ui-kit/style.css'
 
 export type NextPageWithLayout<P = {}, IP = P> = {
@@ -19,6 +22,7 @@ type AppPropsWithLayout = {
 } & AppProps
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  useLoader()
   const getLayout = Component.getLayout ?? (page => page)
 
   return (
