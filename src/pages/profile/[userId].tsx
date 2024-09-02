@@ -1,4 +1,5 @@
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
+import Spinner from '@/components/Spinner/Spinner'
 import { getSideBarLayout } from '@/components/layouts/SidebarLayout/SidebarLayout'
 import { TabContent, Tabs } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
