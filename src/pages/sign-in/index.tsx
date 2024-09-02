@@ -38,8 +38,7 @@ function SignIn() {
       const res = await login(data).unwrap()
 
       localStorage.setItem('accessToken', res.accessToken)
-      // const tokenPayload = res.accessToken.split('.')?.[1]
-      const tokenPayload = 'hjhjh'
+      const tokenPayload = res.accessToken.split('.')?.[1]
       let parserPayload
 
       try {
