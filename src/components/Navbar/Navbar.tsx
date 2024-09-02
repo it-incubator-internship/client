@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useLogoutMutation } from '@/services/auth/authApi'
+
 import {
   BookmarkOutline,
   HomeOutline,
@@ -18,6 +20,8 @@ type Props = {
   className?: string
 }
 export const Navbar = ({ className }: Props) => {
+  const [logout, { isLoading, isError }] = useLogoutMutation()
+
   return (
     <nav className={className}>
       <Sidebar>
@@ -31,7 +35,9 @@ export const Navbar = ({ className }: Props) => {
           <SidebarItem Icon={BookmarkOutline} href={'/'} item={'Favorites'} />
         </div>
         <div style={{ marginTop: '150px' }}>
-          <SidebarItem Icon={LogOut} href={'/'} item={'Logout'} />
+          <div onClick={() => logout()}>
+            <SidebarItem Icon={LogOut} href={'/'} item={'Logout'} />
+          </div>
         </div>
       </Sidebar>
     </nav>

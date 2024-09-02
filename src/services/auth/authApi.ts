@@ -1,4 +1,5 @@
 import { LoginArgs, LoginResponse, MeResponse } from '@/services/auth/authTypes'
+import Router from 'next/router'
 
 import { inctagramApi } from '../inctagramApi'
 
@@ -28,6 +29,24 @@ const authApi = inctagramApi.injectEndpoints({
         url: `/v1/auth/login`,
       }),
     }),
+    logout: builder.mutation<void, void>({
+      onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled
+          localStorage.removeItem('accessToken')
+          dispatch(inctagramApi.util.invalidateTags(['Me']))
+          dispatch(inctagramApi.util.resetApiState())
+          Router.replace('/')
+        } catch (error) {
+          console.error('Logout failed:', error)
+        }
+      },
+      query: () => ({
+        credentials: 'include',
+        method: 'POST',
+        url: '/v1/auth/logout',
+      }),
+    }),
     me: builder.query<MeResponse, void>({
       providesTags: ['Me'],
       query: () => `/v1/auth/me`,
@@ -35,4 +54,4 @@ const authApi = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { useLazyMeQuery, useLoginMutation, useMeQuery } = authApi
+export const { useLazyMeQuery, useLoginMutation, useLogoutMutation, useMeQuery } = authApi
