@@ -1,22 +1,31 @@
 import { PropsWithChildren, useEffect } from 'react'
 
+import Spinner from '@/components/Spinner/Spinner'
+import { PATH, commonRoutes } from '@/consts/route-paths'
 import { useMeQuery } from '@/services/auth/authApi'
+import { isInitialized } from '@/services/slices/slice'
+import { useAppDispatch } from '@/services/store'
 import { useRouter } from 'next/router'
 
-import Spinner from '../Spinner/Spinner'
-
 export function AuthProvider({ children }: PropsWithChildren) {
-  const { isError, isLoading } = useMeQuery()
+  const { data, isLoading } = useMeQuery()
   const router = useRouter()
+  const dispatch = useAppDispatch()
+  const remainingPath = router.pathname
+
+  const isProtectedPage = !commonRoutes.includes(remainingPath)
 
   useEffect(() => {
-    if (!isError) {
+    if (!isLoading && !data && isProtectedPage) {
+      router.replace(PATH.LOGIN)
+      dispatch(isInitialized())
+
       return
     }
-    void router.push('/login')
-  }, [isError, router])
+    dispatch(isInitialized())
+  }, [data, isProtectedPage, isLoading, router])
 
-  if (isLoading) {
+  if (isProtectedPage) {
     return <Spinner />
   }
 
