@@ -2,11 +2,10 @@ import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
 import type { ReactElement, ReactNode } from 'react'
-import { Provider, useSelector } from 'react-redux'
+import { Provider } from 'react-redux'
 
-import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
-import { store, useAppDispatch, useAppSelector } from '@/services/store'
 import { useLoader } from '@/assets/hooks/useLoader'
+import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
 import { store } from '@/services/store'
 
 import '@/styles/index.scss'
