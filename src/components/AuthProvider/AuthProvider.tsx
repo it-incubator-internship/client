@@ -23,9 +23,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
       return
     }
     dispatch(isInitialized())
-  }, [data, isProtectedPage, isLoading, router])
+  }, [dispatch, data, isProtectedPage, isLoading, router])
 
-  if (isProtectedPage) {
+  if (!data && isProtectedPage) {
     return <Spinner />
   }
 

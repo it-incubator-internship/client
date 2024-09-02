@@ -1,0 +1,119 @@
+.SignUpContainer {
+  display: flex;
+  justify-content: center;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  .SignUpCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+
+    width: 100%;
+    max-width: 378px;
+    margin-top: 24px; // todo to delete after compose with layout
+    padding: 24px;
+
+
+    .SignUpCardTitle {
+      margin-bottom: 13px;
+
+      font-family: var(--font-family-primary);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 36px;
+      color: var(--color-light-100);
+    }
+
+    .SignUpCloudAuth {
+      display: flex;
+      gap: 60px;
+      margin-bottom: 24px;
+
+      .SignUpCloudAuthLink {
+        width: 36px;
+        height: 36px;
+
+        & > * {
+          width: inherit;
+          height: inherit;
+        }
+      }
+    }
+
+    .SignUpForm {
+      width: 100%;
+
+      .SignUpFormLabel {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        color: var(--color-light-900);
+      }
+
+      .SignUpFormInput {
+        width: 100%;
+        padding: 6px 12px;
+
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 16px;
+        color: var(--color-light-900);
+
+        outline: none;
+      }
+    }
+
+    .CheckboxAgreementBlock {
+      display: flex;
+      column-gap: 5px;
+      align-items: start;
+
+      height: 48px;
+
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      color: var(--color-light-100);
+
+      & [class*="checkboxLabel"] {
+        font-size: 12px;
+      }
+
+      .SignUpAgreementSpan {
+        padding-top: 4px;
+      }
+
+      .SignUpAgreementLink {
+        padding-top: 4px;
+        color: var(--color-accent-300);
+        text-decoration-line: underline;
+      }
+    }
+
+    .SignUpButton {
+      margin-bottom: 18px;
+    }
+
+    .SignUpHaveAccountLink {
+      margin-bottom: 6px;
+
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--color-light-100);
+    }
+
+    .SignInLink {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      color: var(--color-accent-500);
+    }
+  }
+}
+
+.inputContainer {
+  margin-bottom: 24px;
+}
