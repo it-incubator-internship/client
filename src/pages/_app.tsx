@@ -4,9 +4,12 @@ import type { AppProps } from 'next/app'
 import type { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
 
+import { useLoader } from '@/assets/hooks/useLoader'
+import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
 import { store } from '@/services/store'
 
 import '@/styles/index.scss'
+import '@/styles/nprogress.scss'
 import '@robur_/ui-kit/style.css'
 
 export type NextPageWithLayout<P = {}, IP = P> = {
@@ -18,7 +21,12 @@ type AppPropsWithLayout = {
 } & AppProps
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  useLoader()
   const getLayout = Component.getLayout ?? (page => page)
 
-  return <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
+  return (
+    <Provider store={store}>
+      <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
+    </Provider>
+  )
 }

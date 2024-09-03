@@ -38,8 +38,7 @@ function SignIn() {
       const res = await login(data).unwrap()
 
       localStorage.setItem('accessToken', res.accessToken)
-      // const tokenPayload = res.accessToken.split('.')?.[1]
-      const tokenPayload = 'hjhjh'
+      const tokenPayload = res.accessToken.split('.')?.[1]
       let parserPayload
 
       try {
@@ -80,8 +79,15 @@ function SignIn() {
             <GoogleSvgrepoCom1 className={s.Svg} />
             <GithubSvgrepoCom31 className={s.Svg} />
           </div>
-          <FormInput control={control} error={errors?.email} label={'Email'} name={'email'} />
           <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            error={errors?.email}
+            label={'Email'}
+            name={'email'}
+          />
+          <FormInput
+            containerClassName={s.inputContainer}
             control={control}
             error={errors?.password}
             label={'Password'}

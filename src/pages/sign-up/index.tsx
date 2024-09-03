@@ -1,6 +1,3 @@
-import clsx from "clsx";
-
-
 import {
   Button,
   Card,
@@ -8,123 +5,144 @@ import {
   FormInput,
   GithubSvgrepoCom31,
   GoogleSvgrepoCom1,
-  Label
-} from "@robur_/ui-kit";
+  Label,
+} from '@robur_/ui-kit'
+import clsx from 'clsx'
 
 // todo куда передать тру что бы чекбокс показывал ошибку
 // todo User with this username is already registered,
 // todo
 
-import s from "./Signup.module.scss";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from 'react-hook-form'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
+import { z } from 'zod'
+
+import s from './Signup.module.scss'
 
 const signUpSchema = z.object({
-  username: z.string()
-    .min(6, `Minimum number of characters 6`)
-    .max(30, `Minimum number of characters 30`),
-  email: z.string().email("The email must match the format\nexample@example.com"),
+  email: z.string().email('The email must match the format\nexample@example.com'),
   password: z.string().min(8).max(20),
   passwordConfirmation: z.string().min(8).max(20),
-  SignUpAgreement: z.boolean().refine(val => val === true,
-    {
-      message: "Value must be true",
-    })
-});
+  terms_agreement: z.literal(true, {
+    errorMap: () => ({ message: 'Please, mark the checkbox, if you agree to our terms' }),
+  }),
+  username: z
+    .string()
+    .min(6, `Minimum number of characters 6`)
+    .max(30, `Minimum number of characters 30`),
+})
 
-type FormValues = z.infer<typeof signUpSchema>;
+type FormValues = z.infer<typeof signUpSchema>
 
 export default function SignUp() {
   const {
-    handleSubmit,
     control,
-    formState: { errors }
-  }
-    = useForm<FormValues>({ resolver: zodResolver(signUpSchema) });
+    formState: { errors },
+    handleSubmit,
+  } = useForm<FormValues>({ resolver: zodResolver(signUpSchema) })
 
   const submitForm = handleSubmit(data => {
-    console.log(data);
-  });
+    console.log(data)
+  })
 
   return (
     <div className={clsx(s.SignUpContainer)}>
       <Card className={clsx(s.SignUpCard, s.BorderBack)}>
         <h1 className={s.SignUpCardTitle}>Sign Up</h1>
         <div className={s.SignUpCloudAuth}>
-          <Link className={s.SignUpCloudAuthLink} href={"https://www.google.com"} target={"_blank"}>
+          <Link className={s.SignUpCloudAuthLink} href={'https://www.google.com'} target={'_blank'}>
             <GoogleSvgrepoCom1 />
           </Link>
-          <Link className={s.SignUpCloudAuthLink} href={"https://www.github.com"} target={"_blank"}>
+          <Link className={s.SignUpCloudAuthLink} href={'https://www.github.com'} target={'_blank'}>
             <GithubSvgrepoCom31 />
           </Link>
         </div>
         <form className={s.SignUpForm} onSubmit={submitForm}>
-          <Label label={"Username"} className={s.SignUpFormLabel}>
+          <Label className={s.SignUpFormLabel} label={'Username'}>
             <FormInput
-              type="text"
+              className={s.SignUpFormInput}
+              containerClassName={s.inputContainer}
               control={control}
-              rules={{ required: true }}
-              className={clsx(s.SignUpFormInput, s.BorderBack)}
-              name={"username"}
               errorMsg={errors.username?.message}
+              name={'username'}
+              rules={{ required: true }}
+              type={'text'}
             />
           </Label>
 
-          <Label label={"Email"} className={s.SignUpFormLabel}>
+          <Label className={s.SignUpFormLabel} label={'Email'}>
             <FormInput
-              type="email"
+              className={s.SignUpFormInput}
+              containerClassName={s.inputContainer}
               control={control}
-              rules={{ required: true }}
-              name={"email"}
-              className={clsx(s.SignUpFormInput, s.BorderBack)}
               errorMsg={errors.email?.message}
+              name={'email'}
+              rules={{ required: true }}
+              type={'email'}
             />
           </Label>
 
-          <Label label={"Password"} className={s.SignUpFormLabel}>
+          <Label className={s.SignUpFormLabel} label={'Password'}>
             <FormInput
-              type={"password"}
+              className={s.SignUpFormInput}
+              containerClassName={s.inputContainer}
               control={control}
-              rules={{ required: true }}
-              name={"password"}
-              className={clsx(s.SignUpFormInput, s.BorderBack)}
               errorMsg={errors.password?.message}
+              name={'password'}
+              rules={{ required: true }}
+              type={'password'}
             />
           </Label>
 
-          <Label label={"Password confirmation"} className={s.SignUpFormLabel}>
+          <Label className={s.SignUpFormLabel} label={'Password confirmation'}>
             <FormInput
-              type={"password"}
-              shouldUnregister={true}
+              className={s.SignUpFormInput}
+              containerClassName={s.inputContainer}
               control={control}
-              rules={{ required: true }}
-              name={"passwordConfirmation"}
-              className={clsx(s.SignUpFormInput, s.BorderBack)}
               errorMsg={errors.passwordConfirmation?.message}
+              name={'passwordConfirmation'}
+              rules={{ required: true }}
+              shouldUnregister
+              type={'password'}
             />
           </Label>
 
           <div className={s.CheckboxAgreementBlock}>
             <FormCheckbox
-              control={control}
-              name={"SignUpAgreement"}
-              id={"SignUpAgreementCheckbox"}
-              labelText={"I agree to the "}
               className={s.SignUpAgreementCheckbox}
-              errorMsg={errors.SignUpAgreement?.message}
-            />
-            <Link className={s.SignUpAgreementLink} href={"/terms-and-conditions"}>Terms of Service</Link>
-            <span className={s.SignUpAgreementSpan}>and</span> <Link className={s.SignUpAgreementLink}
-                                                                     href={"/privacy-policy"}>Privacy Policy</Link>
+              control={control}
+              errorMsg={errors.terms_agreement?.message}
+              id={'SignUpAgreementCheckbox'}
+              name={'terms_agreement'}
+            >
+              <span>I agree to the&nbsp;</span>
+              <Link
+                className={s.SignUpAgreementLink}
+                href={'/terms-and-conditions'}
+                target={'_blank'}
+              >
+                Terms of Service
+              </Link>
+              <span className={s.SignUpAgreementSpan}>&nbsp;and&nbsp;</span>
+              <Link className={s.SignUpAgreementLink} href={'/privacy-policy'} target={'_blank'}>
+                Privacy Policy
+              </Link>
+            </FormCheckbox>
           </div>
 
-          <Button type={"submit"} className={s.SignUpButton} fullWidth>Sign Up</Button>
+          <Button className={s.SignUpButton} fullWidth type={'submit'}>
+            Sign Up
+          </Button>
         </form>
-        <Link className={s.SignUpHaveAccountLink} href={"/have-account"}>Do you have an account?</Link>
-        <Link className={s.SignInLink} href={"/sign-in"}>Sign In</Link>
+        <Link className={s.SignUpHaveAccountLink} href={'/have-account'}>
+          Do you have an account?
+        </Link>
+        <Link className={s.SignInLink} href={'/sign-in'}>
+          Sign In
+        </Link>
       </Card>
     </div>
-  );
+  )
 }
