@@ -36,16 +36,18 @@ const authApi = inctagramApi.injectEndpoints({
           localStorage.removeItem('accessToken')
           dispatch(inctagramApi.util.invalidateTags(['Me']))
           dispatch(inctagramApi.util.resetApiState())
-          Router.replace('/')
+          void Router.replace('/')
         } catch (error) {
           console.error('Logout failed:', error)
         }
       },
-      query: () => ({
-        credentials: 'include',
-        method: 'POST',
-        url: '/v1/auth/logout',
-      }),
+      query: () => {
+        return {
+          credentials: 'include',
+          method: 'POST',
+          url: '/v1/auth/logout',
+        }
+      },
     }),
     me: builder.query<MeResponse, void>({
       providesTags: ['Me'],
