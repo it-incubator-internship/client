@@ -5,7 +5,6 @@ import Link from 'next/link'
 function Home() {
   return (
     <>
-      <HeadMeta title={'Inctagram'} />
       <main>
         <div className={'container'}>
           <h1 style={{ fontSize: 30, marginBottom: 20 }}>Home page</h1>
