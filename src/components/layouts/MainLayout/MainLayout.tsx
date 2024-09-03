@@ -1,5 +1,6 @@
 import { PropsWithChildren, ReactElement, ReactNode } from 'react'
 
+import { HeadMeta } from '@/components/HeadMeta/HeadMeta'
 import Spinner from '@/components/Spinner/Spinner'
 import { useAppSelector } from '@/services/store'
 import { NextPage } from 'next'
@@ -11,7 +12,12 @@ const MainLayout: NextPage<PropsWithChildren> = ({ children }) => {
     return <Spinner />
   }
 
-  return <>{children}</>
+  return (
+    <>
+      <HeadMeta title={'Inctagram'} />
+      {children}
+    </>
+  )
 }
 
 export const getMainLayout = (page: ReactNode) => {
