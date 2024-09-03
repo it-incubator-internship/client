@@ -17,7 +17,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     if (!isLoading && !data && isProtectedPage) {
-      router.replace(PATH.LOGIN)
+      void router.push(PATH.LOGIN)
       dispatch(isInitialized())
 
       return
