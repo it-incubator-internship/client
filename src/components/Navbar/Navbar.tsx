@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { useLogoutMutation } from '@/services/auth/authApi'
+import { useMeQuery } from '@/services/auth/authApi'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -15,12 +13,11 @@ import {
 
 import { SidebarItem } from './SidebarItem/SidebarItem'
 
-//qq
 type Props = {
   className?: string
 }
 export const Navbar = ({ className }: Props) => {
-  const [logout, { isLoading, isError }] = useLogoutMutation()
+  const { data } = useMeQuery()
 
   return (
     <nav className={className}>
@@ -35,9 +32,7 @@ export const Navbar = ({ className }: Props) => {
           <SidebarItem Icon={BookmarkOutline} href={'/'} item={'Favorites'} />
         </div>
         <div style={{ marginTop: '150px' }}>
-          <div onClick={() => logout()}>
-            <SidebarItem Icon={LogOut} href={'/'} item={'Logout'} />
-          </div>
+          <SidebarItem Icon={LogOut} href={'/'} item={'Logout'} />
         </div>
       </Sidebar>
     </nav>
