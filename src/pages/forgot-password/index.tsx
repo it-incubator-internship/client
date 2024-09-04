@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useForm } from 'react-hook-form'
 
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
+import { useCheckEmailQuery } from '@/services/password-recovery/password-recovery-api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, FormInput } from '@robur_/ui-kit'
+import { Button, Card, FormInput, Modal, Recaptcha } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { z } from 'zod'
@@ -17,14 +19,59 @@ const FormSchema = z.object({
 })
 
 function ForgotPassword() {
-  const { control, handleSubmit, setError } = useForm({ resolver: zodResolver(FormSchema) })
+  const { executeRecaptcha } = useGoogleReCaptcha()
+  const { control, handleSubmit, reset, setError, watch } = useForm({
+    resolver: zodResolver(FormSchema),
+  })
+  const [email, setEmail] = useState('')
+  const [recaptchaToken, setRecaptchaToken] = useState('')
+
+  console.log({ email, recaptchaToken })
+  const [showModal, setShowModal] = useState(false)
+  //state, should be change to state from redux
+
+  const [sendLinkState, setSendLinkState] = useState<FlowState>('initial')
+  const [recaptchaState, setRecaptchaState] = useState<
+    'checked' | 'expired' | 'initial' | 'loading' | 'withError'
+  >('initial')
   const formSubmit = handleSubmit(data => {
-    console.log(data)
-    setError('email', { message: "User with this email doesn't exist", type: 'manual' })
+    setEmail(data.email)
   })
 
-  //state, should be change to state from redux
-  const [sendLinkState, setSendLinkState] = useState<FlowState>('initial')
+  const recaptchaSubmit = async (event: any) => {
+    event.preventDefault()
+    setRecaptchaState('loading')
+    if (!executeRecaptcha) {
+      console.log('Execute recaptcha not yet available')
+
+      return
+    }
+
+    const token = await executeRecaptcha('password_recovery')
+
+    setRecaptchaToken(token)
+    setRecaptchaState('checked')
+  }
+  const emailValue = watch('email', '')
+
+  const { data: serverData, error } = useCheckEmailQuery(
+    { email, recaptchaToken },
+    { skip: !email || !recaptchaToken }
+  )
+
+  useEffect(() => {
+    if (serverData && serverData.email === email) {
+      setShowModal(true)
+      setSendLinkState('success')
+      reset()
+    }
+  }, [serverData, email])
+
+  useEffect(() => {
+    if (error) {
+      setError('email', { message: "User with this email doesn't exist", type: 'manual' })
+    }
+  }, [error, setError])
 
   return (
     <Card className={s.card}>
@@ -46,14 +93,26 @@ function ForgotPassword() {
             The link has been sent by email. If you don’t receive an email send link again
           </p>
         )}
-        <Button className={s.btnSend} fullWidth>
+        <Button className={s.btnSend} disabled={!emailValue || !recaptchaToken} fullWidth>
           {sendLinkState === 'success' ? 'Send Link Again' : 'Send Link'}
         </Button>
       </form>
       <Button asChild className={s.btnBack} variant={'ghost'}>
         <Link href={'/sign-in'}>Back to Sign In</Link>
       </Button>
-      {sendLinkState !== 'success' && <div className={s.recaptcha}>Recaptcha</div>}
+      {sendLinkState !== 'success' && (
+        <form className={s.recaptcha} onSubmit={recaptchaSubmit}>
+          <Recaptcha variant={recaptchaState} />
+        </form>
+      )}
+      <Modal
+        buttonTitle={'OK'}
+        onClose={() => setShowModal(false)}
+        open={showModal}
+        title={'Email sent'}
+      >
+        <p>We have sent a link to confirm your email to {serverData?.email}</p>
+      </Modal>
     </Card>
   )
 }

@@ -1,4 +1,3 @@
-import { HeadMeta } from '@/components/HeadMeta/HeadMeta'
 import { getSideBarLayout } from '@/components/layouts/SidebarLayout/SidebarLayout'
 import Link from 'next/link'
 

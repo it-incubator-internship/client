@@ -5,14 +5,7 @@ import { inctagramApi } from '../inctagramApi'
 const authApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
     login: builder.mutation<LoginResponse, LoginArgs>({
-      async onQueryStarted(
-        // 1 параметр: QueryArg - аргументы, которые приходят в query
-        _,
-        // 2 параметр: MutationLifecycleApi - dispatch, queryFulfilled, getState и пр.
-        // queryFulfilled - это промис, возвращаемый RTK Query, который разрешается,
-        // когда запрос успешно завершен
-        { queryFulfilled }
-      ) {
+      async onQueryStarted(_, { queryFulfilled }) {
         const { data } = await queryFulfilled
 
         if (!data) {
