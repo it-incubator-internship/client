@@ -1,3 +1,4 @@
+import { PATH } from '@/consts/route-paths'
 import { LoginArgs, LoginResponse, MeResponse } from '@/services/auth/authTypes'
 import Router from 'next/router'
 
@@ -36,7 +37,7 @@ const authApi = inctagramApi.injectEndpoints({
           localStorage.removeItem('accessToken')
           dispatch(inctagramApi.util.invalidateTags(['Me']))
           dispatch(inctagramApi.util.resetApiState())
-          void Router.replace('/')
+          void Router.replace(PATH.LOGIN)
         } catch (error) {
           console.error('Logout failed:', error)
         }
