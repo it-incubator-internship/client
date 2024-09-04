@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form'
 
+import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
-import { useLazyMeQuery, useLoginMutation } from '@/services/auth/authApi'
+import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
@@ -19,6 +20,7 @@ const SigninSchema = z.object({
 type FormValues = z.infer<typeof SigninSchema>
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
+  const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const [getMe] = useLazyMeQuery()
   const router = useRouter()
 
@@ -29,6 +31,7 @@ function SignIn() {
   } = useForm<FormValues>({
     defaultValues: {
       email: 'reno.jool@gmail.com',
+
       password: 'StRo0NgP@SSWoRD',
     },
     resolver: zodResolver(SigninSchema),
@@ -37,7 +40,6 @@ function SignIn() {
     try {
       const res = await login(data).unwrap()
 
-      localStorage.setItem('accessToken', res.accessToken)
       const tokenPayload = res.accessToken.split('.')?.[1]
       let parserPayload
 
@@ -58,16 +60,30 @@ function SignIn() {
 
         userId = meRes?.data?.userId
       }
+      if (isLoading) {
+        return <Spinner />
+      } else if (userId) {
+        router.replace(`/profile/${userId}`)
+
+        return
+      }
       if (!userId) {
         return
       }
-      router.replace(`/profile/${userId}`)
     } catch (error: any) {
       if (error.data?.statusCode === 401 && error.data?.error === 'Unauthorized') {
         router.replace(`/sign-up`)
       }
       console.log(error)
     }
+  }
+
+  if (startIsLoading) {
+    return <Spinner />
+  } else if (meData) {
+    router.replace(`/`)
+
+    return
   }
 
   return (

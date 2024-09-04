@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { useLogoutMutation } from '@/services/auth/authApi'
-
 import {
   BookmarkOutline,
   HomeOutline,
@@ -16,6 +15,7 @@ import {
 
 import { SidebarItem } from './SidebarItem/SidebarItem'
 
+//qq
 type Props = {
   className?: string
 }
@@ -27,7 +27,7 @@ export const Navbar = ({ className }: Props) => {
       <Sidebar>
         <SidebarItem Icon={HomeOutline} href={'/'} item={'Home'} />
         <SidebarItem Icon={PlusSquareOutline} href={'/'} item={'Create'} />
-        <SidebarItem Icon={Person} href={'/sign-in'} item={'My profile'} />
+        <SidebarItem Icon={Person} href={`/profile/${data?.userId}`} item={'My profile'} />
         <SidebarItem Icon={MessageCircleOutline} href={'/'} item={'Messenger'} />
         <SidebarItem Icon={Search} href={'/'} item={'Search'} />
         <div style={{ marginTop: '60px' }}>
