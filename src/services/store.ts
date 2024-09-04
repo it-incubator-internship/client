@@ -1,22 +1,20 @@
 // eslint-disable-next-line import/no-unresolved
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-
-import { appReducer } from '@/services/slices/slice'
 import { configureStore } from '@reduxjs/toolkit'
+import { createWrapper } from 'next-redux-wrapper'
 
 import { inctagramApi } from './inctagramApi'
 
-export const store = configureStore({
-  devTools: true,
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(inctagramApi.middleware),
-  reducer: {
-    appReducer,
-    [inctagramApi.reducerPath]: inctagramApi.reducer,
-  },
-})
+// create a makeStore function
+const makeStore = () =>
+  configureStore({
+    devTools: true,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(inctagramApi.middleware),
+    reducer: {
+      [inctagramApi.reducerPath]: inctagramApi.reducer,
+    },
+  })
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootAppState = ReturnType<typeof makeStore>
 
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
-export const useAppDispatch = () => useDispatch<AppDispatch>()
+// export an assembled wrapper
+export const wrapper = createWrapper<RootAppState>(makeStore, { debug: false })

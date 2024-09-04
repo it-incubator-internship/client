@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 
 import { useLoader } from '@/assets/hooks/useLoader'
 import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
-import { store } from '@/services/store'
+import { wrapper } from '@/services/store'
 
 import '@/styles/index.scss'
 import '@/styles/nprogress.scss'
@@ -20,13 +20,15 @@ type AppPropsWithLayout = {
   Component: NextPageWithLayout
 } & AppProps
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+export default function App({ Component, ...rest }: AppPropsWithLayout) {
+  const { props, store } = wrapper.useWrappedStore(rest)
+
   useLoader()
   const getLayout = Component.getLayout ?? (page => page)
 
   return (
     <Provider store={store}>
-      <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
+      <AuthProvider>{getLayout(<Component {...props.pageProps} />)}</AuthProvider>
     </Provider>
   )
 }
