@@ -4,6 +4,9 @@ import { inctagramApi } from '../inctagramApi'
 
 const authApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
+    googleLogin: builder.query<undefined, void>({
+      query: () => `/v1/auth/google`,
+    }),
     login: builder.mutation<LoginResponse, LoginArgs>({
       async onQueryStarted(
         // 1 параметр: QueryArg - аргументы, которые приходят в query
@@ -35,4 +38,4 @@ const authApi = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { useLazyMeQuery, useLoginMutation, useMeQuery } = authApi
+export const { useLazyGoogleLoginQuery, useLazyMeQuery, useLoginMutation, useMeQuery } = authApi

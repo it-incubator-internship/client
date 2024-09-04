@@ -1,11 +1,12 @@
 import { useForm } from 'react-hook-form'
 
+import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, FormInput, GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
+import { Button, Card, FormInput } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
@@ -90,10 +91,7 @@ function SignIn() {
       <Card className={s.Card}>
         <h1 className={s.Title}>Sign in</h1>
         <form className={s.Form} onSubmit={handleSubmit(handleSignIn)}>
-          <div className={s.BlockForLinks}>
-            <GoogleSvgrepoCom1 className={s.Svg} />
-            <GithubSvgrepoCom31 className={s.Svg} />
-          </div>
+          <SocialMediaAuth />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
