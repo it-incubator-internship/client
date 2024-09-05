@@ -1,6 +1,4 @@
-import { useMeQuery } from '@/services/auth/authApi'
-import { useLogoutMutation } from '@/services/auth/authApi'
-
+import { useLogoutMutation, useMeQuery } from '@/services/auth/authApi'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -21,7 +19,7 @@ type Props = {
 export const Navbar = ({ className }: Props) => {
   const { data } = useMeQuery()
 
-  const [logout, { isLoading, isError }] = useLogoutMutation()
+  const [logout] = useLogoutMutation()
 
   return (
     <nav className={className}>

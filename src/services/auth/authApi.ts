@@ -59,4 +59,10 @@ const authApi = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { useLazyGoogleLoginQuery, useLazyMeQuery, useLoginMutation, useLogoutMutation, useMeQuery } = authApi
+export const {
+  useLazyGoogleLoginQuery,
+  useLazyMeQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useMeQuery,
+} = authApi

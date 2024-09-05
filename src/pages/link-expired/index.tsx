@@ -1,5 +1,5 @@
-import TimeManagement from '@/pages/link-expired/TimeManagement'
 import { Button } from '@robur_/ui-kit'
+import Image from 'next/image'
 
 import s from './link-expired.module.scss'
 
@@ -19,7 +19,7 @@ export default function LinkExpired() {
           Resend link
         </Button>
       </div>
-      <TimeManagement />
+      <Image alt={'link expired'} src={'/TimeManagement.png'} />
     </div>
   )
 }

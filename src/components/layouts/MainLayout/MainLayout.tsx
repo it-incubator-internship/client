@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactElement, ReactNode } from 'react'
+import { PropsWithChildren, ReactNode } from 'react'
 
 import { HeadMeta } from '@/components/HeadMeta/HeadMeta'
 import { NextPage } from 'next'
