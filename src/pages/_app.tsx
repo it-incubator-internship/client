@@ -4,8 +4,8 @@ import type { AppProps } from 'next/app'
 import type { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
 
-import { useLoader } from '@/assets/hooks/useLoader'
 import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
+import { useLoader } from '@/hooks/useLoader'
 import { wrapper } from '@/services/store'
 
 import '@/styles/index.scss'
