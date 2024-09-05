@@ -26,10 +26,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? (page => page)
 
   return (
-    <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_PUBLIC_KEY as string}>
-      <Provider store={store}>
-        <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
-      </Provider>
-    </GoogleReCaptchaProvider>
+    <Provider store={store}>
+      <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
+    </Provider>
   )
 }

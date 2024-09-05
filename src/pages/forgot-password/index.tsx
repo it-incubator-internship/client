@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useForm } from 'react-hook-form'
 
+import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { useCheckEmailQuery } from '@/services/password-recovery/password-recovery-api'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -28,6 +29,8 @@ function ForgotPassword() {
 
   console.log({ email, recaptchaToken })
   const [showModal, setShowModal] = useState(false)
+
+  console.log(showModal)
   //state, should be change to state from redux
 
   const [sendLinkState, setSendLinkState] = useState<FlowState>('initial')
@@ -54,16 +57,16 @@ function ForgotPassword() {
   }
   const emailValue = watch('email', '')
 
-  const { data: serverData, error } = useCheckEmailQuery(
-    { email, recaptchaToken },
-    { skip: !email || !recaptchaToken }
-  )
+  const {
+    data: serverData,
+    error,
+    isLoading,
+  } = useCheckEmailQuery({ email, recaptchaToken }, { skip: !email || !recaptchaToken })
 
   useEffect(() => {
     if (serverData && serverData.email === email) {
       setShowModal(true)
       setSendLinkState('success')
-      reset()
     }
   }, [serverData, email])
 
@@ -73,47 +76,53 @@ function ForgotPassword() {
     }
   }, [error, setError])
 
+  // if (isLoading) {
+  //   return <Spinner />
+  // }
+
+  const handleCloseModal = () => {
+    setShowModal(false)
+    reset()
+  }
+
   return (
-    <Card className={s.card}>
-      <h1 className={s.title}>Forgot password</h1>
-      <form onSubmit={formSubmit}>
-        <FormInput
-          className={s.input}
-          control={control}
-          label={'Email'}
-          name={'email'}
-          placeholder={'Epam@epam.com'}
-          width={'100%'}
-        />
-        <p className={clsx(s.text, s.textTip)}>
-          Enter your email address and we will send you further instructions
-        </p>
-        {sendLinkState === 'success' && (
-          <p className={s.text}>
-            The link has been sent by email. If you don’t receive an email send link again
+    <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_PUBLIC_KEY as string}>
+      <Card className={s.card}>
+        <h1 className={s.title}>Forgot password</h1>
+        <form onSubmit={formSubmit}>
+          <FormInput
+            className={s.input}
+            control={control}
+            label={'Email'}
+            name={'email'}
+            placeholder={'Epam@epam.com'}
+            width={'100%'}
+          />
+          <p className={clsx(s.text, s.textTip)}>
+            Enter your email address and we will send you further instructions
           </p>
-        )}
-        <Button className={s.btnSend} disabled={!emailValue || !recaptchaToken} fullWidth>
-          {sendLinkState === 'success' ? 'Send Link Again' : 'Send Link'}
-        </Button>
-      </form>
-      <Button asChild className={s.btnBack} variant={'ghost'}>
-        <Link href={'/sign-in'}>Back to Sign In</Link>
-      </Button>
-      {sendLinkState !== 'success' && (
-        <form className={s.recaptcha} onSubmit={recaptchaSubmit}>
-          <Recaptcha variant={recaptchaState} />
+          {sendLinkState === 'success' && (
+            <p className={s.text}>
+              The link has been sent by email. If you don’t receive an email send link again
+            </p>
+          )}
+          <Button className={s.btnSend} disabled={!emailValue || !recaptchaToken} fullWidth>
+            {sendLinkState === 'success' ? 'Send Link Again' : 'Send Link'}
+          </Button>
         </form>
-      )}
-      <Modal
-        buttonTitle={'OK'}
-        onClose={() => setShowModal(false)}
-        open={showModal}
-        title={'Email sent'}
-      >
-        <p>We have sent a link to confirm your email to {serverData?.email}</p>
-      </Modal>
-    </Card>
+        <Button asChild className={s.btnBack} variant={'ghost'}>
+          <Link href={'/sign-in'}>Back to Sign In</Link>
+        </Button>
+        {sendLinkState !== 'success' && (
+          <form className={s.recaptcha} onSubmit={recaptchaSubmit}>
+            <Recaptcha variant={recaptchaState} />
+          </form>
+        )}
+        <Modal buttonTitle={'OK'} onClose={handleCloseModal} open={showModal} title={'Email sent'}>
+          <p>We have sent a link to confirm your email to {serverData?.email}</p>
+        </Modal>
+      </Card>
+    </GoogleReCaptchaProvider>
   )
 }
 

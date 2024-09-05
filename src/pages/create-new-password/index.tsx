@@ -1,13 +1,22 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
+import { useChangePasswordMutation } from '@/services/password-recovery/password-recovery-api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, FormInput } from '@robur_/ui-kit'
+import { Button, Card, FormInput, Modal } from '@robur_/ui-kit'
+import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 import styles from './index.module.scss'
 
 function CreateNewPassword() {
+  const [showModal, setShowModal] = useState(false)
+  const router = useRouter()
+  const { recoveryCode } = router.query
+
+  const [changePassword] = useChangePasswordMutation()
+
   const FormSchema = z
     .object({
       confirmPassword: z
@@ -26,7 +35,7 @@ function CreateNewPassword() {
 
   type FormValues = z.infer<typeof FormSchema>
 
-  const { control, handleSubmit } = useForm<FormValues>({
+  const { control, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
       confirmPassword: '',
       newPassword: '',
@@ -34,8 +43,34 @@ function CreateNewPassword() {
     resolver: zodResolver(FormSchema),
   })
 
-  const handleSubmitHandler = (data: FormValues) => {
-    console.log(data)
+  const handleSubmitHandler = async (data: FormValues) => {
+    try {
+      if (typeof recoveryCode !== 'string') {
+        throw new Error('Invalid recovery code')
+      }
+
+      if (data.newPassword !== data.confirmPassword) {
+        alert('The passwords must match')
+
+        return
+      }
+
+      const response = await changePassword({
+        code: recoveryCode,
+        newPassword: data.newPassword,
+        passwordConfirmation: data.confirmPassword,
+      }).unwrap()
+
+      setShowModal(true)
+      console.log('Пароль успешно изменен:', response)
+    } catch (error) {
+      console.error('Ошибка при смене пароля:', error)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false)
+    reset()
   }
 
   return (
@@ -59,6 +94,9 @@ function CreateNewPassword() {
           <Button fullWidth>Create new password</Button>
         </form>
       </div>
+      <Modal buttonTitle={'OK'} onClose={handleCloseModal} open={showModal}>
+        <p>The password has been successfully changed.</p>
+      </Modal>
     </Card>
   )
 }
