@@ -2,7 +2,6 @@ import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
 import type { ReactElement, ReactNode } from 'react'
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { Provider } from 'react-redux'
 
 import { useLoader } from '@/assets/hooks/useLoader'

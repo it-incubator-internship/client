@@ -30,32 +30,36 @@ ForgotPasswordRecaptchaWrapper.getLayout = getHeaderLayout
 export default ForgotPasswordRecaptchaWrapper
 
 const ForgotPassword = () => {
-  const { executeRecaptcha } = useGoogleReCaptcha()
-  const { control, handleSubmit, reset, setError, watch } = useForm({
-    resolver: zodResolver(FormSchema),
-  })
+  //local data states
   const [email, setEmail] = useState('')
   const [recaptchaToken, setRecaptchaToken] = useState('')
-
-  console.log({ email, recaptchaToken })
+  //local component states
   const [showModal, setShowModal] = useState(false)
-
-  console.log(showModal)
-  //state, should be change to state from redux
-
   const [sendLinkState, setSendLinkState] = useState<FlowState>('initial')
   const [recaptchaState, setRecaptchaState] = useState<
     'checked' | 'expired' | 'initial' | 'loading' | 'withError'
   >('initial')
-  const formSubmit = handleSubmit(data => {
+  //libs hooks
+  const { executeRecaptcha } = useGoogleReCaptcha()
+  const { control, handleSubmit, reset, setError, watch } = useForm({
+    resolver: zodResolver(FormSchema),
+  })
+  const { data: serverData, error } = useCheckEmailQuery(
+    { email, recaptchaToken },
+    { skip: !email || !recaptchaToken }
+  )
+  //check the email field for buttonSend disabling
+  const emailValue = watch('email', '')
+  //handlers
+  const dataFormSubmit = handleSubmit(data => {
     setEmail(data.email)
   })
 
-  const recaptchaSubmit = async (event: any) => {
+  const recaptchaFormSubmit = async (event: any) => {
     event.preventDefault()
     setRecaptchaState('loading')
     if (!executeRecaptcha) {
-      console.log('Execute recaptcha not yet available')
+      // console.log('Execute recaptcha not yet available')
 
       return
     }
@@ -65,14 +69,13 @@ const ForgotPassword = () => {
     setRecaptchaToken(token)
     setRecaptchaState('checked')
   }
-  const emailValue = watch('email', '')
 
-  const {
-    data: serverData,
-    error,
-    isLoading,
-  } = useCheckEmailQuery({ email, recaptchaToken }, { skip: !email || !recaptchaToken })
+  const handleCloseModal = () => {
+    setShowModal(false)
+    reset()
+  }
 
+  //side effects
   useEffect(() => {
     if (serverData && serverData.email === email) {
       setShowModal(true)
@@ -86,19 +89,10 @@ const ForgotPassword = () => {
     }
   }, [error, setError])
 
-  // if (isLoading) {
-  //   return <Spinner />
-  // }
-
-  const handleCloseModal = () => {
-    setShowModal(false)
-    reset()
-  }
-
   return (
     <Card className={s.card}>
       <h1 className={s.title}>Forgot password</h1>
-      <form onSubmit={formSubmit}>
+      <form onSubmit={dataFormSubmit}>
         <FormInput
           className={s.input}
           control={control}
@@ -123,7 +117,7 @@ const ForgotPassword = () => {
         <Link href={'/sign-in'}>Back to Sign In</Link>
       </Button>
       {sendLinkState !== 'success' && (
-        <form className={s.recaptcha} onSubmit={recaptchaSubmit}>
+        <form className={s.recaptcha} onSubmit={recaptchaFormSubmit}>
           <Recaptcha variant={recaptchaState} />
         </form>
       )}
