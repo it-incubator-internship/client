@@ -3,6 +3,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_BASE_API_URL,
+  credentials: 'include',
   prepareHeaders: headers => {
     const token = localStorage.getItem('accessToken')
 

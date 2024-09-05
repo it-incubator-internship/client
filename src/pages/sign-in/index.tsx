@@ -31,7 +31,7 @@ function SignIn() {
     handleSubmit,
   } = useForm<FormValues>({
     defaultValues: {
-      email: 'kirillmorgunov@mail.ru',
+      email: 'reno.jool@gmail.com',
       password: 'StRo0NgP@SSWoRD',
     },
     resolver: zodResolver(SigninSchema),
