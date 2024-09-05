@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_BASE_API_URL,
+  baseUrl: 'https://navaibe.ru/api',
   credentials: 'include',
   prepareHeaders: headers => {
     const token = localStorage.getItem('accessToken')
