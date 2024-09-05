@@ -15,9 +15,15 @@ export const SocialMediaAuth = () => {
 
   return (
     <div className={s.container}>
-      <button className={s.btn} type={'button'}>
+      <a
+        className={s.btn}
+        href={
+          'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&redirect_uri=https%3A%2F%2Fnavaibe.ru%2Fapi%2Fv1%2Fauth%2Fgoogle%2Fredirect&scope=profile%20email&client_id=145106821045-oud30j9s8m88l6icdc536vqhoc3k7un7.apps.googleusercontent.com'
+        }
+        type={'button'}
+      >
         <GoogleSvgrepoCom1 className={s.svg} onClick={googleLoginHandler} />
-      </button>
+      </a>
       <button className={s.btn} type={'button'}>
         <GithubSvgrepoCom31 className={s.svg} />
       </button>

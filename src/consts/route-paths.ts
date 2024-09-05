@@ -1,6 +1,7 @@
 // pages
 
 export const PATH = {
+  AUTH_TEMP: '/auth-temp',
   CREATE_NEW_PASSWORD: '/create-new-password',
   FORGOT_PASSWORD: '/forgot-password',
   HOME: '/',
@@ -18,4 +19,5 @@ export const commonRoutes = [
   PATH.FORGOT_PASSWORD,
   PATH.CREATE_NEW_PASSWORD,
   PATH.LINK_EXPIRED,
+  PATH.AUTH_TEMP,
 ]
