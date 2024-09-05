@@ -1,3 +1,4 @@
+import { useTranslation } from '@/hooks/useTranslation'
 import Head from 'next/head'
 
 type PropsTypeHead = {
@@ -7,17 +8,12 @@ type PropsTypeHead = {
 
 export const HeadMeta = (props: PropsTypeHead) => {
   const { description, title } = props
+  const t = useTranslation()
 
   return (
     <Head>
       <title>{title}</title>
-      <meta
-        content={
-          description ||
-          'The Inctagram social network is a limitless communication of people all over the world.'
-        }
-        name={'description'}
-      />
+      <meta content={description || t.meta.defaultDescriptionText} name={'description'} />
       <meta content={'width=device-width, initial-scale=1'} name={'viewport'} />
       <link href={'/favicon.ico'} rel={'icon'} />
     </Head>

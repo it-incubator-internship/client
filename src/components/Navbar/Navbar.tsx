@@ -1,6 +1,6 @@
+import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useLogoutMutation } from '@/services/auth/authApi'
-
 import {
   BookmarkOutline,
   HomeOutline,
@@ -19,25 +19,26 @@ type Props = {
   className?: string
 }
 export const Navbar = ({ className }: Props) => {
+  const t = useTranslation()
   const { data } = useMeQuery()
 
-  const [logout, { isLoading, isError }] = useLogoutMutation()
+  const [logout] = useLogoutMutation()
 
   return (
     <nav className={className}>
       <Sidebar>
-        <SidebarItem Icon={HomeOutline} href={'/'} item={'Home'} />
-        <SidebarItem Icon={PlusSquareOutline} href={'/'} item={'Create'} />
-        <SidebarItem Icon={Person} href={`/profile/${data?.userId}`} item={'My profile'} />
-        <SidebarItem Icon={MessageCircleOutline} href={'/'} item={'Messenger'} />
-        <SidebarItem Icon={Search} href={'/'} item={'Search'} />
+        <SidebarItem Icon={HomeOutline} href={'/'} item={t.nav.home} />
+        <SidebarItem Icon={PlusSquareOutline} href={'/'} item={t.nav.create} />
+        <SidebarItem Icon={Person} href={`/profile/${data?.userId}`} item={t.nav.myProfile} />
+        <SidebarItem Icon={MessageCircleOutline} href={'/'} item={t.nav.messenger} />
+        <SidebarItem Icon={Search} href={'/'} item={t.nav.search} />
         <div style={{ marginTop: '60px' }}>
-          <SidebarItem Icon={TrendingUpOutline} href={'/'} item={'Statistics'} />
-          <SidebarItem Icon={BookmarkOutline} href={'/'} item={'Favorites'} />
+          <SidebarItem Icon={TrendingUpOutline} href={'/'} item={t.nav.statistics} />
+          <SidebarItem Icon={BookmarkOutline} href={'/'} item={t.nav.favorites} />
         </div>
         <div style={{ marginTop: '150px' }}>
           <div onClick={() => logout()}>
-            <SidebarItem Icon={LogOut} href={'/'} item={'Logout'} />
+            <SidebarItem Icon={LogOut} href={'/'} item={t.nav.logout} />
           </div>
         </div>
       </Sidebar>
