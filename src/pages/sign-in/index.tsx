@@ -2,11 +2,13 @@ import { useForm } from 'react-hook-form'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
+import { PATH } from '@/consts/route-paths'
 import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
 import clsx from 'clsx'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
@@ -18,6 +20,7 @@ const SigninSchema = z.object({
 })
 
 type FormValues = z.infer<typeof SigninSchema>
+
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
@@ -114,7 +117,7 @@ function SignIn() {
           </Button>
         </form>
         <Button asChild className={clsx(s.ButtonForgot, s.leftItem)} variant={'ghost'}>
-          <a href={'#'}>Forgot Password</a>
+          <Link href={PATH.FORGOT_PASSWORD}>Forgot Password</Link>
         </Button>
         <Button asChild className={s.ButtonAccount} variant={'ghost'}>
           <a href={'#'}>Don’t have an account?</a>

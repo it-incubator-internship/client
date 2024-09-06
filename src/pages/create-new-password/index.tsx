@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
+import { PATH } from '@/consts/route-paths'
 import { useChangePasswordMutation } from '@/services/password-recovery/password-recovery-api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, Modal } from '@robur_/ui-kit'
@@ -62,7 +63,7 @@ function CreateNewPassword() {
       }).unwrap()
 
       setShowModal(true)
-      console.log('Пароль успешно изменен:', response)
+      // await router.replace(PATH.LOGIN)
     } catch (error) {
       console.error('Ошибка при смене пароля:', error)
     }

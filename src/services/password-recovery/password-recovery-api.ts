@@ -15,7 +15,7 @@ const passwordRecovery = inctagramApi.injectEndpoints({
         url: '/v1/auth/new-password',
       }),
     }),
-    checkEmail: builder.query<{ email: string }, { email: string; recaptchaToken: string }>({
+    checkEmail: builder.mutation<{ email: string }, { email: string; recaptchaToken: string }>({
       query: ({ email, recaptchaToken }) => ({
         body: { email, recaptchaToken },
         method: 'POST',
@@ -25,4 +25,4 @@ const passwordRecovery = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { useChangePasswordMutation, useCheckEmailQuery } = passwordRecovery
+export const { useChangePasswordMutation, useCheckEmailMutation } = passwordRecovery

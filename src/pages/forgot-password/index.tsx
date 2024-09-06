@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useForm } from 'react-hook-form'
 
+import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
-import { useCheckEmailQuery } from '@/services/password-recovery/password-recovery-api'
+import { useCheckEmailMutation } from '@/services/password-recovery/password-recovery-api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, Modal, Recaptcha } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -44,22 +45,29 @@ const ForgotPassword = () => {
   const { control, handleSubmit, reset, setError, watch } = useForm({
     resolver: zodResolver(FormSchema),
   })
-  const { data: serverData, error } = useCheckEmailQuery(
-    { email, recaptchaToken },
-    { skip: !email || !recaptchaToken }
-  )
+  const [checkEmail, { isError, isLoading }] = useCheckEmailMutation()
   //check the email field for buttonSend disabling
   const emailValue = watch('email', '')
   //handlers
-  const dataFormSubmit = handleSubmit(data => {
-    setEmail(data.email)
+  const dataFormSubmit = handleSubmit(async data => {
+    try {
+      const res = await checkEmail({ email: data.email, recaptchaToken }).unwrap()
+
+      setEmail(data.email)
+      setShowModal(true)
+      setSendLinkState('success')
+    } catch (error: any) {
+      if (error.data?.statusCode === 400) {
+        // setError('email', { message: "User with this email doesn't exist", type: 'manual' })
+      }
+    }
   })
 
   const recaptchaFormSubmit = async (event: any) => {
     event.preventDefault()
     setRecaptchaState('loading')
     if (!executeRecaptcha) {
-      // console.log('Execute recaptcha not yet available')
+      setError('email', { message: 'Execute recaptcha not yet available', type: 'manual' })
 
       return
     }
@@ -75,19 +83,13 @@ const ForgotPassword = () => {
     reset()
   }
 
-  //side effects
-  useEffect(() => {
-    if (serverData && serverData.email === email) {
-      setShowModal(true)
-      setSendLinkState('success')
-    }
-  }, [serverData, email])
+  if (isLoading) {
+    return <Spinner />
+  }
 
-  useEffect(() => {
-    if (error) {
-      setError('email', { message: "User with this email doesn't exist", type: 'manual' })
-    }
-  }, [error, setError])
+  if (isError) {
+    setError('email', { message: "User with this email doesn't exist", type: 'manual' })
+  }
 
   return (
     <Card className={s.card}>
@@ -122,7 +124,7 @@ const ForgotPassword = () => {
         </form>
       )}
       <Modal buttonTitle={'OK'} onClose={handleCloseModal} open={showModal} title={'Email sent'}>
-        <p>We have sent a link to confirm your email to {serverData?.email}</p>
+        <p>We have sent a link to confirm your email to {email}</p>
       </Modal>
     </Card>
   )
