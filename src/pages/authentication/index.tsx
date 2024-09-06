@@ -14,11 +14,13 @@ function Authentication() {
   if (isLoading) {
     return <Spinner />
   } else if (meData) {
-    router.replace(`/profile/${meData.userId}`)
-
-    return
+    // router.replace(`/profile/${meData.userId}`)
+    //
+    // return
+    console.log('success', meData)
   } else {
-    router.replace(PATH.LOGIN)
+    console.log('fail')
+    // router.replace(PATH.LOGIN)
   }
 
   return <div>Authentication</div>
