@@ -6,7 +6,9 @@ import { useRouter } from 'next/router'
 function Authentication() {
   const router = useRouter()
 
-  localStorage.setItem('accessToken', JSON.stringify(router.query.accessToken))
+  if (typeof router.query.accessToken === 'string') {
+    localStorage.setItem('accessToken', router.query.accessToken)
+  }
 
   const { data: meData, isLoading } = useMeQuery()
 
