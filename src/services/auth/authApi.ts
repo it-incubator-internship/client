@@ -13,7 +13,11 @@ import { inctagramApi } from '../inctagramApi'
 const authApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
     registration: builder.mutation<RegistrationResponse, RegistrationArgs>({
-
+      query: (regArgs: RegistrationArgs)=>({
+        body: regArgs,
+        method: 'POST',
+        url: `/v1/auth/registration`,
+      }),
     }),
     login: builder.mutation<LoginResponse, LoginArgs>({
       async onQueryStarted(
@@ -67,4 +71,10 @@ const authApi = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { useLazyMeQuery, useLoginMutation, useLogoutMutation, useMeQuery } = authApi
+export const {
+  useLazyMeQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useMeQuery,
+  useRegistrationMutation,
+} = authApi
