@@ -36,14 +36,14 @@ const signUpSchema = z.object({
 }).refine((data) => data.password === data.passwordConfirmation,
   {
     path: ["passwordConfirmation"],
-    message: 'Password shoud match'
+    message: "Password should match"
   });
 
 type FormValues = z.infer<typeof signUpSchema>
 
 export default function SignUp() {
   const [registration, { isLoading }] = useRegistrationMutation();
-  const [isModalOpen, setIsModalOpen] =    useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [responseEmail, setResponseEmail] = useState("");
 
   const {
@@ -61,6 +61,15 @@ export default function SignUp() {
       },
       resolver: zodResolver(signUpSchema)
     });
+
+  // const [isSignUpButtonDisabled, setIsSignUpButtonDisabled] = useState(true);
+  // console.log(`errors, isSignUpButtonDisabled`, errors, isSignUpButtonDisabled);
+  // useEffect(() => {
+  //   if (Object.keys(errors).length === 0) {
+  //     setIsSignUpButtonDisabled(false);
+  //   }
+  // });
+
 
   const handleSignUp = async (data: RegistrationArgs) => {
     const trimmedData = {
