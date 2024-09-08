@@ -1,11 +1,20 @@
 import { PATH } from '@/consts/route-paths'
-import { LoginArgs, LoginResponse, MeResponse } from '@/services/auth/authTypes'
+import {
+  LoginArgs,
+  LoginResponse,
+  MeResponse,
+  RegistrationArgs,
+  RegistrationResponse
+} from "@/services/auth/authTypes";
 import Router from 'next/router'
 
 import { inctagramApi } from '../inctagramApi'
 
 const authApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
+    registration: builder.mutation<RegistrationResponse, RegistrationArgs>({
+
+    }),
     login: builder.mutation<LoginResponse, LoginArgs>({
       async onQueryStarted(
         // 1 параметр: QueryArg - аргументы, которые приходят в query
@@ -23,6 +32,7 @@ const authApi = inctagramApi.injectEndpoints({
 
         localStorage.setItem('accessToken', data.accessToken)
       },
+      // этот метод выполяется перед onQueryStarted
       query: ({ email, password }) => ({
         body: { email, password },
         credentials: 'include',

@@ -9,8 +9,8 @@ import {
 } from '@robur_/ui-kit'
 import clsx from 'clsx'
 
-// todo куда передать тру что бы чекбокс показывал ошибку
-// todo User with this username is already registered,
+// todo
+// todo
 // todo
 
 import { useForm } from 'react-hook-form'
