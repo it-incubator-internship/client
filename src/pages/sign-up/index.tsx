@@ -17,7 +17,7 @@ import { z } from "zod";
 
 import s from "./Signup.module.scss";
 import { useRegistrationMutation } from "@/services/auth/authApi";
-import { RegistrationArgs, RegistrationResponse } from "@/services/auth/authTypes";
+import { RegistrationArgs } from "@/services/auth/authTypes";
 import Spinner from "@/components/Spinner/Spinner";
 import { useState } from "react";
 
@@ -33,7 +33,11 @@ const signUpSchema = z.object({
     .string()
     .min(6, `Minimum number of characters 6`)
     .max(30, `Minimum number of characters 30`)
-});
+}).refine((data) => data.password === data.passwordConfirmation,
+  {
+    path: ["passwordConfirmation"],
+    message: 'Password shoud match'
+  });
 
 type FormValues = z.infer<typeof signUpSchema>
 
