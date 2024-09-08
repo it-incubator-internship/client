@@ -43,6 +43,9 @@ type FormValues = z.infer<typeof signUpSchema>
 
 export default function SignUp() {
   const [registration, { isLoading }] = useRegistrationMutation();
+  const [isModalOpen, setIsModalOpen] =    useState(false);
+  const [responseEmail, setResponseEmail] = useState("");
+
   const {
     control,
     formState: { errors },
@@ -58,11 +61,6 @@ export default function SignUp() {
       },
       resolver: zodResolver(signUpSchema)
     });
-
-  const [isModalOpen, setIsModalOpen] =
-    useState(false);
-
-  const [responseEmail, setResponseEmail] = useState("email@email.to");
 
   const handleSignUp = async (data: RegistrationArgs) => {
     const trimmedData = {
@@ -192,7 +190,7 @@ export default function SignUp() {
               </FormCheckbox>
             </div>
 
-            <Button className={s.SignUpButton} fullWidth type={"submit"}>
+            <Button className={s.SignUpButton} fullWidth type={"submit"} disabled={false}>
               Sign Up
             </Button>
           </form>
