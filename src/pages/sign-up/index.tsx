@@ -56,6 +56,7 @@ export default function SignUp() {
     });
 
   const [modalIsOpen, setModalIsOpen] = useState(true);
+
   const handleSignUp = async (data: RegistrationArgs) => {
     const trimmedData = {
       ...data,
@@ -74,11 +75,18 @@ export default function SignUp() {
       //   </Modal>)
       // }
 
+      const args = {
+        children: <p>We have sent a link to confirm your email to email@email.com</p>,
+        open: true,
+        title: "Email sent",
+        onClose: () => {
+          console.log('close!')
+        }
+      };
+
       return (
-        <Modal open={modalIsOpen} buttonTitle={"OK"} title={"Email sent"} onClose={() => {
-          setModalIsOpen(false);
-        }}>
-          children={<p>We have sent a link to confirm your email to email@email.com</p>}
+        <Modal {...args} onClose={args.onClose}>
+          {args.children}
         </Modal>);
 
     } catch (error: any) {
