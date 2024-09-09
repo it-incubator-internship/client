@@ -1,11 +1,5 @@
 import { useForm } from 'react-hook-form'
 
-<<<<<<< HEAD
-import { useLazyMeQuery, useLoginMutation } from '@/services/auth/authApi'
-import { LoginArgs } from '@/services/auth/authTypes'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, FormInput, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
-=======
 import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
@@ -13,14 +7,11 @@ import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/au
 import { LoginArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput } from '@robur_/ui-kit'
->>>>>>> master
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 import s from './signIn.module.scss'
-
-import GitHubAuthPage from '../auth/github'
 
 const SigninSchema = z.object({
   email: z.string().email(),
@@ -39,13 +30,10 @@ export default function SignIn() {
     formState: { errors },
     handleSubmit,
   } = useForm<FormValues>({
-<<<<<<< HEAD
-=======
     defaultValues: {
       email: 'reno.jool@gmail.com',
       password: 'StRo0NgP@SSWoRD',
     },
->>>>>>> master
     resolver: zodResolver(SigninSchema),
   })
   const handleSignIn = async (data: LoginArgs) => {
@@ -103,15 +91,7 @@ export default function SignIn() {
       <Card className={s.Card}>
         <h1 className={s.Title}>Sign in</h1>
         <form className={s.Form} onSubmit={handleSubmit(handleSignIn)}>
-<<<<<<< HEAD
-          <div className={s.BlockForLinks}>
-            <GoogleSvgrepoCom1 className={s.Svg} />
-            <GitHubAuthPage />
-          </div>
-          <FormInput control={control} error={errors?.email} label={'Email'} name={'email'} />
-=======
           <SocialMediaAuth />
->>>>>>> master
           <FormInput
             control={control}
             error={errors?.password}
