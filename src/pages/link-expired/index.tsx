@@ -15,7 +15,6 @@ function LinkExpired() {
   const [lastClickTime, setLastClickTime] = useState(0)
   const [showModal, setShowModal] = useState(false)
 
-  console.log('ema ', email)
   const handleOnClick = useCallback(async () => {
     const currentTime = Date.now()
 

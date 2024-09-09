@@ -74,7 +74,7 @@ function CreateNewPassword() {
   }, [recoveryCode])
 
   useEffect(() => {
-    if (parsedJwt.email && parsedJwt.exp && Date.now() > parsedJwt.exp) {
+    if (parsedJwt.email && parsedJwt.exp && Date.now() > parsedJwt.exp * 1000) {
       void router.replace(`/link-expired?email=${encodeURIComponent(parsedJwt.email)}`)
     }
   }, [parsedJwt, router])
