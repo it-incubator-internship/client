@@ -1,11 +1,5 @@
 import { PATH } from '@/consts/route-paths'
-import {
-  LoginArgs,
-  LoginResponse,
-  MeResponse,
-  RegistrationArgs,
-  RegistrationResponse
-} from "@/services/auth/authTypes";
+import { LoginArgs, LoginResponse, MeResponse } from '@/services/auth/authTypes'
 import Router from 'next/router'
 
 import { inctagramApi } from '../inctagramApi'
@@ -18,6 +12,9 @@ const authApi = inctagramApi.injectEndpoints({
         method: 'POST',
         url: `/v1/auth/registration`,
       }),
+    }),
+    googleLogin: builder.query<undefined, void>({
+      query: () => `/v1/auth/google`,
     }),
     login: builder.mutation<LoginResponse, LoginArgs>({
       async onQueryStarted(
@@ -36,7 +33,6 @@ const authApi = inctagramApi.injectEndpoints({
 
         localStorage.setItem('accessToken', data.accessToken)
       },
-      // этот метод выполяется перед onQueryStarted
       query: ({ email, password }) => ({
         body: { email, password },
         credentials: 'include',
@@ -71,10 +67,4 @@ const authApi = inctagramApi.injectEndpoints({
   }),
 })
 
-export const {
-  useLazyMeQuery,
-  useLoginMutation,
-  useLogoutMutation,
-  useMeQuery,
-  useRegistrationMutation,
-} = authApi
+export const { useLazyMeQuery, useLoginMutation, useLogoutMutation, useMeQuery } = authApi

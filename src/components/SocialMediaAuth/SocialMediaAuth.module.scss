@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  gap: 60px;
+  justify-content: center;
+
+  margin-top: 13px;
+  margin-bottom: 24px;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.svg {
+  width: 36px;
+  height: 36px;
+}
