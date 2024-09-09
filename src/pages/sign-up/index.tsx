@@ -45,11 +45,10 @@ export default function SignUp() {
   const [registration, { isLoading }] = useRegistrationMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [responseEmail, setResponseEmail] = useState("");
-  const [isSignUpButtonDisabled, setIsSignUpButtonDisabled] = useState(false);
 
   const {
     control,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
     reset
   } = useForm<FormValues>(
@@ -195,7 +194,7 @@ export default function SignUp() {
               </FormCheckbox>
             </div>
 
-            <Button className={s.SignUpButton} fullWidth type={"submit"} disabled={isSignUpButtonDisabled}>
+            <Button className={s.SignUpButton} fullWidth type={"submit"} disabled={!isValid}>
               Sign Up
             </Button>
           </form>
