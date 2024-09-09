@@ -24,7 +24,9 @@ import { useEffect, useState } from "react";
 // todo  проверить валидацию по тз
 const signUpSchema = z.object({
   email: z.string().email("The email must match the format\nexample@example.com"),
-  password: z.string().min(8).max(20),
+  password: z.string().min(8).max(20)
+    .regex(/^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]+$/g,
+      'password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~'),
   passwordConfirmation: z.string().min(8).max(20),
   isAgreement: z.literal(true, {
     errorMap: () => ({ message: "Please, mark the checkbox, if you agree to our terms" })
