@@ -62,8 +62,9 @@ function CreateNewPassword() {
         passwordConfirmation: data.confirmPassword,
       }).unwrap()
 
-      setShowModal(true)
       // await router.replace(PATH.LOGIN)
+
+      setShowModal(true)
     } catch (error) {
       console.error('Ошибка при смене пароля:', error)
     }

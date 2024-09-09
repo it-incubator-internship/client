@@ -4,7 +4,10 @@ import { useForm } from 'react-hook-form'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
-import { useCheckEmailMutation } from '@/services/password-recovery/password-recovery-api'
+import {
+  useCheckEmailMutation,
+  useResendEmailMutation,
+} from '@/services/password-recovery/password-recovery-api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, Modal, Recaptcha } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -45,17 +48,23 @@ const ForgotPassword = () => {
   const { control, handleSubmit, reset, setError, watch } = useForm({
     resolver: zodResolver(FormSchema),
   })
-  const [checkEmail, { isError, isLoading }] = useCheckEmailMutation()
+  const [checkEmail, { isError: isErrorCheckEmail, isLoading: isLoadingCheckEmail }] =
+    useCheckEmailMutation()
+  const [resendEmail, { isError: isErrorResendEmail, isLoading: isLoadingResendEmail }] =
+    useResendEmailMutation()
   //check the email field for buttonSend disabling
   const emailValue = watch('email', '')
   //handlers
   const dataFormSubmit = handleSubmit(async data => {
     try {
-      const res = await checkEmail({ email: data.email, recaptchaToken }).unwrap()
-
-      setEmail(data.email)
+      if (sendLinkState === 'initial') {
+        await checkEmail({ email: data.email, recaptchaToken }).unwrap()
+        setEmail(data.email)
+        setSendLinkState('success')
+      } else if (sendLinkState === 'success') {
+        await resendEmail({ email }).unwrap()
+      }
       setShowModal(true)
-      setSendLinkState('success')
     } catch (error: any) {
       if (error.data?.statusCode === 400) {
         // setError('email', { message: "User with this email doesn't exist", type: 'manual' })
@@ -83,12 +92,20 @@ const ForgotPassword = () => {
     reset()
   }
 
-  if (isLoading) {
+  if (isLoadingCheckEmail || isLoadingResendEmail) {
     return <Spinner />
   }
 
-  if (isError) {
+  if (isErrorCheckEmail || isErrorResendEmail) {
     setError('email', { message: "User with this email doesn't exist", type: 'manual' })
+  }
+
+  const isBtnDisabled = () => {
+    if (sendLinkState === 'success') {
+      return false
+    }
+
+    return !emailValue || !recaptchaToken
   }
 
   return (
@@ -111,7 +128,7 @@ const ForgotPassword = () => {
             The link has been sent by email. If you don’t receive an email send link again
           </p>
         )}
-        <Button className={s.btnSend} disabled={!emailValue || !recaptchaToken} fullWidth>
+        <Button className={s.btnSend} disabled={isBtnDisabled()} fullWidth>
           {sendLinkState === 'success' ? 'Send Link Again' : 'Send Link'}
         </Button>
       </form>

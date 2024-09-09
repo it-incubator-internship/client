@@ -8,7 +8,7 @@ type ChangePasswordRequest = {
 
 const passwordRecovery = inctagramApi.injectEndpoints({
   endpoints: builder => ({
-    changePassword: builder.mutation<any, ChangePasswordRequest>({
+    changePassword: builder.mutation<void, ChangePasswordRequest>({
       query: ({ code, newPassword, passwordConfirmation }) => ({
         body: { code, newPassword, passwordConfirmation },
         method: 'POST',
@@ -22,7 +22,15 @@ const passwordRecovery = inctagramApi.injectEndpoints({
         url: '/v1/auth/password-recovery',
       }),
     }),
+    resendEmail: builder.mutation<{ email: string }, { email: string }>({
+      query: ({ email }) => ({
+        body: { email },
+        method: 'POST',
+        url: '/v1/auth/password-recovery-email-resending',
+      }),
+    }),
   }),
 })
 
-export const { useChangePasswordMutation, useCheckEmailMutation } = passwordRecovery
+export const { useChangePasswordMutation, useCheckEmailMutation, useResendEmailMutation } =
+  passwordRecovery
