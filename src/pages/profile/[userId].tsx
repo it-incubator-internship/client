@@ -1,14 +1,13 @@
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
-import Spinner from '@/components/Spinner/Spinner'
 import { getSideBarLayout } from '@/components/layouts/SidebarLayout/SidebarLayout'
+import { useMeQuery } from '@/services/auth/authApi'
 import { TabContent, Tabs } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
-import { useMeQuery } from '@/services/auth/authApi'
 
 function Profile() {
   const router = useRouter()
   const userId = router.query.userId
-  const { data, isLoading } = useMeQuery()
+  const { data } = useMeQuery()
 
   return (
     <div className={'container'}>
