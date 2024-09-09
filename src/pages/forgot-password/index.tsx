@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useForm } from 'react-hook-form'
 
@@ -37,33 +37,36 @@ const ForgotPassword = () => {
   //local data states
   const [email, setEmail] = useState('')
   const [recaptchaToken, setRecaptchaToken] = useState('')
+  const [lastClickTime, setLastClickTime] = useState(0)
+
   //local component states
   const [showModal, setShowModal] = useState(false)
   const [sendLinkState, setSendLinkState] = useState<FlowState>('initial')
   const [recaptchaState, setRecaptchaState] = useState<
     'checked' | 'expired' | 'initial' | 'loading' | 'withError'
   >('initial')
+
   //libs hooks
   const { executeRecaptcha } = useGoogleReCaptcha()
+
   const { control, handleSubmit, reset, setError, watch } = useForm({
     resolver: zodResolver(FormSchema),
   })
   const [checkEmail, { isError: isErrorCheckEmail, isLoading: isLoadingCheckEmail }] =
     useCheckEmailMutation()
+
   const [resendEmail, { isError: isErrorResendEmail, isLoading: isLoadingResendEmail }] =
     useResendEmailMutation()
+
   //check the email field for buttonSend disabling
   const emailValue = watch('email', '')
+
   //handlers
   const dataFormSubmit = handleSubmit(async data => {
     try {
-      if (sendLinkState === 'initial') {
-        await checkEmail({ email: data.email, recaptchaToken }).unwrap()
-        setEmail(data.email)
-        setSendLinkState('success')
-      } else if (sendLinkState === 'success') {
-        await resendEmail({ email }).unwrap()
-      }
+      await checkEmail({ email: data.email, recaptchaToken }).unwrap()
+      setEmail(data.email)
+      setSendLinkState('success')
       setShowModal(true)
     } catch (error: any) {
       if (error.data?.statusCode === 400) {
@@ -92,14 +95,6 @@ const ForgotPassword = () => {
     reset()
   }
 
-  if (isLoadingCheckEmail || isLoadingResendEmail) {
-    return <Spinner />
-  }
-
-  if (isErrorCheckEmail || isErrorResendEmail) {
-    setError('email', { message: "User with this email doesn't exist", type: 'manual' })
-  }
-
   const isBtnDisabled = () => {
     if (sendLinkState === 'success') {
       return false
@@ -108,16 +103,43 @@ const ForgotPassword = () => {
     return !emailValue || !recaptchaToken
   }
 
+  const handleResendEmail = useCallback(async () => {
+    const currentTime = Date.now()
+
+    if (currentTime - lastClickTime < 60000) {
+      const remainingTime = Math.ceil((60000 - (currentTime - lastClickTime)) / 1000)
+
+      alert(`Please wait ${remainingTime} seconds before trying to send the link again.`)
+
+      return
+    }
+
+    setLastClickTime(currentTime)
+    await resendEmail({ email }).unwrap()
+    setShowModal(true)
+  }, [resendEmail, lastClickTime, email])
+
+  //Guards
+  if (isLoadingCheckEmail || isLoadingResendEmail) {
+    return <Spinner />
+  }
+
+  if (isErrorCheckEmail || isErrorResendEmail) {
+    setError('email', { message: "User with this email doesn't exist", type: 'manual' })
+  }
+
   return (
     <Card className={s.card}>
       <h1 className={s.title}>Forgot password</h1>
+
       <form onSubmit={dataFormSubmit}>
         <FormInput
           className={s.input}
           control={control}
+          disabled={sendLinkState === 'success'}
           label={'Email'}
           name={'email'}
-          placeholder={'Epam@epam.com'}
+          placeholder={email ?? 'Epam@epam.com'}
           width={'100%'}
         />
         <p className={clsx(s.text, s.textTip)}>
@@ -128,18 +150,27 @@ const ForgotPassword = () => {
             The link has been sent by email. If you don’t receive an email send link again
           </p>
         )}
-        <Button className={s.btnSend} disabled={isBtnDisabled()} fullWidth>
+        <Button
+          className={s.btnSend}
+          disabled={isBtnDisabled()}
+          fullWidth
+          onClick={sendLinkState === 'success' ? handleResendEmail : undefined}
+          type={sendLinkState === 'success' ? 'button' : 'submit'}
+        >
           {sendLinkState === 'success' ? 'Send Link Again' : 'Send Link'}
         </Button>
       </form>
+
       <Button asChild className={s.btnBack} variant={'ghost'}>
         <Link href={'/sign-in'}>Back to Sign In</Link>
       </Button>
+
       {sendLinkState !== 'success' && (
         <form className={s.recaptcha} onSubmit={recaptchaFormSubmit}>
           <Recaptcha variant={recaptchaState} />
         </form>
       )}
+
       <Modal buttonTitle={'OK'} onClose={handleCloseModal} open={showModal} title={'Email sent'}>
         <p>We have sent a link to confirm your email to {email}</p>
       </Modal>

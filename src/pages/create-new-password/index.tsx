@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
@@ -12,10 +12,18 @@ import { z } from 'zod'
 import styles from './index.module.scss'
 
 function CreateNewPassword() {
-  const [showModal, setShowModal] = useState(false)
   const router = useRouter()
   const { recoveryCode } = router.query
-
+  const [showModal, setShowModal] = useState(false)
+  const [parsedJwt, setParsedJwt] = useState<{
+    email: string
+    exp: number
+    iat: number
+  }>({
+    email: '',
+    exp: 0,
+    iat: 0,
+  })
   const [changePassword] = useChangePasswordMutation()
 
   const FormSchema = z
@@ -44,29 +52,47 @@ function CreateNewPassword() {
     resolver: zodResolver(FormSchema),
   })
 
+  function parseJwt(recoveryCode: any) {
+    const tokenPayload = recoveryCode.split('.')?.[1]
+    let parsedPayload
+
+    try {
+      const decoderPayload = atob(tokenPayload)
+
+      parsedPayload = JSON.parse(decoderPayload)
+    } catch {
+      parsedPayload = {}
+    }
+
+    return parsedPayload
+  }
+
+  useEffect(() => {
+    const jwtData = parseJwt(recoveryCode)
+
+    setParsedJwt(jwtData)
+  }, [recoveryCode])
+
+  useEffect(() => {
+    if (parsedJwt.email && parsedJwt.exp && Date.now() > parsedJwt.exp) {
+      void router.replace(`/link-expired?email=${encodeURIComponent(parsedJwt.email)}`)
+    }
+  }, [parsedJwt, router])
+
   const handleSubmitHandler = async (data: FormValues) => {
     try {
-      if (typeof recoveryCode !== 'string') {
-        throw new Error('Invalid recovery code')
-      }
-
-      if (data.newPassword !== data.confirmPassword) {
-        alert('The passwords must match')
-
-        return
-      }
-
-      const response = await changePassword({
-        code: recoveryCode,
+      await changePassword({
+        code: recoveryCode as string,
         newPassword: data.newPassword,
         passwordConfirmation: data.confirmPassword,
-      }).unwrap()
-
-      // await router.replace(PATH.LOGIN)
-
-      setShowModal(true)
+      })
+        .unwrap()
+        .then(async () => {
+          await router.replace(PATH.LOGIN)
+        })
+        .then(() => setShowModal(true))
     } catch (error) {
-      console.error('Ошибка при смене пароля:', error)
+      console.log(error)
     }
   }
 
