@@ -1,15 +1,16 @@
 import { useForm } from 'react-hook-form'
 
-import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { useLazyMeQuery, useLoginMutation } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, FormInput, GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
+import { Button, Card, FormInput, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 import s from './signIn.module.scss'
+
+import GitHubAuthPage from '../auth/github'
 
 const SigninSchema = z.object({
   email: z.string().email(),
@@ -17,7 +18,7 @@ const SigninSchema = z.object({
 })
 
 type FormValues = z.infer<typeof SigninSchema>
-function SignIn() {
+export default function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
   const [getMe] = useLazyMeQuery()
   const router = useRouter()
@@ -27,10 +28,6 @@ function SignIn() {
     formState: { errors },
     handleSubmit,
   } = useForm<FormValues>({
-    defaultValues: {
-      email: 'come@mail.ru',
-      password: 'StRo0NgP@SSWoRD+9_',
-    },
     resolver: zodResolver(SigninSchema),
   })
   const handleSignIn = async (data: LoginArgs) => {
@@ -77,17 +74,10 @@ function SignIn() {
         <form className={s.Form} onSubmit={handleSubmit(handleSignIn)}>
           <div className={s.BlockForLinks}>
             <GoogleSvgrepoCom1 className={s.Svg} />
-            <GithubSvgrepoCom31 className={s.Svg} />
+            <GitHubAuthPage />
           </div>
+          <FormInput control={control} error={errors?.email} label={'Email'} name={'email'} />
           <FormInput
-            containerClassName={s.inputContainer}
-            control={control}
-            error={errors?.email}
-            label={'Email'}
-            name={'email'}
-          />
-          <FormInput
-            containerClassName={s.inputContainer}
             control={control}
             error={errors?.password}
             label={'Password'}
@@ -111,6 +101,3 @@ function SignIn() {
     </div>
   )
 }
-
-SignIn.getLayout = getHeaderLayout
-export default SignIn

@@ -4,6 +4,28 @@ import { inctagramApi } from '../inctagramApi'
 
 const authApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
+    githubAuth: builder.mutation<void, void>({
+      query: () => ({
+        credentials: 'include',
+        method: 'GET',
+        url: 'v1/auth/github',
+      }),
+    }),
+    githubCallback: builder.mutation<{ accessToken: string }, void>({
+      async onQueryStarted(_, { queryFulfilled }) {
+        const { data } = await queryFulfilled
+
+        if (!data) {
+          return
+        }
+        localStorage.setItem('accessToken', data.accessToken)
+      },
+      query: () => ({
+        credentials: 'include',
+        method: 'GET',
+        url: `v1/auth/github/callback`,
+      }),
+    }),
     login: builder.mutation<LoginResponse, LoginArgs>({
       async onQueryStarted(
         // 1 параметр: QueryArg - аргументы, которые приходят в query
@@ -35,4 +57,10 @@ const authApi = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { useLazyMeQuery, useLoginMutation, useMeQuery } = authApi
+export const {
+  useGithubAuthMutation,
+  useGithubCallbackMutation,
+  useLazyMeQuery,
+  useLoginMutation,
+  useMeQuery,
+} = authApi
