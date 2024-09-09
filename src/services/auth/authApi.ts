@@ -1,20 +1,25 @@
-import { PATH } from '@/consts/route-paths'
-import { LoginArgs, LoginResponse, MeResponse } from '@/services/auth/authTypes'
-import Router from 'next/router'
-
-import { inctagramApi } from '../inctagramApi'
+import { PATH } from "@/consts/route-paths";
+import {
+  LoginArgs,
+  LoginResponse,
+  MeResponse,
+  RegistrationArgs,
+  RegistrationResponse
+} from "@/services/auth/authTypes";
+import Router from "next/router";
+import { inctagramApi } from "../inctagramApi";
 
 const authApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
     registration: builder.mutation<RegistrationResponse, RegistrationArgs>({
-      query: (regArgs: RegistrationArgs)=>({
+      query: (regArgs: RegistrationArgs) => ({
         body: regArgs,
-        method: 'POST',
-        url: `/v1/auth/registration`,
-      }),
+        method: "POST",
+        url: `/v1/auth/registration`
+      })
     }),
     googleLogin: builder.query<undefined, void>({
-      query: () => `/v1/auth/google`,
+      query: () => `/v1/auth/google`
     }),
     login: builder.mutation<LoginResponse, LoginArgs>({
       async onQueryStarted(
@@ -25,46 +30,52 @@ const authApi = inctagramApi.injectEndpoints({
         // когда запрос успешно завершен
         { queryFulfilled }
       ) {
-        const { data } = await queryFulfilled
+        const { data } = await queryFulfilled;
 
         if (!data) {
-          return
+          return;
         }
 
-        localStorage.setItem('accessToken', data.accessToken)
+        localStorage.setItem("accessToken", data.accessToken);
       },
       query: ({ email, password }) => ({
         body: { email, password },
-        credentials: 'include',
-        method: 'POST',
-        url: `/v1/auth/login`,
-      }),
+        credentials: "include",
+        method: "POST",
+        url: `/v1/auth/login`
+      })
     }),
     logout: builder.mutation<void, void>({
       onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
         try {
-          await queryFulfilled
-          localStorage.removeItem('accessToken')
-          dispatch(inctagramApi.util.invalidateTags(['Me']))
-          dispatch(inctagramApi.util.resetApiState())
-          void Router.replace(PATH.LOGIN)
+          await queryFulfilled;
+          localStorage.removeItem("accessToken");
+          dispatch(inctagramApi.util.invalidateTags(["Me"]));
+          dispatch(inctagramApi.util.resetApiState());
+          void Router.replace(PATH.LOGIN);
         } catch (error) {
-          console.error('Logout failed:', error)
+          console.error("Logout failed:", error);
         }
       },
       query: () => {
         return {
-          credentials: 'include',
-          method: 'POST',
-          url: '/v1/auth/logout',
-        }
-      },
+          credentials: "include",
+          method: "POST",
+          url: "/v1/auth/logout"
+        };
+      }
     }),
     me: builder.query<MeResponse, void>({
-      providesTags: ['Me'],
-      query: () => `/v1/auth/me`,
-    }),
-  }),
-})
+      providesTags: ["Me"],
+      query: () => `/v1/auth/me`
+    })
+  })
+});
 
-export const { useLazyMeQuery, useLoginMutation, useLogoutMutation, useMeQuery } = authApi
+export const {
+  useLazyMeQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useMeQuery,
+  useRegistrationMutation
+} = authApi;
