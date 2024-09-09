@@ -1,31 +1,11 @@
+import { PATH } from '@/consts/route-paths'
 import { LoginArgs, LoginResponse, MeResponse } from '@/services/auth/authTypes'
+import Router from 'next/router'
 
 import { inctagramApi } from '../inctagramApi'
 
 const authApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
-    githubAuth: builder.mutation<void, void>({
-      query: () => ({
-        credentials: 'include',
-        method: 'GET',
-        url: 'v1/auth/github',
-      }),
-    }),
-    githubCallback: builder.mutation<{ accessToken: string }, void>({
-      async onQueryStarted(_, { queryFulfilled }) {
-        const { data } = await queryFulfilled
-
-        if (!data) {
-          return
-        }
-        localStorage.setItem('accessToken', data.accessToken)
-      },
-      query: () => ({
-        credentials: 'include',
-        method: 'GET',
-        url: `v1/auth/github/callback`,
-      }),
-    }),
     login: builder.mutation<LoginResponse, LoginArgs>({
       async onQueryStarted(
         // 1 параметр: QueryArg - аргументы, которые приходят в query
@@ -50,6 +30,26 @@ const authApi = inctagramApi.injectEndpoints({
         url: `/v1/auth/login`,
       }),
     }),
+    logout: builder.mutation<void, void>({
+      onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled
+          localStorage.removeItem('accessToken')
+          dispatch(inctagramApi.util.invalidateTags(['Me']))
+          dispatch(inctagramApi.util.resetApiState())
+          void Router.replace(PATH.LOGIN)
+        } catch (error) {
+          console.error('Logout failed:', error)
+        }
+      },
+      query: () => {
+        return {
+          credentials: 'include',
+          method: 'POST',
+          url: '/v1/auth/logout',
+        }
+      },
+    }),
     me: builder.query<MeResponse, void>({
       providesTags: ['Me'],
       query: () => `/v1/auth/me`,
@@ -57,10 +57,4 @@ const authApi = inctagramApi.injectEndpoints({
   }),
 })
 
-export const {
-  useGithubAuthMutation,
-  useGithubCallbackMutation,
-  useLazyMeQuery,
-  useLoginMutation,
-  useMeQuery,
-} = authApi
+export const { useLazyMeQuery, useLoginMutation, useMeQuery } = authApi

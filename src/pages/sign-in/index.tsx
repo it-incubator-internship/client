@@ -1,9 +1,19 @@
 import { useForm } from 'react-hook-form'
 
+<<<<<<< HEAD
 import { useLazyMeQuery, useLoginMutation } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
+=======
+import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
+import Spinner from '@/components/Spinner/Spinner'
+import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
+import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
+import { LoginArgs } from '@/services/auth/authTypes'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, Card, FormInput } from '@robur_/ui-kit'
+>>>>>>> master
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
@@ -20,6 +30,7 @@ const SigninSchema = z.object({
 type FormValues = z.infer<typeof SigninSchema>
 export default function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
+  const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const [getMe] = useLazyMeQuery()
   const router = useRouter()
 
@@ -28,13 +39,19 @@ export default function SignIn() {
     formState: { errors },
     handleSubmit,
   } = useForm<FormValues>({
+<<<<<<< HEAD
+=======
+    defaultValues: {
+      email: 'reno.jool@gmail.com',
+      password: 'StRo0NgP@SSWoRD',
+    },
+>>>>>>> master
     resolver: zodResolver(SigninSchema),
   })
   const handleSignIn = async (data: LoginArgs) => {
     try {
       const res = await login(data).unwrap()
 
-      localStorage.setItem('accessToken', res.accessToken)
       const tokenPayload = res.accessToken.split('.')?.[1]
       let parserPayload
 
@@ -55,10 +72,16 @@ export default function SignIn() {
 
         userId = meRes?.data?.userId
       }
+      if (isLoading) {
+        return <Spinner />
+      } else if (userId) {
+        router.replace(`/profile/${userId}`)
+
+        return
+      }
       if (!userId) {
         return
       }
-      router.replace(`/profile/${userId}`)
     } catch (error: any) {
       if (error.data?.statusCode === 401 && error.data?.error === 'Unauthorized') {
         router.replace(`/sign-up`)
@@ -67,16 +90,28 @@ export default function SignIn() {
     }
   }
 
+  if (startIsLoading) {
+    return <Spinner />
+  } else if (meData) {
+    router.replace(`/`)
+
+    return
+  }
+
   return (
     <div className={s.Container}>
       <Card className={s.Card}>
         <h1 className={s.Title}>Sign in</h1>
         <form className={s.Form} onSubmit={handleSubmit(handleSignIn)}>
+<<<<<<< HEAD
           <div className={s.BlockForLinks}>
             <GoogleSvgrepoCom1 className={s.Svg} />
             <GitHubAuthPage />
           </div>
           <FormInput control={control} error={errors?.email} label={'Email'} name={'email'} />
+=======
+          <SocialMediaAuth />
+>>>>>>> master
           <FormInput
             control={control}
             error={errors?.password}
