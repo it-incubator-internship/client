@@ -20,6 +20,7 @@ import { useRegistrationMutation } from "@/services/auth/authApi";
 import { RegistrationArgs } from "@/services/auth/authTypes";
 import Spinner from "@/components/Spinner/Spinner";
 import { useEffect, useState } from "react";
+import { SocialMediaAuth } from "@/components/SocialMediaAuth/SocialMediaAuth";
 
 // todo  проверить валидацию по тз
 const signUpSchema = z.object({
@@ -116,12 +117,7 @@ export default function SignUp() {
         <Card className={clsx(s.SignUpCard, s.BorderBack)}>
           <h1 className={s.SignUpCardTitle}>Sign Up</h1>
           <div className={s.SignUpCloudAuth}>
-            <Link className={s.SignUpCloudAuthLink} href={"https://www.google.com"} target={"_blank"}>
-              <GoogleSvgrepoCom1 />
-            </Link>
-            <Link className={s.SignUpCloudAuthLink} href={"https://www.github.com"} target={"_blank"}>
-              <GithubSvgrepoCom31 />
-            </Link>
+            <SocialMediaAuth />
           </div>
           <form className={s.SignUpForm} onSubmit={handleSubmit(handleSignUp)}>
             <Label className={s.SignUpFormLabel} label={"userName"}>

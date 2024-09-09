@@ -77,5 +77,6 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useMeQuery,
-  useRegistrationMutation
+  useRegistrationMutation,
+  useLazyGoogleLoginQuery
 } = authApi;
