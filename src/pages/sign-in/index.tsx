@@ -19,7 +19,7 @@ const SigninSchema = z.object({
 })
 
 type FormValues = z.infer<typeof SigninSchema>
-export default function SignIn() {
+function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const [getMe] = useLazyMeQuery()
@@ -93,6 +93,14 @@ export default function SignIn() {
         <form className={s.Form} onSubmit={handleSubmit(handleSignIn)}>
           <SocialMediaAuth />
           <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            error={errors?.email}
+            label={'Email'}
+            name={'email'}
+          />
+          <FormInput
+            containerClassName={s.inputContainer}
             control={control}
             error={errors?.password}
             label={'Password'}
@@ -116,3 +124,6 @@ export default function SignIn() {
     </div>
   )
 }
+
+SignIn.getLayout = getHeaderLayout
+export default SignIn

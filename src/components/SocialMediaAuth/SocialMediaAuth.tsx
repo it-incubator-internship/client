@@ -1,16 +1,25 @@
 import React from 'react'
 
-import { useLazyGoogleLoginQuery } from '@/services/auth/authApi'
+import { useLazyGithubLoginQuery, useLazyGoogleLoginQuery } from '@/services/auth/authApi'
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
 
 import s from './SocialMediaAuth.module.scss'
 
 export const SocialMediaAuth = () => {
   const [googleLogin] = useLazyGoogleLoginQuery()
+  const [gihubLogin] = useLazyGithubLoginQuery()
 
   const googleLoginHandler = () => {
     console.log('google login')
     googleLogin()
+  }
+  const githubLoginHandler = () => {
+    console.log('github login')
+    gihubLogin()
+      .unwrap()
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   return (
@@ -24,9 +33,15 @@ export const SocialMediaAuth = () => {
       >
         <GoogleSvgrepoCom1 className={s.svg} onClick={googleLoginHandler} />
       </a>
-      <button className={s.btn} type={'button'}>
-        <GithubSvgrepoCom31 className={s.svg} />
-      </button>
+      <a
+        className={s.btn}
+        href={
+          'https://github.com/login/oauth/authorize?response_type=code&redirect_uri=http%3A%2F%2Fnavaibe.ru%2Fapi%2Fv1%2Fauth%2Fgithub%2Fcallback&scope=user%3Aemail&client_id=Ov23liPXUAuNE4Qn65BU'
+        }
+        type={'button'}
+      >
+        <GithubSvgrepoCom31 className={s.svg} onClick={githubLoginHandler} />
+      </a>
     </div>
   )
 }
