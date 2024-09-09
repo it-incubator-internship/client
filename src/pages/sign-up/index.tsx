@@ -19,7 +19,7 @@ import s from "./Signup.module.scss";
 import { useRegistrationMutation } from "@/services/auth/authApi";
 import { RegistrationArgs } from "@/services/auth/authTypes";
 import Spinner from "@/components/Spinner/Spinner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // todo  проверить валидацию по тз
 const signUpSchema = z.object({
@@ -45,30 +45,25 @@ export default function SignUp() {
   const [registration, { isLoading }] = useRegistrationMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [responseEmail, setResponseEmail] = useState("");
+  const [isSignUpButtonDisabled, setIsSignUpButtonDisabled] = useState(false);
 
   const {
     control,
     formState: { errors },
-    handleSubmit
+    handleSubmit,
+    reset
   } = useForm<FormValues>(
     {
-      defaultValues: {
-        userName: "demorest49de",
-        email: "demorest49de@gmail.com",
-        password: "StRo0NgP@SSWoRD",
-        passwordConfirmation: "StRo0NgP@SSWoRD",
-        isAgreement: true
-      },
-      resolver: zodResolver(signUpSchema)
+      // defaultValues: {
+      //   userName: "demorest49de",
+      //   email: "demorest49de@gmail.com",
+      //   password: "StRo0NgP@SSWoRD",
+      //   passwordConfirmation: "StRo0NgP@SSWoRD",
+      //   isAgreement: true
+      // },
+      resolver: zodResolver(signUpSchema),
+      mode: "onBlur"
     });
-
-  // const [isSignUpButtonDisabled, setIsSignUpButtonDisabled] = useState(true);
-  // console.log(`errors, isSignUpButtonDisabled`, errors, isSignUpButtonDisabled);
-  // useEffect(() => {
-  //   if (Object.keys(errors).length === 0) {
-  //     setIsSignUpButtonDisabled(false);
-  //   }
-  // });
 
 
   const handleSignUp = async (data: RegistrationArgs) => {
@@ -86,16 +81,15 @@ export default function SignUp() {
       setIsModalOpen(true);
       setResponseEmail(res.email);
     } catch (error: any) {
-
       if (error.status === 400) {
         console.log(error.data.message);
+        console.log(error);
       }
     }
 
     if (isLoading) {
       return <Spinner />;
     }
-
     return;
   };
 
@@ -105,6 +99,7 @@ export default function SignUp() {
     title: "Email sent",
     onClose: () => {
       setIsModalOpen(false);
+      reset();
     }
   };
 
@@ -148,6 +143,7 @@ export default function SignUp() {
                 name={"email"}
                 rules={{ required: true }}
                 type={"email"}
+
               />
             </Label>
 
@@ -199,7 +195,7 @@ export default function SignUp() {
               </FormCheckbox>
             </div>
 
-            <Button className={s.SignUpButton} fullWidth type={"submit"} disabled={false}>
+            <Button className={s.SignUpButton} fullWidth type={"submit"} disabled={isSignUpButtonDisabled}>
               Sign Up
             </Button>
           </form>
