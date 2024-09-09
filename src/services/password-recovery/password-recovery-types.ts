@@ -17,3 +17,17 @@ export type ResendEmailArgs = {
 export type ResendEmailResponse = {
   email: string
 }
+export type ServerError = {
+  data: {
+    fields: [
+      {
+        field: string
+        message: string
+      },
+    ]
+    message: string
+    path: string
+    status: number
+    timestamp: string
+  }
+}

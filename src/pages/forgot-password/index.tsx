@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useForm } from 'react-hook-form'
 
@@ -52,11 +52,9 @@ const ForgotPassword = () => {
   const { control, handleSubmit, reset, setError, watch } = useForm({
     resolver: zodResolver(FormSchema),
   })
-  const [checkEmail, { isError: isErrorCheckEmail, isLoading: isLoadingCheckEmail }] =
-    useCheckEmailMutation()
+  const [checkEmail, { isLoading: isLoadingCheckEmail }] = useCheckEmailMutation()
 
-  const [resendEmail, { isError: isErrorResendEmail, isLoading: isLoadingResendEmail }] =
-    useResendEmailMutation()
+  const [resendEmail, { isLoading: isLoadingResendEmail }] = useResendEmailMutation()
 
   //check the email field for buttonSend disabling
   const emailValue = watch('email', '')
@@ -68,10 +66,8 @@ const ForgotPassword = () => {
       setEmail(data.email)
       setSendLinkState('success')
       setShowModal(true)
-    } catch (error: any) {
-      if (error.data?.statusCode === 400) {
-        // setError('email', { message: "User with this email doesn't exist", type: 'manual' })
-      }
+    } catch (e) {
+      setError('email', { message: "User with this email doesn't exist", type: 'manual' })
     }
   })
 
@@ -122,10 +118,6 @@ const ForgotPassword = () => {
   //Guards
   if (isLoadingCheckEmail || isLoadingResendEmail) {
     return <Spinner />
-  }
-
-  if (isErrorCheckEmail || isErrorResendEmail) {
-    setError('email', { message: "User with this email doesn't exist", type: 'manual' })
   }
 
   return (

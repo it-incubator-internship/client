@@ -4,18 +4,20 @@ import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import TimeManagement from '@/pages/link-expired/TimeManagement'
 import { useResendEmailMutation } from '@/services/password-recovery/password-recovery-api'
+import { ServerError } from '@/services/password-recovery/password-recovery-types'
 import { Button, Modal } from '@robur_/ui-kit'
 import { router } from 'next/client'
 
 import s from './link-expired.module.scss'
 
 function LinkExpired() {
-  const [resendEmail, { isLoading }] = useResendEmailMutation()
+  const [resendEmail, { error, isError, isLoading }] = useResendEmailMutation()
+  const serverError = (error as ServerError)?.data?.fields[0]?.message
   const { email } = router.query
   const [lastClickTime, setLastClickTime] = useState(0)
   const [showModal, setShowModal] = useState(false)
 
-  const handleOnClick = useCallback(async () => {
+  const resendHandler = useCallback(async () => {
     const currentTime = Date.now()
 
     if (currentTime - lastClickTime < 60000) {
@@ -36,6 +38,10 @@ function LinkExpired() {
     return <Spinner />
   }
 
+  if (isError) {
+    alert(serverError)
+  }
+
   return (
     <div className={s.outerWrapper}>
       <div className={s.innerWrapper}>
@@ -43,7 +49,7 @@ function LinkExpired() {
         <p className={s.text}>
           Looks like the verification link has expired. Not to worry, we can send the link again
         </p>
-        <Button fullWidth onClick={handleOnClick}>
+        <Button fullWidth onClick={resendHandler}>
           Resend link
         </Button>
       </div>
