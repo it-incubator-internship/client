@@ -33,6 +33,7 @@ const signUpSchema = z.object({
     .string()
     .min(6, `Minimum number of characters 6`)
     .max(30, `Minimum number of characters 30`)
+    .regex(/^[a-zA-Z0-9_-]+$/g, 'name must contain  0-9; A-Z; a-z; _ ; -')
 }).refine((data) => data.password === data.passwordConfirmation,
   {
     path: ["passwordConfirmation"],
