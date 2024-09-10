@@ -126,7 +126,7 @@ const ForgotPassword = () => {
 
       <form onSubmit={dataFormSubmit}>
         <FormInput
-          className={s.input}
+          containerClassName={s.inputContainer}
           control={control}
           disabled={sendLinkState === 'success'}
           label={'Email'}

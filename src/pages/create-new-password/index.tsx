@@ -116,12 +116,14 @@ function CreateNewPassword() {
         <h1 className={styles.h1}>Create New Password</h1>
         <form onSubmit={handleSubmit(handleSubmitHandler)}>
           <FormInput
+            containerClassName={styles.input}
             control={control}
             label={'New password'}
             name={'newPassword'}
             type={'password'}
           />
           <FormInput
+            containerClassName={styles.input}
             control={control}
             label={'Password confirmation'}
             name={'confirmPassword'}
