@@ -2,9 +2,9 @@ import { Button } from "@robur_/ui-kit";
 import src from "../../../public/email-confirmed.png";
 import Image from "next/image";
 
-import s from "./link-sent.module.scss";
+import s from "./email-confirmed.module.scss";
 
-export default function LinkSent() {
+export default function EmailConfirmed() {
 
   const handleOnClick = () => {
     alert("The link was sent again");
@@ -18,11 +18,11 @@ export default function LinkSent() {
           <p className={s.text}>
             Your email has been confirmed
           </p>
-          <Button fullWidth onClick={handleOnClick}>
+          <Button onClick={handleOnClick}>
             Resend verification link
           </Button>
         </div>
-        <Image src={src} alt="email-confirmed" className={s.image} />
+        <Image src={src} alt="email-sent" className={s.image} />
       </div>
     </div>
   );

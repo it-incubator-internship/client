@@ -17,7 +17,7 @@ export default function LinkExpired() {
           <p className={s.text}>
             Looks like the verification link has expired. Not to worry, we can send the link again
           </p>
-          <Button fullWidth  onClick={handleOnClick} asChild>
+          <Button onClick={handleOnClick} asChild>
             {<a href={"#"}>Resend verification link</a>}
           </Button>
         </div>
