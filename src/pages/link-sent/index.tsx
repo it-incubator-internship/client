@@ -5,6 +5,7 @@ import Image from "next/image";
 import s from "./link-sent.module.scss";
 
 export default function LinkSent() {
+
   const handleOnClick = () => {
     alert("The link was sent again");
   };
