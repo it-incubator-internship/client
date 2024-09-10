@@ -6,6 +6,7 @@ import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { PATH } from '@/consts/route-paths'
 import { useChangePasswordMutation } from '@/services/password-recovery/password-recovery-api'
 import { ServerError } from '@/services/password-recovery/password-recovery-types'
+import { convertAccessToken } from '@/utils/convertAccessToken'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, Modal } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
@@ -55,29 +56,14 @@ function CreateNewPassword() {
     resolver: zodResolver(FormSchema),
   })
 
-  function parseJwt(recoveryCode: string | string[] | undefined) {
-    if (typeof recoveryCode === 'string') {
-      const tokenPayload = recoveryCode.split('.')?.[1]
-      let parsedPayload
-
-      try {
-        const decoderPayload = atob(tokenPayload)
-
-        parsedPayload = JSON.parse(decoderPayload)
-      } catch {
-        parsedPayload = {}
-      }
-
-      return parsedPayload
-    } else {
-      throw new Error('Unrecognized JWT token')
-    }
-  }
-
   useEffect(() => {
-    const jwtData = parseJwt(recoveryCode)
+    const getParsedData = async () => {
+      const jwtData = await convertAccessToken(recoveryCode)
 
-    setParsedJwt(jwtData)
+      setParsedJwt(jwtData)
+    }
+
+    void getParsedData()
   }, [recoveryCode])
 
   useEffect(() => {

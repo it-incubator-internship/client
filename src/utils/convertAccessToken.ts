@@ -1,13 +1,16 @@
-export const convertAccessToken = async (accessToken: string) => {
-  const tokenPayload = accessToken.split('.')?.[1]
+export const convertAccessToken = async (accessToken: string | string[] | undefined) => {
   let parserPayload
 
-  try {
-    const decoderPayload = atob(tokenPayload)
+  if (typeof accessToken === 'string') {
+    const tokenPayload = accessToken.split('.')?.[1]
 
-    parserPayload = JSON.parse(decoderPayload)
-  } catch {
-    parserPayload = {}
+    try {
+      const decoderPayload = atob(tokenPayload)
+
+      parserPayload = JSON.parse(decoderPayload)
+    } catch {
+      parserPayload = {}
+    }
   }
 
   return await parserPayload
