@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form'
 import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
-import { useTranslation } from '@/hooks/useTranslation'
 import { PATH } from '@/consts/route-paths'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { convertAccessToken } from '@/utils/convertAccessToken'
@@ -64,7 +64,7 @@ function SignIn() {
         return <Spinner />
       } else if (userId) {
         console.log('userId', userId)
-        void router.replace(`/profile/${userId}`)
+        void router.replace(`/profile/${userId}/edit`)
 
         return
       }
