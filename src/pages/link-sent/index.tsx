@@ -1,10 +1,10 @@
 import { Button } from "@robur_/ui-kit";
-import src from "../../../public/TimeManagement.png";
+import src from "../../../public/email-confirmed.png";
 import Image from "next/image";
 
-import s from "./link-expired.module.scss";
+import s from "./link-sent.module.scss";
 
-export default function LinkExpired() {
+export default function LinkSent() {
   const handleOnClick = () => {
     alert("The link was sent again");
   };
@@ -13,9 +13,9 @@ export default function LinkExpired() {
     <div className={s.container}>
       <div className={s.outerWrapper}>
         <div className={s.innerWrapper}>
-          <h1 className={s.title}>Email verification link expired</h1>
+          <h1 className={s.title}>Congratulations!</h1>
           <p className={s.text}>
-            Looks like the verification link has expired. Not to worry, we can send the link again
+            Your email has been confirmed
           </p>
           <Button fullWidth onClick={handleOnClick}>
             Resend verification link
