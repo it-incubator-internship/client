@@ -1,6 +1,5 @@
 import { useTranslation } from '@/hooks/useTranslation'
-import { useMeQuery } from '@/services/auth/authApi'
-import { useLogoutMutation } from '@/services/auth/authApi'
+import { useLogoutMutation, useMeQuery } from '@/services/auth/authApi'
 import {
   BookmarkOutline,
   HomeOutline,
