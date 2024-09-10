@@ -4,12 +4,14 @@ import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { useTranslation } from '@/hooks/useTranslation'
+import { PATH } from '@/consts/route-paths'
 import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { convertAccessToken } from '@/utils/convertAccessToken'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput } from '@robur_/ui-kit'
 import clsx from 'clsx'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
@@ -21,6 +23,7 @@ const SigninSchema = z.object({
 })
 
 type FormValues = z.infer<typeof SigninSchema>
+
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
@@ -35,8 +38,8 @@ function SignIn() {
     handleSubmit,
   } = useForm<FormValues>({
     defaultValues: {
-      email: 'reno.jool@gmail.com',
-      password: 'StRo0NgP@SSWoRD',
+      email: '',
+      password: '',
     },
     resolver: zodResolver(SigninSchema),
   })
@@ -111,7 +114,7 @@ function SignIn() {
           </Button>
         </form>
         <Button asChild className={clsx(s.ButtonForgot, s.leftItem)} variant={'ghost'}>
-          <a href={'#'}>{t.auth.forgotPassword}</a>
+          <Link href={PATH.FORGOT_PASSWORD}>{t.auth.forgotPassword}</Link>
         </Button>
         <Button asChild className={s.ButtonAccount} variant={'ghost'}>
           <a href={'#'}>{t.auth.noAccount}</a>
