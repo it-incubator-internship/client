@@ -49,4 +49,20 @@ body {
   max-width: 1086px;
   margin: 0 auto;
   padding: 36px 24px;
+
+  span {
+    color: var(--color-accent-500);
+  }
+}
+
+.wrapper404,
+.wrapper500 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  height: 100vh;
+  padding: 10px;
 }
