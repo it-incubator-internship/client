@@ -14,20 +14,12 @@ function Profile() {
       <Tabs
         defaultValue={'information'}
         fullWidth
-        tabs={[
-          { title: 'General information', value: 'information' },
-          { disabled: true, title: 'Devices', value: 'devices' },
-          { disabled: true, title: 'Account Management', value: 'account' },
-          { disabled: true, title: 'My payments', value: 'payments' },
-        ]}
+        tabs={[{ title: 'General information', value: 'information' }]}
       >
         <>
           <TabContent value={'information'}>
             <ProfilePageContent />
           </TabContent>
-          <TabContent value={'devices'}>Content about Devices</TabContent>
-          <TabContent value={'account'}>Content about Account Management</TabContent>
-          <TabContent value={'payments'}>Content about My payments</TabContent>
         </>
       </Tabs>
       <p>{`userId: ${userId}`}</p>

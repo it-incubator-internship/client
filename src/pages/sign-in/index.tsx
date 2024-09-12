@@ -3,11 +3,15 @@ import { useForm } from 'react-hook-form'
 import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
+import { PATH } from '@/consts/route-paths'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
+import { convertAccessToken } from '@/utils/convertAccessToken'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput } from '@robur_/ui-kit'
 import clsx from 'clsx'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
@@ -19,11 +23,14 @@ const SigninSchema = z.object({
 })
 
 type FormValues = z.infer<typeof SigninSchema>
+
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const [getMe] = useLazyMeQuery()
   const router = useRouter()
+
+  const t = useTranslation()
 
   const {
     control,
@@ -31,8 +38,8 @@ function SignIn() {
     handleSubmit,
   } = useForm<FormValues>({
     defaultValues: {
-      email: 'reno.jool@gmail.com',
-      password: 'StRo0NgP@SSWoRD',
+      email: '',
+      password: '',
     },
     resolver: zodResolver(SigninSchema),
   })
@@ -40,16 +47,9 @@ function SignIn() {
     try {
       const res = await login(data).unwrap()
 
-      const tokenPayload = res.accessToken.split('.')?.[1]
-      let parserPayload
+      const parserPayload = await convertAccessToken(res.accessToken)
 
-      try {
-        const decoderPayload = atob(tokenPayload)
-
-        parserPayload = JSON.parse(decoderPayload)
-      } catch {
-        parserPayload = {}
-      }
+      console.log(parserPayload)
 
       let userId: string | undefined
 
@@ -63,10 +63,12 @@ function SignIn() {
       if (isLoading) {
         return <Spinner />
       } else if (userId) {
-        router.replace(`/profile/${userId}`)
+        console.log('userId', userId)
+        void router.replace(`/profile/${userId}/edit`)
 
         return
       }
+
       if (!userId) {
         return
       }
@@ -89,7 +91,7 @@ function SignIn() {
   return (
     <div className={s.Container}>
       <Card className={s.Card}>
-        <h1 className={s.Title}>Sign in</h1>
+        <h1 className={s.Title}>{t.auth.signIn}</h1>
         <form className={s.Form} onSubmit={handleSubmit(handleSignIn)}>
           <SocialMediaAuth />
           <FormInput
@@ -108,17 +110,17 @@ function SignIn() {
             type={'password'}
           />
           <Button className={s.ButtonSignIn} fullWidth>
-            Sign In
+            {t.auth.signIn}
           </Button>
         </form>
         <Button asChild className={clsx(s.ButtonForgot, s.leftItem)} variant={'ghost'}>
-          <a href={'#'}>Forgot Password</a>
+          <Link href={PATH.FORGOT_PASSWORD}>{t.auth.forgotPassword}</Link>
         </Button>
         <Button asChild className={s.ButtonAccount} variant={'ghost'}>
-          <a href={'#'}>Don’t have an account?</a>
+          <a href={'#'}>{t.auth.noAccount}</a>
         </Button>
         <Button asChild className={s.ButtonSignUp} variant={'ghost'}>
-          <a href={'#'}>Sign Up</a>
+          <a href={'#'}>{t.auth.signUp}</a>
         </Button>
       </Card>
     </div>
