@@ -86,7 +86,7 @@ export default function SignUp() {
 
       console.log(`/email-confirmed/${codeId}`);
       router.replace(`/email-confirmed/${codeId}`)
-      return
+
       // setIsModalOpen(true);
       // setResponseEmail(res.email);
     } catch (error: any) {

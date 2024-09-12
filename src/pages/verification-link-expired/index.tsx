@@ -1,4 +1,4 @@
-import { Button } from "@robur_/ui-kit";
+import { Button, Modal } from "@robur_/ui-kit";
 import src from "../../../public/TimeManagement.png";
 import Image from "next/image";
 
@@ -6,6 +6,7 @@ import s from "./verification-link-expired.module.scss";
 import { useRouter } from "next/router";
 import { useRegistrationResendingMutation } from "@/services/auth/authApi";
 import Spinner from "@/components/Spinner/Spinner";
+import { useState } from "react";
 
 
 export default function LinkExpired() {
@@ -13,31 +14,51 @@ export default function LinkExpired() {
 const router = useRouter();
 const { email } = router.query;
 const [registrationResending, { isLoading }] = useRegistrationResendingMutation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [responseEmail, setResponseEmail] = useState("");
+
+
+  const [isSpinnerWorking, setisSpinnerWorking] = useState(false);
+
+
 
   const handleOnClick = () => {
     try {
       if (email && typeof email === "string") {
-        const res = registrationResending({ email }).unwrap();
-        console.log(res);
+        // const res = registrationResending({ email }).unwrap();
+        // console.log(res);
 
-        // if(res.status === 403){
-        //   router.replace(`/verification-link-expired?email=${res.data.email}`);
-        router.replace(`/verification-link-expired?email=demorest49de@gmail.com`);
-        //return
-        // }
-
-
+        setIsModalOpen(true);
+        // setResponseEmail(res.email);
+        setResponseEmail('demorest49de@gmail.com');
       }
     } catch (error: any) {
       console.log(error);
+
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isSpinnerWorking) {
     return <Spinner />;
   }
 
-  return (
+  const args = {
+    children: <p>We have sent a link to confirm your email to {responseEmail}</p>,
+    open: true,
+    title: "Email sent",
+    onClose: () => {
+      setIsModalOpen(false);
+      setisSpinnerWorking(true)
+      router.replace("/sign-in");
+    }
+  };
+
+  const modalJSX = <Modal {...args}>
+    {args.children}
+  </Modal>;
+
+  return isModalOpen ? modalJSX
+    : (
     <div className={s.container}>
       <div className={s.outerWrapper}>
         <div className={s.innerWrapper}>
