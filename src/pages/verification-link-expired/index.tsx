@@ -2,7 +2,7 @@ import { Button } from "@robur_/ui-kit";
 import src from "../../../public/TimeManagement.png";
 import Image from "next/image";
 
-import s from "./link-expired.module.scss";
+import s from "./verification-link-expired.module.scss";
 
 export default function LinkExpired() {
   const handleOnClick = () => {

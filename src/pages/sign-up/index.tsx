@@ -3,8 +3,6 @@ import {
   Card,
   FormCheckbox,
   FormInput,
-  GithubSvgrepoCom31,
-  GoogleSvgrepoCom1,
   Label, Modal
 } from "@robur_/ui-kit";
 import clsx from "clsx";
@@ -21,6 +19,7 @@ import { RegistrationArgs } from "@/services/auth/authTypes";
 import Spinner from "@/components/Spinner/Spinner";
 import { useEffect, useState } from "react";
 import { SocialMediaAuth } from "@/components/SocialMediaAuth/SocialMediaAuth";
+import { useRouter } from "next/router";
 
 // todo  проверить валидацию по тз
 const signUpSchema = z.object({
@@ -50,6 +49,10 @@ export default function SignUp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [responseEmail, setResponseEmail] = useState("");
 
+
+  const router = useRouter();
+  const codeId = 'hghghghghjc5sergfx'
+
   const {
     control,
     formState: { errors, isValid },
@@ -57,13 +60,13 @@ export default function SignUp() {
     reset
   } = useForm<FormValues>(
     {
-      // defaultValues: {
-      //   userName: "demorest49de",
-      //   email: "demorest49de@gmail.com",
-      //   password: "StRo0NgP@SSWoRD",
-      //   passwordConfirmation: "StRo0NgP@SSWoRD",
-      //   isAgreement: true
-      // },
+      defaultValues: {
+        userName: "demorest49de",
+        email: "demorest49de@gmail.com",
+        password: "StRo0NgP@SSWoRD",
+        passwordConfirmation: "StRo0NgP@SSWoRD",
+        isAgreement: true
+      },
       resolver: zodResolver(signUpSchema),
       mode: "onBlur"
     });
@@ -78,11 +81,16 @@ export default function SignUp() {
 
     try {
       console.log("это сабмит!");
-      const res = await registration(trimmedData).unwrap();
-      console.log(res);
+      // const res = await registration(trimmedData).unwrap();
+      // console.log(res);
 
-      setIsModalOpen(true);
-      setResponseEmail(res.email);
+
+
+      console.log(`/email-confirmed/${codeId}`);
+      router.replace(`/email-confirmed/${codeId}`)
+      return
+      // setIsModalOpen(true);
+      // setResponseEmail(res.email);
     } catch (error: any) {
       if (error.status === 400) {
         console.log(error.data.message);

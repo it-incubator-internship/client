@@ -3,11 +3,18 @@ import src from "../../../public/email-confirmed.png";
 import Image from "next/image";
 
 import s from "./email-confirmed.module.scss";
+import { useRouter } from "next/router";
 
 export default function EmailConfirmed() {
 
+  const router = useRouter();
+  const codeId = router.query.codeId;
+
+  console.log('email-confirmed');
+  console.log(`code`, codeId);
+
   const handleOnClick = () => {
-    alert("The link was sent again");
+    alert(`${codeId}`);
   };
 
   return (

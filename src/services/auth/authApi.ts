@@ -1,5 +1,11 @@
 import { PATH } from '@/consts/route-paths'
-import { LoginArgs, LoginResponse, MeResponse } from '@/services/auth/authTypes'
+import {
+  LoginArgs,
+  LoginResponse,
+  MeResponse,
+  RegistrationArgs,
+  RegistrationResponse
+} from "@/services/auth/authTypes";
 import Router from 'next/router'
 
 import { inctagramApi } from '../inctagramApi'
