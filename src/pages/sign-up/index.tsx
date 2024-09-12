@@ -84,8 +84,6 @@ export default function SignUp() {
       // const res = await registration(trimmedData).unwrap();
       // console.log(res);
 
-
-
       console.log(`/email-confirmed/${codeId}`);
       router.replace(`/email-confirmed/${codeId}`)
       return

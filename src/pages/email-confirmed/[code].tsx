@@ -5,22 +5,44 @@ import Image from "next/image";
 import s from "./email-confirmed.module.scss";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useRegistrationConfirmationMutation } from "@/services/auth/authApi";
+import Spinner from "@/components/Spinner/Spinner";
 
 export default function EmailConfirmed() {
 
   const router = useRouter();
   const code = router.query.code;
+  const [registrationConfirmation, { isLoading }] = useRegistrationConfirmationMutation();
 
-  console.log('email-confirmed');
+  console.log("email-confirmed");
   console.log(`code`, code);
 
-  useEffect(()=>{
+  useEffect(() => {
+    try {
+      if (code && typeof code === "string") {
+        const res = registrationConfirmation({ code }).unwrap();
+        console.log(res);
 
-  }, [code])
+        // if(res.status === 403){
+        //   router.replace(`/verification-link-expired?email=${res.data.email}`);
+          router.replace(`/verification-link-expired?email=demorest49de@gmail.com`);
+        //return
+        // }
+
+
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  }, [code]);
 
   const handleOnClick = () => {
-    alert(`${code}`);
+    router.replace("/sign-in");
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={s.container}>

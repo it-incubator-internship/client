@@ -20,3 +20,9 @@ export type MeResponse = {
   userId: string
   userName: string
 }
+export type RegistrationConfirmationArgs = {
+  code: string
+}
+export type RegistrationResendingArgs = {
+  email: string
+}
