@@ -17,6 +17,7 @@ export default function LinkExpired() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [responseEmail, setResponseEmail] = useState("");
 
+  console.log('email: ', email)
 
   const [isSpinnerWorking, setisSpinnerWorking] = useState(false);
 
