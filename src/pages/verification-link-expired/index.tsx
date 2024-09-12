@@ -11,9 +11,9 @@ import { useState } from "react";
 
 export default function LinkExpired() {
 
-const router = useRouter();
-const { email } = router.query;
-const [registrationResending, { isLoading }] = useRegistrationResendingMutation();
+  const router = useRouter();
+  const { email } = router.query;
+  const [registrationResending, { isLoading }] = useRegistrationResendingMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [responseEmail, setResponseEmail] = useState("");
 
@@ -21,16 +21,17 @@ const [registrationResending, { isLoading }] = useRegistrationResendingMutation(
   const [isSpinnerWorking, setisSpinnerWorking] = useState(false);
 
 
-
   const handleOnClick = () => {
     try {
-      if (email && typeof email === "string") {
+      // if (email && typeof email === "string") {
+      if (true) {
         // const res = registrationResending({ email }).unwrap();
-        // console.log(res);
+        const res = registrationResending({ email: "liv_61@mail.ru" }).unwrap();
+        console.log(res);
 
         setIsModalOpen(true);
         // setResponseEmail(res.email);
-        setResponseEmail('demorest49de@gmail.com');
+        setResponseEmail("demorest49de@gmail.com");
       }
     } catch (error: any) {
       console.log(error);
@@ -48,7 +49,7 @@ const [registrationResending, { isLoading }] = useRegistrationResendingMutation(
     title: "Email sent",
     onClose: () => {
       setIsModalOpen(false);
-      setisSpinnerWorking(true)
+      setisSpinnerWorking(true);
       router.replace("/sign-in");
     }
   };
@@ -57,21 +58,22 @@ const [registrationResending, { isLoading }] = useRegistrationResendingMutation(
     {args.children}
   </Modal>;
 
+
   return isModalOpen ? modalJSX
     : (
-    <div className={s.container}>
-      <div className={s.outerWrapper}>
-        <div className={s.innerWrapper}>
-          <h1 className={s.title}>Email verification link expired</h1>
-          <p className={s.text}>
-            Looks like the verification link has expired. Not to worry, we can send the link again
-          </p>
-          <Button onClick={handleOnClick} asChild>
-            {<a href={"#"}>Resend verification link</a>}
-          </Button>
+      <div className={s.container}>
+        <div className={s.outerWrapper}>
+          <div className={s.innerWrapper}>
+            <h1 className={s.title}>Email verification link expired</h1>
+            <p className={s.text}>
+              Looks like the verification link has expired. Not to worry, we can send the link again
+            </p>
+            <Button onClick={handleOnClick}>
+              Resend verification link
+            </Button>
+          </div>
+          <Image src={src} alt="email-confirmed" className={s.image} />
         </div>
-        <Image src={src} alt="email-confirmed" className={s.image} />
       </div>
-    </div>
-  );
+    );
 }
