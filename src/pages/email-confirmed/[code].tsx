@@ -4,17 +4,22 @@ import Image from "next/image";
 
 import s from "./email-confirmed.module.scss";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function EmailConfirmed() {
 
   const router = useRouter();
-  const codeId = router.query.codeId;
+  const code = router.query.code;
 
   console.log('email-confirmed');
-  console.log(`code`, codeId);
+  console.log(`code`, code);
+
+  useEffect(()=>{
+
+  }, [code])
 
   const handleOnClick = () => {
-    alert(`${codeId}`);
+    alert(`${code}`);
   };
 
   return (
@@ -26,7 +31,7 @@ export default function EmailConfirmed() {
             Your email has been confirmed
           </p>
           <Button onClick={handleOnClick}>
-            Resend verification link
+            Sign in
           </Button>
         </div>
         <Image src={src} alt="email-sent" className={s.image} />
