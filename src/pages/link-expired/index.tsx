@@ -65,3 +65,6 @@ function LinkExpired() {
     </div>
   )
 }
+
+LinkExpired.getLayout = getHeaderLayout
+export default LinkExpired

@@ -1,0 +1,25 @@
+.outerWrapper {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.innerWrapper {
+  align-self: center;
+  max-width: 294px;
+  margin-bottom: 31px;
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 19px;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-light-100);
+}
+
+.text {
+  display: block;
+  margin-bottom: 30px;
+  font-size: var(--font-size-m);
+  color: var(--color-light-100);
+}
