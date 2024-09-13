@@ -1,7 +1,4 @@
-import Image from 'next/image'
 import Link from 'next/link'
-
-import image500 from '../../public/image500.png'
 
 const ServerError = () => (
   <div>
