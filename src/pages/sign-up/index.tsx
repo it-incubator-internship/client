@@ -136,9 +136,7 @@ export default function SignUp() {
             Sign Up
           </Button>
         </form>
-        <Link className={s.SignUpHaveAccountLink} href={'/have-account'}>
-          Do you have an account?
-        </Link>
+        <div className={s.SignUpHaveAccountLink}>Do you have an account?</div>
         <Link className={s.SignInLink} href={'/sign-in'}>
           Sign In
         </Link>
