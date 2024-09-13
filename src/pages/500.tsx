@@ -8,7 +8,7 @@ const ServerError = () => (
     <div className={'wrapper500'}>
       <h1 style={{ fontSize: 50 }}>OOPS! INTERNAL SERVER ERROR.</h1>
       <p>An unexpected error has occurred on the server. Please wait, it will be fixed soon.</p>
-      <Image alt={'Picture 500 errors'} src={image500} />
+      {/*<Image alt={'Picture 500 errors'} src={image500} />*/}
       <Link href={'/'}>
         Try to return to the <span style={{ color: 'var(--color-accent-500)' }}>home page.</span>
       </Link>
