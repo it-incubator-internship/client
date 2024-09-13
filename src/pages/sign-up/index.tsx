@@ -17,11 +17,11 @@ import s from "./Signup.module.scss";
 import { useRegistrationMutation } from "@/services/auth/authApi";
 import { RegistrationArgs } from "@/services/auth/authTypes";
 import Spinner from "@/components/Spinner/Spinner";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SocialMediaAuth } from "@/components/SocialMediaAuth/SocialMediaAuth";
 import { useRouter } from "next/router";
 
-// todo  проверить валидацию по тз
+
 const signUpSchema = z.object({
   email: z.string().email("The email must match the format\nexample@example.com"),
   password: z.string().min(8).max(20)
@@ -81,14 +81,14 @@ export default function SignUp() {
 
     try {
       console.log("это сабмит!");
-      // const res = await registration(trimmedData).unwrap();
-      // console.log(res);
+      const res = await registration(trimmedData).unwrap();
+      console.log(res);
 
-      console.log(`/email-confirmed/${code}`);
-      router.replace(`/email-confirmed/${code}`);
+      // console.log(`/email-confirmed/${code}`);
+      // router.replace(`/email-confirmed/${code}`);
 
-      // setIsModalOpen(true);
-      // setResponseEmail(res.email);
+      setIsModalOpen(true);
+      setResponseEmail(res.email);
     } catch (error: any) {
       if (error.status === 400) {
         console.log(error.data.message);

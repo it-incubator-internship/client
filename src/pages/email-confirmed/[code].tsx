@@ -22,9 +22,6 @@ export default function EmailConfirmed() {
       if (code && typeof code === "string") {
         const res = registrationConfirmation({ code }).unwrap();
         console.log(res);
-
-
-
       }
     } catch (error: any) {
       console.log(error);
