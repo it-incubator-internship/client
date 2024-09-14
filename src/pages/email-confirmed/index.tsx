@@ -53,7 +53,7 @@ export default function EmailConfirmed() {
             Sign in
           </Button>
         </div>
-        <Image src={src} alt="email-sent" className={s.image} />
+        <Image src={src} alt="email sent" className={s.image} />
       </div>
     </div>
   );

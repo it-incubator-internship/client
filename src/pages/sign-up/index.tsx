@@ -188,7 +188,7 @@ export default function SignUp() {
                 <span>I agree to the&nbsp;</span>
                 <Link
                   className={s.SignUpAgreementLink}
-                  href={"/terms-and-conditions"}
+                  href={"/terms-of-service"}
                   target={"_blank"}
                 >
                   Terms of Service
