@@ -26,13 +26,12 @@ export default function EmailConfirmed() {
     } catch (error: any) {
       console.log(error);
 
-      // if(res.status === 403){
-      //   router.replace(`/verification-link-expired?email=${res.data.email}`);
-      router.replace(`/verification-link-expired?email=demorest49de@gmail.com`);
-      //return
-      // }
+      router.replace(`/verification-link-expired?email=${error.data.email}`);
+      if (error.status === 403) {
+        // router.replace(`/verification-link-expired?email=demorest49de@gmail.com`);
+      }
     }
-  }, [code]);
+  }, [router.query.code]);
 
   const handleOnClick = () => {
     router.replace("/sign-in");
