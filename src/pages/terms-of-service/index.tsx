@@ -1,7 +1,7 @@
-import s from "./privacy-policy.module.scss";
+import s from "./terms-of-service.module.scss";
 import { ArrowBackOutline, Button } from "@robur_/ui-kit";
 
-export default function PrivacyPolicy() {
+export default function TermsOfService() {
 
 
   return (
@@ -19,7 +19,7 @@ export default function PrivacyPolicy() {
         </Button>
       </div>
       <div className={s.mainBlock}>
-        <h1 className={s.title}>Privacy Policy</h1>
+        <h1 className={s.title}>Terms of Service</h1>
         <p className={s.text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh. Amet consectetur
           adipiscing elit ut aliquam
