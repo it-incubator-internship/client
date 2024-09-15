@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormCheckbox, FormInput, Label, Modal } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 import s from './Signup.module.scss'
@@ -47,9 +46,6 @@ export default function SignUp() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [responseEmail, setResponseEmail] = useState('')
 
-  const router = useRouter()
-  const { code } = router.query
-
   const {
     control,
     formState: { errors, isValid },
@@ -57,11 +53,11 @@ export default function SignUp() {
     reset,
   } = useForm<FormValues>({
     defaultValues: {
-      email: 'demorest49de@gmail.com',
+      email: '',
       isAgreement: true,
       password: 'StRo0NgP@SSWoRD',
       passwordConfirmation: 'StRo0NgP@SSWoRD',
-      userName: 'demorest49de',
+      userName: 'demorest49de9',
     },
     mode: 'onBlur',
     resolver: zodResolver(signUpSchema),
@@ -75,22 +71,15 @@ export default function SignUp() {
     }
 
     try {
-      console.log('это сабмит!')
       const res = await registration(trimmedData).unwrap()
 
       console.log(res)
 
-      // console.log(`/email-confirmed/${code}`);
-      // router.replace(`/email-confirmed/${code}`);
-
       setIsModalOpen(true)
       setResponseEmail(res.email)
     } catch (error: any) {
-      if (error.status === 400) {
-        console.log(error.data.message)
-        console.log(error)
-      }
       console.log(error)
+      //todo bubble...
     }
 
     if (isLoading) {

@@ -74,7 +74,7 @@ function SignIn() {
       }
     } catch (error: any) {
       if (error.data?.statusCode === 401 && error.data?.error === 'Unauthorized') {
-        router.replace(`/sign-up`)
+        void router.replace(`/sign-up`)
       }
       console.log(error)
     }
@@ -83,7 +83,7 @@ function SignIn() {
   if (startIsLoading) {
     return <Spinner />
   } else if (meData) {
-    router.replace(`/`)
+    void router.replace(`/`)
 
     return
   }

@@ -18,25 +18,20 @@ export default function LinkExpired() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [responseEmail, setResponseEmail] = useState('')
 
-  console.log('email: ', email)
-
   const [isSpinnerWorking, setisSpinnerWorking] = useState(false)
 
-  const handleOnClick = () => {
+  const handleOnClick = async () => {
     try {
-      // if (email && typeof email === "string") {
-      if (true) {
-        // const res = registrationResending({ email }).unwrap();
-        const res = registrationResending({ email: 'liv_61@mail.ru' }).unwrap()
+      if (email && typeof email === 'string') {
+        const res = await registrationResending({ email }).unwrap()
 
-        console.log(res)
+        console.log(`verification: res  в  блоке try: ${res}`)
 
         setIsModalOpen(true)
-        // setResponseEmail(res.email);
-        setResponseEmail('demorest49de@gmail.com')
+        setResponseEmail(email)
       }
     } catch (error: any) {
-      console.log(error)
+      console.log(`error  в  блоке catch: ${error}`)
     }
   }
 

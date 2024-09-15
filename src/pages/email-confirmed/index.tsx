@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { useRegistrationConfirmationMutation } from '@/services/auth/authApi'
@@ -17,25 +17,27 @@ export default function EmailConfirmed() {
 
   console.log('email-confirmed')
   console.log(`code`, code)
-  alert(`\`code\`: ${code}`)
+
+  const [isRedirected, setIsRedirected] = useState(false)
 
   useEffect(() => {
-    try {
-      if (code && typeof code === 'string') {
-        const res = registrationConfirmation({ code }).unwrap()
+    const resData = async () => {
+      try {
+        if (code && typeof code === 'string') {
+          await registrationConfirmation({ code }).unwrap()
+        }
+      } catch (error: any) {
+        console.log(error)
 
-        console.log(res)
-      }
-    } catch (error: any) {
-      console.log(error)
-
-      router.replace(`/verification-link-expired?email=${error.data.email}`)
-      if (error.status === 403) {
-        // router.replace(`/verification-link-expired?email=demorest49de@gmail.com`);
+        if (error.status === 403) {
+          setIsRedirected(true)
+          void router.replace(`/verification-link-expired?email=${error.data.message}`)
+        }
       }
     }
-  }, [router.query.code])
 
+    resData()
+  }, [])
   const handleOnClick = () => {
     router.replace('/sign-in')
   }
@@ -44,7 +46,9 @@ export default function EmailConfirmed() {
     return <Spinner />
   }
 
-  return (
+  return isRedirected ? (
+    <></>
+  ) : (
     <div className={s.container}>
       <div className={s.outerWrapper}>
         <div className={s.innerWrapper}>
