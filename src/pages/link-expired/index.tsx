@@ -1,10 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import TimeManagement from '@/pages/link-expired/TimeManagement'
 import { useResendEmailMutation } from '@/services/password-recovery/password-recovery-api'
 import { ServerError } from '@/services/password-recovery/password-recovery-types'
+import { useThrottle } from '@/utils/throttleButtonClick'
 import { Button, Modal } from '@robur_/ui-kit'
 import { router } from 'next/client'
 
@@ -14,25 +15,21 @@ function LinkExpired() {
   const [resendEmail, { error, isError, isLoading }] = useResendEmailMutation()
   const serverError = (error as ServerError)?.data?.fields[0]?.message
   const { email } = router.query
-  const [lastClickTime, setLastClickTime] = useState(0)
   const [showModal, setShowModal] = useState(false)
+  const { throttled } = useThrottle(60)
 
-  const resendHandler = useCallback(async () => {
-    const currentTime = Date.now()
-
-    if (currentTime - lastClickTime < 60000) {
-      const remainingTime = Math.ceil((60000 - (currentTime - lastClickTime)) / 1000)
-
-      alert(`Please wait ${remainingTime} seconds before trying to send the link again.`)
+  const resendHandler = async () => {
+    if (throttled()) {
+      // setShowModal(true)
 
       return
     }
-    setLastClickTime(currentTime)
+
     if (email && typeof email === 'string') {
       await resendEmail({ email })
       setShowModal(true)
     }
-  }, [resendEmail, lastClickTime, email])
+  }
 
   if (isLoading) {
     return <Spinner />

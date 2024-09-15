@@ -31,3 +31,7 @@ export type ServerError = {
     timestamp: string
   }
 }
+
+export type CheckCodeArgs = {
+  code: string
+}

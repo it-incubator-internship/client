@@ -8,6 +8,7 @@ import {
   useCheckEmailMutation,
   useResendEmailMutation,
 } from '@/services/password-recovery/password-recovery-api'
+import { useThrottle } from '@/utils/throttleButtonClick'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, Modal, Recaptcha } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -37,10 +38,12 @@ const ForgotPassword = () => {
   //local data states
   const [email, setEmail] = useState('')
   const [recaptchaToken, setRecaptchaToken] = useState('')
-  const [lastClickTime, setLastClickTime] = useState(0)
+  // const [lastClickTime, setLastClickTime] = useState(0)
+  const { throttled } = useThrottle(60)
 
   //local component states
-  const [showModal, setShowModal] = useState(false)
+  const [showThrottleModal, setShowThrottleModal] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [sendLinkState, setSendLinkState] = useState<FlowState>('initial')
   const [recaptchaState, setRecaptchaState] = useState<
     'checked' | 'expired' | 'initial' | 'loading' | 'withError'
@@ -65,7 +68,7 @@ const ForgotPassword = () => {
       await checkEmail({ email: data.email, recaptchaToken }).unwrap()
       setEmail(data.email)
       setSendLinkState('success')
-      setShowModal(true)
+      setShowSuccessModal(true)
     } catch (e) {
       setError('email', { message: "User with this email doesn't exist", type: 'manual' })
     }
@@ -86,9 +89,13 @@ const ForgotPassword = () => {
     setRecaptchaState('checked')
   }
 
-  const handleCloseModal = () => {
-    setShowModal(false)
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false)
     reset()
+  }
+
+  const handleCloseThrottleModal = () => {
+    setShowThrottleModal(false)
   }
 
   const isBtnDisabled = () => {
@@ -99,21 +106,16 @@ const ForgotPassword = () => {
     return !emailValue || !recaptchaToken
   }
 
-  const handleResendEmail = useCallback(async () => {
-    const currentTime = Date.now()
-
-    if (currentTime - lastClickTime < 60000) {
-      const remainingTime = Math.ceil((60000 - (currentTime - lastClickTime)) / 1000)
-
-      alert(`Please wait ${remainingTime} seconds before trying to send the link again.`)
+  const handleResendEmail = async () => {
+    if (throttled()) {
+      setShowThrottleModal(true)
 
       return
     }
 
-    setLastClickTime(currentTime)
     await resendEmail({ email }).unwrap()
-    setShowModal(true)
-  }, [resendEmail, lastClickTime, email])
+    setShowSuccessModal(true)
+  }
 
   //Guards
   if (isLoadingCheckEmail || isLoadingResendEmail) {
@@ -163,8 +165,16 @@ const ForgotPassword = () => {
         </form>
       )}
 
-      <Modal buttonTitle={'OK'} onClose={handleCloseModal} open={showModal} title={'Email sent'}>
+      <Modal
+        buttonTitle={'OK'}
+        onClose={handleCloseSuccessModal}
+        open={showSuccessModal}
+        title={'Email sent'}
+      >
         <p>We have sent a link to confirm your email to {email}</p>
+      </Modal>
+      <Modal buttonTitle={'OK'} onClose={handleCloseThrottleModal} open={showThrottleModal}>
+        <p>Please wait {throttled()?.toFixed(0)} seconds before trying to send the link again.</p>
       </Modal>
     </Card>
   )
