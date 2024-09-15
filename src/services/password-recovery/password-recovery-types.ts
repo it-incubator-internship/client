@@ -32,6 +32,4 @@ export type ServerError = {
   }
 }
 
-export type CheckCodeArgs = {
-  code: string
-}
+export type CheckCodeArgs = string

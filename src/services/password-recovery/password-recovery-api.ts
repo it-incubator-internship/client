@@ -22,8 +22,8 @@ const passwordRecovery = inctagramApi.injectEndpoints({
       }),
     }),
     checkCode: builder.query<void, CheckCodeArgs>({
-      query: code => ({
-        body: { code },
+      query: recoveryCode => ({
+        body: { code: recoveryCode },
         method: 'POST',
         url: '/v1/auth/code-validation',
       }),
@@ -45,5 +45,9 @@ const passwordRecovery = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { useChangePasswordMutation, useCheckEmailMutation, useResendEmailMutation } =
-  passwordRecovery
+export const {
+  useChangePasswordMutation,
+  useCheckCodeQuery,
+  useCheckEmailMutation,
+  useResendEmailMutation,
+} = passwordRecovery
