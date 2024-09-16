@@ -36,6 +36,7 @@ function SignIn() {
     control,
     formState: { errors },
     handleSubmit,
+    setError,
   } = useForm<FormValues>({
     defaultValues: {
       email: '',
@@ -48,8 +49,6 @@ function SignIn() {
       const res = await login(data).unwrap()
 
       const parserPayload = await convertAccessToken(res.accessToken)
-
-      console.log(parserPayload)
 
       let userId: string | undefined
 
@@ -73,10 +72,10 @@ function SignIn() {
         return
       }
     } catch (error: any) {
-      if (error.data?.statusCode === 401 && error.data?.error === 'Unauthorized') {
-        void router.replace(`/sign-up`)
-      }
-      console.log(error)
+      setError('email', {
+        message: error.data.error || error.data.errorMessages[0],
+        type: 'manual',
+      })
     }
   }
 

@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 
 import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
 import Spinner from '@/components/Spinner/Spinner'
+import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
+import { PATH } from '@/consts/route-paths'
 import { useRegistrationMutation } from '@/services/auth/authApi'
 import { RegistrationArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,9 +18,7 @@ import s from './Signup.module.scss'
 const signUpSchema = z
   .object({
     email: z.string().email('The email must match the format\nexample@example.com'),
-    isAgreement: z.literal(true, {
-      errorMap: () => ({ message: 'Please, mark the checkbox, if you agree to our terms' }),
-    }),
+    isAgreement: z.boolean(),
     password: z
       .string()
       .min(8)
@@ -38,28 +38,36 @@ const signUpSchema = z
     message: 'Password should match',
     path: ['passwordConfirmation'],
   })
+  .superRefine((data, ctx) => {
+    if (!data.isAgreement) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Please, mark the checkbox, if you agree to our terms',
+        path: ['isAgreement'],
+      })
+    }
+  })
 
 type FormValues = z.infer<typeof signUpSchema>
 
-export default function SignUp() {
+function SignUp() {
   const [registration, { isLoading }] = useRegistrationMutation()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [responseEmail, setResponseEmail] = useState('')
 
   const {
     control,
-    formState: { errors, isValid },
+    formState: { errors },
     handleSubmit,
     reset,
   } = useForm<FormValues>({
     defaultValues: {
       email: '',
-      isAgreement: true,
-      password: 'StRo0NgP@SSWoRD',
-      passwordConfirmation: 'StRo0NgP@SSWoRD',
-      userName: 'demorest49de9',
+      isAgreement: false,
+      password: '',
+      passwordConfirmation: '',
+      userName: '',
     },
-    mode: 'onBlur',
     resolver: zodResolver(signUpSchema),
   })
 
@@ -72,8 +80,6 @@ export default function SignUp() {
 
     try {
       const res = await registration(trimmedData).unwrap()
-
-      console.log(res)
 
       setIsModalOpen(true)
       setResponseEmail(res.email)
@@ -90,7 +96,12 @@ export default function SignUp() {
   }
 
   const args = {
-    children: <p>We have sent a link to confirm your email to {responseEmail}</p>,
+    children: (
+      <div>
+        <p>We have sent a link to confirm your email to {responseEmail}</p>
+        <Link href={PATH.LOGIN}>Go to sign in</Link>
+      </div>
+    ),
     onClose: () => {
       setIsModalOpen(false)
       reset()
@@ -111,7 +122,7 @@ export default function SignUp() {
           <SocialMediaAuth />
         </div>
         <form className={s.SignUpForm} onSubmit={handleSubmit(handleSignUp)}>
-          <Label className={s.SignUpFormLabel} label={'userName'}>
+          <Label className={s.SignUpFormLabel} label={'Username'}>
             <FormInput
               className={s.SignUpFormInput}
               containerClassName={s.inputContainer}
@@ -179,7 +190,7 @@ export default function SignUp() {
             </FormCheckbox>
           </div>
 
-          <Button className={s.SignUpButton} disabled={!isValid} fullWidth type={'submit'}>
+          <Button className={s.SignUpButton} fullWidth type={'submit'}>
             Sign Up
           </Button>
         </form>
@@ -191,3 +202,6 @@ export default function SignUp() {
     </div>
   )
 }
+
+SignUp.getLayout = getHeaderLayout
+export default SignUp

@@ -15,9 +15,6 @@ export default function EmailConfirmed() {
   const code = router.query.code
   const [registrationConfirmation, { isLoading }] = useRegistrationConfirmationMutation()
 
-  console.log('email-confirmed')
-  console.log(`code`, code)
-
   const [isRedirected, setIsRedirected] = useState(false)
 
   useEffect(() => {

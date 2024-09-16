@@ -28,7 +28,7 @@ export const Navbar = ({ className }: Props) => {
       <Sidebar>
         <SidebarItem Icon={HomeOutline} href={'/'} item={t.nav.home} />
         <SidebarItem Icon={PlusSquareOutline} href={'/'} item={t.nav.create} />
-        <SidebarItem Icon={Person} href={`/profile/${data?.userId}`} item={t.nav.myProfile} />
+        <SidebarItem Icon={Person} href={`/profile/${data?.userId}/edit`} item={t.nav.myProfile} />
         <SidebarItem Icon={MessageCircleOutline} href={'/'} item={t.nav.messenger} />
         <SidebarItem Icon={Search} href={'/'} item={t.nav.search} />
         <div style={{ marginTop: '60px' }}>
