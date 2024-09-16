@@ -1,18 +1,7 @@
-import { useState } from 'react'
+export function throttleBtn(throttleDuration: number, lastClickTime: number) {
+  const currentTime = Date.now() / 1000
 
-export function useThrottle(throttleTime: number) {
-  const [lastClickTime, setLastClickTime] = useState(0)
-
-  const throttled = () => {
-    const currentTime = Date.now() / 1000
-
-    if (currentTime - lastClickTime <= throttleTime) {
-      return throttleTime - (currentTime - lastClickTime)
-    }
-    setLastClickTime(currentTime)
-
-    return null
+  if (currentTime - lastClickTime < throttleDuration) {
+    return Math.ceil(throttleDuration - (currentTime - lastClickTime))
   }
-
-  return { throttled }
 }

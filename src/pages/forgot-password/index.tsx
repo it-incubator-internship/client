@@ -1,14 +1,15 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useForm } from 'react-hook-form'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
+import { PATH } from '@/consts/route-paths'
+import { useTranslation } from '@/hooks/useTranslation'
 import {
   useCheckEmailMutation,
   useResendEmailMutation,
 } from '@/services/password-recovery/password-recovery-api'
-import { useThrottle } from '@/utils/throttleButtonClick'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, Modal, Recaptcha } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -38,20 +39,20 @@ const ForgotPassword = () => {
   //local data states
   const [email, setEmail] = useState('')
   const [recaptchaToken, setRecaptchaToken] = useState('')
-  // const [lastClickTime, setLastClickTime] = useState(0)
-  const { throttled } = useThrottle(60)
 
-  //local component states
+  //modal window states
   const [showThrottleModal, setShowThrottleModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+
+  //local component states
   const [sendLinkState, setSendLinkState] = useState<FlowState>('initial')
   const [recaptchaState, setRecaptchaState] = useState<
     'checked' | 'expired' | 'initial' | 'loading' | 'withError'
   >('initial')
 
-  //libs hooks
+  //hooks
+  const t = useTranslation()
   const { executeRecaptcha } = useGoogleReCaptcha()
-
   const { control, handleSubmit, reset, setError, watch } = useForm({
     resolver: zodResolver(FormSchema),
   })
@@ -59,22 +60,32 @@ const ForgotPassword = () => {
 
   const [resendEmail, { isLoading: isLoadingResendEmail }] = useResendEmailMutation()
 
+  //throttle
+  const [lastClickTime, setLastClickTime] = useState(0)
+  const [remainingTime, setRemainingTime] = useState(0)
+  //
+
   //check the email field for buttonSend disabling
   const emailValue = watch('email', '')
 
   //handlers
-  const dataFormSubmit = handleSubmit(async data => {
+  const HandleSubmitDataForm = handleSubmit(async data => {
     try {
-      await checkEmail({ email: data.email, recaptchaToken }).unwrap()
-      setEmail(data.email)
-      setSendLinkState('success')
-      setShowSuccessModal(true)
+      await checkEmail({ email: data.email, recaptchaToken })
+        .unwrap()
+        .then(() => {
+          setEmail(data.email)
+          setSendLinkState('success')
+        })
+        .finally(() => {
+          setShowSuccessModal(true)
+        })
     } catch (e) {
       setError('email', { message: "User with this email doesn't exist", type: 'manual' })
     }
   })
 
-  const recaptchaFormSubmit = async (event: any) => {
+  const handleSubmitRecaptchaForm = async (event: any) => {
     event.preventDefault()
     setRecaptchaState('loading')
     if (!executeRecaptcha) {
@@ -87,6 +98,23 @@ const ForgotPassword = () => {
 
     setRecaptchaToken(token)
     setRecaptchaState('checked')
+  }
+
+  const handleResendEmail = async () => {
+    const currentTime = Date.now()
+
+    if (currentTime - lastClickTime < 60000) {
+      const remainingTime = Math.ceil((60000 - (currentTime - lastClickTime)) / 1000)
+
+      setRemainingTime(remainingTime)
+      setShowThrottleModal(true)
+
+      return
+    }
+    setLastClickTime(currentTime)
+
+    await resendEmail({ email }).unwrap()
+    setShowSuccessModal(true)
   }
 
   const handleCloseSuccessModal = () => {
@@ -106,17 +134,6 @@ const ForgotPassword = () => {
     return !emailValue || !recaptchaToken
   }
 
-  const handleResendEmail = async () => {
-    if (throttled()) {
-      setShowThrottleModal(true)
-
-      return
-    }
-
-    await resendEmail({ email }).unwrap()
-    setShowSuccessModal(true)
-  }
-
   //Guards
   if (isLoadingCheckEmail || isLoadingResendEmail) {
     return <Spinner />
@@ -124,25 +141,21 @@ const ForgotPassword = () => {
 
   return (
     <Card className={s.card}>
-      <h1 className={s.title}>Forgot password</h1>
+      <h1 className={s.title}>{t.forgotPassword.title}</h1>
 
-      <form onSubmit={dataFormSubmit}>
+      <form onSubmit={HandleSubmitDataForm}>
         <FormInput
           containerClassName={s.inputContainer}
           control={control}
           disabled={sendLinkState === 'success'}
-          label={'Email'}
+          label={t.forgotPassword.inputLabel}
           name={'email'}
           placeholder={email ?? 'Epam@epam.com'}
           width={'100%'}
         />
-        <p className={clsx(s.text, s.textTip)}>
-          Enter your email address and we will send you further instructions
-        </p>
+        <p className={clsx(s.text, s.textTip)}>{t.forgotPassword.subtitleInitial}</p>
         {sendLinkState === 'success' && (
-          <p className={s.text}>
-            The link has been sent by email. If you don’t receive an email send link again
-          </p>
+          <p className={s.text}>{t.forgotPassword.subtitleSuccess}</p>
         )}
         <Button
           className={s.btnSend}
@@ -151,30 +164,44 @@ const ForgotPassword = () => {
           onClick={sendLinkState === 'success' ? handleResendEmail : undefined}
           type={sendLinkState === 'success' ? 'button' : 'submit'}
         >
-          {sendLinkState === 'success' ? 'Send Link Again' : 'Send Link'}
+          {sendLinkState === 'success'
+            ? t.forgotPassword.buttonSendSuccess
+            : t.forgotPassword.buttonSendInitial}
         </Button>
       </form>
 
       <Button asChild className={s.btnBack} variant={'ghost'}>
-        <Link href={'/sign-in'}>Back to Sign In</Link>
+        <Link href={PATH.LOGIN}>{t.forgotPassword.buttonBack}</Link>
       </Button>
 
       {sendLinkState !== 'success' && (
-        <form className={s.recaptcha} onSubmit={recaptchaFormSubmit}>
-          <Recaptcha variant={recaptchaState} />
+        <form className={s.recaptcha} onSubmit={handleSubmitRecaptchaForm}>
+          <Recaptcha label={t.forgotPassword.recaptchaLabel} variant={recaptchaState} />
         </form>
       )}
 
       <Modal
-        buttonTitle={'OK'}
+        buttonTitle={t.forgotPassword.modal.buttonTitle}
         onClose={handleCloseSuccessModal}
         open={showSuccessModal}
-        title={'Email sent'}
+        title={t.forgotPassword.modal.title}
       >
-        <p>We have sent a link to confirm your email to {email}</p>
+        <p>
+          {t.forgotPassword.modal.subtitle}
+          {email}
+        </p>
       </Modal>
-      <Modal buttonTitle={'OK'} onClose={handleCloseThrottleModal} open={showThrottleModal}>
-        <p>Please wait {throttled()?.toFixed(0)} seconds before trying to send the link again.</p>
+      <Modal
+        buttonTitle={t.forgotPassword.modal.buttonTitle}
+        onClose={handleCloseThrottleModal}
+        open={showThrottleModal}
+        title={''}
+      >
+        <p>
+          {t.forgotPassword.modal.throttleSubtitleStart}
+          {remainingTime}
+          {t.forgotPassword.modal.throttleSubtitleEnd}
+        </p>
       </Modal>
     </Card>
   )

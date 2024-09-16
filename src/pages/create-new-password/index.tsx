@@ -1,7 +1,7 @@
 import Spinner from '@/components/Spinner/Spinner'
+import { NewPasswordForm } from '@/components/create-password/new-password-form/new-password-form'
+import { PasswordLinkExpired } from '@/components/create-password/password-link-expired/password-link-expired'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
-import { NewPasswordForm } from '@/components/new-password-form/new-password-form'
-import { PasswordLinkExpired } from '@/components/password-link-expired/password-link-expired'
 import { useCheckCodeQuery } from '@/services/password-recovery/password-recovery-api'
 import { useRouter } from 'next/router'
 
@@ -13,7 +13,6 @@ function CreateNewPassword() {
   if (isLoading) {
     return <Spinner />
   }
-
   if (isSuccess) {
     return <NewPasswordForm recoveryCode={recoveryCode as string} />
   }

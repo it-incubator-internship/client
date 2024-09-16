@@ -3,16 +3,15 @@ import { useForm } from 'react-hook-form'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { PATH } from '@/consts/route-paths'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useLogoutMutation } from '@/services/auth/authApi'
 import { useChangePasswordMutation } from '@/services/password-recovery/password-recovery-api'
-import { ServerError } from '@/services/password-recovery/password-recovery-types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, Modal } from '@robur_/ui-kit'
-import { router } from 'next/client'
 import Router from 'next/router'
 import { z } from 'zod'
 
-import styles from '@/pages/create-new-password/index.module.scss'
+import styles from './new-password-form.module.scss'
 
 type NewPasswordFormProps = {
   recoveryCode: string
@@ -41,6 +40,7 @@ export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
   const [changePassword, { error, isError, isLoading }] = useChangePasswordMutation()
   const [doLogout] = useLogoutMutation()
   const serverError = JSON.stringify(error)
+  const t = useTranslation()
 
   const { control, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
@@ -64,9 +64,10 @@ export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
     try {
       await doLogout()
     } finally {
-      setShowModal(false)
-      reset()
-      void Router.replace(PATH.LOGIN)
+      Router.replace(PATH.LOGIN).then(() => {
+        setShowModal(false)
+        reset()
+      })
     }
   }
 
@@ -81,28 +82,33 @@ export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
   return (
     <Card className={styles.cardContainer}>
       <div>
-        <h1 className={styles.h1}>Create New Password</h1>
+        <h1 className={styles.h1}>{t.createNewPassword.newPasswordForm.title}</h1>
         <form onSubmit={handleSubmit(handleSubmitHandler)}>
           <FormInput
             containerClassName={styles.input}
             control={control}
-            label={'New password'}
+            label={t.createNewPassword.newPasswordForm.inputNewPassLabel}
             name={'newPassword'}
             type={'password'}
           />
           <FormInput
             containerClassName={styles.input}
             control={control}
-            label={'Password confirmation'}
+            label={t.createNewPassword.newPasswordForm.inputConfirmPassLabel}
             name={'confirmPassword'}
             type={'password'}
           />
-          <p className={styles.paragraph}>Your password must be between 6 and 20 characters</p>
-          <Button fullWidth>Create new password</Button>
+          <p className={styles.paragraph}>{t.createNewPassword.newPasswordForm.subTitle}</p>
+          <Button fullWidth>{t.createNewPassword.newPasswordForm.button}</Button>
         </form>
       </div>
-      <Modal buttonTitle={'OK'} onClose={handleCloseModal} open={showModal}>
-        <p>The password has been successfully changed.</p>
+      <Modal
+        buttonTitle={t.createNewPassword.newPasswordForm.modal.buttonTitle}
+        onClose={handleCloseModal}
+        open={showModal}
+        title={''}
+      >
+        <p>{t.createNewPassword.newPasswordForm.modal.subtitle}</p>
       </Modal>
     </Card>
   )
