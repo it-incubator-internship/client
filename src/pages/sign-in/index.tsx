@@ -116,11 +116,9 @@ function SignIn() {
         <Button asChild className={clsx(s.ButtonForgot, s.leftItem)} variant={'ghost'}>
           <Link href={PATH.FORGOT_PASSWORD}>{t.auth.forgotPassword}</Link>
         </Button>
-        <Button asChild className={s.ButtonAccount} variant={'ghost'}>
-          <a href={'#'}>{t.auth.noAccount}</a>
-        </Button>
+        <div className={s.ButtonAccount}>{t.auth.noAccount}</div>
         <Button asChild className={s.ButtonSignUp} variant={'ghost'}>
-          <a href={'#'}>{t.auth.signUp}</a>
+          <Link href={PATH.REGISTRATION}>{t.auth.signUp}</Link>
         </Button>
       </Card>
     </div>

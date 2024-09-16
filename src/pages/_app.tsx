@@ -11,6 +11,10 @@ import { wrapper } from '@/services/store'
 import '@/styles/index.scss'
 import '@/styles/nprogress.scss'
 import '@robur_/ui-kit/style.css'
+import '@/styles/toastStyles.scss'
+import { ToastContainer } from 'react-toastify'
+
+import 'react-toastify/dist/ReactToastify.css'
 
 export type NextPageWithLayout<P = {}, IP = P> = {
   getLayout?: (page: ReactElement) => ReactNode
@@ -28,7 +32,10 @@ export default function App({ Component, ...rest }: AppPropsWithLayout) {
 
   return (
     <Provider store={store}>
-      <AuthProvider>{getLayout(<Component {...props.pageProps} />)}</AuthProvider>
+      <AuthProvider>
+        <ToastContainer />
+        {getLayout(<Component {...props.pageProps} />)}
+      </AuthProvider>
     </Provider>
   )
 }

@@ -13,7 +13,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@reduxjs/toolkit": "^2.2.7",
-    "@robur_/ui-kit": "^0.0.27",
+    "@robur_/ui-kit": "^0.0.28",
     "async-mutex": "^0.5.0",
     "clsx": "^2.1.1",
     "next": "14.2.5",
@@ -24,6 +24,7 @@
     "react-google-recaptcha-v3": "^1.10.1",
     "react-hook-form": "^7.52.2",
     "react-redux": "^9.1.2",
+    "react-toastify": "^10.0.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
