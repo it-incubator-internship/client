@@ -56,17 +56,21 @@ export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
       newPassword: data.newPassword,
       passwordConfirmation: data.confirmPassword,
     })
+      .unwrap()
+      .then(() => {
+        setShowModal(true)
+      })
   }
 
   const handleCloseModal = async () => {
-    try {
-      await doLogout()
-    } finally {
-      Router.replace(PATH.LOGIN).then(() => {
-        setShowModal(false)
-        reset()
+    await doLogout()
+      .unwrap()
+      .finally(() => {
+        Router.replace(PATH.LOGIN).then(() => {
+          setShowModal(false)
+          reset()
+        })
       })
-    }
   }
 
   if (isLoading) {
@@ -75,14 +79,9 @@ export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
 
   if (isError) {
     const errorMessage =
-      // @ts-ignore
       (error as ServerError).data?.fields[0].message || 'Unexpected error occurred.'
 
     showErrorToast(errorMessage)
-  }
-
-  if (isSuccess) {
-    setShowModal(true)
   }
 
   return (
