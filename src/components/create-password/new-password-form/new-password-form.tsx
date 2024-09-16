@@ -39,7 +39,7 @@ type FormValues = z.infer<typeof FormSchema>
 
 export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
   const [showModal, setShowModal] = useState(false)
-  const [changePassword, { error, isError, isLoading, isSuccess }] = useChangePasswordMutation()
+  const [changePassword, { error, isError, isLoading }] = useChangePasswordMutation()
   const [doLogout] = useLogoutMutation()
   const t = useTranslation()
 
@@ -78,8 +78,7 @@ export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
   }
 
   if (isError) {
-    const errorMessage =
-      (error as ServerError).data?.fields[0].message || 'Unexpected error occurred.'
+    const errorMessage = (error as ServerError).data?.message || 'Unexpected error occurred.'
 
     showErrorToast(errorMessage)
   }
