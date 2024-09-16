@@ -40,13 +40,13 @@ export const Header = () => {
             <SelectItem value={'en'}>
               <div className={s.langOption}>
                 <FlagUnitedKingdom className={s.flag} />
-                <span>{t.english}</span>
+                <span>English</span>
               </div>
             </SelectItem>
             <SelectItem value={'ru'}>
               <div className={s.langOption}>
                 <FlagRussia className={s.flag} />
-                <span>{t.russian}</span>
+                <span>Русский</span>
               </div>
             </SelectItem>
           </Select>

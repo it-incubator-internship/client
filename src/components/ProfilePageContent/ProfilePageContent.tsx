@@ -86,9 +86,24 @@ export const ProfilePageContent = ({ isEditMode = false }: ProfilePageContentPro
           )}
         </div>
         <div className={s.dataSection}>
-          <FormInput control={control} label={'Username'} name={'username'} />
-          <FormInput control={control} label={'Firstname'} name={'firstname'} />
-          <FormInput control={control} label={'Lastname'} name={'lastname'} />
+          <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            label={'Username'}
+            name={'username'}
+          />
+          <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            label={'Firstname'}
+            name={'firstname'}
+          />
+          <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            label={'Lastname'}
+            name={'lastname'}
+          />
           <FormDatePicker control={control} label={'Date of birth'} name={'birthdate'} />
           <div style={{ display: 'flex', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>

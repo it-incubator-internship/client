@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
-import { PATH, commonRoutes, privateRoutes } from '@/consts/route-paths'
+import { PATH, privateRoutes } from '@/consts/route-paths'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useRouter } from 'next/router'
 
