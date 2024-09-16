@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { toast } from 'react-toastify'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { useTranslation } from '@/hooks/useTranslation'

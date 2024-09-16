@@ -1,9 +1,9 @@
 export type RegistrationArgs = {
-  email: string,
-  password: string,
-  passwordConfirmation: string,
-  userName: string,
+  email: string
   isAgreement: boolean
+  password: string
+  passwordConfirmation: string
+  userName: string
 }
 export type RegistrationResponse = {
   email: string

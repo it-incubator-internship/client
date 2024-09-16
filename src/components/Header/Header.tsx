@@ -1,4 +1,3 @@
-import { useTranslation } from '@/hooks/useTranslation'
 import { FlagRussia, FlagUnitedKingdom, OutlineBell, Select, SelectItem } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
@@ -6,7 +5,6 @@ import { useRouter } from 'next/router'
 import s from './Header.module.scss'
 
 export const Header = () => {
-  const t = useTranslation()
   const { asPath, locale, pathname, push, query } = useRouter()
   const isHomePage = pathname === '/'
 

@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app'
 
 import type { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
+import { ToastContainer } from 'react-toastify'
 
 import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
 import { useLoader } from '@/hooks/useLoader'
@@ -10,10 +11,8 @@ import { wrapper } from '@/services/store'
 
 import '@/styles/index.scss'
 import '@/styles/nprogress.scss'
-import '@robur_/ui-kit/style.css'
 import '@/styles/toastStyles.scss'
-import { ToastContainer } from 'react-toastify'
-
+import '@robur_/ui-kit/style.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 export type NextPageWithLayout<P = {}, IP = P> = {
