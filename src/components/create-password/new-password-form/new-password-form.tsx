@@ -6,6 +6,8 @@ import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLogoutMutation } from '@/services/auth/authApi'
 import { useChangePasswordMutation } from '@/services/password-recovery/password-recovery-api'
+import { ServerError } from '@/services/password-recovery/password-recovery-types'
+import { showErrorToast } from '@/utils/toastConfig'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, Modal } from '@robur_/ui-kit'
 import Router from 'next/router'
@@ -37,9 +39,8 @@ type FormValues = z.infer<typeof FormSchema>
 
 export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
   const [showModal, setShowModal] = useState(false)
-  const [changePassword, { error, isError, isLoading }] = useChangePasswordMutation()
+  const [changePassword, { error, isError, isLoading, isSuccess }] = useChangePasswordMutation()
   const [doLogout] = useLogoutMutation()
-  const serverError = JSON.stringify(error)
   const t = useTranslation()
 
   const { control, handleSubmit, reset } = useForm<FormValues>({
@@ -50,14 +51,11 @@ export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
     resolver: zodResolver(FormSchema),
   })
   const handleSubmitHandler = async (data: FormValues) => {
-    try {
-      await changePassword({
-        code: recoveryCode as string,
-        newPassword: data.newPassword,
-        passwordConfirmation: data.confirmPassword,
-      })
-      setShowModal(true)
-    } catch (e) {}
+    await changePassword({
+      code: recoveryCode as string,
+      newPassword: data.newPassword,
+      passwordConfirmation: data.confirmPassword,
+    })
   }
 
   const handleCloseModal = async () => {
@@ -76,7 +74,15 @@ export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
   }
 
   if (isError) {
-    console.log(serverError)
+    const errorMessage =
+      // @ts-ignore
+      (error as ServerError).data?.fields[0].message || 'Unexpected error occurred.'
+
+    showErrorToast(errorMessage)
+  }
+
+  if (isSuccess) {
+    setShowModal(true)
   }
 
   return (

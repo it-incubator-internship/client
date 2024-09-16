@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useResendEmailMutation } from '@/services/password-recovery/password-recovery-api'
 import { ServerError } from '@/services/password-recovery/password-recovery-types'
+import { showErrorToast } from '@/utils/toastConfig'
 import { Button, Modal } from '@robur_/ui-kit'
 
 import s from './password-link-expired.module.scss'
@@ -16,7 +18,6 @@ type PasswordLinkExpiredProps = {
 
 export function PasswordLinkExpired({ email }: PasswordLinkExpiredProps) {
   const [resendEmail, { error, isError, isLoading }] = useResendEmailMutation()
-  const serverError = (error as ServerError)?.data?.fields[0]?.message
   const [showThrottleModal, setShowThrottleModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const t = useTranslation()
@@ -51,7 +52,9 @@ export function PasswordLinkExpired({ email }: PasswordLinkExpiredProps) {
   }
 
   if (isError) {
-    alert(serverError)
+    const errorMessage = (error as ServerError).data?.message || 'Unexpected error occurred.'
+
+    showErrorToast(errorMessage)
   }
 
   return (

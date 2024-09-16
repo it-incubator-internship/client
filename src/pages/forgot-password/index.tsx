@@ -56,7 +56,8 @@ const ForgotPassword = () => {
   const { control, handleSubmit, reset, setError, watch } = useForm({
     resolver: zodResolver(FormSchema),
   })
-  const [checkEmail, { isLoading: isLoadingCheckEmail }] = useCheckEmailMutation()
+  const [checkEmail, { error, isError, isLoading: isLoadingCheckEmail, isSuccess }] =
+    useCheckEmailMutation()
 
   const [resendEmail, { isLoading: isLoadingResendEmail }] = useResendEmailMutation()
 
@@ -70,20 +71,20 @@ const ForgotPassword = () => {
 
   //handlers
   const HandleSubmitDataForm = handleSubmit(async data => {
-    try {
-      await checkEmail({ email: data.email, recaptchaToken })
-        .unwrap()
-        .then(() => {
-          setEmail(data.email)
-          setSendLinkState('success')
-        })
-        .finally(() => {
-          setShowSuccessModal(true)
-        })
-    } catch (e) {
-      setError('email', { message: "User with this email doesn't exist", type: 'manual' })
-    }
+    await checkEmail({ email: data.email, recaptchaToken })
+      .unwrap()
+      .then(() => {
+        setEmail(data.email)
+        setSendLinkState('success')
+      })
+      .then(() => {
+        setShowSuccessModal(true)
+      })
   })
+
+  if (isError) {
+    setError('email', { message: "User with this email doesn't exist", type: 'manual' })
+  }
 
   const handleSubmitRecaptchaForm = async (event: any) => {
     event.preventDefault()

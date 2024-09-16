@@ -19,7 +19,7 @@ export type ResendEmailResponse = {
 }
 export type ServerError = {
   data: {
-    fields: [
+    fields?: [
       {
         field: string
         message: string
