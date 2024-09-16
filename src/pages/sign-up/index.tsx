@@ -17,22 +17,21 @@ import s from './Signup.module.scss'
 
 const signUpSchema = z
   .object({
-    email: z.string().email('The email must match the format\nexample@example.com'),
+    email: z
+      .string()
+      .min(1, { message: 'This field is required' })
+      .email('The email must match the format\nexample@example.com'),
     isAgreement: z.boolean(),
     password: z
-      .string()
+      .string({ message: 'This field is required' })
       .min(8)
       .max(20)
       .regex(
         /^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]+$/g,
         'password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~'
       ),
-    passwordConfirmation: z.string().min(8).max(20),
-    userName: z
-      .string()
-      .min(6, `Minimum number of characters 6`)
-      .max(30, `Minimum number of characters 30`)
-      .regex(/^[a-zA-Z0-9_-]+$/g, 'name must contain  0-9; A-Z; a-z; _ ; -'),
+    passwordConfirmation: z.string().min(1, { message: 'This field is required' }),
+    userName: z.string().min(1, { message: 'This field is required' }),
   })
   .refine(data => data.password === data.passwordConfirmation, {
     message: 'Password should match',
@@ -50,6 +49,18 @@ const signUpSchema = z
 
 type FormValues = z.infer<typeof signUpSchema>
 
+type FieldError = {
+  field: 'email' | 'isAgreement' | 'password' | 'passwordConfirmation' | 'userName'
+  message: string
+}
+
+type ErrorType = {
+  data: {
+    fields: FieldError[]
+  }
+  message: string
+}
+
 function SignUp() {
   const [registration, { isLoading }] = useRegistrationMutation()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -60,6 +71,7 @@ function SignUp() {
     formState: { errors },
     handleSubmit,
     reset,
+    setError,
   } = useForm<FormValues>({
     defaultValues: {
       email: '',
@@ -83,9 +95,17 @@ function SignUp() {
 
       setIsModalOpen(true)
       setResponseEmail(res.email)
-    } catch (error: any) {
-      console.log(error)
-      //todo bubble...
+    } catch (error: unknown) {
+      const errors = (error as ErrorType).data?.fields
+
+      if (errors) {
+        errors.forEach((error: FieldError) => {
+          setError(error.field, {
+            message: error.message,
+            type: 'manual',
+          })
+        })
+      }
     }
 
     if (isLoading) {
@@ -129,7 +149,6 @@ function SignUp() {
               control={control}
               errorMsg={errors.userName?.message}
               name={'userName'}
-              rules={{ required: true }}
               type={'text'}
             />
           </Label>
@@ -141,7 +160,6 @@ function SignUp() {
               control={control}
               errorMsg={errors.email?.message}
               name={'email'}
-              rules={{ required: true }}
               type={'email'}
             />
           </Label>
@@ -153,7 +171,6 @@ function SignUp() {
               control={control}
               errorMsg={errors.password?.message}
               name={'password'}
-              rules={{ required: true }}
               type={'password'}
             />
           </Label>
@@ -165,7 +182,6 @@ function SignUp() {
               control={control}
               errorMsg={errors.passwordConfirmation?.message}
               name={'passwordConfirmation'}
-              rules={{ required: true }}
               shouldUnregister
               type={'password'}
             />

@@ -7,7 +7,6 @@ import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
-import { convertAccessToken } from '@/utils/convertAccessToken'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -18,8 +17,8 @@ import { z } from 'zod'
 import s from './signIn.module.scss'
 
 const SigninSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6).max(30),
+  email: z.string().min(1, { message: 'This field is required' }).email(),
+  password: z.string().min(1, { message: 'This field is required' }),
 })
 
 type FormValues = z.infer<typeof SigninSchema>
@@ -27,7 +26,7 @@ type FormValues = z.infer<typeof SigninSchema>
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
-  const [getMe] = useLazyMeQuery()
+  const [getMe, { isLoading: getMeIsLoading }] = useLazyMeQuery()
   const router = useRouter()
 
   const t = useTranslation()
@@ -46,23 +45,27 @@ function SignIn() {
   })
   const handleSignIn = async (data: LoginArgs) => {
     try {
-      const res = await login(data).unwrap()
+      await login(data).unwrap()
 
-      const parserPayload = await convertAccessToken(res.accessToken)
+      // const parserPayload = await convertAccessToken(res.accessToken)
+      //
+      // let userId: string | undefined
+      //
+      // if (parserPayload?.userId) {
+      //   userId = parserPayload?.userId
+      // } else {
+      //   const meRes = await getMe()
+      //
+      //   userId = meRes?.data?.userId
+      // }
 
-      let userId: string | undefined
+      const meRes = await getMe()
 
-      if (parserPayload?.userId) {
-        userId = parserPayload?.userId
-      } else {
-        const meRes = await getMe()
+      const userId = meRes?.data?.userId
 
-        userId = meRes?.data?.userId
-      }
-      if (isLoading) {
+      if (isLoading || getMeIsLoading) {
         return <Spinner />
       } else if (userId) {
-        console.log('userId', userId)
         void router.replace(`/profile/${userId}/edit`)
 
         return
