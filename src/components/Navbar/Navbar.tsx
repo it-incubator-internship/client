@@ -36,9 +36,14 @@ export const Navbar = ({ className }: Props) => {
           <SidebarItem Icon={BookmarkOutline} href={'/'} item={t.nav.favorites} />
         </div>
         <div style={{ marginTop: '150px' }}>
-          <div onClick={() => logout()}>
-            <SidebarItem Icon={LogOut} href={'/'} item={t.nav.logout} />
-          </div>
+          <SidebarItem
+            Icon={LogOut}
+            as={'button'}
+            href={'/'}
+            item={t.nav.logout}
+            onClick={() => logout()}
+            type={'button'}
+          />
         </div>
       </Sidebar>
     </nav>

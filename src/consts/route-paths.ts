@@ -7,6 +7,7 @@ export const PATH = {
   FORGOT_PASSWORD: '/forgot-password',
   HOME: '/',
   LINK_EXPIRED: '/link-expired',
+  LIST: '/list',
   LOGIN: '/sign-in',
   PROFILE_EDIT: '/profile/edit',
   REGISTRATION: '/sign-up',
@@ -21,6 +22,7 @@ export const commonRoutes = [
   PATH.LINK_EXPIRED,
   PATH.AUTH,
   PATH.EMAIL_CONFIRMED,
+  PATH.LIST,
 ]
 
 export const privateRoutes = [PATH.PROFILE_EDIT]
