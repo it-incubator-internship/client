@@ -47,18 +47,6 @@ function SignIn() {
     try {
       await login(data).unwrap()
 
-      // const parserPayload = await convertAccessToken(res.accessToken)
-      //
-      // let userId: string | undefined
-      //
-      // if (parserPayload?.userId) {
-      //   userId = parserPayload?.userId
-      // } else {
-      //   const meRes = await getMe()
-      //
-      //   userId = meRes?.data?.userId
-      // }
-
       const meRes = await getMe()
 
       const userId = meRes?.data?.userId
@@ -66,7 +54,7 @@ function SignIn() {
       if (isLoading || getMeIsLoading) {
         return <Spinner />
       } else if (userId) {
-        void router.replace(`/profile/${userId}/edit`)
+        void router.replace(`/profile-settings/${userId}`)
 
         return
       }

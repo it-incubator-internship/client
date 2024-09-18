@@ -9,7 +9,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const { data, isLoading } = useMeQuery()
   const router = useRouter()
 
-  const remainingPath = router.pathname.replace(/^\/profile(\/[^/]+)?|\/profile\?(.+)/, '/profile')
+  const remainingPath = router.pathname.replace(
+    /^\/profile-settings(\/[^/]+)?|\/profile-settings\?(.+)/,
+    '/profile-settings'
+  )
 
   const isProtectedPage = privateRoutes.includes(remainingPath)
 

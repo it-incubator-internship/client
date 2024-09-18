@@ -1,25 +1,21 @@
-import { getSideBarLayout } from '@/components/layouts/SidebarLayout/SidebarLayout'
-import Link from 'next/link'
+import Spinner from '@/components/Spinner/Spinner'
+import { PATH } from '@/consts/route-paths'
+import { useMeQuery } from '@/services/auth/authApi'
+import { useRouter } from 'next/router'
 
 function Home() {
-  return (
-    <>
-      <main>
-        <div className={'container'}>
-          <h1 style={{ fontSize: 30, marginBottom: 20 }}>Home page</h1>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
-            <Link href={'/sign-in'}>Sign in</Link>
-            <Link href={'/sign-up'}>Sign up</Link>
-            <Link href={'/profile'}>Profile</Link>
-            <Link href={'/create-new-password'}>Create new password</Link>
-            <Link href={'/forgot-password'}>Forgot-password</Link>
-          </div>
-        </div>
-      </main>
-    </>
-  )
-}
+  const { data, isLoading } = useMeQuery()
+  const router = useRouter()
 
-Home.getLayout = getSideBarLayout
+  if (!isLoading && data) {
+    void router.replace(`/profile-settings/${data?.userId}`)
+
+    return
+  } else {
+    void router.replace(PATH.LOGIN)
+  }
+
+  return <Spinner />
+}
 
 export default Home

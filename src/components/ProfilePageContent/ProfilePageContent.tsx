@@ -53,11 +53,7 @@ const cityOptions = [
   },
 ]
 
-type ProfilePageContentProps = {
-  isEditMode?: boolean
-}
-
-export const ProfilePageContent = ({ isEditMode = false }: ProfilePageContentProps) => {
+export const ProfilePageContent = () => {
   const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
       birthdate: undefined,
@@ -79,11 +75,9 @@ export const ProfilePageContent = ({ isEditMode = false }: ProfilePageContentPro
           <div className={s.userPhoto}>
             <ImageOutline height={'48'} width={'48'} />
           </div>
-          {isEditMode && (
-            <Button fullWidth type={'button'} variant={'outlined'}>
-              Add a Profile Photo
-            </Button>
-          )}
+          <Button fullWidth type={'button'} variant={'outlined'}>
+            Add a Profile Photo
+          </Button>
         </div>
         <div className={s.dataSection}>
           <FormInput
@@ -134,11 +128,9 @@ export const ProfilePageContent = ({ isEditMode = false }: ProfilePageContentPro
           <Textarea className={s.textArea} placeholder={'Text-area'} titleLabel={'About Me'} />
         </div>
       </div>
-      {isEditMode && (
-        <Button className={s.submitBtn} type={'submit'}>
-          Save changes
-        </Button>
-      )}
+      <Button className={s.submitBtn} type={'submit'}>
+        Save changes
+      </Button>
     </form>
   )
 }
