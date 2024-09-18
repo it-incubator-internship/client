@@ -2,6 +2,8 @@
 
 export const PATH = {
   AUTH: '/authentication',
+  BOOKMARKS: '/bookmarks',
+  CREATE: '/create',
   CREATE_NEW_PASSWORD: '/create-new-password',
   EMAIL_CONFIRMED: '/email-confirmed',
   FORGOT_PASSWORD: '/forgot-password',
@@ -9,8 +11,11 @@ export const PATH = {
   LINK_EXPIRED: '/link-expired',
   LIST: '/list',
   LOGIN: '/sign-in',
-  PROFILE_EDIT: '/profile/edit',
+  MESSAGES: '/messages',
+  PROFILE_EDIT: '/profile-settings',
   REGISTRATION: '/sign-up',
+  SEARCH: '/search',
+  STATISTICS: '/statistics',
 }
 
 export const commonRoutes = [

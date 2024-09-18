@@ -8,7 +8,7 @@ function Home() {
   const router = useRouter()
 
   if (!isLoading && data) {
-    void router.replace(`/profile/${data?.userId}/edit`)
+    void router.replace(`/profile-settings/${data?.userId}`)
 
     return
   } else {
