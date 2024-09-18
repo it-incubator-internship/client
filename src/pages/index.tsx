@@ -13,7 +13,6 @@ function Home() {
             <Link href={'/profile'}>Profile</Link>
             <Link href={'/create-new-password'}>Create new password</Link>
             <Link href={'/forgot-password'}>Forgot-password</Link>
-            <Link href={'/link-expired'}>Link Expired</Link>
           </div>
         </div>
       </main>

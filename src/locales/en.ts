@@ -7,7 +7,51 @@ export const en: LocaleType = {
     signIn: 'Sign in',
     signUp: 'Sign Up',
   },
+  createNewPassword: {
+    newPasswordForm: {
+      button: 'Create new password',
+      inputConfirmPassLabel: 'Password confirmation',
+      inputNewPassLabel: 'New password',
+      modal: {
+        buttonTitle: 'OK',
+        subtitle: 'The password has been successfully changed.',
+      },
+      subTitle: 'Your password must be between 6 and 20 characters',
+      title: 'New Password',
+    },
+    passwordLinkExpired: {
+      button: 'Email verification link expired',
+      modal: {
+        buttonTitle: 'OK',
+        subtitle: 'We have sent a link to confirm your email to ',
+        throttleSubtitleEnd: ' seconds before trying to send the link again.',
+        throttleSubtitleStart: 'Please wait ',
+        title: 'Email sent',
+      },
+      subtitle:
+        'Looks like the verification link has expired. Not to worry, we can send the link again',
+      title: 'Resend link',
+    },
+  },
   english: 'English',
+  forgotPassword: {
+    buttonBack: 'Back to Sign In',
+    buttonSendInitial: 'Send link',
+    buttonSendSuccess: 'Send Link Again',
+    inputLabel: 'Email',
+    modal: {
+      buttonTitle: 'OK',
+      subtitle: 'We have sent a link to confirm your email to ',
+      throttleSubtitleEnd: ' seconds before trying to send the link again.',
+      throttleSubtitleStart: 'Please wait ',
+      title: 'Email sent',
+    },
+    recaptchaLabel: 'I’m not a robot',
+    subtitleInitial: 'Enter your email address and we will send you further instructions',
+    subtitleSuccess:
+      'The link has been sent by email. If you don’t receive an email send link again',
+    title: 'Forgot password',
+  },
   meta: {
     defaultDescriptionText:
       'The Inctagram social network is a limitless communication of people all over the world',

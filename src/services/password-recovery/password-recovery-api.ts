@@ -1,6 +1,7 @@
 import { inctagramApi } from '@/services/inctagramApi'
 import {
   ChangePasswordArgs,
+  CheckCodeArgs,
   CheckEmailArgs,
   CheckEmailResponse,
   ResendEmailArgs,
@@ -20,6 +21,13 @@ const passwordRecovery = inctagramApi.injectEndpoints({
         url: '/v1/auth/new-password',
       }),
     }),
+    checkCode: builder.query<void, CheckCodeArgs>({
+      query: recoveryCode => ({
+        body: { code: recoveryCode },
+        method: 'POST',
+        url: '/v1/auth/code-validation',
+      }),
+    }),
     checkEmail: builder.mutation<CheckEmailResponse, CheckEmailArgs>({
       query: args => ({
         body: { email: args.email, recaptchaToken: args.recaptchaToken },
@@ -37,5 +45,9 @@ const passwordRecovery = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { useChangePasswordMutation, useCheckEmailMutation, useResendEmailMutation } =
-  passwordRecovery
+export const {
+  useChangePasswordMutation,
+  useCheckCodeQuery,
+  useCheckEmailMutation,
+  useResendEmailMutation,
+} = passwordRecovery
