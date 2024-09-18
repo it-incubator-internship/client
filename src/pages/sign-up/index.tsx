@@ -48,9 +48,10 @@ const signUpSchema = z
   })
 
 type FormValues = z.infer<typeof signUpSchema>
+type ZodKeys = keyof FormValues
 
 type FieldError = {
-  field: 'email' | 'isAgreement' | 'password' | 'passwordConfirmation' | 'userName'
+  field: ZodKeys
   message: string
 }
 
