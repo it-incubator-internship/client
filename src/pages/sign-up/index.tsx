@@ -5,6 +5,7 @@ import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { PATH } from '@/consts/route-paths'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useRegistrationMutation } from '@/services/auth/authApi'
 import { RegistrationArgs } from '@/services/auth/authTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -62,6 +63,7 @@ type ErrorType = {
 }
 
 function SignUp() {
+  const t = useTranslation()
   const [registration, { isLoading }] = useRegistrationMutation()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [responseEmail, setResponseEmail] = useState('')
@@ -137,12 +139,12 @@ function SignUp() {
   ) : (
     <div className={clsx(s.SignUpContainer)}>
       <Card className={clsx(s.SignUpCard, s.BorderBack)}>
-        <h1 className={s.SignUpCardTitle}>Sign Up</h1>
+        <h1 className={s.SignUpCardTitle}>{t.signUp.signUp}</h1>
         <div className={s.SignUpCloudAuth}>
           <SocialMediaAuth />
         </div>
         <form className={s.SignUpForm} onSubmit={handleSubmit(handleSignUp)}>
-          <Label className={s.SignUpFormLabel} label={'Username'}>
+          <Label className={s.SignUpFormLabel} label={t.signUp.userName}>
             <FormInput
               className={s.SignUpFormInput}
               containerClassName={s.inputContainer}
@@ -153,7 +155,7 @@ function SignUp() {
             />
           </Label>
 
-          <Label className={s.SignUpFormLabel} label={'Email'}>
+          <Label className={s.SignUpFormLabel} label={t.signUp.email}>
             <FormInput
               className={s.SignUpFormInput}
               containerClassName={s.inputContainer}
@@ -164,7 +166,7 @@ function SignUp() {
             />
           </Label>
 
-          <Label className={s.SignUpFormLabel} label={'Password'}>
+          <Label className={s.SignUpFormLabel} label={t.signUp.password}>
             <FormInput
               className={s.SignUpFormInput}
               containerClassName={s.inputContainer}
@@ -175,7 +177,7 @@ function SignUp() {
             />
           </Label>
 
-          <Label className={s.SignUpFormLabel} label={'Password confirmation'}>
+          <Label className={s.SignUpFormLabel} label={t.signUp.confirmPassword}>
             <FormInput
               className={s.SignUpFormInput}
               containerClassName={s.inputContainer}
@@ -195,24 +197,24 @@ function SignUp() {
               id={'SignUpAgreementCheckbox'}
               name={'isAgreement'}
             >
-              <span>I agree to the&nbsp;</span>
+              <span>{t.signUp.isAgreement}</span>
               <Link className={s.SignUpAgreementLink} href={'/terms-of-service'} target={'_blank'}>
-                Terms of Service
+                {t.signUp.termsOfServices}
               </Link>
-              <span className={s.SignUpAgreementSpan}>&nbsp;and&nbsp;</span>
+              <span className={s.SignUpAgreementSpan}>&nbsp;{t.signUp.and}&nbsp;</span>
               <Link className={s.SignUpAgreementLink} href={'/privacy-policy'} target={'_blank'}>
-                Privacy Policy
+                {t.signUp.privacyPolicy}
               </Link>
             </FormCheckbox>
           </div>
 
           <Button className={s.SignUpButton} fullWidth type={'submit'}>
-            Sign Up
+            {t.signUp.signUp}
           </Button>
         </form>
-        <div className={s.SignUpHaveAccountLink}>Do you have an account?</div>
+        <div className={s.SignUpHaveAccountLink}>{t.signUp.haveAccount}</div>
         <Link className={s.SignInLink} href={'/sign-in'}>
-          Sign In
+          {t.signUp.signIn}
         </Link>
       </Card>
     </div>
