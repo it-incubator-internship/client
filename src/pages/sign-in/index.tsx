@@ -63,8 +63,13 @@ function SignIn() {
         return
       }
     } catch (error: any) {
+      console.log(' error: ', error)
       setError('email', {
-        message: error.data.error || error.data.errorMessages[0],
+        message:
+          (error.data.message ||
+            error.data.error ||
+            (error.data.errorMessages && error.data.errorMessages[0])) ??
+          'some error occured',
         type: 'manual',
       })
     }
