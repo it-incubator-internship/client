@@ -1,23 +1,26 @@
-import React from 'react'
+import React, { ComponentPropsWithoutRef, ElementType } from 'react'
 
 import clsx from 'clsx'
 import Link from 'next/link'
 
 import s from './SidebarItem.module.scss'
 
-type Props = {
+export type SidebarItemProps<T extends ElementType = typeof Link> = {
   Icon: React.ElementType
+  as?: T
   disabled?: boolean
   href: string
   item: string
-}
-export const SidebarItem = ({ Icon, disabled, href, item }: Props) => {
+} & ComponentPropsWithoutRef<T>
+
+export const SidebarItem = <T extends ElementType = typeof Link>(props: SidebarItemProps<T>) => {
+  const { Icon, as: Component = Link, disabled, href, item, ...rest } = props
   const disabledClasses = disabled ? s.TagDisabled : ''
 
   return (
-    <Link className={clsx(s.Tag, disabledClasses)} href={href}>
+    <Component className={clsx(s.Tag, disabledClasses)} href={href} {...rest}>
       <Icon aria-hidden={'true'} className={s.Svg} />
       <span className={s.A}>{item}</span>
-    </Link>
+    </Component>
   )
 }

@@ -49,9 +49,10 @@ const signUpSchema = z
   })
 
 type FormValues = z.infer<typeof signUpSchema>
+type ZodKeys = keyof FormValues
 
 type FieldError = {
-  field: 'email' | 'isAgreement' | 'password' | 'passwordConfirmation' | 'userName'
+  field: ZodKeys
   message: string
 }
 
@@ -110,10 +111,6 @@ function SignUp() {
       }
     }
 
-    if (isLoading) {
-      return <Spinner />
-    }
-
     return
   }
 
@@ -133,6 +130,10 @@ function SignUp() {
   }
 
   const modalJSX = <Modal {...args}>{args.children}</Modal>
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return isModalOpen ? (
     modalJSX

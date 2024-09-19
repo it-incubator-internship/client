@@ -1,0 +1,33 @@
+.container {
+  padding-top: 30px;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  margin: 0 0 6px;
+
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: var(--color-light-100);
+}
+
+.device {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.btn {
+  margin: 24px 0 18px auto;
+}
+
+.devices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
