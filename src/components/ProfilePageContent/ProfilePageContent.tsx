@@ -1,15 +1,9 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { AvatarDialog } from '@/components/ProfilePageContent/avatar-dialog/avatar-dialog'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  Button,
-  FormDatePicker,
-  FormInput,
-  ImageOutline,
-  Select,
-  SelectItem,
-  Textarea,
-} from '@robur_/ui-kit'
+import { Button, FormDatePicker, FormInput, ImageOutline, Select, SelectItem, Textarea } from '@robur_/ui-kit'
 import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
@@ -75,29 +69,12 @@ export const ProfilePageContent = () => {
           <div className={s.userPhoto}>
             <ImageOutline height={'48'} width={'48'} />
           </div>
-          <Button fullWidth type={'button'} variant={'outlined'}>
-            Add a Profile Photo
-          </Button>
+          <AvatarDialog />
         </div>
         <div className={s.dataSection}>
-          <FormInput
-            containerClassName={s.inputContainer}
-            control={control}
-            label={'Username'}
-            name={'username'}
-          />
-          <FormInput
-            containerClassName={s.inputContainer}
-            control={control}
-            label={'Firstname'}
-            name={'firstname'}
-          />
-          <FormInput
-            containerClassName={s.inputContainer}
-            control={control}
-            label={'Lastname'}
-            name={'lastname'}
-          />
+          <FormInput containerClassName={s.inputContainer} control={control} label={'Username'} name={'username'} />
+          <FormInput containerClassName={s.inputContainer} control={control} label={'Firstname'} name={'firstname'} />
+          <FormInput containerClassName={s.inputContainer} control={control} label={'Lastname'} name={'lastname'} />
           <FormDatePicker control={control} label={'Date of birth'} name={'birthdate'} />
           <div style={{ display: 'flex', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>
