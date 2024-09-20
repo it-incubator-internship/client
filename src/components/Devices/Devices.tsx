@@ -1,9 +1,13 @@
+import React, { ReactNode } from 'react'
+
+import { ChromeIcon, FireFoxIcon, SafariIcon, YandexIcon } from '@/assets/components'
 import Spinner from '@/components/Spinner/Spinner'
 import {
   useCloseAllSessionsMutation,
   useCloseSessionMutation,
   useGetSessionsQuery,
 } from '@/services/devices/devicesApi'
+import { convertDeviceData } from '@/utils/convertDeviceData'
 import { Button, Card, LogOut } from '@robur_/ui-kit'
 import Image from 'next/image'
 
@@ -14,6 +18,13 @@ export const Devices = () => {
   const [closeSessions, { isLoading: isClosingLoading }] = useCloseAllSessionsMutation()
   const [closeSession] = useCloseSessionMutation()
 
+  const browser = {
+    Chrome: <ChromeIcon />,
+    Firefox: <FireFoxIcon />,
+    Safari: <SafariIcon />,
+    Yandex: <YandexIcon />,
+  } as Record<string, ReactNode>
+  let currentDeviceBrowserType
   const handleCloseSession = async (sessionId: string) => {
     try {
       await closeSession(sessionId).unwrap()
@@ -26,20 +37,30 @@ export const Devices = () => {
     return <Spinner />
   }
 
+  const currentDevice = data?.find(session => {
+    return session.current
+  })
+
+  if (currentDevice) {
+    currentDeviceBrowserType = convertDeviceData(currentDevice.deviceName).browser
+  }
+
   return (
     <div className={s.container}>
-      <div className={s.block}>
-        <h3 className={s.title}>Current device</h3>
-        <Card className={s.device}>
-          <div className={s.deviceContainer}>
-            <Image alt={'chrome'} height={36} src={'/icon-chrome.svg'} width={36} />
-            <div>
-              <p>Chrome</p>
-              <p>IP: ::ffff:10.244.0.90</p>
+      {currentDevice && (
+        <div className={s.block}>
+          <h3 className={s.title}>Current device</h3>
+          <Card className={s.device}>
+            <div className={s.deviceContainer}>
+              {currentDeviceBrowserType && browser[currentDeviceBrowserType]}
+              <div>
+                <p>{currentDeviceBrowserType}</p>
+                <p>IP: {currentDevice?.ip}</p>
+              </div>
             </div>
-          </div>
-        </Card>
-      </div>
+          </Card>
+        </div>
+      )}
       <Button
         className={s.btn}
         disabled={isClosingLoading}
@@ -54,9 +75,9 @@ export const Devices = () => {
           <div className={s.devices}>
             {data?.map(session => {
               return (
-                <>
+                <React.Fragment key={session.sessionId}>
                   {!session.current && (
-                    <Card className={s.device} key={session.sessionId}>
+                    <Card className={s.device}>
                       <div className={s.deviceContainer}>
                         <div className={s.info}>
                           <Image alt={'chrome'} height={36} src={'/icon-desktop.svg'} width={36} />
@@ -86,7 +107,7 @@ export const Devices = () => {
                       </div>
                     </Card>
                   )}
-                </>
+                </React.Fragment>
               )
             })}
           </div>
