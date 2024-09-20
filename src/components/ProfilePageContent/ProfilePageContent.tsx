@@ -3,7 +3,17 @@ import { useForm } from 'react-hook-form'
 
 import { AvatarDialog } from '@/components/ProfilePageContent/avatar-dialog/avatar-dialog'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Close, FormDatePicker, FormInput, ImageOutline, Select, SelectItem, Textarea } from '@robur_/ui-kit'
+import {
+  Button,
+  Close,
+  FormDatePicker,
+  FormInput,
+  ImageOutline,
+  Modal,
+  Select,
+  SelectItem,
+  Textarea,
+} from '@robur_/ui-kit'
 import Image from 'next/image'
 import { z } from 'zod'
 
@@ -50,6 +60,7 @@ const cityOptions = [
 
 export const ProfilePageContent = () => {
   const [avatar, setAvatar] = useState()
+  const [isAvatarRemoveModal, setIsAvatarRemoveModal] = useState(false)
   const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
       birthdate: undefined,
@@ -64,61 +75,81 @@ export const ProfilePageContent = () => {
     console.log(e)
   }
 
+  const handleRemoveAvatarBtn = () => {
+    setIsAvatarRemoveModal(true)
+  }
+
+  function handleModalClosed() {
+    setIsAvatarRemoveModal(false)
+  }
+
   return (
-    <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
-      <div className={s.formContainer}>
-        <div className={s.photoSection}>
-          <div className={s.userPhoto}>
-            {!avatar ? (
-              <ImageOutline height={'48'} width={'48'} />
-            ) : (
-              <>
-                <button className={s.removeAvatarBtn} onClick={() => setAvatar(undefined)} type={'button'}>
-                  <Close />
-                </button>
-                <Image alt={'your avatar'} height={'192'} src={avatar} width={'192'} />
-              </>
-            )}
-          </div>
-          <AvatarDialog setAvatarPicture={setAvatar} />
-        </div>
-        <div className={s.dataSection}>
-          <FormInput containerClassName={s.inputContainer} control={control} label={'Username'} name={'username'} />
-          <FormInput containerClassName={s.inputContainer} control={control} label={'Firstname'} name={'firstname'} />
-          <FormInput containerClassName={s.inputContainer} control={control} label={'Lastname'} name={'lastname'} />
-          <FormDatePicker control={control} label={'Date of birth'} name={'birthdate'} />
-          <div style={{ display: 'flex', gap: '24px' }}>
-            <div style={{ flexGrow: 1 }}>
-              <div>Select your country</div>
-              <Select placeholder={'Country'}>
-                {countryOptions.map(option => {
-                  return (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  )
-                })}
-              </Select>
+    <>
+      <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
+        <div className={s.formContainer}>
+          <div className={s.photoSection}>
+            <div className={s.userPhoto}>
+              {!avatar ? (
+                <ImageOutline height={'48'} width={'48'} />
+              ) : (
+                <>
+                  <button className={s.removeAvatarBtn} onClick={handleRemoveAvatarBtn} type={'button'}>
+                    <Close />
+                  </button>
+                  <Image alt={'your avatar'} height={'192'} src={avatar} width={'192'} />
+                </>
+              )}
             </div>
-            <div style={{ flexGrow: 1 }}>
-              <div>Select your city</div>
-              <Select placeholder={'City'}>
-                {cityOptions.map(option => {
-                  return (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  )
-                })}
-              </Select>
-            </div>
+            <AvatarDialog avatarPicture={avatar} setAvatarPicture={setAvatar} />
           </div>
-          <Textarea className={s.textArea} placeholder={'Text-area'} titleLabel={'About Me'} />
+          <div className={s.dataSection}>
+            <FormInput containerClassName={s.inputContainer} control={control} label={'Username'} name={'username'} />
+            <FormInput containerClassName={s.inputContainer} control={control} label={'Firstname'} name={'firstname'} />
+            <FormInput containerClassName={s.inputContainer} control={control} label={'Lastname'} name={'lastname'} />
+            <FormDatePicker control={control} label={'Date of birth'} name={'birthdate'} />
+            <div style={{ display: 'flex', gap: '24px' }}>
+              <div style={{ flexGrow: 1 }}>
+                <div>Select your country</div>
+                <Select placeholder={'Country'}>
+                  {countryOptions.map(option => {
+                    return (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    )
+                  })}
+                </Select>
+              </div>
+              <div style={{ flexGrow: 1 }}>
+                <div>Select your city</div>
+                <Select placeholder={'City'}>
+                  {cityOptions.map(option => {
+                    return (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    )
+                  })}
+                </Select>
+              </div>
+            </div>
+            <Textarea className={s.textArea} placeholder={'Text-area'} titleLabel={'About Me'} />
+          </div>
         </div>
-      </div>
-      <Button className={s.submitBtn} type={'submit'}>
-        Save changes
-      </Button>
-    </form>
+        <Button className={s.submitBtn} type={'submit'}>
+          Save changes
+        </Button>
+      </form>
+      <Modal
+        buttonRejectionTitle={'No'}
+        buttonTitle={'Yes'}
+        onClose={handleModalClosed}
+        onCloseWithApproval={() => setAvatar(undefined)}
+        open={isAvatarRemoveModal}
+        withConfirmation
+      >
+        Do you really want to delete your profile photo?
+      </Modal>
+    </>
   )
 }

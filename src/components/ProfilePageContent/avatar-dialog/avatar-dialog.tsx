@@ -1,17 +1,22 @@
-import { ReactNode, useState } from 'react'
-import Avatar from 'react-avatar-edit'
+import { useRef, useState } from 'react'
+// import Avatar from 'react-avatar-edit'
+
+const Avatar = dynamic(() => import('react-avatar-edit'), { ssr: false })
 
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button, Close, ImageOutline } from '@robur_/ui-kit'
+import dynamic from 'next/dynamic'
 
 import s from './avatar-dialog.module.scss'
 
 type AvatarDialogProps = {
+  avatarPicture: string | undefined
   setAvatarPicture: (picture: any) => void
 }
 
-export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
+export const AvatarDialog = ({ avatarPicture, setAvatarPicture }: AvatarDialogProps) => {
   const [avatar, setAvatar] = useState<any>('')
+  const [isFileLoaded, setIsFileLoaded] = useState(false)
   const [preview, setPreview] = useState(null)
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -19,12 +24,27 @@ export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
   //Error! The format of the uploaded photo must be PNG and JPEG
 
   const onClose = () => {
-    // setAvatar(preview)
     setAvatarPicture(preview)
+    setIsFileLoaded(false)
   }
 
   const onCrop = (view: any) => {
     setPreview(view)
+  }
+
+  const onBeforeFileLoad = () => {
+    console.log('before file load')
+  }
+  const onFileLoad = () => {
+    setIsFileLoaded(true)
+  }
+
+  const handleButtonClick = () => {
+    const fileInput = document.querySelector('input[type="file"][id^="avatar_loader-"]') as HTMLInputElement
+
+    if (fileInput) {
+      fileInput.click()
+    }
   }
 
   return (
@@ -54,15 +74,8 @@ export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
                 <button className={s.removeAvatarBtn} onClick={() => setAvatar(null)} type={'button'}>
                   <Close />
                 </button>
-                {/*<img alt={''} src={avatar} style={{ height: '340px', objectFit: 'cover', width: 'auto' }} />*/}
               </div>
             )}
-            {/*{!showEditor && !preview && (*/}
-            {/*  <div className={s.emptyAvatar}>*/}
-            {/*    <ImageOutline />*/}
-            {/*  </div>*/}
-            {/*)}*/}
-
             {!avatar && (
               <Avatar
                 backgroundColor={'#171717'}
@@ -70,30 +83,39 @@ export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
                   border: 'none',
                 }}
                 closeIconColor={'transparent'}
-                height={340}
+                height={isFileLoaded ? 340 : 228}
+                imageWidth={332}
                 label={<ImageOutline className={s.emptyAvatarlabel} />}
                 labelStyle={{
                   alignItems: 'center',
                   background: 'var(--color-dark-500)',
+                  cursor: 'pointer',
                   display: 'flex',
                   height: '100%',
                   justifyContent: 'center',
+                  overflow: 'hidden',
                 }}
+                onBeforeFileLoad={onBeforeFileLoad}
                 onClose={onClose}
                 onCrop={onCrop}
+                onFileLoad={onFileLoad}
                 shadingColor={'#171717'}
-                src={avatar}
-                width={332}
+                shadingOpacity={0.7}
+                src={''}
+                width={isFileLoaded ? 332 : 222}
               />
             )}
-            {/*<Button className={s.selectBtn} fullWidth>*/}
-            {/*  Select from Computer*/}
-            {/*</Button>*/}
-            <Dialog.Close asChild>
-              <Button className={s.selectBtn} onClick={onClose}>
-                Save
+            {!isFileLoaded ? (
+              <Button className={s.selectBtn} onClick={handleButtonClick}>
+                Select from Computer
               </Button>
-            </Dialog.Close>
+            ) : (
+              <Dialog.Close asChild>
+                <Button className={s.saveBtn} onClick={onClose}>
+                  Save
+                </Button>
+              </Dialog.Close>
+            )}
           </div>
         </Dialog.Content>
       </Dialog.Portal>
