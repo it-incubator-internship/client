@@ -17,6 +17,8 @@
 }
 
 .userPhoto {
+  position: relative;
+
   display: grid;
   place-items: center;
 
@@ -46,4 +48,20 @@
 
 .submitBtn {
   margin-left: auto;
+}
+
+.removeAvatarBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+
+  border: 2px solid var(--color-danger-900);
+  border-radius: 50%;
+
+  svg {
+    width: 30px;
+    height: 30px;
+    color: var(--color-danger-900);
+  }
 }

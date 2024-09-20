@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form'
 
 import { AvatarDialog } from '@/components/ProfilePageContent/avatar-dialog/avatar-dialog'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, FormDatePicker, FormInput, ImageOutline, Select, SelectItem, Textarea } from '@robur_/ui-kit'
+import { Button, Close, FormDatePicker, FormInput, ImageOutline, Select, SelectItem, Textarea } from '@robur_/ui-kit'
+import Image from 'next/image'
 import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
@@ -48,6 +49,7 @@ const cityOptions = [
 ]
 
 export const ProfilePageContent = () => {
+  const [avatar, setAvatar] = useState()
   const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
       birthdate: undefined,
@@ -67,9 +69,18 @@ export const ProfilePageContent = () => {
       <div className={s.formContainer}>
         <div className={s.photoSection}>
           <div className={s.userPhoto}>
-            <ImageOutline height={'48'} width={'48'} />
+            {!avatar ? (
+              <ImageOutline height={'48'} width={'48'} />
+            ) : (
+              <>
+                <button className={s.removeAvatarBtn} onClick={() => setAvatar(undefined)} type={'button'}>
+                  <Close />
+                </button>
+                <Image alt={'your avatar'} height={'192'} src={avatar} width={'192'} />
+              </>
+            )}
           </div>
-          <AvatarDialog />
+          <AvatarDialog setAvatarPicture={setAvatar} />
         </div>
         <div className={s.dataSection}>
           <FormInput containerClassName={s.inputContainer} control={control} label={'Username'} name={'username'} />
