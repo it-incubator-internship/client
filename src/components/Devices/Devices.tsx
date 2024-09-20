@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 
 import { ChromeIcon, FireFoxIcon, SafariIcon, YandexIcon } from '@/assets/components'
 import Spinner from '@/components/Spinner/Spinner'
+import { useTranslation } from '@/hooks/useTranslation'
 import {
   useCloseAllSessionsMutation,
   useCloseSessionMutation,
@@ -17,8 +18,9 @@ export const Devices = () => {
   const { data, isLoading } = useGetSessionsQuery()
   const [closeSessions, { isLoading: isClosingLoading }] = useCloseAllSessionsMutation()
   const [closeSession] = useCloseSessionMutation()
+  const t = useTranslation()
 
-  const browser = {
+  const browserIcons = {
     Chrome: <ChromeIcon />,
     Firefox: <FireFoxIcon />,
     Safari: <SafariIcon />,
@@ -49,10 +51,10 @@ export const Devices = () => {
     <div className={s.container}>
       {currentDevice && (
         <div className={s.block}>
-          <h3 className={s.title}>Current device</h3>
+          <h3 className={s.title}>{t.devices.currentDevice}</h3>
           <Card className={s.device}>
             <div className={s.deviceContainer}>
-              {currentDeviceBrowserType && browser[currentDeviceBrowserType]}
+              {currentDeviceBrowserType && browserIcons[currentDeviceBrowserType]}
               <div>
                 <p>{currentDeviceBrowserType}</p>
                 <p>IP: {currentDevice?.ip}</p>
@@ -67,20 +69,36 @@ export const Devices = () => {
         onClick={() => closeSessions()}
         variant={'outlined'}
       >
-        Terminate all other session
+        {t.devices.terminateOtherSessions}
       </Button>
       {data && data.length > 1 && (
         <div className={s.block}>
-          <h3 className={s.title}>Active sessions</h3>
+          <h3 className={s.title}>{t.devices.activeSessions}</h3>
           <div className={s.devices}>
             {data?.map(session => {
+              const { deviceType } = convertDeviceData(session.deviceName)
+
               return (
                 <React.Fragment key={session.sessionId}>
                   {!session.current && (
                     <Card className={s.device}>
                       <div className={s.deviceContainer}>
                         <div className={s.info}>
-                          <Image alt={'chrome'} height={36} src={'/icon-desktop.svg'} width={36} />
+                          {deviceType === 'desktop' ? (
+                            <Image
+                              alt={'device type'}
+                              height={36}
+                              src={'/icon-desktop.svg'}
+                              width={36}
+                            />
+                          ) : (
+                            <Image
+                              alt={'device type'}
+                              height={34}
+                              src={'/icon-mobile.svg'}
+                              width={20}
+                            />
+                          )}
                           <div>
                             <p>IP: {session.ip}</p>
                             <p>
@@ -102,7 +120,7 @@ export const Devices = () => {
                           type={'button'}
                         >
                           <LogOut height={24} width={24} />
-                          <span>Log out</span>
+                          <span>{t.devices.logOut}</span>
                         </button>
                       </div>
                     </Card>
