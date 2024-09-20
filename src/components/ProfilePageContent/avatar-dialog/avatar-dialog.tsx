@@ -1,5 +1,5 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { Button, Close } from '@robur_/ui-kit'
+import { Button, Close, ImageOutline } from '@robur_/ui-kit'
 
 import s from './avatar-dialog.module.scss'
 
@@ -24,6 +24,16 @@ export const AvatarDialog = () => {
             <Dialog.Description className={s.hiddenElement}>Click here and add your Profile Photo.</Dialog.Description>
           </div>
           <div className={s.separator}></div>
+          <div className={s.errorMsg}>Error! Photo size must be less than 10 MB!</div>
+          <div className={s.errorMsg}>Error! The format of the uploaded photo must be PNG and JPEG</div>
+          <div className={s.selectAvatarWrapper}>
+            <div className={s.emptyAvatar}>
+              <ImageOutline />
+            </div>
+            <Button className={s.selectBtn} fullWidth>
+              Select from Computer
+            </Button>
+          </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

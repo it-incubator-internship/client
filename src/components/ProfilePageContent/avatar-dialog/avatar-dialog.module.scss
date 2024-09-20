@@ -15,8 +15,11 @@
   transform: translate(-50%, -50%);
 
   width: 492px;
-  height: 564px;
-  padding: 12px 25px;
+
+  //height: 564px;
+  padding: 0 25px;
+
+  color: var(--color-light-100);
 
   background-color: var(--color-dark-300);
   border: 1px solid var(--color-dark-100);
@@ -32,13 +35,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 60px;
 }
 
 .title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-l);
-  color: var(--color-light-100);
 }
 
 .closeBtn {
@@ -62,6 +65,50 @@
   background-color: var(--color-dark-100);
 }
 
+.errorMsg {
+  margin: 24px 0;
+  padding: 6px 56px;
+
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-m);
+  text-align: center;
+
+  background-color: var(--color-danger-900);
+  border: 1px solid var(--color-danger-500);
+  border-radius: 2px;
+}
+
+.selectAvatarWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 222px;
+  margin: 0 auto 96px;
+}
+
+.emptyAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 228px;
+  margin-bottom: 60px;
+
+  background: var(--color-dark-500);
+  border-radius: 2px;
+
+  svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.selectBtn {
+  border-radius: 2px
+}
 
 @keyframes overlay-show {
   from {
