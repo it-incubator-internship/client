@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 // import Avatar from 'react-avatar-edit'
 
 const Avatar = dynamic(() => import('react-avatar-edit'), { ssr: false })
@@ -15,37 +15,69 @@ type AvatarDialogProps = {
 }
 
 export const AvatarDialog = ({ avatarPicture, setAvatarPicture }: AvatarDialogProps) => {
-  const [avatar, setAvatar] = useState<any>('')
   const [isFileLoaded, setIsFileLoaded] = useState(false)
   const [preview, setPreview] = useState(null)
-  const [errorMsg, setErrorMsg] = useState('')
-
-  //Error! Photo size must be less than 10 MB!
-  //Error! The format of the uploaded photo must be PNG and JPEG
+  const [isError, setIsError] = useState('')
+  const [shouldClick, setShouldClick] = useState(false)
 
   const onClose = () => {
     setAvatarPicture(preview)
     setIsFileLoaded(false)
+    setIsError('')
   }
 
   const onCrop = (view: any) => {
     setPreview(view)
   }
 
-  const onBeforeFileLoad = () => {
-    console.log('before file load')
+  const onBeforeFileLoad = (event: any) => {
+    const file = event.target.files[0]
+    const maxFileSize = 4 * 1024 * 1024
+    const fileSize = file.size
+    const fileType = file.type
+
+    if (fileSize > maxFileSize) {
+      setIsError('Error! Photo size must be less than 4 MB')
+
+      return
+    }
+
+    if (fileType !== 'image/jpeg' && fileType !== 'image/png') {
+      setIsError('Error! The format of the uploaded photo must be PNG and JPEG')
+
+      return
+    }
+    setIsError('')
   }
   const onFileLoad = () => {
     setIsFileLoaded(true)
   }
 
-  const handleButtonClick = () => {
-    const fileInput = document.querySelector('input[type="file"][id^="avatar_loader-"]') as HTMLInputElement
+  // const handleButtonClick = () => {
+  //   setIsError('')
+  //   const fileInput = document.querySelector('input[type="file"][id^="avatar_loader-"]') as HTMLInputElement
+  //
+  //   if (fileInput) {
+  //     fileInput.click()
+  //   }
+  // }
 
-    if (fileInput) {
-      fileInput.click()
-    }
+  const handleButtonClick = () => {
+    setIsError('')
+    setShouldClick(true)
+    setIsFileLoaded(false)
   }
+
+  useEffect(() => {
+    if (shouldClick) {
+      const fileInput = document.querySelector('input[type="file"][id^="avatar_loader-"]') as HTMLInputElement
+
+      if (fileInput) {
+        fileInput.click()
+      }
+      setShouldClick(false)
+    }
+  }, [shouldClick])
 
   return (
     <Dialog.Root>
@@ -60,23 +92,26 @@ export const AvatarDialog = ({ avatarPicture, setAvatarPicture }: AvatarDialogPr
           <div className={s.header}>
             <Dialog.Title className={s.title}>Add a Profile Photo</Dialog.Title>
             <Dialog.Close asChild>
-              <button type={'button'}>
+              <button
+                onClick={() => {
+                  setIsError('')
+                  setIsFileLoaded(false)
+                }}
+                type={'button'}
+              >
                 <Close className={s.closeBtn} />
               </button>
             </Dialog.Close>
             <Dialog.Description className={s.hiddenElement}>Click here and add your Profile Photo.</Dialog.Description>
           </div>
           <div className={s.separator}></div>
-          {errorMsg && <div className={s.errorMsg}>{errorMsg}</div>}
+          {isError && <div className={s.errorMsg}>{isError}</div>}
           <div className={s.selectAvatarWrapper}>
-            {avatar && (
-              <div className={s.avatarPlate}>
-                <button className={s.removeAvatarBtn} onClick={() => setAvatar(null)} type={'button'}>
-                  <Close />
-                </button>
+            {isError ? (
+              <div className={s.emptyAvatar}>
+                <ImageOutline className={s.emptyAvatarlabel} />
               </div>
-            )}
-            {!avatar && (
+            ) : (
               <Avatar
                 backgroundColor={'#171717'}
                 borderStyle={{
@@ -105,7 +140,7 @@ export const AvatarDialog = ({ avatarPicture, setAvatarPicture }: AvatarDialogPr
                 width={isFileLoaded ? 332 : 222}
               />
             )}
-            {!isFileLoaded ? (
+            {!isFileLoaded || isError ? (
               <Button className={s.selectBtn} onClick={handleButtonClick}>
                 Select from Computer
               </Button>

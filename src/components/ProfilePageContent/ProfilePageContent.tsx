@@ -146,6 +146,7 @@ export const ProfilePageContent = () => {
         onClose={handleModalClosed}
         onCloseWithApproval={() => setAvatar(undefined)}
         open={isAvatarRemoveModal}
+        title={' '}
         withConfirmation
       >
         Do you really want to delete your profile photo?
