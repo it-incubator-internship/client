@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 // import Avatar from 'react-avatar-edit'
 
 const Avatar = dynamic(() => import('react-avatar-edit'), { ssr: false })
@@ -9,63 +9,68 @@ import dynamic from 'next/dynamic'
 
 import s from './avatar-dialog.module.scss'
 
+type ValidateSettings = typeof FILE_VALIDATION_CONFIG
+
+const FILE_VALIDATION_CONFIG = {
+  allowedFileTypes: ['image/png', 'image/jpeg'],
+  maxFileSize: 4 * 1024 * 1024,
+}
+
 type AvatarDialogProps = {
-  avatarPicture: string | undefined
   setAvatarPicture: (picture: any) => void
 }
 
-export const AvatarDialog = ({ avatarPicture, setAvatarPicture }: AvatarDialogProps) => {
+export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
   const [isFileLoaded, setIsFileLoaded] = useState(false)
   const [preview, setPreview] = useState(null)
   const [isError, setIsError] = useState('')
   const [shouldClick, setShouldClick] = useState(false)
 
-  const onClose = () => {
-    setAvatarPicture(preview)
+  const resetState = () => {
     setIsFileLoaded(false)
     setIsError('')
   }
 
-  const onCrop = (view: any) => {
+  const handleClose = () => {
+    setAvatarPicture(preview)
+    resetState()
+  }
+
+  const handleCrop = (view: any) => {
     setPreview(view)
   }
 
-  const onBeforeFileLoad = (event: any) => {
-    const file = event.target.files[0]
-    const maxFileSize = 4 * 1024 * 1024
-    const fileSize = file.size
-    const fileType = file.type
+  const handleBeforeFileLoad = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
 
-    if (fileSize > maxFileSize) {
+    if (file) {
+      validateFile(file, FILE_VALIDATION_CONFIG)
+    }
+  }
+
+  const validateFile = (file: File, validateSettings: ValidateSettings) => {
+    if (file.size > validateSettings.maxFileSize) {
       setIsError('Error! Photo size must be less than 4 MB')
 
       return
     }
 
-    if (fileType !== 'image/jpeg' && fileType !== 'image/png') {
-      setIsError('Error! The format of the uploaded photo must be PNG and JPEG')
+    if (!validateSettings.allowedFileTypes.includes(file.type)) {
+      setIsError('Error! The format of the uploaded photo must be PNG or JPEG')
 
       return
     }
+
     setIsError('')
   }
-  const onFileLoad = () => {
+
+  const handleFileLoad = () => {
     setIsFileLoaded(true)
   }
 
-  // const handleButtonClick = () => {
-  //   setIsError('')
-  //   const fileInput = document.querySelector('input[type="file"][id^="avatar_loader-"]') as HTMLInputElement
-  //
-  //   if (fileInput) {
-  //     fileInput.click()
-  //   }
-  // }
-
   const handleButtonClick = () => {
-    setIsError('')
     setShouldClick(true)
-    setIsFileLoaded(false)
+    resetState()
   }
 
   useEffect(() => {
@@ -92,13 +97,7 @@ export const AvatarDialog = ({ avatarPicture, setAvatarPicture }: AvatarDialogPr
           <div className={s.header}>
             <Dialog.Title className={s.title}>Add a Profile Photo</Dialog.Title>
             <Dialog.Close asChild>
-              <button
-                onClick={() => {
-                  setIsError('')
-                  setIsFileLoaded(false)
-                }}
-                type={'button'}
-              >
+              <button onClick={resetState} type={'button'}>
                 <Close className={s.closeBtn} />
               </button>
             </Dialog.Close>
@@ -130,10 +129,10 @@ export const AvatarDialog = ({ avatarPicture, setAvatarPicture }: AvatarDialogPr
                   justifyContent: 'center',
                   overflow: 'hidden',
                 }}
-                onBeforeFileLoad={onBeforeFileLoad}
-                onClose={onClose}
-                onCrop={onCrop}
-                onFileLoad={onFileLoad}
+                onBeforeFileLoad={handleBeforeFileLoad}
+                onClose={handleClose}
+                onCrop={handleCrop}
+                onFileLoad={handleFileLoad}
                 shadingColor={'#171717'}
                 shadingOpacity={0.7}
                 src={''}
@@ -146,7 +145,7 @@ export const AvatarDialog = ({ avatarPicture, setAvatarPicture }: AvatarDialogPr
               </Button>
             ) : (
               <Dialog.Close asChild>
-                <Button className={s.saveBtn} onClick={onClose}>
+                <Button className={s.saveBtn} onClick={handleClose}>
                   Save
                 </Button>
               </Dialog.Close>

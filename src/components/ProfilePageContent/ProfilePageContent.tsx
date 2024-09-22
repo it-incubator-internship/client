@@ -100,7 +100,7 @@ export const ProfilePageContent = () => {
                 </>
               )}
             </div>
-            <AvatarDialog avatarPicture={avatar} setAvatarPicture={setAvatar} />
+            <AvatarDialog setAvatarPicture={setAvatar} />
           </div>
           <div className={s.dataSection}>
             <FormInput containerClassName={s.inputContainer} control={control} label={'Username'} name={'username'} />
