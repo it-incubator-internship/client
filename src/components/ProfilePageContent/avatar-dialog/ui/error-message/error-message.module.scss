@@ -1,0 +1,13 @@
+.errorMsg {
+  margin: 24px 0;
+  padding: 6px 56px;
+
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-m);
+  text-align: center;
+
+  background-color: var(--color-danger-900);
+  border: 1px solid var(--color-danger-500);
+  border-radius: 2px;
+}
