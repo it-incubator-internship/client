@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
@@ -106,6 +106,7 @@ export const ProfilePageContent = () => {
   )
   const [editProfile, { isError, isLoading: isloadingEditProfile }] = useEditProfileMutation()
   const { modalJSX, openModal } = useModalFromSettingsProfile()
+  const [startDate, setStartDate] = useState<Date | null>(null)
   const { control, handleSubmit, reset, setError } = useForm<FormValues>({
     defaultValues: {
       aboutMe: '',
@@ -131,6 +132,8 @@ export const ProfilePageContent = () => {
         lastName: profileData.lastName || '',
         userName: profileData.userName || '',
       })
+      // Устанавливаем дату рождения в состояние
+      setStartDate(profileData.dateOfBirth ? new Date(profileData.dateOfBirth) : null)
     }
   }, [profileData, reset])
 
@@ -188,6 +191,8 @@ export const ProfilePageContent = () => {
   if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
     return <Spinner />
   }
+  const currentYear = new Date().getFullYear()
+  const years = Array.from({ length: 50 }, (_, i) => currentYear - i)
 
   return (
     <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
@@ -235,7 +240,14 @@ export const ProfilePageContent = () => {
             label={'Your country'}
             name={'country'}
           />
-          <FormDatePicker control={control} label={'Date of birth'} name={'dateOfBirth'} />
+          <FormDatePicker
+            control={control}
+            label={'Date of birth'}
+            name={'dateOfBirth'}
+            setStartDate={setStartDate}
+            startDate={startDate}
+            years={years}
+          />
           <div style={{ display: 'flex', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>
               <div>Select your country</div>
@@ -263,7 +275,7 @@ export const ProfilePageContent = () => {
             </div>
           </div>
           <FormTextarea
-            // className={s.textAreaClasses}
+            className={s.textArea}
             control={control}
             name={'aboutMe'}
             placeholder={'Text-area'}
