@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { AvatarDialog } from '@/components/ProfilePageContent/avatar-dialog/avatar-dialog'
+import { AvatarDialog } from '@/components/ProfilePageContent/avatar-dialog/ui/avatar-dialog'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Button,

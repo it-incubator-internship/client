@@ -1,4 +1,4 @@
-import s from './avatar-dialog.module.scss'
+import s from './error-message.module.scss'
 
 type ErrorMessageProps = {
   message: string
