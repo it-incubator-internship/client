@@ -1,4 +1,4 @@
-import { Reducer, useReducer } from 'react'
+import { useReducer } from 'react'
 
 const FILE_VALIDATION_CONFIG = {
   allowedFileTypes: ['image/png', 'image/jpeg'],
@@ -20,7 +20,7 @@ type State = {
 type Action =
   | { payload: string; type: 'SET_ERROR' }
   | { payload: string; type: 'SET_PREVIEW' }
-  | { type: 'LOAD_FILE' }
+  | { type: 'FILE_LOADED' }
   | { type: 'RESET' }
 
 const reducer = (state: State, action: Action): State => {
@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, isError: action.payload }
     case 'SET_PREVIEW':
       return { ...state, isPreview: action.payload }
-    case 'LOAD_FILE':
+    case 'FILE_LOADED':
       return { ...state, isFileLoad: true }
     case 'RESET':
       return initialState

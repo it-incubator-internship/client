@@ -1,5 +1,6 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useReducer, useState } from 'react'
 
+import { useAvatarDialog } from '@/components/ProfilePageContent/avatar-dialog/useAvatarDialog'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button, Close, ImageOutline } from '@robur_/ui-kit'
 import dynamic from 'next/dynamic'
@@ -8,68 +9,40 @@ import s from './avatar-dialog.module.scss'
 
 const Avatar = dynamic(() => import('react-avatar-edit'), { ssr: false })
 
-type ValidateSettings = typeof FILE_VALIDATION_CONFIG
-
-const FILE_VALIDATION_CONFIG = {
-  allowedFileTypes: ['image/png', 'image/jpeg'],
-  maxFileSize: 4 * 1024 * 1024,
-}
-
 type AvatarDialogProps = {
   setAvatarPicture: (picture: any) => void
 }
 
 export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
-  const [isFileLoaded, setIsFileLoaded] = useState(false)
-  const [preview, setPreview] = useState(null)
-  const [isError, setIsError] = useState('')
   const [shouldClick, setShouldClick] = useState(false)
 
-  const resetState = () => {
-    setIsFileLoaded(false)
-    setIsError('')
-  }
+  const { dispatch, state, validateFile } = useAvatarDialog()
+  const { isError, isFileLoad, isPreview } = state
 
   const handleClose = () => {
-    setAvatarPicture(preview)
-    resetState()
+    setAvatarPicture(isPreview)
+    dispatch({ type: 'RESET' })
   }
 
-  const handleCrop = (view: any) => {
-    setPreview(view)
+  const handleCrop = (view: string) => {
+    dispatch({ payload: view, type: 'SET_PREVIEW' })
   }
 
   const handleBeforeFileLoad = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
 
-    if (file) {
-      validateFile(file, FILE_VALIDATION_CONFIG)
+    if (file && validateFile(file)) {
+      dispatch({ type: 'FILE_LOADED' })
     }
-  }
-
-  const validateFile = (file: File, validateSettings: ValidateSettings) => {
-    if (file.size > validateSettings.maxFileSize) {
-      setIsError('Error! Photo size must be less than 4 MB')
-
-      return
-    }
-
-    if (!validateSettings.allowedFileTypes.includes(file.type)) {
-      setIsError('Error! The format of the uploaded photo must be PNG or JPEG')
-
-      return
-    }
-
-    setIsError('')
   }
 
   const handleFileLoad = () => {
-    setIsFileLoaded(true)
+    dispatch({ type: 'FILE_LOADED' })
   }
 
   const handleButtonClick = () => {
     setShouldClick(true)
-    resetState()
+    dispatch({ type: 'RESET' })
   }
 
   useEffect(() => {
@@ -96,7 +69,7 @@ export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
           <div className={s.header}>
             <Dialog.Title className={s.title}>Add a Profile Photo</Dialog.Title>
             <Dialog.Close asChild>
-              <button onClick={resetState} type={'button'}>
+              <button onClick={() => dispatch({ type: 'RESET' })} type={'button'}>
                 <Close className={s.closeBtn} />
               </button>
             </Dialog.Close>
@@ -116,7 +89,7 @@ export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
                   border: 'none',
                 }}
                 closeIconColor={'transparent'}
-                height={isFileLoaded ? 340 : 228}
+                height={isFileLoad ? 340 : 228}
                 imageWidth={332}
                 label={<ImageOutline className={s.emptyAvatarlabel} />}
                 labelStyle={{
@@ -135,10 +108,10 @@ export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
                 shadingColor={'#171717'}
                 shadingOpacity={0.7}
                 src={''}
-                width={isFileLoaded ? 332 : 222}
+                width={isFileLoad ? 332 : 222}
               />
             )}
-            {!isFileLoaded || isError ? (
+            {!isFileLoad || isError ? (
               <Button className={s.selectBtn} onClick={handleButtonClick}>
                 Select from Computer
               </Button>
