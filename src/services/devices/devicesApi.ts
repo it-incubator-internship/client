@@ -14,6 +14,16 @@ const devicesApi = inctagramApi.injectEndpoints({
         }
       },
     }),
+    closeSession: builder.mutation<unknown, string>({
+      invalidatesTags: ['Sessions'],
+      query: deviceUuid => {
+        return {
+          credentials: 'include',
+          method: 'DELETE',
+          url: `/v1/sessions/${deviceUuid}`,
+        }
+      },
+    }),
     getSessions: builder.query<DevicesType[], void>({
       providesTags: ['Sessions'],
       query: () => {
@@ -27,4 +37,5 @@ const devicesApi = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { useCloseAllSessionsMutation, useGetSessionsQuery } = devicesApi
+export const { useCloseAllSessionsMutation, useCloseSessionMutation, useGetSessionsQuery } =
+  devicesApi
