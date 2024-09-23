@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 
-import { ChromeIcon, FireFoxIcon, SafariIcon, YandexIcon } from '@/assets/components'
+import { BraveIcon, ChromeIcon, FireFoxIcon, SafariIcon, YandexIcon } from '@/assets/components'
 import Spinner from '@/components/Spinner/Spinner'
 import { useTranslation } from '@/hooks/useTranslation'
 import {
@@ -8,9 +8,9 @@ import {
   useCloseSessionMutation,
   useGetSessionsQuery,
 } from '@/services/devices/devicesApi'
-import { convertDeviceData } from '@/utils/convertDeviceData'
 import { Button, Card, LogOut } from '@robur_/ui-kit'
 import Image from 'next/image'
+import { UAParser } from 'ua-parser-js'
 
 import s from './Devices.module.scss'
 
@@ -19,20 +19,25 @@ export const Devices = () => {
   const [closeSessions, { isLoading: isClosingLoading }] = useCloseAllSessionsMutation()
   const [closeSession] = useCloseSessionMutation()
   const t = useTranslation()
+  let currentBrowserType
 
   const browserIcons = {
+    Brave: <BraveIcon />,
     Chrome: <ChromeIcon />,
     Firefox: <FireFoxIcon />,
     Safari: <SafariIcon />,
     Yandex: <YandexIcon />,
   } as Record<string, ReactNode>
-  let currentDeviceBrowserType
   const handleCloseSession = async (sessionId: string) => {
     try {
       await closeSession(sessionId).unwrap()
     } catch (e) {
       console.log(e)
     }
+  }
+
+  const cleanedIp = (ip: string) => {
+    return ip.replace(/^::ffff:/, '')
   }
 
   if (isLoading) {
@@ -44,7 +49,9 @@ export const Devices = () => {
   })
 
   if (currentDevice) {
-    currentDeviceBrowserType = convertDeviceData(currentDevice.deviceName).browser
+    const { browser } = UAParser(currentDevice.deviceName)
+
+    currentBrowserType = browser.name
   }
 
   return (
@@ -54,10 +61,10 @@ export const Devices = () => {
           <h3 className={s.title}>{t.devices.currentDevice}</h3>
           <Card className={s.device}>
             <div className={s.deviceContainer}>
-              {currentDeviceBrowserType && browserIcons[currentDeviceBrowserType]}
+              {currentBrowserType && browserIcons[currentBrowserType]}
               <div>
-                <p>{currentDeviceBrowserType}</p>
-                <p>IP: {currentDevice?.ip}</p>
+                <p>{currentBrowserType}</p>
+                <p>IP: {cleanedIp(currentDevice?.ip)}</p>
               </div>
             </div>
           </Card>
@@ -76,7 +83,7 @@ export const Devices = () => {
           <h3 className={s.title}>{t.devices.activeSessions}</h3>
           <div className={s.devices}>
             {data?.map(session => {
-              const { deviceType } = convertDeviceData(session.deviceName)
+              const { device } = UAParser(session.deviceName)
 
               return (
                 <React.Fragment key={session.sessionId}>
@@ -84,29 +91,29 @@ export const Devices = () => {
                     <Card className={s.device}>
                       <div className={s.deviceContainer}>
                         <div className={s.info}>
-                          {deviceType === 'desktop' ? (
-                            <Image
-                              alt={'device type'}
-                              height={36}
-                              src={'/icon-desktop.svg'}
-                              width={36}
-                            />
-                          ) : (
+                          {device.type === 'mobile' ? (
                             <Image
                               alt={'device type'}
                               height={34}
                               src={'/icon-mobile.svg'}
                               width={20}
                             />
+                          ) : (
+                            <Image
+                              alt={'device type'}
+                              height={36}
+                              src={'/icon-desktop.svg'}
+                              width={36}
+                            />
                           )}
                           <div>
-                            <p>IP: {session.ip}</p>
+                            <p>IP: {cleanedIp(session.ip)}</p>
                             <p>
                               Last visit:&nbsp;
                               {new Date(session.lastActiveDate).toLocaleString([], {
                                 day: 'numeric',
-                                hour: undefined,
-                                minute: undefined,
+                                hour: 'numeric',
+                                minute: 'numeric',
                                 month: 'numeric',
                                 second: undefined,
                                 year: 'numeric',
