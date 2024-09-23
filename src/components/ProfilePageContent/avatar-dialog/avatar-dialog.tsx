@@ -1,13 +1,12 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
-// import Avatar from 'react-avatar-edit'
-
-const Avatar = dynamic(() => import('react-avatar-edit'), { ssr: false })
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button, Close, ImageOutline } from '@robur_/ui-kit'
 import dynamic from 'next/dynamic'
 
 import s from './avatar-dialog.module.scss'
+
+const Avatar = dynamic(() => import('react-avatar-edit'), { ssr: false })
 
 type ValidateSettings = typeof FILE_VALIDATION_CONFIG
 
