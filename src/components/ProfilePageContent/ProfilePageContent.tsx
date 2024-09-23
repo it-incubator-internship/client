@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useEditProfileMutation, useGetProfileQuery } from '@/services/profile/profile-api'
+import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Button,
@@ -143,40 +144,44 @@ export const ProfilePageContent = () => {
 
       return
     }
-    // Преобразование даты рождения в формат "дд.мм.гггг"
-    const formattedDateOfBirth = new Date(dataForm.dateOfBirth).toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })
-    // Вычисляем возраст пользователя
-    const today = new Date()
-    const birthDate = new Date(dataForm.dateOfBirth)
-    let age = today.getFullYear() - birthDate.getFullYear()
-    const monthDifference = today.getMonth() - birthDate.getMonth()
-
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-      age--
-    }
-
-    // Проверяем, меньше ли пользователю 13 лет
-    if (age < 13) {
-      openModal(variantModals.youngUser)
-
-      return // Останавливаем дальнейшую отправку формы
-    }
 
     try {
+      const birthDate = new Date(dataForm.dateOfBirth)
+      const formattedDateOfBirth = formatDateOfBirth(birthDate)
+      const age = calculateAge(birthDate)
+
+      // Проверяем, меньше ли пользователю 13 лет
+      if (age < 13) {
+        openModal(variantModals.youngUser)
+
+        return
+      }
+
+      // Логируем отправляемые данные
+      console.log('Submitting profile data:', {
+        ...dataForm,
+        dateOfBirth: formattedDateOfBirth,
+        id: currentUserId,
+      })
+
+      // Отправляем данные на сервер
       await editProfile({
         ...dataForm,
         dateOfBirth: formattedDateOfBirth,
         id: currentUserId,
       }).unwrap()
+
       openModal(variantModals.successfulSaveProfile)
     } catch (error: unknown) {
+      handleFormSubmitError(error)
+    }
+  }
+
+  // Вынесем обработку ошибок в отдельную функцию
+  const handleFormSubmitError = (error: unknown) => {
+    if (error && typeof error === 'object' && 'data' in error) {
       const errors = (error as ErrorType).data?.fields
 
-      openModal(variantModals.failedSaveProfile)
       if (errors) {
         errors.forEach((error: FieldError) => {
           setError(error.field, {
@@ -186,13 +191,15 @@ export const ProfilePageContent = () => {
         })
       }
     }
+
+    // Если ошибка неизвестная или без детализированных полей
+    openModal(variantModals.failedSaveProfile)
+    console.error('Profile update failed:', error)
   }
 
   if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
     return <Spinner />
   }
-  const currentYear = new Date().getFullYear()
-  const years = Array.from({ length: 50 }, (_, i) => currentYear - i)
 
   return (
     <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
