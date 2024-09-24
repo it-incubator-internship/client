@@ -1,0 +1,95 @@
+.dialogOverlay {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  background-color: rgb(0 0 0 / 80%);
+
+  animation: fade-in 0.2s, fade-out 0.2s;
+}
+
+.dialogContent {
+  position: fixed;
+  z-index: 50;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: grid;
+  gap: 16px;
+
+  width: 100%;
+  max-width: 640px;
+  padding: 24px;
+
+  background-color: var(--background-color);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px rgb(0 0 0 / 10%);
+
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.dialogClose {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  opacity: 0.7;
+  border-radius: 4px;
+
+  transition: opacity 0.2s;
+}
+
+.dialogClose:hover {
+  opacity: 1;
+}
+
+.dialogHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+}
+
+.dialogFooter {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.dialogFooter.sm {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.dialogTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+}
+
+.dialogDescription {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+/* Animation Keyframes */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}

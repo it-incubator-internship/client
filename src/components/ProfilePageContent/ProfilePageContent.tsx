@@ -13,6 +13,7 @@ import {
 import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
+import { Combobox } from '@/pages/sign-up/temporary/Combobox'
 
 const updateProfileSchema = z.object({
   birthdate: z.date({ message: 'This field is required' }),
@@ -102,6 +103,7 @@ export const ProfilePageContent = () => {
           <div style={{ display: 'flex', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>
               <div>Select your country</div>
+              <Combobox></Combobox>
               <Select placeholder={'Country'}>
                 {countryOptions.map(option => {
                   return (
