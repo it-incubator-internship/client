@@ -19,5 +19,19 @@ export const calculateAge = (birthDate: Date): number => {
 
   return age
 }
-export const currentYear = new Date().getFullYear()
-export const years = Array.from({ length: 50 }, (_, i) => currentYear - i)
+
+export function range(start: number, end: number) {
+  const ret: Array<number> = []
+
+  for (let i = start; i < end; i++) {
+    ret.push(i)
+  }
+
+  return ret
+}
+
+export function getYear(date: Date): number {
+  return date.getFullYear()
+}
+
+export const years = range(1940, getYear(new Date()) + 1)

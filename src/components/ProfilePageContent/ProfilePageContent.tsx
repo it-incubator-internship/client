@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
@@ -107,7 +107,6 @@ export const ProfilePageContent = () => {
   )
   const [editProfile, { isError, isLoading: isloadingEditProfile }] = useEditProfileMutation()
   const { modalJSX, openModal } = useModalFromSettingsProfile()
-  const [startDate, setStartDate] = useState<Date | null>(null)
   const { control, handleSubmit, reset, setError } = useForm<FormValues>({
     defaultValues: {
       aboutMe: '',
@@ -133,8 +132,6 @@ export const ProfilePageContent = () => {
         lastName: profileData.lastName || '',
         userName: profileData.userName || '',
       })
-      // Устанавливаем дату рождения в состояние
-      setStartDate(profileData.dateOfBirth ? new Date(profileData.dateOfBirth) : null)
     }
   }, [profileData, reset])
 
@@ -150,21 +147,12 @@ export const ProfilePageContent = () => {
       const formattedDateOfBirth = formatDateOfBirth(birthDate)
       const age = calculateAge(birthDate)
 
-      // Проверяем, меньше ли пользователю 13 лет
       if (age < 13) {
         openModal(variantModals.youngUser)
 
         return
       }
 
-      // Логируем отправляемые данные
-      console.log('Submitting profile data:', {
-        ...dataForm,
-        dateOfBirth: formattedDateOfBirth,
-        id: currentUserId,
-      })
-
-      // Отправляем данные на сервер
       await editProfile({
         ...dataForm,
         dateOfBirth: formattedDateOfBirth,
@@ -177,7 +165,6 @@ export const ProfilePageContent = () => {
     }
   }
 
-  // Вынесем обработку ошибок в отдельную функцию
   const handleFormSubmitError = (error: unknown) => {
     if (error && typeof error === 'object' && 'data' in error) {
       const errors = (error as ErrorType).data?.fields
@@ -192,7 +179,6 @@ export const ProfilePageContent = () => {
       }
     }
 
-    // Если ошибка неизвестная или без детализированных полей
     openModal(variantModals.failedSaveProfile)
     console.error('Profile update failed:', error)
   }
@@ -232,7 +218,7 @@ export const ProfilePageContent = () => {
             name={'lastName'}
             // eslint-disable-next-line react/jsx-no-comment-textnodes
           />
-          //TODO сделать через селект
+          //TODO make a choice via select
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
@@ -240,7 +226,7 @@ export const ProfilePageContent = () => {
             name={'city'}
             // eslint-disable-next-line react/jsx-no-comment-textnodes
           />
-          //TODO сделать через селект
+          //TODO make a choice via select
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
@@ -251,8 +237,6 @@ export const ProfilePageContent = () => {
             control={control}
             label={'Date of birth'}
             name={'dateOfBirth'}
-            setStartDate={setStartDate}
-            startDate={startDate}
             years={years}
           />
           <div style={{ display: 'flex', gap: '24px' }}>
