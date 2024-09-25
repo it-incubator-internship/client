@@ -1,8 +1,10 @@
 import * as React from 'react'
+
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { Cross2Icon } from '@radix-ui/react-icons'
-import styles from './Dialog.module.css'
 import clsx from 'clsx'
+
+import styles from './Dialog.module.css'
 
 const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
@@ -13,43 +15,48 @@ const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Overlay ref={ref} className={clsx(styles.dialogOverlay, className)} {...props} />
+  <DialogPrimitive.Overlay className={clsx(styles.dialogOverlay, className)} ref={ref} {...props} />
 ))
+
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+>(({ children, className, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
-    <DialogPrimitive.Content ref={ref} className={clsx(styles.dialogContent, className)} {...props}>
+    <DialogPrimitive.Content className={clsx(styles.dialogContent, className)} ref={ref} {...props}>
       {children}
       <DialogClose className={styles.dialogClose}>
-        <Cross2Icon className="h-4 w-4" />
-        <span className="sr-only">Close</span>
+        <Cross2Icon className={'h-4 w-4'} />
+        <span className={'sr-only'}>Close</span>
       </DialogClose>
     </DialogPrimitive.Content>
   </DialogPortal>
 ))
+
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={clsx(styles.dialogHeader, className)} {...props} />
 )
+
 DialogHeader.displayName = 'DialogHeader'
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={clsx(styles.dialogFooter, className)} {...props} />
 )
+
 DialogFooter.displayName = 'DialogFooter'
 
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title ref={ref} className={clsx(styles.dialogTitle, className)} {...props} />
+  <DialogPrimitive.Title className={clsx(styles.dialogTitle, className)} ref={ref} {...props} />
 ))
+
 DialogTitle.displayName = DialogPrimitive.Title.displayName
 
 const DialogDescription = React.forwardRef<
@@ -57,22 +64,23 @@ const DialogDescription = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
-    ref={ref}
     className={clsx(styles.dialogDescription, className)}
+    ref={ref}
     {...props}
   />
 ))
+
 DialogDescription.displayName = DialogPrimitive.Description.displayName
 
 export {
   Dialog,
-  DialogPortal,
-  DialogOverlay,
-  DialogTrigger,
   DialogClose,
   DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
 }

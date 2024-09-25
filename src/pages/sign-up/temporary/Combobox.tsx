@@ -1,7 +1,11 @@
 'use client'
 
 import * as React from 'react'
+
+import { Button } from '@robur_/ui-kit'
 import { Check, ChevronsUpDown } from 'lucide-react'
+
+import styles from './Combobox.module.css'
 
 import {
   Command,
@@ -12,30 +16,27 @@ import {
   CommandList,
 } from './command'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
-import { Button } from '@robur_/ui-kit'
-
-import styles from './Combobox.module.css'
 
 const frameworks = [
   {
-    value: 'next.js',
     label: 'Next.js',
+    value: 'next.js',
   },
   {
-    value: 'sveltekit',
     label: 'SvelteKit',
+    value: 'sveltekit',
   },
   {
-    value: 'nuxt.js',
     label: 'Nuxt.js',
+    value: 'nuxt.js',
   },
   {
-    value: 'remix',
     label: 'Remix',
+    value: 'remix',
   },
   {
-    value: 'astro',
     label: 'Astro',
+    value: 'astro',
   },
 ]
 
@@ -44,13 +45,13 @@ export const Combobox = () => {
   const [value, setValue] = React.useState('')
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button
-          variant="outlined"
-          role="combobox"
           aria-expanded={open}
           className={styles.comboboxButton}
+          role={'combobox'}
+          variant={'outlined'}
         >
           {value
             ? frameworks.find(framework => framework.value === value)?.label
@@ -60,25 +61,25 @@ export const Combobox = () => {
       </PopoverTrigger>
       <PopoverContent className={styles.comboboxContent}>
         <Command>
-          <CommandInput placeholder="Search framework..." className={styles.commandInput} />
+          <CommandInput className={styles.commandInput} placeholder={'Search framework...'} />
           <CommandList className={styles.commandList}>
             <CommandEmpty className={styles.commandEmpty}>No framework found.</CommandEmpty>
             <CommandGroup className={styles.commandGroup}>
               {frameworks.map(framework => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={currentValue => {
-                    setValue(currentValue === value ? '' : currentValue)
-                    setOpen(false)
-                  }}
                   className={`${styles.commandItem} ${
                     value === framework.value
                       ? styles.commandItemSelected
                       : styles.commandItemUnselected
                   }`}
+                  key={framework.value}
+                  onSelect={currentValue => {
+                    setValue(currentValue === value ? '' : currentValue)
+                    setOpen(false)
+                  }}
+                  value={framework.value}
                 >
-                  <Check className="checkIcon" />
+                  <Check className={'checkIcon'} />
                   {framework.label}
                 </CommandItem>
               ))}

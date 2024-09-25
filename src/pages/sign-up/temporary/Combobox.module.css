@@ -1,21 +1,26 @@
 .comboboxButton {
-  width: 200px;
-  justify-content: space-between;
+  cursor: pointer;
+
   display: flex;
   align-items: center;
-  border: 1px solid #ccc;
+  justify-content: space-between;
+
+  width: 200px;
   padding: 8px;
-  border-radius: 4px;
+
   background-color: white;
-  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .comboboxIcon {
-  margin-left: 8px;
-  height: 16px;
-  width: 16px;
-  opacity: 0.5;
   flex-shrink: 0;
+
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+
+  opacity: 0.5;
 }
 
 .comboboxContent {
@@ -24,30 +29,30 @@
 }
 
 .commandItem {
+  cursor: pointer;
   display: flex;
   align-items: center;
   padding: 8px;
-  cursor: pointer;
 }
 
 .commandItemSelected .checkIcon {
-  margin-right: 8px;
-  height: 16px;
   width: 16px;
+  height: 16px;
+  margin-right: 8px;
   opacity: 1;
 }
 
 .commandItemUnselected .checkIcon {
-  margin-right: 8px;
-  height: 16px;
   width: 16px;
+  height: 16px;
+  margin-right: 8px;
   opacity: 0;
 }
 
 .commandList {
-  list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .commandGroup {

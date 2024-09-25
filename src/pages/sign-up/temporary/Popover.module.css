@@ -1,36 +1,42 @@
 .popoverContent {
   z-index: 50;
+
   width: 288px; /* 72 * 4 = 288px */
-  border-radius: 8px;
-  border: 1px solid transparent;
-  background-color: var(--popover-background);
   padding: 16px;
+
   color: var(--popover-foreground);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  background-color: var(--popover-background);
+  border: 1px solid transparent;
+  border-radius: 8px;
   outline: none;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+
   transition: opacity 0.2s, transform 0.2s;
 }
 
 /* Animations for opening and closing the popover */
 @keyframes fade-in {
   from {
-    opacity: 0;
     transform: scale(0.95);
+    opacity: 0;
   }
+
   to {
-    opacity: 1;
     transform: scale(1);
+    opacity: 1;
   }
 }
 
 @keyframes fade-out {
   from {
-    opacity: 1;
     transform: scale(1);
+    opacity: 1;
   }
+
   to {
-    opacity: 0;
     transform: scale(0.95);
+    opacity: 0;
   }
 }
 
@@ -64,6 +70,7 @@
   from {
     transform: translateY(-10px);
   }
+
   to {
     transform: translateY(0);
   }
@@ -73,6 +80,7 @@
   from {
     transform: translateY(10px);
   }
+
   to {
     transform: translateY(0);
   }
@@ -82,6 +90,7 @@
   from {
     transform: translateX(-10px);
   }
+
   to {
     transform: translateX(0);
   }
@@ -91,6 +100,7 @@
   from {
     transform: translateX(10px);
   }
+
   to {
     transform: translateX(0);
   }

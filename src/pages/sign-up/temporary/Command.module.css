@@ -1,12 +1,15 @@
 .command {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  flex-direction: column;
   overflow: hidden;
-  border-radius: 8px;
-  background-color: black;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+
   color: white;
+
+  background-color: black;
+  border-radius: 8px;
 }
 
 .commandDialogContent {
@@ -17,60 +20,68 @@
 .commandInputWrapper {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #ccc;
   padding: 0 12px;
+  border-bottom: 1px solid #ccc;
 }
 
 .commandIcon {
-  margin-right: 8px;
-  height: 16px;
-  width: 16px;
-  opacity: 0.5;
   flex-shrink: 0;
+
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+
+  opacity: 0.5;
 }
 
 .commandInput {
   flex: 1;
-  height: 40px;
+
   width: 100%;
-  border-radius: 4px;
-  background: transparent;
+  height: 40px;
   padding: 12px 0;
+
   font-size: 14px;
-  outline: none;
   color: inherit;
+
+  background: transparent;
+  border-radius: 4px;
+  outline: none;
 }
 
 .commandList {
+  overflow: hidden auto;
   max-height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .commandItem {
-  display: flex;
   cursor: default;
   user-select: none;
+
+  display: flex;
   align-items: center;
+
   padding: 8px 12px;
+
   font-size: 14px;
+
   border-radius: 4px;
 }
 
 .commandItemSelected {
-  background-color: var(--accent-color);
   color: var(--accent-foreground-color);
+  background-color: var(--accent-color);
 }
 
 .commandItemDisabled {
-  opacity: 0.5;
   pointer-events: none;
+  opacity: 0.5;
 }
 
 .commandEmpty {
   padding: 24px 0;
-  text-align: center;
   font-size: 14px;
+  text-align: center;
 }
 
 .commandGroup {
@@ -78,15 +89,15 @@
 }
 
 .commandSeparator {
-  margin-left: -4px;
-  margin-right: -4px;
   height: 1px;
+  margin-right: -4px;
+  margin-left: -4px;
   background-color: var(--border-color);
 }
 
 .commandShortcut {
   margin-left: auto;
   font-size: 12px;
-  letter-spacing: 1px;
   color: var(--muted-foreground);
+  letter-spacing: 1px;
 }
