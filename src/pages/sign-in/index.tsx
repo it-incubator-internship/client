@@ -26,7 +26,7 @@ type FormValues = z.infer<typeof SigninSchema>
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
-  const [getMe, { isLoading: getMeIsLoading }] = useLazyMeQuery()
+  const [getMe] = useLazyMeQuery()
   const router = useRouter()
 
   const t = useTranslation()
@@ -51,15 +51,11 @@ function SignIn() {
 
       const userId = meRes?.data?.userId
 
-      if (isLoading || getMeIsLoading) {
-        return <Spinner />
-      } else if (userId) {
+      if (!userId) {
+        return
+      } else {
         void router.replace(`/profile-settings/${userId}`)
 
-        return
-      }
-
-      if (!userId) {
         return
       }
     } catch (error: any) {
@@ -99,7 +95,7 @@ function SignIn() {
             name={'password'}
             type={'password'}
           />
-          <Button className={s.ButtonSignIn} fullWidth>
+          <Button className={s.ButtonSignIn} disabled={isLoading} fullWidth>
             {t.auth.signIn}
           </Button>
         </form>
