@@ -4,6 +4,7 @@ import { EditProfileArgs } from './profile-types'
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
     editProfile: builder.mutation<void, EditProfileArgs>({
+      invalidatesTags: ['Profile'],
       query: args => ({
         body: {
           aboutMe: args.aboutMe,
@@ -19,6 +20,7 @@ export const profileApi = inctagramApi.injectEndpoints({
       }),
     }),
     getProfile: builder.query<EditProfileArgs, { id: string }>({
+      providesTags: ['Profile'],
       query: args => ({
         method: 'GET',
         url: `/v1/user/profile/${args.id}`,
