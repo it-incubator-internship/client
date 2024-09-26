@@ -1,19 +1,20 @@
-import { PATH } from '@/consts/route-paths'
 import { useState } from 'react'
+
+import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLogoutMutation, useMeQuery } from '@/services/auth/authApi'
 import {
   BookmarkOutline,
+  Button,
   HomeOutline,
   LogOut,
   MessageCircleOutline,
+  Modal,
   Person,
   PlusSquareOutline,
   Search,
   Sidebar,
   TrendingUpOutline,
-  Modal,
-  Button,
 } from '@robur_/ui-kit'
 
 import { SidebarItem } from './SidebarItem/SidebarItem'
@@ -57,17 +58,14 @@ export const Navbar = ({ className }: Props) => {
           <SidebarItem Icon={BookmarkOutline} href={PATH.BOOKMARKS} item={t.nav.favorites} />
         </div>
         <div style={{ marginTop: '150px' }}>
-          <div onClick={() => handleModalOpened()}>
-            <SidebarItem Icon={LogOut} href={'/'} item={t.nav.logout} />
-            {/*<SidebarItem*/}
-            {/*  Icon={LogOut}*/}
-            {/*  as={'button'}*/}
-            {/*  href={'/'}*/}
-            {/*  item={t.nav.logout}*/}
-            {/*  onClick={() => logout()}*/}
-            {/*  type={'button'}*/}
-            {/*/>*/}
-          </div>
+          <SidebarItem
+            Icon={LogOut}
+            as={'button'}
+            href={''}
+            item={t.nav.logout}
+            onClick={() => handleModalOpened()}
+            type={'button'}
+          />
         </div>
       </Sidebar>
       <Modal
@@ -75,10 +73,9 @@ export const Navbar = ({ className }: Props) => {
         buttonTitle={'Yes'}
         onClose={handleModalClosed}
         onCloseWithApproval={handleModalApproved}
-        open
+        open={modalIsOpen}
         title={'Log out'}
         withConfirmation
-        open={modalIsOpen}
       >
         <p>{`Are you really want to log out of your account ${data?.userName}?`}</p>
       </Modal>
