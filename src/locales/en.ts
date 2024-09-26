@@ -62,6 +62,12 @@ export const en: LocaleType = {
     defaultDescriptionText:
       'The Inctagram social network is a limitless communication of people all over the world',
   },
+  myProfile: {
+    followers: 'Followers',
+    following: 'Following',
+    initialUrlProfile: 'UrlProfile',
+    publications: 'Publications',
+  },
   nav: {
     create: 'Create',
     favorites: 'Favorites',

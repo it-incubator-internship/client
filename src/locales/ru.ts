@@ -59,6 +59,12 @@ export const ru = {
     defaultDescriptionText:
       'Социальная сеть The Inctagram это безлимитная коммуникация людей по всему миру',
   },
+  myProfile: {
+    followers: 'Подписчики',
+    following: 'Подписки',
+    initialUrlProfile: 'Url пользователя',
+    publications: 'Публикации',
+  },
   nav: {
     create: 'Создать',
     favorites: 'Избранное',
