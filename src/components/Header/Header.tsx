@@ -1,4 +1,4 @@
-import { useTranslation } from '@/hooks/useTranslation'
+import { useMeQuery } from '@/services/auth/authApi'
 import { FlagRussia, FlagUnitedKingdom, OutlineBell, Select, SelectItem } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
@@ -6,8 +6,8 @@ import { useRouter } from 'next/router'
 import s from './Header.module.scss'
 
 export const Header = () => {
-  const t = useTranslation()
   const { asPath, locale, pathname, push, query } = useRouter()
+  const { data, isLoading } = useMeQuery()
   const isHomePage = pathname === '/'
 
   const logoClickHandler = () => {
@@ -28,9 +28,11 @@ export const Header = () => {
         </button>
       )}
       <div className={s.options}>
-        <button className={s.notifications} type={'button'}>
-          <OutlineBell />
-        </button>
+        {data && (
+          <button className={s.notifications} type={'button'}>
+            <OutlineBell />
+          </button>
+        )}
         <div className={s.langSelect}>
           <Select
             defaultValue={locale}

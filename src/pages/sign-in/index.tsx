@@ -26,7 +26,7 @@ type FormValues = z.infer<typeof SigninSchema>
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
-  const [getMe, { isLoading: getMeIsLoading }] = useLazyMeQuery()
+  const [getMe] = useLazyMeQuery()
   const router = useRouter()
 
   const t = useTranslation()
@@ -47,31 +47,15 @@ function SignIn() {
     try {
       await login(data).unwrap()
 
-      // const parserPayload = await convertAccessToken(res.accessToken)
-      //
-      // let userId: string | undefined
-      //
-      // if (parserPayload?.userId) {
-      //   userId = parserPayload?.userId
-      // } else {
-      //   const meRes = await getMe()
-      //
-      //   userId = meRes?.data?.userId
-      // }
-
       const meRes = await getMe()
 
       const userId = meRes?.data?.userId
 
-      if (isLoading || getMeIsLoading) {
-        return <Spinner />
-      } else if (userId) {
-        void router.replace(`/profile/${userId}/edit`)
-
-        return
-      }
-
       if (!userId) {
+        return
+      } else {
+        void router.replace(`/profile-settings/${userId}`)
+
         return
       }
     } catch (error: any) {
@@ -111,7 +95,7 @@ function SignIn() {
             name={'password'}
             type={'password'}
           />
-          <Button className={s.ButtonSignIn} fullWidth>
+          <Button className={s.ButtonSignIn} disabled={isLoading} fullWidth>
             {t.auth.signIn}
           </Button>
         </form>
