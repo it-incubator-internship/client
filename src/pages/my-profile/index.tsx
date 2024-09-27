@@ -14,82 +14,26 @@ type NextPageWithLayout<P = {}> = {
 } & NextPage<P>
 
 type ProfileStatsProps = {
-  initialNumberFollowers?: string
-  initialNumberFollowing?: string
-  initialNumberPublications?: string
+  countFollowers?: string
+  countFollowing?: string
+  countPublications?: string
 }
 
 type MyProfileProps = {
-  initialAvatar?: string
+  avatar?: string
 }
 
 type PublicationsPhotoProps = {
-  initialImages?: string[]
+  publicImages?: string[]
 }
 
-export const ProfileStats: NextPageWithLayout<ProfileStatsProps> = ({
-  initialNumberFollowers = '2 358',
-  initialNumberFollowing = '2 218',
-  initialNumberPublications = '2 764',
-}) => {
-  const t = useTranslation()
-
-  return (
-    <div className={s.stats}>
-      <p className={clsx(s.statsItem, s.statsFollowing)}>
-        <a href={'#'}>
-          <div>{initialNumberFollowing}</div>
-          <span className={s.statsItemName}> {t.myProfile.following} </span>{' '}
-        </a>
-      </p>
-
-      <p className={clsx(s.statsItem, s.statsFollowers)}>
-        <a href={'#'}>
-          <div>{initialNumberFollowers}</div>
-          <span className={s.statsItemName}> {t.myProfile.followers} </span>
-        </a>
-      </p>
-
-      <p className={clsx(s.statsItem, s.statsPublications)}>
-        <div>{initialNumberPublications} </div>
-        <span className={s.statsItemName}> {t.myProfile.publications} </span>
-      </p>
-    </div>
-  )
+const USER_ACHIEVEMENTS = {
+  countFollowers: '2 358',
+  countFollowing: '2 218',
+  countPublications: '2 764',
 }
 
-export const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
-  initialImages = [
-    '/photo-default-1.png',
-    '/photo-default-2.png',
-    '/photo-default-3.png',
-    '/photo-default-4.png',
-    '/photo-default-5.png',
-    '/photo-default-5.png',
-    '/photo-default-5.png',
-    '/photo-default-5.png',
-  ],
-}) => {
-  return (
-    <div className={s.photoGrid}>
-      {initialImages.map((image, index) => (
-        <div className={s.photoItem} key={index}>
-          <Image
-            alt={`User photo ${index + 1}`}
-            height={228}
-            layout={'responsive'}
-            src={image}
-            width={234}
-          />
-        </div>
-      ))}
-    </div>
-  )
-}
-
-const MyProfile: NextPageWithLayout<MyProfileProps> = ({
-  initialAvatar = '/default-avatar.png',
-}) => {
+const MyProfile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar.png' }) => {
   const t = useTranslation()
 
   return (
@@ -102,7 +46,7 @@ const MyProfile: NextPageWithLayout<MyProfileProps> = ({
             className={s.avatarImage}
             height={204}
             layout={'intrinsic'}
-            src={initialAvatar}
+            src={avatar}
             width={204}
           />
         </div>
@@ -119,10 +63,9 @@ const MyProfile: NextPageWithLayout<MyProfileProps> = ({
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
               incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco{' '}
+              exercitation ullamco
               <a className={s.descriptionLink} href={'#'}>
-                {' '}
-                laboris nisi ut aliquip ex ea commodo consequat.{' '}
+                laboris nisi ut aliquip ex ea commodo consequat.
               </a>
             </p>
           </div>
@@ -130,6 +73,70 @@ const MyProfile: NextPageWithLayout<MyProfileProps> = ({
       </div>
       {/* Сетка фотографий */}
       <PublicationsPhoto />
+    </div>
+  )
+}
+
+const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
+  const t = useTranslation()
+
+  return (
+    <div className={s.stats}>
+      <p className={clsx(s.statsItem, s.statsFollowing)}>
+        <a href={'#'}>
+          <div>{USER_ACHIEVEMENTS.countFollowing}</div>
+          <span className={s.statsItemName}> {t.myProfile.following} </span>{' '}
+        </a>
+      </p>
+
+      <p className={clsx(s.statsItem, s.statsFollowers)}>
+        <a href={'#'}>
+          <div>{USER_ACHIEVEMENTS.countFollowers}</div>
+          <span className={s.statsItemName}> {t.myProfile.followers} </span>
+        </a>
+      </p>
+
+      <p className={clsx(s.statsItem, s.statsPublications)}>
+        <div>{USER_ACHIEVEMENTS.countPublications} </div>
+        <span className={s.statsItemName}> {t.myProfile.publications} </span>
+      </p>
+    </div>
+  )
+}
+
+const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
+  publicImages = [
+    '/photo-default-1.png',
+    '/photo-default-2.png',
+    '/photo-default-3.png',
+    '/photo-default-4.png',
+    '/photo-default-5.png',
+    '/photo-default-6.png',
+    '/photo-default-7.png',
+    '/photo-default-8.png',
+    '/photo-default-1.png',
+    '/photo-default-2.png',
+    '/photo-default-3.png',
+    '/photo-default-4.png',
+    '/photo-default-5.png',
+    '/photo-default-6.png',
+    '/photo-default-7.png',
+    '/photo-default-8.png',
+  ],
+}) => {
+  return (
+    <div className={s.photoGrid}>
+      {publicImages.map((image, index) => (
+        <div className={s.photoItem} key={index}>
+          <Image
+            alt={`User photo ${index + 1}`}
+            height={228}
+            layout={'responsive'}
+            src={image}
+            width={234}
+          />
+        </div>
+      ))}
     </div>
   )
 }
