@@ -7,6 +7,8 @@ import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
+import { customErrorHandler } from '@/utils/customErrorHandler'
+import { AuthError, ErrorType, FieldError } from '@/utils/types/errorTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -22,6 +24,7 @@ const SigninSchema = z.object({
 })
 
 type FormValues = z.infer<typeof SigninSchema>
+type ZodKeys = keyof FormValues
 
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
@@ -58,11 +61,8 @@ function SignIn() {
 
         return
       }
-    } catch (error: any) {
-      setError('email', {
-        message: error.data.error || error.data.errorMessages[0],
-        type: 'manual',
-      })
+    } catch (error: unknown) {
+      customErrorHandler<ZodKeys>({ error, setError, specificField: 'email' })
     }
   }
 

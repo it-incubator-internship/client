@@ -7,6 +7,8 @@ import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { PATH } from '@/consts/route-paths'
 import { useRegistrationMutation } from '@/services/auth/authApi'
 import { RegistrationArgs } from '@/services/auth/authTypes'
+import { customErrorHandler } from '@/utils/customErrorHandler'
+import { ErrorType, FieldError } from '@/utils/types/errorTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormCheckbox, FormInput, Label, Modal } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -50,18 +52,6 @@ const signUpSchema = z
 type FormValues = z.infer<typeof signUpSchema>
 type ZodKeys = keyof FormValues
 
-type FieldError = {
-  field: ZodKeys
-  message: string
-}
-
-type ErrorType = {
-  data: {
-    fields: FieldError[]
-  }
-  message: string
-}
-
 function SignUp() {
   const [registration, { isLoading }] = useRegistrationMutation()
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -97,10 +87,11 @@ function SignUp() {
       setIsModalOpen(true)
       setResponseEmail(res.email)
     } catch (error: unknown) {
-      const errors = (error as ErrorType).data?.fields
+      customErrorHandler<ZodKeys>({ error, setError })
+      const errors = (error as ErrorType<ZodKeys>).data?.fields
 
       if (errors) {
-        errors.forEach((error: FieldError) => {
+        errors.forEach((error: FieldError<ZodKeys>) => {
           setError(error.field, {
             message: error.message,
             type: 'manual',
