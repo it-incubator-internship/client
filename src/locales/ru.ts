@@ -37,6 +37,11 @@ export const ru = {
     terminateOtherSessions: 'Закрыть все сессии кроме текущей',
   },
   english: 'Английский',
+  errors: {
+    401: 'Не правильный логин или пароль',
+    default: 'Что-то пошло не так',
+    fetch_error: 'Проблемы с Вашим интернет соединением',
+  },
   forgotPassword: {
     buttonBack: 'Вернуться на страницу входа',
     buttonSendInitial: 'Отправить',

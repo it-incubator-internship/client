@@ -40,6 +40,11 @@ export const en: LocaleType = {
     terminateOtherSessions: 'Terminate all other session',
   },
   english: 'English',
+  errors: {
+    401: 'Incorrect login or password',
+    default: 'Something went wrong',
+    fetch_error: 'Some problems with your connection',
+  },
   forgotPassword: {
     buttonBack: 'Back to Sign In',
     buttonSendInitial: 'Send link',

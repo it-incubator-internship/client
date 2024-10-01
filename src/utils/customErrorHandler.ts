@@ -1,12 +1,19 @@
+import { LocaleType } from '@/locales/ru'
 import { AuthError, ErrorType, FieldError } from '@/utils/types/errorTypes'
 
 type Props = {
   error: unknown
   setError: any
   specificField?: null | string
+  translations: LocaleType
 }
 
-export const customErrorHandler = <T>({ error, setError, specificField = null }: Props) => {
+export const customErrorHandler = <T>({
+  error,
+  setError,
+  specificField = null,
+  translations,
+}: Props) => {
   const errors = (error as ErrorType<T>).data?.fields
 
   if (errors) {
@@ -22,11 +29,9 @@ export const customErrorHandler = <T>({ error, setError, specificField = null }:
     if (error instanceof Error) {
       errorMessage = `Native error: ${error.message}`
     } else if ((error as AuthError)?.data) {
-      errorMessage = (error as AuthError)?.data?.error
+      errorMessage = translations.errors['401']
+      // errorMessage = (error as AuthError)?.data?.error
     }
-    // else {
-    //   errorMessage = JSON.stringify(error)
-    // }
 
     if (specificField) {
       setError(specificField, {

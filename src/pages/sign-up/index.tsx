@@ -5,6 +5,7 @@ import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { PATH } from '@/consts/route-paths'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useRegistrationMutation } from '@/services/auth/authApi'
 import { RegistrationArgs } from '@/services/auth/authTypes'
 import { customErrorHandler } from '@/utils/customErrorHandler'
@@ -56,6 +57,7 @@ function SignUp() {
   const [registration, { isLoading }] = useRegistrationMutation()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [responseEmail, setResponseEmail] = useState('')
+  const t = useTranslation()
 
   const {
     control,
@@ -87,17 +89,7 @@ function SignUp() {
       setIsModalOpen(true)
       setResponseEmail(res.email)
     } catch (error: unknown) {
-      customErrorHandler<ZodKeys>({ error, setError })
-      const errors = (error as ErrorType<ZodKeys>).data?.fields
-
-      if (errors) {
-        errors.forEach((error: FieldError<ZodKeys>) => {
-          setError(error.field, {
-            message: error.message,
-            type: 'manual',
-          })
-        })
-      }
+      customErrorHandler<ZodKeys>({ error, setError, translations: t })
     }
 
     return

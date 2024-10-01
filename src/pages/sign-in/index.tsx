@@ -8,7 +8,6 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { customErrorHandler } from '@/utils/customErrorHandler'
-import { AuthError, ErrorType, FieldError } from '@/utils/types/errorTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -62,7 +61,7 @@ function SignIn() {
         return
       }
     } catch (error: unknown) {
-      customErrorHandler<ZodKeys>({ error, setError, specificField: 'email' })
+      customErrorHandler<ZodKeys>({ error, setError, specificField: 'email', translations: t })
     }
   }
 
