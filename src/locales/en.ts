@@ -33,6 +33,12 @@ export const en: LocaleType = {
       title: 'Resend link',
     },
   },
+  devices: {
+    activeSessions: 'Active sessions',
+    currentDevice: 'Current device',
+    logOut: 'Log out',
+    terminateOtherSessions: 'Terminate all other session',
+  },
   english: 'English',
   forgotPassword: {
     buttonBack: 'Back to Sign In',

@@ -30,6 +30,12 @@ export const ru = {
       title: 'Срок действия ссылки истек',
     },
   },
+  devices: {
+    activeSessions: 'Активные сессии',
+    currentDevice: 'Текущее устройство',
+    logOut: 'Выйти',
+    terminateOtherSessions: 'Закрыть все сессии кроме текущей',
+  },
   english: 'Английский',
   forgotPassword: {
     buttonBack: 'Вернуться на страницу входа',
