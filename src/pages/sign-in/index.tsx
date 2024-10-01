@@ -59,8 +59,19 @@ function SignIn() {
         return
       }
     } catch (error: any) {
+      let errorMessage = ''
+
+      if (error.status === 401) {
+        errorMessage = `${t.auth.errors.incorrectEmailOrPassword}`
+      } else if (error.status === 403) {
+        errorMessage = `${t.auth.errors.confirmAccount}`
+      }
+      setError('password', {
+        message: errorMessage,
+        type: 'manual',
+      })
       setError('email', {
-        message: error.data.error || error.data.errorMessages[0],
+        message: errorMessage,
         type: 'manual',
       })
     }
