@@ -4,6 +4,10 @@ export const ru = {
     noAccount: 'Нет аккаунта?',
     signIn: 'Войти',
     signUp: 'Зарегистрироваться',
+    errors: {
+      incorrectEmailOrPassword: 'Неправильный адрес электронной почты или пароль',
+      confirmAccount: 'Пожалуйста, подтвердите свою учетную запись перед входом',
+    },
   },
   createNewPassword: {
     newPasswordForm: {

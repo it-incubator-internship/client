@@ -6,6 +6,10 @@ export const en: LocaleType = {
     noAccount: 'Don’t have an account?',
     signIn: 'Sign in',
     signUp: 'Sign Up',
+    errors: {
+      incorrectEmailOrPassword: 'Incorrect email or password',
+      confirmAccount: 'Please confirm your account before logging in',
+    },
   },
   createNewPassword: {
     newPasswordForm: {
