@@ -68,7 +68,7 @@ export const ru = {
   nav: {
     create: 'Создать',
     favorites: 'Избранное',
-    home: 'На главную',
+    home: 'Главная',
     logout: 'Выйти',
     messenger: 'Сообщения',
     myProfile: 'Мой профиль',
