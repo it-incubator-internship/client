@@ -6,52 +6,18 @@ import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
+import { signUpFormValues, signUpSchema } from '@/schemas/signUpSchema'
 import { useRegistrationMutation } from '@/services/auth/authApi'
 import { RegistrationArgs } from '@/services/auth/authTypes'
 import { customErrorHandler } from '@/utils/customErrorHandler'
-import { ErrorType, FieldError } from '@/utils/types/errorTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormCheckbox, FormInput, Label, Modal } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
-import { z } from 'zod'
 
 import s from './Signup.module.scss'
 
-const signUpSchema = z
-  .object({
-    email: z
-      .string()
-      .min(1, { message: 'This field is required' })
-      .email('The email must match the format\nexample@example.com'),
-    isAgreement: z.boolean(),
-    password: z
-      .string({ message: 'This field is required' })
-      .min(8)
-      .max(20)
-      .regex(
-        /^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]+$/g,
-        'password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~'
-      ),
-    passwordConfirmation: z.string().min(1, { message: 'This field is required' }),
-    userName: z.string().min(1, { message: 'This field is required' }),
-  })
-  .refine(data => data.password === data.passwordConfirmation, {
-    message: 'Password should match',
-    path: ['passwordConfirmation'],
-  })
-  .superRefine((data, ctx) => {
-    if (!data.isAgreement) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Please, mark the checkbox, if you agree to our terms',
-        path: ['isAgreement'],
-      })
-    }
-  })
-
-type FormValues = z.infer<typeof signUpSchema>
-type ZodKeys = keyof FormValues
+type ZodKeys = keyof signUpFormValues
 
 function SignUp() {
   const [registration, { isLoading }] = useRegistrationMutation()
@@ -65,7 +31,7 @@ function SignUp() {
     handleSubmit,
     reset,
     setError,
-  } = useForm<FormValues>({
+  } = useForm<signUpFormValues>({
     defaultValues: {
       email: '',
       isAgreement: false,
@@ -73,7 +39,7 @@ function SignUp() {
       passwordConfirmation: '',
       userName: '',
     },
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(signUpSchema(t)),
   })
 
   const handleSignUp = async (data: RegistrationArgs) => {
@@ -98,8 +64,8 @@ function SignUp() {
   const args = {
     children: (
       <div>
-        <p>We have sent a link to confirm your email to {responseEmail}</p>
-        <Link href={PATH.LOGIN}>Go to sign in</Link>
+        <p>{t.auth.sentConfirmationLink(responseEmail)}</p>
+        <Link href={PATH.LOGIN}>{t.auth.goToSignIn}</Link>
       </div>
     ),
     onClose: () => {
@@ -107,7 +73,7 @@ function SignUp() {
       reset()
     },
     open: true,
-    title: 'Email sent',
+    title: t.auth.EmailSent,
   }
 
   const modalJSX = <Modal {...args}>{args.children}</Modal>
@@ -121,12 +87,12 @@ function SignUp() {
   ) : (
     <div className={clsx(s.SignUpContainer)}>
       <Card className={clsx(s.SignUpCard, s.BorderBack)}>
-        <h1 className={s.SignUpCardTitle}>Sign Up</h1>
+        <h1 className={s.SignUpCardTitle}>{t.auth.signUp}</h1>
         <div className={s.SignUpCloudAuth}>
           <SocialMediaAuth />
         </div>
         <form className={s.SignUpForm} onSubmit={handleSubmit(handleSignUp)}>
-          <Label className={s.SignUpFormLabel} label={'Username'}>
+          <Label className={s.SignUpFormLabel} label={t.auth.username}>
             <FormInput
               className={s.SignUpFormInput}
               containerClassName={s.inputContainer}
@@ -137,7 +103,7 @@ function SignUp() {
             />
           </Label>
 
-          <Label className={s.SignUpFormLabel} label={'Email'}>
+          <Label className={s.SignUpFormLabel} label={t.auth.email}>
             <FormInput
               className={s.SignUpFormInput}
               containerClassName={s.inputContainer}
@@ -148,7 +114,7 @@ function SignUp() {
             />
           </Label>
 
-          <Label className={s.SignUpFormLabel} label={'Password'}>
+          <Label className={s.SignUpFormLabel} label={t.auth.password}>
             <FormInput
               className={s.SignUpFormInput}
               containerClassName={s.inputContainer}
@@ -159,7 +125,7 @@ function SignUp() {
             />
           </Label>
 
-          <Label className={s.SignUpFormLabel} label={'Password confirmation'}>
+          <Label className={s.SignUpFormLabel} label={t.auth.passwordConfirmation}>
             <FormInput
               className={s.SignUpFormInput}
               containerClassName={s.inputContainer}
@@ -179,24 +145,24 @@ function SignUp() {
               id={'SignUpAgreementCheckbox'}
               name={'isAgreement'}
             >
-              <span>I agree to the&nbsp;</span>
+              <span> {t.auth.agreeTo}&nbsp;</span>
               <Link className={s.SignUpAgreementLink} href={'/terms-of-service'} target={'_blank'}>
-                Terms of Service
+                {t.auth.terms}
               </Link>
-              <span className={s.SignUpAgreementSpan}>&nbsp;and&nbsp;</span>
+              <span className={s.SignUpAgreementSpan}>&nbsp;{t.and}&nbsp;</span>
               <Link className={s.SignUpAgreementLink} href={'/privacy-policy'} target={'_blank'}>
-                Privacy Policy
+                {t.auth.policy}
               </Link>
             </FormCheckbox>
           </div>
 
           <Button className={s.SignUpButton} fullWidth type={'submit'}>
-            Sign Up
+            {t.auth.signUp}
           </Button>
         </form>
-        <div className={s.SignUpHaveAccountLink}>Do you have an account?</div>
+        <div className={s.SignUpHaveAccountLink}>{t.auth.haveAccount}</div>
         <Link className={s.SignInLink} href={'/sign-in'}>
-          Sign In
+          {t.auth.signIn}
         </Link>
       </Card>
     </div>

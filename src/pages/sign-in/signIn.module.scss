@@ -1,7 +1,16 @@
+.Container {
+  width: 100%;
+  padding: 0 15px;
+
+  @media (width >= 768px) {
+    width: 408px;
+  }
+}
+
 .Card {
   position: relative;
   flex-direction: column;
-  min-width: 378px;
+  width: 100%;
 
   .Title {
     margin: 23px auto 0;
@@ -68,8 +77,12 @@
       height: 36px;
     }
   }
+
+  @media (width >= 768px) {
+    width: 378px;
+  }
 }
 
 .inputContainer {
-  margin-bottom: 24px;
+  margin-bottom: 4px;
 }
