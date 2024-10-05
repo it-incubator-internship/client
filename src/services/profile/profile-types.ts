@@ -8,3 +8,9 @@ export type EditProfileArgs = {
   lastName: string
   userName: string
 }
+
+export type CountryReturnType = {
+  country_id: number
+  title_en: string
+  title_ru: string
+}

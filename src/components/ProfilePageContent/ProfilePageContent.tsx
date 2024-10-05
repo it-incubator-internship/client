@@ -3,11 +3,16 @@ import { useForm } from 'react-hook-form'
 
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
 import { useMeQuery } from '@/services/auth/authApi'
-import { useEditProfileMutation, useGetProfileQuery } from '@/services/profile/profile-api'
+import {
+  useEditProfileMutation,
+  useGetCountriesQuery,
+  useGetProfileQuery,
+} from '@/services/profile/profile-api'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Button,
+  FormCombobox,
   FormDatePicker,
   FormInput,
   FormTextarea,
@@ -18,7 +23,6 @@ import {
 import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
-import { Combobox } from '@/pages/sign-up/temporary/Combobox'
 
 import Spinner from '../Spinner/Spinner'
 
@@ -108,6 +112,7 @@ export const ProfilePageContent = () => {
   )
   const [editProfile, { isError, isLoading: isloadingEditProfile }] = useEditProfileMutation()
   const { modalJSX, openModal } = useModalFromSettingsProfile()
+
   const { control, handleSubmit, reset, setError } = useForm<FormValues>({
     defaultValues: {
       aboutMe: '',
@@ -122,7 +127,10 @@ export const ProfilePageContent = () => {
     resolver: zodResolver(updateProfileSchema),
   })
 
+  const { data: countriesData, isLoading: isCountriesLoading } = useGetCountriesQuery()
+
   useEffect(() => {
+    console.log('profileData: ', profileData)
     if (profileData) {
       reset({
         aboutMe: profileData.aboutMe || '',
@@ -184,7 +192,7 @@ export const ProfilePageContent = () => {
     console.error('Profile update failed:', error)
   }
 
-  if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
+  if (startIsLoading || isLoadingProfile || isloadingEditProfile || isCountriesLoading) {
     return <Spinner />
   }
 
@@ -219,21 +227,6 @@ export const ProfilePageContent = () => {
             name={'lastName'}
             // eslint-disable-next-line react/jsx-no-comment-textnodes
           />
-          //TODO make a choice via select
-          <FormInput
-            containerClassName={s.inputContainer}
-            control={control}
-            label={'Your city'}
-            name={'city'}
-            // eslint-disable-next-line react/jsx-no-comment-textnodes
-          />
-          //TODO make a choice via select
-          <FormInput
-            containerClassName={s.inputContainer}
-            control={control}
-            label={'Your country'}
-            name={'country'}
-          />
           <FormDatePicker
             control={control}
             label={'Date of birth'}
@@ -243,28 +236,28 @@ export const ProfilePageContent = () => {
           <div style={{ display: 'flex', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>
               <div>Select your country</div>
-              <Combobox></Combobox>
-              <Select placeholder={'Country'}>
-                {countryOptions.map(option => {
-                  return (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  )
-                })}
-              </Select>
+              <FormCombobox
+                control={control}
+                inputValue={''}
+                name={'country'}
+                onChange={(value: any) => {
+                }}
+                onInputChange={(value: any) => {}}
+                options={countryOptions}
+                value={''}
+              />
             </div>
             <div style={{ flexGrow: 1 }}>
               <div>Select your city</div>
-              <Select placeholder={'City'}>
-                {cityOptions.map(option => {
-                  return (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  )
-                })}
-              </Select>
+              <FormCombobox
+                control={control}
+                inputValue={''}
+                name={'city'}
+                onChange={(value: any) => {}}
+                onInputChange={(value: any) => {}}
+                options={cityOptions}
+                value={''}
+              />
             </div>
           </div>
           <FormTextarea

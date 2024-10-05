@@ -1,5 +1,5 @@
 import { inctagramApi } from '../inctagramApi'
-import { EditProfileArgs } from './profile-types'
+import { CountryReturnType, EditProfileArgs } from './profile-types'
 
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
@@ -19,6 +19,13 @@ export const profileApi = inctagramApi.injectEndpoints({
         url: `/v1/user/profile/${args.id}`,
       }),
     }),
+    // todo подписываться не нужно???
+    getCountries: builder.query<CountryReturnType[], void>({
+      query: args => ({
+        method: 'GET',
+        url: `/v1/localization/countries`,
+      }),
+    }),
     getProfile: builder.query<EditProfileArgs, { id: string }>({
       providesTags: ['Profile'],
       query: args => ({
@@ -28,4 +35,4 @@ export const profileApi = inctagramApi.injectEndpoints({
     }),
   }),
 })
-export const { useEditProfileMutation, useGetProfileQuery } = profileApi
+export const { useEditProfileMutation, useGetCountriesQuery, useGetProfileQuery } = profileApi
