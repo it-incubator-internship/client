@@ -1,15 +1,16 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
+import { en, ru } from '@/locales'
 import { useMeQuery } from '@/services/auth/authApi'
 import {
   useEditProfileMutation,
-  useGetCountriesQuery,
   useGetProfileQuery,
+  useLazyGetCountriesQuery,
 } from '@/services/profile/profile-api'
+import { CountryReturnType } from '@/services/profile/profile-types'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Button,
   FormCombobox,
@@ -19,7 +20,9 @@ import {
   ImageOutline,
   Select,
   SelectItem,
-} from '@robur_/ui-kit'
+} from '@demorest49de/ui-kit'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
@@ -103,6 +106,7 @@ const cityOptions = [
 ]
 
 export const ProfilePageContent = () => {
+  const router = useRouter()
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId // Извлекаем ID пользователя из данных профиля
 
@@ -127,7 +131,8 @@ export const ProfilePageContent = () => {
     resolver: zodResolver(updateProfileSchema),
   })
 
-  const { data: countriesData, isLoading: isCountriesLoading } = useGetCountriesQuery()
+  const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
+    useLazyGetCountriesQuery()
 
   useEffect(() => {
     console.log('profileData: ', profileData)
@@ -143,6 +148,12 @@ export const ProfilePageContent = () => {
       })
     }
   }, [profileData, reset])
+
+  const [countriesValues, setCountriesValues] = useState<CountryReturnType[] | null>(
+    localStorage.getItem(`countries`) !== null
+      ? JSON.parse(localStorage.getItem(`countries`) as string)
+      : null
+  )
 
   const handleFormSubmit = async (dataForm: FormValues) => {
     if (!currentUserId) {
@@ -174,6 +185,29 @@ export const ProfilePageContent = () => {
     }
   }
 
+  const handleClickInputCountries = () => {
+    console.log(' countriesValues: ', countriesValues)
+    const locale = router.locale === 'en' ? en : ru
+
+    if (!countriesValues) {
+      const countries = getCountries()
+
+      // const stringified = JSON.stringify(countries)
+      //
+      // localStorage.setItem('countries', stringified)
+
+      // const transformedData = data.map(country => ({
+      //   country_id: country.country_id,
+      //   value: country.title_ru,
+      //   value_en: country.title_en,
+      // }))
+
+      console.log(' contries: ', countries)
+
+      return
+    }
+  }
+
   const handleFormSubmitError = (error: unknown) => {
     if (error && typeof error === 'object' && 'data' in error) {
       const errors = (error as ErrorType).data?.fields
@@ -192,7 +226,12 @@ export const ProfilePageContent = () => {
     console.error('Profile update failed:', error)
   }
 
-  if (startIsLoading || isLoadingProfile || isloadingEditProfile || isCountriesLoading) {
+  if (
+    startIsLoading ||
+    isLoadingProfile ||
+    isloadingEditProfile
+    // || isCountriesLoading
+  ) {
     return <Spinner />
   }
 
@@ -240,10 +279,10 @@ export const ProfilePageContent = () => {
                 control={control}
                 inputValue={''}
                 name={'country'}
-                onChange={(value: any) => {
-                }}
+                onChange={(value: any) => {}}
                 onInputChange={(value: any) => {}}
-                options={countryOptions}
+                onInputClick={handleClickInputCountries}
+                options={countriesValues ?? []}
                 value={''}
               />
             </div>
@@ -255,6 +294,7 @@ export const ProfilePageContent = () => {
                 name={'city'}
                 onChange={(value: any) => {}}
                 onInputChange={(value: any) => {}}
+                onInputClick={() => {}}
                 options={cityOptions}
                 value={''}
               />

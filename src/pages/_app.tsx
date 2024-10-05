@@ -12,7 +12,7 @@ import { wrapper } from '@/services/store'
 import '@/styles/index.scss'
 import '@/styles/nprogress.scss'
 import '@/styles/toastStyles.scss'
-import '@robur_/ui-kit/style.css'
+import '@demorest49de/ui-kit/style.css'
 import 'react-toastify/dist/ReactToastify.css'
 
 export type NextPageWithLayout<P = {}, IP = P> = {

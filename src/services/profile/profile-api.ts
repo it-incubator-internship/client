@@ -19,8 +19,16 @@ export const profileApi = inctagramApi.injectEndpoints({
         url: `/v1/user/profile/${args.id}`,
       }),
     }),
-    // todo подписываться не нужно???
     getCountries: builder.query<CountryReturnType[], void>({
+      async onQueryStarted(_, { queryFulfilled }) {
+        const { data } = await queryFulfilled
+
+        console.log(' data: ', data)
+        if (!data) {
+          return
+        }
+
+      },
       query: args => ({
         method: 'GET',
         url: `/v1/localization/countries`,
@@ -35,4 +43,4 @@ export const profileApi = inctagramApi.injectEndpoints({
     }),
   }),
 })
-export const { useEditProfileMutation, useGetCountriesQuery, useGetProfileQuery } = profileApi
+export const { useEditProfileMutation, useGetProfileQuery, useLazyGetCountriesQuery } = profileApi
