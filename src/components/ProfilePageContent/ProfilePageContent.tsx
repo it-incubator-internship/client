@@ -192,16 +192,6 @@ export const ProfilePageContent = () => {
     if (!countriesValues) {
       const countries = getCountries()
 
-      // const stringified = JSON.stringify(countries)
-      //
-      // localStorage.setItem('countries', stringified)
-
-      // const transformedData = data.map(country => ({
-      //   country_id: country.country_id,
-      //   value: country.title_ru,
-      //   value_en: country.title_en,
-      // }))
-
       console.log(' contries: ', countries)
 
       return
