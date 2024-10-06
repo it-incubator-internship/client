@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
-import { useTranslation } from '@/hooks/useTranslation'
-import { en, ru } from '@/locales'
 import { useMeQuery } from '@/services/auth/authApi'
 import {
   CountryTransformedType,
@@ -11,7 +9,6 @@ import {
   useGetProfileQuery,
   useLazyGetCountriesQuery,
 } from '@/services/profile/profile-api'
-import { CountryReturnType } from '@/services/profile/profile-types'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import {
   Button,
@@ -20,8 +17,6 @@ import {
   FormInput,
   FormTextarea,
   ImageOutline,
-  Select,
-  SelectItem,
 } from '@demorest49de/ui-kit'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
@@ -94,7 +89,6 @@ const cityOptions = [
 
 export const ProfilePageContent = () => {
   const router = useRouter()
-  const translation = useTranslation()
 
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId // Извлекаем ID пользователя из данных профиля
@@ -140,18 +134,20 @@ export const ProfilePageContent = () => {
 
   const [countriesValues, setCountriesValues] = useState<CountryTransformedType[] | null>(null)
 
-  const [valueCountry, setValueCountry] = useState<null | number | string>(null)
-  const [inputValueCountry, setInputValueCountry] = useState('')
+  const [valueCountry, setValueCountry] = useState<null | string>(null)
 
   const getCountriesFromLocalStorage = () => {
     const currentLocale = `countries-${router.locale}`
 
+    // debugger
     if (localStorage.getItem(currentLocale) !== null) {
+      //TODO  try catch
       const countries: CountryTransformedType[] = JSON.parse(
         localStorage.getItem(currentLocale) as string
       )
 
       setCountriesValues(countries)
+      console.log(' countriesValues: ', countriesValues)
     }
   }
 
@@ -187,6 +183,7 @@ export const ProfilePageContent = () => {
 
   const handleClickInputCountries = () => {
     getCountriesFromLocalStorage()
+    console.log(' countriesValues: ', countriesValues)
     if (!countriesValues) {
       getCountries()
     }
@@ -261,27 +258,23 @@ export const ProfilePageContent = () => {
               <div>Select your country</div>
               <FormCombobox
                 control={control}
-                inputValue={''}
                 name={'country'}
-                onChange={(value: any) => {}}
-                onInputChange={(value: any) => {}}
                 onInputClick={handleClickInputCountries}
                 options={countriesValues ?? []}
-                value={''}
+                setValue={setValueCountry}
+                value={valueCountry}
               />
             </div>
             <div style={{ flexGrow: 1 }}>
               <div>Select your city</div>
-              <FormCombobox
-                control={control}
-                inputValue={''}
-                name={'city'}
-                onChange={(value: any) => {}}
-                onInputChange={(value: any) => {}}
-                onInputClick={() => {}}
-                options={cityOptions}
-                value={''}
-              />
+              {/*<FormCombobox*/}
+              {/*    control={control}*/}
+              {/*    name={'city'}*/}
+              {/*    onInputClick={handleClickInputCountries}*/}
+              {/*    options={countriesValues ?? []}*/}
+              {/*    setValue={setValueCountry}*/}
+              {/*    value={valueCountry}*/}
+              {/*/>*/}
             </div>
           </div>
           <FormTextarea
