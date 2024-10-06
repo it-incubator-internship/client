@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
@@ -135,12 +135,15 @@ export const ProfilePageContent = () => {
   }, [profileData, reset])
 
   useEffect(() => {
-    console.log(' countriesValues: ', countriesValues)
+    const res = getCountriesFromLocalStorage()
 
+    res.then(result => {
+      if (!result) {
+      }
+    })
+    console.log(' `res`: ', res)
     if (!countriesValues) {
-      console.log('State has been updated:', countriesValues)
-    } else {
-      getCountries() // Загружаем страны, если их нет в localStorage
+      console.log('countriesValues: ', countriesValues)
     }
   }, [router.locale])
 
@@ -150,16 +153,31 @@ export const ProfilePageContent = () => {
     const currentLocale = `countries-${router.locale}`
     const storedCountries = localStorage.getItem(currentLocale)
 
-    console.log('storedCountries:', storedCountries)
+    console.log(' storedCountries: ', storedCountries)
 
-    if (storedCountries !== null) {
+    return new Promise((resolve, reject) => {
       try {
-        const countries: CountryTransformedType[] = JSON.parse(storedCountries)
+        if (storedCountries !== null) {
+          const countries: CountryTransformedType[] = JSON.parse(storedCountries)
 
-        setCountriesValues(countries)
+          setCountriesValues(countries)
+          resolve(true)
+        }
+        // if (!storedCountries) {
+        //   reject(false)
+        // }
       } catch (error) {
         console.error('Error parsing countries:', error)
       }
+    })
+  }
+
+  const handleClickInputCountries = async () => {
+    const result = await getCountriesFromLocalStorage()
+
+    if (!result) {
+      await getCountries()
+      console.log(' countriesValues: ', countriesValues)
     }
   }
 
@@ -193,14 +211,6 @@ export const ProfilePageContent = () => {
     }
   }
 
-  const handleClickInputCountries = () => {
-    getCountriesFromLocalStorage()
-    // console.log('Loading countries from localStorage...')
-    // if (!countriesValues) {
-    //   getCountries()
-    // }
-  }
-
   const handleFormSubmitError = (error: unknown) => {
     if (error && typeof error === 'object' && 'data' in error) {
       const errors = (error as ErrorType).data?.fields
@@ -219,12 +229,7 @@ export const ProfilePageContent = () => {
     console.error('Profile update failed:', error)
   }
 
-  if (
-    startIsLoading ||
-    isLoadingProfile ||
-    isloadingEditProfile
-    // || isCountriesLoading
-  ) {
+  if (startIsLoading || isLoadingProfile || isloadingEditProfile || isCountriesLoading) {
     return <Spinner />
   }
 
