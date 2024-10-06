@@ -5,6 +5,9 @@ const transformData = (data: CountryReturnType[], locale: string) => {
   const countryEn: Array<{ country_id: number; value: string }> = []
   const countryRu: Array<{ country_id: number; value: string }> = []
 
+  const COUNTRIES_EN = 'countries-en'
+  const COUNTRIES_RU = 'countries-ru'
+
   data.forEach(country => {
     countryEn.push({
       country_id: country.country_id,
@@ -19,11 +22,11 @@ const transformData = (data: CountryReturnType[], locale: string) => {
 
   const stringifiedEn = JSON.stringify(countryEn)
 
-  localStorage.setItem('countries-en', stringifiedEn)
+  localStorage.setItem(COUNTRIES_EN, stringifiedEn)
 
   const stringifiedRu = JSON.stringify(countryRu)
 
-  localStorage.setItem('countries-en', stringifiedRu)
+  localStorage.setItem(COUNTRIES_RU, stringifiedRu)
 }
 
 export const profileApi = inctagramApi.injectEndpoints({

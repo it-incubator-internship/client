@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
+import { useTranslation } from '@/hooks/useTranslation'
 import { en, ru } from '@/locales'
 import { useMeQuery } from '@/services/auth/authApi'
 import {
@@ -107,6 +108,7 @@ const cityOptions = [
 
 export const ProfilePageContent = () => {
   const router = useRouter()
+  const translation = useTranslation()
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId // Извлекаем ID пользователя из данных профиля
 
@@ -147,6 +149,12 @@ export const ProfilePageContent = () => {
         userName: profileData.userName || '',
       })
     }
+    if(localStorage.getItem(`countries`) !== null){
+
+      const  countries = JSON.parse(localStorage.getItem(`countries-${router.locale}`) as string)
+
+
+    }
   }, [profileData, reset])
 
   const [countriesValues, setCountriesValues] = useState<CountryReturnType[] | null>(
@@ -186,16 +194,12 @@ export const ProfilePageContent = () => {
   }
 
   const handleClickInputCountries = () => {
-    console.log(' countriesValues: ', countriesValues)
-    const locale = router.locale === 'en' ? en : ru
-
     if (!countriesValues) {
-      const countries = getCountries()
+      // setCountriesValues()
+      getCountries()
 
-      console.log(' contries: ', countries)
-
-      return
     }
+
   }
 
   const handleFormSubmitError = (error: unknown) => {
