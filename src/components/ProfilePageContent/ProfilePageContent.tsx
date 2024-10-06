@@ -6,6 +6,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { en, ru } from '@/locales'
 import { useMeQuery } from '@/services/auth/authApi'
 import {
+  CountryTransformedType,
   useEditProfileMutation,
   useGetProfileQuery,
   useLazyGetCountriesQuery,
@@ -76,21 +77,6 @@ type ErrorType = {
   message: string
 }
 
-const countryOptions = [
-  {
-    label: 'England',
-    value: '1',
-  },
-  {
-    label: 'Usa',
-    value: '2',
-  },
-  {
-    label: 'Germany',
-    value: '3',
-  },
-]
-
 const cityOptions = [
   {
     label: 'London',
@@ -109,6 +95,7 @@ const cityOptions = [
 export const ProfilePageContent = () => {
   const router = useRouter()
   const translation = useTranslation()
+
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId // Извлекаем ID пользователя из данных профиля
 
@@ -149,19 +136,24 @@ export const ProfilePageContent = () => {
         userName: profileData.userName || '',
       })
     }
-    if(localStorage.getItem(`countries`) !== null){
-
-      const  countries = JSON.parse(localStorage.getItem(`countries-${router.locale}`) as string)
-
-
-    }
   }, [profileData, reset])
 
-  const [countriesValues, setCountriesValues] = useState<CountryReturnType[] | null>(
-    localStorage.getItem(`countries`) !== null
-      ? JSON.parse(localStorage.getItem(`countries`) as string)
-      : null
-  )
+  const [countriesValues, setCountriesValues] = useState<CountryTransformedType[] | null>(null)
+
+  const [valueCountry, setValueCountry] = useState<null | number | string>(null)
+  const [inputValueCountry, setInputValueCountry] = useState('')
+
+  const getCountriesFromLocalStorage = () => {
+    const currentLocale = `countries-${router.locale}`
+
+    if (localStorage.getItem(currentLocale) !== null) {
+      const countries: CountryTransformedType[] = JSON.parse(
+        localStorage.getItem(currentLocale) as string
+      )
+
+      setCountriesValues(countries)
+    }
+  }
 
   const handleFormSubmit = async (dataForm: FormValues) => {
     if (!currentUserId) {
@@ -194,12 +186,10 @@ export const ProfilePageContent = () => {
   }
 
   const handleClickInputCountries = () => {
+    getCountriesFromLocalStorage()
     if (!countriesValues) {
-      // setCountriesValues()
       getCountries()
-
     }
-
   }
 
   const handleFormSubmitError = (error: unknown) => {

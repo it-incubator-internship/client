@@ -1,12 +1,19 @@
 import { inctagramApi } from '../inctagramApi'
 import { CountryReturnType, EditProfileArgs } from './profile-types'
 
-const transformData = (data: CountryReturnType[], locale: string) => {
-  const countryEn: Array<{ country_id: number; value: string }> = []
-  const countryRu: Array<{ country_id: number; value: string }> = []
+export enum CountryLocale {
+  en = 'countries-en',
+  ru = 'countries-ru',
+}
 
-  const COUNTRIES_EN = 'countries-en'
-  const COUNTRIES_RU = 'countries-ru'
+export type CountryTransformedType = {
+  country_id: number
+  value: string
+}
+
+const transformData = (data: CountryReturnType[], locale: string) => {
+  const countryEn: Array<CountryTransformedType> = []
+  const countryRu: Array<CountryTransformedType> = []
 
   data.forEach(country => {
     countryEn.push({
@@ -22,11 +29,11 @@ const transformData = (data: CountryReturnType[], locale: string) => {
 
   const stringifiedEn = JSON.stringify(countryEn)
 
-  localStorage.setItem(COUNTRIES_EN, stringifiedEn)
+  localStorage.setItem(CountryLocale.en, stringifiedEn)
 
   const stringifiedRu = JSON.stringify(countryRu)
 
-  localStorage.setItem(COUNTRIES_RU, stringifiedRu)
+  localStorage.setItem(CountryLocale.ru, stringifiedRu)
 }
 
 export const profileApi = inctagramApi.injectEndpoints({
