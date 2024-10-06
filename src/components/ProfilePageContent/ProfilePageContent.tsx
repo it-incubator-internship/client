@@ -117,6 +117,8 @@ export const ProfilePageContent = () => {
   const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
     useLazyGetCountriesQuery()
 
+  const [countriesValues, setCountriesValues] = useState<CountryTransformedType[] | null>(null)
+
   useEffect(() => {
     console.log('profileData: ', profileData)
     if (profileData) {
@@ -132,22 +134,32 @@ export const ProfilePageContent = () => {
     }
   }, [profileData, reset])
 
-  const [countriesValues, setCountriesValues] = useState<CountryTransformedType[] | null>(null)
+  useEffect(() => {
+    console.log(' countriesValues: ', countriesValues)
+
+    if (!countriesValues) {
+      console.log('State has been updated:', countriesValues)
+    } else {
+      getCountries() // Загружаем страны, если их нет в localStorage
+    }
+  }, [router.locale])
 
   const [valueCountry, setValueCountry] = useState<null | string>(null)
 
   const getCountriesFromLocalStorage = () => {
     const currentLocale = `countries-${router.locale}`
+    const storedCountries = localStorage.getItem(currentLocale)
 
-    // debugger
-    if (localStorage.getItem(currentLocale) !== null) {
-      //TODO  try catch
-      const countries: CountryTransformedType[] = JSON.parse(
-        localStorage.getItem(currentLocale) as string
-      )
+    console.log('storedCountries:', storedCountries)
 
-      setCountriesValues(countries)
-      console.log(' countriesValues: ', countriesValues)
+    if (storedCountries !== null) {
+      try {
+        const countries: CountryTransformedType[] = JSON.parse(storedCountries)
+
+        setCountriesValues(countries)
+      } catch (error) {
+        console.error('Error parsing countries:', error)
+      }
     }
   }
 
@@ -183,10 +195,10 @@ export const ProfilePageContent = () => {
 
   const handleClickInputCountries = () => {
     getCountriesFromLocalStorage()
-    console.log(' countriesValues: ', countriesValues)
-    if (!countriesValues) {
-      getCountries()
-    }
+    // console.log('Loading countries from localStorage...')
+    // if (!countriesValues) {
+    //   getCountries()
+    // }
   }
 
   const handleFormSubmitError = (error: unknown) => {
