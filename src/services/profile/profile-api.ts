@@ -1,16 +1,10 @@
 import { inctagramApi } from '../inctagramApi'
-import { CountryReturnType, EditProfileArgs } from './profile-types'
-
-export enum CountryLocale {
-  en = 'countries-en',
-  ru = 'countries-ru',
-}
-
-export type CountryTransformedType = {
-  country_id: number
-  label: string
-  value: string
-}
+import {
+  CountryLocale,
+  CountryReturnType,
+  CountryTransformedType,
+  EditProfileArgs,
+} from './profile-types'
 
 const transformData = (data: CountryReturnType[], locale: string) => {
   const countryEn: Array<CountryTransformedType> = []
@@ -18,15 +12,13 @@ const transformData = (data: CountryReturnType[], locale: string) => {
 
   data.forEach(country => {
     countryEn.push({
-      country_id: country.country_id,
       label: country.title_en,
-      value: country.title_en,
+      value: { id: country.country_id, name: country.title_en },
     })
 
     countryRu.push({
-      country_id: country.country_id,
       label: country.title_ru,
-      value: country.title_ru,
+      value: { id: country.country_id, name: country.title_ru },
     })
   })
 

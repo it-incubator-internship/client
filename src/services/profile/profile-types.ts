@@ -14,3 +14,13 @@ export type CountryReturnType = {
   title_en: string
   title_ru: string
 }
+
+export enum CountryLocale {
+  en = 'countries-en',
+  ru = 'countries-ru',
+}
+
+export type CountryTransformedType = {
+  label: string
+  value: { id: number; name: string }
+}

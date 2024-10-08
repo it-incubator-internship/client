@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@demorest49de/ui-kit':
-        specifier: ^0.0.41
-        version: 0.0.41(@types/react-dom@18.3.0)(@types/react@18.3.6)(typescript@5.6.2)
+        specifier: ^0.0.43
+        version: 0.0.43(@types/react-dom@18.3.0)(@types/react@18.3.6)(typescript@5.6.2)
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@18.3.1))
@@ -169,8 +169,8 @@ packages:
     peerDependencies:
       postcss-selector-parser: ^6.1.0
 
-  '@demorest49de/ui-kit@0.0.41':
-    resolution: {integrity: sha512-LUPPoz88Qh1NWkAmMQEQ5EICaGQPda0/gz5T4Fl4MvsBSj6oGK9yMFIuiIPM4miY4N7lR0hq7zPBdQsjnHENJQ==}
+  '@demorest49de/ui-kit@0.0.43':
+    resolution: {integrity: sha512-RyeNWIq1sVEKYqqoqkdb0CTAkFvFfOLhbI3ilYMYksQg9JGSva4GMlP1ULwVb/6994h4P44y7cCibxaYKWuzBg==}
 
   '@dual-bundle/import-meta-resolve@4.1.0':
     resolution: {integrity: sha512-+nxncfwHM5SgAtrVzgpzJOI1ol0PkumhVo469KCf9lUi21IGcY90G98VuHm9VRrUypmAzawAHO9bs6hqeADaVg==}
@@ -2944,6 +2944,10 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  uuid@10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
+
   warning@4.0.3:
     resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
 
@@ -3039,7 +3043,7 @@ snapshots:
     dependencies:
       postcss-selector-parser: 6.1.2
 
-  '@demorest49de/ui-kit@0.0.41(@types/react-dom@18.3.0)(@types/react@18.3.6)(typescript@5.6.2)':
+  '@demorest49de/ui-kit@0.0.43(@types/react-dom@18.3.0)(@types/react@18.3.6)(typescript@5.6.2)':
     dependencies:
       '@fontsource-variable/inter': 5.0.20
       '@fontsource/inter': 5.1.0
@@ -3067,6 +3071,7 @@ snapshots:
       sass: 1.78.0
       stylelint: 16.9.0(typescript@5.6.2)
       tailwind-merge: 2.5.2
+      uuid: 10.0.0
       zod: 3.23.8
     transitivePeerDependencies:
       - '@types/react'
@@ -6075,6 +6080,8 @@ snapshots:
       react: 18.3.1
 
   util-deprecate@1.0.2: {}
+
+  uuid@10.0.0: {}
 
   warning@4.0.3:
     dependencies:

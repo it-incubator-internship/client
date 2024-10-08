@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form'
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
 import { useMeQuery } from '@/services/auth/authApi'
 import {
-  CountryTransformedType,
   useEditProfileMutation,
   useGetProfileQuery,
   useLazyGetCountriesQuery,
 } from '@/services/profile/profile-api'
+import { CountryTransformedType } from '@/services/profile/profile-types'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import {
   Button,
@@ -118,7 +118,15 @@ export const ProfilePageContent = () => {
   const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
     useLazyGetCountriesQuery()
 
-  const [countriesValues, setCountriesValues] = useState<CountryTransformedType[]>([]) // Измените null на []
+  const [countriesValues, setCountriesValues] = useState<CountryTransformedType[]>([])
+  console.log(' countriesValues: ', countriesValues);
+  const [dataForCountry, setGetDataForCountry] = useState<CountryTransformedType | null>(null)
+
+  console.log(' dataForCountry: ', dataForCountry)
+
+  const [valueCountry, setValueCountry] = useState<null | string>(null)
+
+  console.log(valueCountry)
 
   useEffect(() => {
     if (profileData) {
@@ -134,15 +142,10 @@ export const ProfilePageContent = () => {
     }
   }, [profileData, reset])
 
-  const [valueCountry, setValueCountry] = useState<null | string>(null)
-
-  console.log(valueCountry)
-
   const getCountriesFromLocalStorage = () => {
     const currentLocale = `countries-${router.locale}`
     const storedCountries = localStorage.getItem(currentLocale)
 
-    // return new Promise<boolean>(resolve => {
     try {
       if (storedCountries !== null) {
         const countries: CountryTransformedType[] = JSON.parse(storedCountries)
@@ -264,6 +267,7 @@ export const ProfilePageContent = () => {
               <div>Select your country</div>
               <FormCombobox
                 control={control}
+                getDataForCombobox={setGetDataForCountry}
                 name={'country'}
                 onInputClick={handleClickInputCountries}
                 options={countriesValues ?? []}
