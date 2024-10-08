@@ -121,8 +121,9 @@ export const ProfilePageContent = () => {
   const [getCities, { isError: isCityError, isLoading: isCitiesLoading }] = useLazyGetCitiesQuery()
 
   const [countriesValues, setCountriesValues] = useState<TransformedType[]>([])
-  const [citiesValues, setCitiesValues] = useState<TransformedType[] | null>([])
 
+  const [citiesValues, setCitiesValues] = useState<TransformedType[] | null>([])
+  const cityTemp = citiesValues?.slice(0, 10)
   const [dataForCountry, setGetDataForCountry] = useState<TransformedType | null>(null)
 
     // приходит с комп-ты строка
@@ -166,6 +167,8 @@ export const ProfilePageContent = () => {
             if (storedCountries !== null) {
               const countries: TransformedType[] = JSON.parse(storedCountries)
 
+
+
               setCountriesValues(countries)
               setCitiesValues(null)
             }
@@ -202,22 +205,25 @@ export const ProfilePageContent = () => {
   const transformDataCity = (data:  CityReturnType[]): TransformedType[] => {
     // const tmp = data.slice(0, 100);
 
-    const arr =  data.map((city) => {
-        const el = {
-          label: city.title_ru,
-          value: { id: city.country_id, name: city.title_ru },
-        }
-      console.log(' el: ', el);
-        return el;
-    })
-    console.log(' arr: ', arr);
-    return arr;
+
+    // const lll  = data.length / 100;
+    //
+    // const arr =  data.map((city) => {
+    //     const el = {
+    //       label: city.title_ru,
+    //       value: { id: city.country_id, name: city.title_ru },
+    //     }
+    //   console.log(' el: ', el);
+    //     return el;
+    // })
+    // console.log(' arr: ', arr);
+    // return arr;
 
 
-    // return tmp.map((city) => ({
-    //     label: city.title_ru,
-    //     value: { id: city.country_id, name: city.title_ru },
-    // }));
+    return data.map((city) => ({
+        label: city.title_ru,
+        value: { id: city.country_id, name: city.title_ru },
+    }));
   };
 
   //todo заблокировать пока не получены страны
@@ -228,7 +234,7 @@ export const ProfilePageContent = () => {
         .unwrap()
         .then(data => {
           const cities = transformDataCity(data)
-            // setCitiesValues(cities)
+            setCitiesValues(cities)
         })
         .catch((error: any) => {
           console.log(error)
@@ -353,7 +359,7 @@ export const ProfilePageContent = () => {
                 getDataForCombobox={setGetDataForCity}
                 name={'city'}
                 onInputClick={handleClickInputCity}
-                options={citiesValues ?? []}
+                options={cityTemp ?? []}
                 setValue={setValueCity}
                 value={valueCity}
               />
