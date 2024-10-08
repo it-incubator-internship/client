@@ -243,6 +243,7 @@ export const ProfilePageContent = () => {
   }
 
   const handleFormSubmit = async (dataForm: FormValues) => {
+    console.log(' dataForm: ', dataForm);
     if (!currentUserId) {
       console.error('User ID is missing')
 
