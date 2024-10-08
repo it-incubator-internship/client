@@ -14,7 +14,8 @@
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@reduxjs/toolkit": "^2.2.7",
-    "@robur_/ui-kit": "^0.0.28",
+    "@robur_/ui-kit": "^0.0.34",
+    "@types/ua-parser-js": "^0.7.39",
     "async-mutex": "^0.5.0",
     "clsx": "^2.1.1",
     "env-cmd": "^10.1.0",
@@ -28,6 +29,7 @@
     "react-hook-form": "^7.52.2",
     "react-redux": "^9.1.2",
     "react-toastify": "^10.0.5",
+    "ua-parser-js": "^1.0.39",
     "zod": "^3.23.8"
   },
   "devDependencies": {
