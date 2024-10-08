@@ -6,9 +6,10 @@ import { useMeQuery } from '@/services/auth/authApi'
 import {
   useEditProfileMutation,
   useGetProfileQuery,
+  useLazyGetCitiesQuery,
   useLazyGetCountriesQuery,
 } from '@/services/profile/profile-api'
-import { CountryTransformedType } from '@/services/profile/profile-types'
+import {CityReturnType, CountryLocale, TransformedType} from '@/services/profile/profile-types'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import {
   Button,
@@ -117,16 +118,20 @@ export const ProfilePageContent = () => {
 
   const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
     useLazyGetCountriesQuery()
+  const [getCities, { isError: isCityError, isLoading: isCitiesLoading }] = useLazyGetCitiesQuery()
 
-  const [countriesValues, setCountriesValues] = useState<CountryTransformedType[]>([])
-  console.log(' countriesValues: ', countriesValues);
-  const [dataForCountry, setGetDataForCountry] = useState<CountryTransformedType | null>(null)
+  const [countriesValues, setCountriesValues] = useState<TransformedType[]>([])
+  const [citiesValues, setCitiesValues] = useState<TransformedType[] | null>([])
 
-  console.log(' dataForCountry: ', dataForCountry)
+  const [dataForCountry, setGetDataForCountry] = useState<TransformedType | null>(null)
 
+    // приходит с комп-ты строка
   const [valueCountry, setValueCountry] = useState<null | string>(null)
+  const [valueCity, setValueCity] = useState<null | string>(null)
 
-  console.log(valueCountry)
+  const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
+
+  console.log(' dataForCity: ', dataForCity)
 
   useEffect(() => {
     if (profileData) {
@@ -148,9 +153,10 @@ export const ProfilePageContent = () => {
 
     try {
       if (storedCountries !== null) {
-        const countries: CountryTransformedType[] = JSON.parse(storedCountries)
+        const countries: TransformedType[] = JSON.parse(storedCountries)
 
         setCountriesValues(countries)
+        setCitiesValues(null)
       } else {
         getCountries()
           .unwrap()
@@ -158,9 +164,10 @@ export const ProfilePageContent = () => {
             const storedCountries = localStorage.getItem(currentLocale)
 
             if (storedCountries !== null) {
-              const countries: CountryTransformedType[] = JSON.parse(storedCountries)
+              const countries: TransformedType[] = JSON.parse(storedCountries)
 
               setCountriesValues(countries)
+              setCitiesValues(null)
             }
           })
       }
@@ -171,6 +178,62 @@ export const ProfilePageContent = () => {
 
   const handleClickInputCountries = () => {
     getCountriesFromLocalStorage()
+  }
+
+  // const transformDataCity = (data: CityReturnType[]): TransformedType[] => {
+  //   const chunkSize = 100;
+  //   let transformedCities: TransformedType[] = [];
+  //
+  //   for (let i = 0; i < data.length; i += chunkSize) {
+  //     const chunk = data.slice(i, i + chunkSize);
+  //     const transformedChunk = chunk.map(city => ({
+  //       label: city.title_ru,
+  //       value: {
+  //         id: city.city_id,
+  //         name: city.title_ru,
+  //       },
+  //     }));
+  //     transformedCities = [...transformedCities, ...transformedChunk];
+  //   }
+  //   console.log(' transformedCities: ', transformedCities);
+  //   return transformedCities;
+  // };
+
+  const transformDataCity = (data:  CityReturnType[]): TransformedType[] => {
+    // const tmp = data.slice(0, 100);
+
+    const arr =  data.map((city) => {
+        const el = {
+          label: city.title_ru,
+          value: { id: city.country_id, name: city.title_ru },
+        }
+      console.log(' el: ', el);
+        return el;
+    })
+    console.log(' arr: ', arr);
+    return arr;
+
+
+    // return tmp.map((city) => ({
+    //     label: city.title_ru,
+    //     value: { id: city.country_id, name: city.title_ru },
+    // }));
+  };
+
+  //todo заблокировать пока не получены страны
+  const handleClickInputCity = () => {
+    console.log(' dataForCountry: ', dataForCountry);
+    if (dataForCountry?.value.id) {
+      getCities({ id: dataForCountry?.value.id })
+        .unwrap()
+        .then(data => {
+          const cities = transformDataCity(data)
+            // setCitiesValues(cities)
+        })
+        .catch((error: any) => {
+          console.log(error)
+        })
+    }
   }
 
   const handleFormSubmit = async (dataForm: FormValues) => {
@@ -221,7 +284,13 @@ export const ProfilePageContent = () => {
     console.error('Profile update failed:', error)
   }
 
-  if (startIsLoading || isLoadingProfile || isloadingEditProfile || isCountriesLoading) {
+  if (
+    startIsLoading ||
+    isLoadingProfile ||
+    isloadingEditProfile ||
+    isCountriesLoading ||
+    isCitiesLoading
+  ) {
     return <Spinner />
   }
 
@@ -267,6 +336,7 @@ export const ProfilePageContent = () => {
               <div>Select your country</div>
               <FormCombobox
                 control={control}
+                //todo сделать поле в комп-те необязательным
                 getDataForCombobox={setGetDataForCountry}
                 name={'country'}
                 onInputClick={handleClickInputCountries}
@@ -277,14 +347,16 @@ export const ProfilePageContent = () => {
             </div>
             <div style={{ flexGrow: 1 }}>
               <div>Select your city</div>
-              {/*<FormCombobox*/}
-              {/*    control={control}*/}
-              {/*    name={'city'}*/}
-              {/*    onInputClick={handleClickInputCountries}*/}
-              {/*    options={countriesValues ?? []}*/}
-              {/*    setValue={setValueCountry}*/}
-              {/*    value={valueCountry}*/}
-              {/*/>*/}
+
+              <FormCombobox
+                control={control}
+                getDataForCombobox={setGetDataForCity}
+                name={'city'}
+                onInputClick={handleClickInputCity}
+                options={citiesValues ?? []}
+                setValue={setValueCity}
+                value={valueCity}
+              />
             </div>
           </div>
           <FormTextarea

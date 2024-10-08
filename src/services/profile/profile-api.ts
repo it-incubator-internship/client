@@ -2,13 +2,13 @@ import { inctagramApi } from '../inctagramApi'
 import {
   CountryLocale,
   CountryReturnType,
-  CountryTransformedType,
-  EditProfileArgs,
+  TransformedType,
+  EditProfileArgs, CityReturnType,
 } from './profile-types'
 
-const transformData = (data: CountryReturnType[], locale: string) => {
-  const countryEn: Array<CountryTransformedType> = []
-  const countryRu: Array<CountryTransformedType> = []
+const transformDataCountry = (data: CountryReturnType[], locale: string) => {
+  const countryEn: Array<TransformedType> = []
+  const countryRu: Array<TransformedType> = []
 
   data.forEach(country => {
     countryEn.push({
@@ -31,6 +31,7 @@ const transformData = (data: CountryReturnType[], locale: string) => {
   localStorage.setItem(CountryLocale.ru, stringifiedRu)
 }
 
+
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
     editProfile: builder.mutation<void, EditProfileArgs>({
@@ -49,6 +50,12 @@ export const profileApi = inctagramApi.injectEndpoints({
         url: `/v1/user/profile/${args.id}`,
       }),
     }),
+    getCities: builder.query<CityReturnType[], { id: number }>({
+      query: args => ({
+        method: 'GET',
+        url: `/v1/localization/cities/${args.id}`,
+      })
+  }),
     getCountries: builder.query<CountryReturnType[], void>({
       async onQueryStarted(_, { queryFulfilled }) {
         const { data } = await queryFulfilled
@@ -57,14 +64,16 @@ export const profileApi = inctagramApi.injectEndpoints({
         if (!data) {
           return
         }
-        transformData(data, 'ru')
-        transformData(data, 'en')
+
+        transformDataCountry(data, 'ru')
+        transformDataCountry(data, 'en')
       },
       query: args => ({
         method: 'GET',
         url: `/v1/localization/countries`,
       }),
     }),
+
     getProfile: builder.query<EditProfileArgs, { id: string }>({
       providesTags: ['Profile'],
       query: args => ({
@@ -74,4 +83,4 @@ export const profileApi = inctagramApi.injectEndpoints({
     }),
   }),
 })
-export const { useEditProfileMutation, useGetProfileQuery, useLazyGetCountriesQuery } = profileApi
+export const { useEditProfileMutation, useGetProfileQuery,  useLazyGetCitiesQuery, useLazyGetCountriesQuery} = profileApi

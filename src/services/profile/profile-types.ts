@@ -20,7 +20,13 @@ export enum CountryLocale {
   ru = 'countries-ru',
 }
 
-export type CountryTransformedType = {
+export type TransformedType = {
   label: string
   value: { id: number; name: string }
+}
+
+export type CityReturnType = {
+  city_id: number
+  country_id: number
+  title_ru: string
 }
