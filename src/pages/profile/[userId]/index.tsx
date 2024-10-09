@@ -4,6 +4,7 @@ import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
+import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import clsx from 'clsx'
 import { NextPage } from 'next'
@@ -39,6 +40,7 @@ const USER_ACHIEVEMENTS = {
 }
 
 const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar.png' }) => {
+  const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const router = useRouter()
   const { userId } = useParams()
 
@@ -47,8 +49,12 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
     { skip: !userId }
   )
 
-  if (!userId || isLoadingProfile) {
+  if (!userId || startIsLoading || isLoadingProfile) {
     return <Spinner />
+  }
+
+  if (meData?.userId === userId) {
+    void router.replace(PATH.PROFILE)
   }
 
   if (!isLoadingProfile && !profileData) {
