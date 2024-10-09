@@ -24,3 +24,18 @@ export const showErrorToast = (message: string) => {
     className: 'toast-error-custom',
   })
 }
+
+// export const onQueryStartedErrorToast = async (args: any, { queryFulfilled }: any) => {
+//   try {
+//     await queryFulfilled
+//   } catch (error) {
+//     let errorMessage
+//
+//     if (error instanceof Error) {
+//       errorMessage = `Native error: ${error.message}`
+//     } else {
+//       errorMessage = JSON.stringify(error)
+//     }
+//     showErrorToast(errorMessage)
+//   }
+// }
