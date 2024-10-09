@@ -10,7 +10,7 @@ import s from './CombinedLayout.module.scss'
 
 const CombinedLayout: NextPage<PropsWithChildren> = ({ children }) => {
   const WrappedComponent = getMainLayout(children)
-  const { data, isLoading } = useMeQuery()
+  const { data } = useMeQuery()
 
   return (
     <main className={s.main}>

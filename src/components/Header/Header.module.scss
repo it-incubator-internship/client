@@ -28,9 +28,21 @@
 
 .options {
   display: flex;
-  flex: 0 0 234px;
+  flex-shrink: 0;
   gap: 48px;
   align-items: center;
+}
+
+.navOptions {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+
+  a {
+    justify-content: center;
+    min-width: 100px;
+    border-radius: 2px;
+  }
 }
 
 .langSelect{
