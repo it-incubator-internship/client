@@ -1,11 +1,15 @@
+import { useState } from 'react'
+
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLogoutMutation, useMeQuery } from '@/services/auth/authApi'
 import {
   BookmarkOutline,
+  Button,
   HomeOutline,
   LogOut,
   MessageCircleOutline,
+  Modal,
   Person,
   PlusSquareOutline,
   Search,
@@ -23,6 +27,19 @@ export const Navbar = ({ className }: Props) => {
   const { data } = useMeQuery()
 
   const [logout] = useLogoutMutation()
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  function handleModalOpened() {
+    setModalIsOpen(true)
+  }
+
+  function handleModalClosed() {
+    setModalIsOpen(false)
+  }
+
+  function handleModalApproved() {
+    logout()
+  }
 
   return (
     <nav className={className}>
@@ -44,13 +61,24 @@ export const Navbar = ({ className }: Props) => {
           <SidebarItem
             Icon={LogOut}
             as={'button'}
-            href={'/'}
+            href={''}
             item={t.nav.logout}
-            onClick={() => logout()}
+            onClick={() => handleModalOpened()}
             type={'button'}
           />
         </div>
       </Sidebar>
+      <Modal
+        buttonRejectionTitle={'No'}
+        buttonTitle={'Yes'}
+        onClose={handleModalClosed}
+        onCloseWithApproval={handleModalApproved}
+        open={modalIsOpen}
+        title={'Log out'}
+        withConfirmation
+      >
+        <p>{`Are you really want to log out of your account ${data?.userName}?`}</p>
+      </Modal>
     </nav>
   )
 }
