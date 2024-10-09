@@ -36,7 +36,7 @@ const updateProfileSchema = z.object({
         .string({message: 'This field is required'})
         .min(4, 'This field is required')
         .max(30, 'This field is required'),
-    country: z.string().min(4, 'This field is required').max(30, 'This field is required'),
+    country: z.string({message: 'This field is required'}).min(4, 'This field is required').max(30, 'This field is required'),
     dateOfBirth: z.date({message: 'This field is required'}),
     firstName: z
         .string({message: 'This field is required'})
@@ -57,16 +57,16 @@ const updateProfileSchema = z.object({
         .min(6, 'This field is required')
         .max(30),
 })
-    .superRefine((data, ctx) => {
-        console.log(' data.city: ', data.city);
-    if (data.city && !data.country) {
-        ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: ['city'],
-            message: 'You must select a country first.'
-        })
-    }
-})
+//     .superRefine((data, ctx) => {
+//         console.log(' data.city: ', data.city);
+//     if (data.city && !data.country) {
+//         ctx.addIssue({
+//             code: z.ZodIssueCode.custom,
+//             path: ['city'],
+//             message: 'You must select a country first.'
+//         })
+//     }
+// })
 
 type FormValues = z.infer<typeof updateProfileSchema>
 type ZodKeys = keyof FormValues
@@ -97,7 +97,7 @@ export const ProfilePageContent = () => {
     const [editProfile, {isError, isLoading: isloadingEditProfile}] = useEditProfileMutation()
     const {modalJSX, openModal} = useModalFromSettingsProfile()
 
-    const {control, handleSubmit, reset,watch, setError} = useForm<FormValues>({
+    const {control, setValue, handleSubmit, reset,watch, setError} = useForm<FormValues>({
         defaultValues: {
             aboutMe: '',
             city: '',
@@ -122,10 +122,6 @@ export const ProfilePageContent = () => {
 
     const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
 
-    // // приходит с комп-ты строка
-    // const [valueCountry, setValueCountry] = useState<null | string>(null)
-    // const [valueCity, setValueCity] = useState<null | string>(null)
-
     const countryValue = watch('country');
     console.log(' countryValue: ', countryValue);
 
@@ -142,6 +138,13 @@ export const ProfilePageContent = () => {
             })
         }
     }, [profileData, reset])
+    useEffect(() => {
+        if (!countryValue) {
+            setValue('city', ''); // Очистка значения city
+            setCitiesValues(null); // Также очищаем список городов, если необходимо
+        }
+    }, [countryValue, setValue]);
+
 
     const getCountriesFromLocalStorage = () => {
         const currentLocale = `countries-${router.locale}`
@@ -202,6 +205,13 @@ export const ProfilePageContent = () => {
 
     const handleFormSubmit = async (dataForm: FormValues) => {
         console.log(' dataForm: ', dataForm);
+
+        const result = updateProfileSchema.safeParse(dataForm);
+
+        if (!result.success) {
+            console.log('Validation errors:', result.error.errors);
+        }
+
         if (!currentUserId) {
             console.error('User ID is missing')
 
@@ -234,7 +244,7 @@ export const ProfilePageContent = () => {
     const handleFormSubmitError = (error: unknown) => {
         if (error && typeof error === 'object' && 'data' in error) {
             const errors = (error as ErrorType).data?.fields
-
+            
             if (errors) {
                 errors.forEach((error: FieldError) => {
                     setError(error.field, {
@@ -301,10 +311,11 @@ export const ProfilePageContent = () => {
                             <div>Select your country</div>
                             <FormCombobox
                                 control={control}
-                                getDataForCombobox={setGetDataForCountry}
                                 name={'country'}
-                                onInputClick={handleClickInputCountries}
                                 options={countriesValues ?? []}
+                                onInputClick={handleClickInputCountries}
+                                getDataForCombobox={setGetDataForCountry}
+                                setValue={(value)=> setValue('country', value)}
                             />
                         </div>
                         <div style={{flexGrow: 1}}>
@@ -312,11 +323,12 @@ export const ProfilePageContent = () => {
 
                             <FormCombobox
                                 control={control}
-                                getDataForCombobox={setGetDataForCity}
                                 name={'city'}
-                                onInputClick={handleClickInputCity}
                                 options={citiesValues ?? []}
+                                onInputClick={handleClickInputCity}
+                                getDataForCombobox={setGetDataForCity}
                                 disabled={!countryValue}
+                                setValue={(value)=> setValue('city', value)}
                             />
                         </div>
                     </div>
