@@ -73,21 +73,6 @@ type ErrorType = {
   message: string
 }
 
-const cityOptions = [
-  {
-    label: 'London',
-    value: '1',
-  },
-  {
-    label: 'Paris',
-    value: '2',
-  },
-  {
-    label: 'Berlin',
-    value: '3',
-  },
-]
-
 export const ProfilePageContent = () => {
   const router = useRouter()
 
@@ -123,16 +108,17 @@ export const ProfilePageContent = () => {
   const [countriesValues, setCountriesValues] = useState<TransformedType[]>([])
 
   const [citiesValues, setCitiesValues] = useState<TransformedType[] | null>([])
-  const cityTemp = citiesValues?.slice(0, 10)
+
   const [dataForCountry, setGetDataForCountry] = useState<TransformedType | null>(null)
 
     // приходит с комп-ты строка
   const [valueCountry, setValueCountry] = useState<null | string>(null)
-  const [valueCity, setValueCity] = useState<null | string>(null)
+  const [valueCity, setValueCity] = useState<null | string>(null )
 
   const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
 
-  console.log(' dataForCity: ', dataForCity)
+    console.log(' profileData: ', profileData);
+    console.log(' valueCity: ', valueCity);
 
   useEffect(() => {
     if (profileData) {
@@ -167,8 +153,6 @@ export const ProfilePageContent = () => {
             if (storedCountries !== null) {
               const countries: TransformedType[] = JSON.parse(storedCountries)
 
-
-
               setCountriesValues(countries)
               setCitiesValues(null)
             }
@@ -183,42 +167,7 @@ export const ProfilePageContent = () => {
     getCountriesFromLocalStorage()
   }
 
-  // const transformDataCity = (data: CityReturnType[]): TransformedType[] => {
-  //   const chunkSize = 100;
-  //   let transformedCities: TransformedType[] = [];
-  //
-  //   for (let i = 0; i < data.length; i += chunkSize) {
-  //     const chunk = data.slice(i, i + chunkSize);
-  //     const transformedChunk = chunk.map(city => ({
-  //       label: city.title_ru,
-  //       value: {
-  //         id: city.city_id,
-  //         name: city.title_ru,
-  //       },
-  //     }));
-  //     transformedCities = [...transformedCities, ...transformedChunk];
-  //   }
-  //   console.log(' transformedCities: ', transformedCities);
-  //   return transformedCities;
-  // };
-
   const transformDataCity = (data:  CityReturnType[]): TransformedType[] => {
-    // const tmp = data.slice(0, 100);
-
-
-    // const lll  = data.length / 100;
-    //
-    // const arr =  data.map((city) => {
-    //     const el = {
-    //       label: city.title_ru,
-    //       value: { id: city.country_id, name: city.title_ru },
-    //     }
-    //   console.log(' el: ', el);
-    //     return el;
-    // })
-    // console.log(' arr: ', arr);
-    // return arr;
-
 
     return data.map((city) => ({
         label: city.title_ru,
@@ -343,13 +292,10 @@ export const ProfilePageContent = () => {
               <div>Select your country</div>
               <FormCombobox
                 control={control}
-                //todo сделать поле в комп-те необязательным
                 getDataForCombobox={setGetDataForCountry}
                 name={'country'}
                 onInputClick={handleClickInputCountries}
                 options={countriesValues ?? []}
-                setValue={setValueCountry}
-                value={valueCountry}
               />
             </div>
             <div style={{ flexGrow: 1 }}>
@@ -360,9 +306,7 @@ export const ProfilePageContent = () => {
                 getDataForCombobox={setGetDataForCity}
                 name={'city'}
                 onInputClick={handleClickInputCity}
-                options={cityTemp ?? []}
-                setValue={setValueCity}
-                value={valueCity}
+                options={citiesValues ?? []}
               />
             </div>
           </div>
