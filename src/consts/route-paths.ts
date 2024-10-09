@@ -12,6 +12,8 @@ export const PATH = {
   LIST: '/list',
   LOGIN: '/sign-in',
   MESSAGES: '/messages',
+  NOT_FOUND: '/404',
+  PROFILE: '/profile',
   PROFILE_EDIT: '/profile-settings',
   REGISTRATION: '/sign-up',
   SEARCH: '/search',
@@ -28,6 +30,8 @@ export const commonRoutes = [
   PATH.AUTH,
   PATH.EMAIL_CONFIRMED,
   PATH.LIST,
+  PATH.NOT_FOUND,
+  PATH.PROFILE,
 ]
 
-export const privateRoutes = [PATH.PROFILE_EDIT]
+export const privateRoutes = [PATH.PROFILE_EDIT, PATH.PROFILE]
