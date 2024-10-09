@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@demorest49de/ui-kit':
-        specifier: ^0.0.47
-        version: 0.0.47(@types/react-dom@18.3.0)(@types/react@18.3.6)(typescript@5.6.2)
+        specifier: ^0.0.48
+        version: 0.0.48(@types/react-dom@18.3.0)(@types/react@18.3.6)(typescript@5.6.2)
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@18.3.1))
@@ -169,8 +169,8 @@ packages:
     peerDependencies:
       postcss-selector-parser: ^6.1.0
 
-  '@demorest49de/ui-kit@0.0.47':
-    resolution: {integrity: sha512-dolXN1wzpG73biHjbeXMpxBE/HZcYol3PxmN++ezeruoLwsvy3/bRV9cLK4zMiFOb4C2ARCBGuINoW1TW9VXqw==}
+  '@demorest49de/ui-kit@0.0.48':
+    resolution: {integrity: sha512-GZO/+IUkXysZDS7lyh3p60yWyZiwnfvrWLnKNUX2EqW+gi7ikTPUcmcueSejref62e21RMGAD9fv4/zq6sJwaQ==}
 
   '@dual-bundle/import-meta-resolve@4.1.0':
     resolution: {integrity: sha512-+nxncfwHM5SgAtrVzgpzJOI1ol0PkumhVo469KCf9lUi21IGcY90G98VuHm9VRrUypmAzawAHO9bs6hqeADaVg==}
@@ -3056,7 +3056,7 @@ snapshots:
     dependencies:
       postcss-selector-parser: 6.1.2
 
-  '@demorest49de/ui-kit@0.0.47(@types/react-dom@18.3.0)(@types/react@18.3.6)(typescript@5.6.2)':
+  '@demorest49de/ui-kit@0.0.48(@types/react-dom@18.3.0)(@types/react@18.3.6)(typescript@5.6.2)':
     dependencies:
       '@fontsource-variable/inter': 5.0.20
       '@fontsource/inter': 5.1.0
