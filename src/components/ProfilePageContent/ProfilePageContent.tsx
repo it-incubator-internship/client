@@ -117,7 +117,6 @@ export const ProfilePageContent = () => {
   const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
 
   const countryValue = watch('country')
-  // console.log(' countryValue: ', countryValue);
 
   useEffect(() => {
     if (profileData) {
@@ -253,13 +252,7 @@ export const ProfilePageContent = () => {
     console.error('Profile update failed:', error)
   }
 
-  if (
-    startIsLoading ||
-    isLoadingProfile ||
-    isloadingEditProfile ||
-    isCountriesLoading ||
-    isCitiesLoading
-  ) {
+  if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
     return <Spinner />
   }
 
@@ -292,7 +285,6 @@ export const ProfilePageContent = () => {
             control={control}
             label={'Lastname'}
             name={'lastName'}
-            // eslint-disable-next-line react/jsx-no-comment-textnodes
           />
           <FormDatePicker
             control={control}
@@ -306,6 +298,7 @@ export const ProfilePageContent = () => {
               <FormCombobox
                 control={control}
                 getDataForCombobox={setGetDataForCountry}
+                isLoading={isCountriesLoading}
                 name={'country'}
                 onInputClick={handleClickInputCountries}
                 options={countriesValues ?? []}
@@ -319,6 +312,7 @@ export const ProfilePageContent = () => {
                 control={control}
                 disabled={!countryValue}
                 getDataForCombobox={setGetDataForCity}
+                isLoading={isCitiesLoading}
                 name={'city'}
                 onInputClick={handleClickInputCity}
                 options={citiesValues ?? []}
