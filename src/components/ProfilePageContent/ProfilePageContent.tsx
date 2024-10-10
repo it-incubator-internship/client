@@ -11,7 +11,6 @@ import {
 } from '@/services/profile/profile-api'
 import { CityReturnType, CountryLocale, TransformedType } from '@/services/profile/profile-types'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Button,
   FormCombobox,
@@ -19,7 +18,8 @@ import {
   FormInput,
   FormTextarea,
   ImageOutline,
-} from '@robur_/ui-kit'
+} from '@demorest49de/ui-kit'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 

@@ -10,8 +10,8 @@ import {
   useCheckEmailMutation,
   useResendEmailMutation,
 } from '@/services/password-recovery/password-recovery-api'
+import { Button, Card, FormInput, Modal, Recaptcha } from '@demorest49de/ui-kit'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, FormInput, Modal, Recaptcha } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { z } from 'zod'

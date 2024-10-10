@@ -1,5 +1,11 @@
 import { useMeQuery } from '@/services/auth/authApi'
-import { FlagRussia, FlagUnitedKingdom, OutlineBell, Select, SelectItem } from '@robur_/ui-kit'
+import {
+  FlagRussia,
+  FlagUnitedKingdom,
+  OutlineBell,
+  Select,
+  SelectItem,
+} from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 
