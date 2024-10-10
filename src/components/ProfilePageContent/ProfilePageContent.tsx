@@ -9,7 +9,7 @@ import {
   useLazyGetCitiesQuery,
   useLazyGetCountriesQuery,
 } from '@/services/profile/profile-api'
-import { CityReturnType, CountryLocale, TransformedType } from '@/services/profile/profile-types'
+import { CityReturnType, TransformedType } from '@/services/profile/profile-types'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import {
   Button,
