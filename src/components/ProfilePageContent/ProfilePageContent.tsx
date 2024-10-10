@@ -139,6 +139,8 @@ export const ProfilePageContent = () => {
     }
   }, [countryValue, setValue])
 
+  const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
+
   const getCountriesFromLocalStorage = () => {
     const currentLocale = `countries-${router.locale}`
     const storedCountries = localStorage.getItem(currentLocale)
@@ -316,6 +318,12 @@ export const ProfilePageContent = () => {
                 name={'city'}
                 onInputClick={handleClickInputCity}
                 options={citiesValues ?? []}
+                requestItemOnKeyDown={() => {
+                  if (!arrowDownPressed) {
+                    handleClickInputCity()
+                    setArrowDownPressed(true)
+                  }
+                }}
                 setValue={value => setValue('city', value)}
               />
             </div>
