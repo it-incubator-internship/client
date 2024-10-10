@@ -57,16 +57,6 @@ const updateProfileSchema = z.object({
         .min(6, 'This field is required')
         .max(30),
 })
-//     .superRefine((data, ctx) => {
-//         console.log(' data.city: ', data.city);
-//     if (data.city && !data.country) {
-//         ctx.addIssue({
-//             code: z.ZodIssueCode.custom,
-//             path: ['city'],
-//             message: 'You must select a country first.'
-//         })
-//     }
-// })
 
 type FormValues = z.infer<typeof updateProfileSchema>
 type ZodKeys = keyof FormValues
@@ -138,6 +128,7 @@ export const ProfilePageContent = () => {
             })
         }
     }, [profileData, reset])
+
     useEffect(() => {
         if (!countryValue) {
             setValue('city', ''); // Очистка значения city
