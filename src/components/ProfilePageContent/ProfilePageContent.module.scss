@@ -72,3 +72,35 @@
     transform: scale(1.2);
   }
 }
+
+.avatarImgWrapper {
+  position: relative;
+}
+
+.avatarImgIsLoading {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  color: var(--color-light-100);
+
+  animation: sway 2s ease-in-out infinite;
+}
+
+@keyframes sway {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

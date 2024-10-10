@@ -1,9 +1,9 @@
 import { inctagramApi } from '../inctagramApi'
-import { EditProfileArgs } from './profile-types'
+import { EditProfileArgs, EditProfileResponse } from './profile-types'
 
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
-    editProfile: builder.mutation<void, EditProfileArgs>({
+    editProfile: builder.mutation<EditProfileResponse, EditProfileArgs>({
       invalidatesTags: ['Profile'],
       query: args => ({
         body: {
@@ -19,13 +19,21 @@ export const profileApi = inctagramApi.injectEndpoints({
         url: `/v1/user/profile/${args.id}`,
       }),
     }),
-    getProfile: builder.query<EditProfileArgs, { id: string }>({
+    getProfile: builder.query<EditProfileResponse, { id: string }>({
       providesTags: ['Profile'],
       query: args => ({
         method: 'GET',
         url: `/v1/user/profile/${args.id}`,
       }),
     }),
+    sendAvatarToServer: builder.mutation<void, any>({
+      query: file => ({
+        body: file,
+        method: 'POST',
+        url: `/v1/file/avatar`,
+      }),
+    }),
   }),
 })
-export const { useEditProfileMutation, useGetProfileQuery } = profileApi
+export const { useEditProfileMutation, useGetProfileQuery, useLazyGetProfileQuery, useSendAvatarToServerMutation } =
+  profileApi

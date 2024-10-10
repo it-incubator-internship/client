@@ -5,23 +5,32 @@ import { ActionButtons } from '@/components/ProfilePageContent/avatar-dialog/ui/
 import { AvatarHeader } from '@/components/ProfilePageContent/avatar-dialog/ui/avatar-header/avatar-header'
 import { AvatarSelector } from '@/components/ProfilePageContent/avatar-dialog/ui/avatar-selector/avatar-selector'
 import { ErrorMessage } from '@/components/ProfilePageContent/avatar-dialog/ui/error-message/error-message'
+import { useSendAvatarToServerMutation } from '@/services/profile/profile-api'
+import { base64ImgToFormData } from '@/utils/base64ImgToFormData'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button } from '@robur_/ui-kit'
 
 import s from './avatar-dialog.module.scss'
 
 type AvatarDialogProps = {
-  setAvatarPicture: (picture: any) => void
+  setAvatar: (picture: any) => void
 }
 
-export const AvatarDialog = ({ setAvatarPicture }: AvatarDialogProps) => {
+export const AvatarDialog = ({ setAvatar }: AvatarDialogProps) => {
   const [shouldClick, setShouldClick] = useState(false)
 
   const { dispatch, state, validateFile } = useAvatarDialog()
   const { isError, isFileLoad, isPreview } = state
 
-  const handleSaveAndClose = () => {
-    setAvatarPicture(isPreview)
+  const [sendAvatarToServer] = useSendAvatarToServerMutation()
+
+  const handleSaveAndClose = async () => {
+    if (isPreview) {
+      const convertedAvatarImg = base64ImgToFormData(isPreview)
+
+      await sendAvatarToServer(convertedAvatarImg).unwrap()
+      setAvatar('pending')
+    }
     dispatch({ type: 'RESET' })
   }
 

@@ -1,11 +1,10 @@
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { AvatarDialog } from '@/components/ProfilePageContent/avatar-dialog/ui/avatar-dialog'
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
 import { useMeQuery } from '@/services/auth/authApi'
-import { useEditProfileMutation, useGetProfileQuery } from '@/services/profile/profile-api'
+import { useEditProfileMutation, useGetProfileQuery, useLazyGetProfileQuery } from '@/services/profile/profile-api'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -27,15 +26,12 @@ import s from './ProfilePageContent.module.scss'
 import Spinner from '../Spinner/Spinner'
 
 const updateProfileSchema = z.object({
-  aboutMe: z
-    .string()
-    .max(200, { message: 'This field about me must be no more than 200 characters' })
-    .optional(),
-  city: z
-    .string({ message: 'This field is required' })
-    .min(4, 'This field is required')
-    .max(30, 'This field is required'),
-  country: z.string().min(4, 'This field is required').max(30, 'This field is required'),
+  aboutMe: z.string().max(200, { message: 'This field about me must be no more than 200 characters' }).optional(),
+  // city: z
+  //   .string({ message: 'This field is required' })
+  //   .min(4, 'This field is required')
+  //   .max(30, 'This field is required'),
+  // country: z.string().min(4, 'This field is required').max(30, 'This field is required'),
   dateOfBirth: z.date({ message: 'This field is required' }),
   firstName: z
     .string({ message: 'This field is required' })
@@ -51,10 +47,7 @@ const updateProfileSchema = z.object({
     .regex(/^[A-Za-zА-Яа-я]+$/, {
       message: 'Last name must contain only letters A-Z, a-z, А-Я, а-я',
     }),
-  userName: z
-    .string({ message: 'This field is required' })
-    .min(6, 'This field is required')
-    .max(30),
+  userName: z.string({ message: 'This field is required' }).min(6, 'This field is required').max(30),
 })
 
 type FormValues = z.infer<typeof updateProfileSchema>
@@ -103,9 +96,9 @@ const cityOptions = [
 ]
 
 export const ProfilePageContent = () => {
-  const [avatar, setAvatar] = useState()
+  const [avatar, setAvatar] = useState<string>()
   const [isAvatarRemoveModal, setIsAvatarRemoveModal] = useState(false)
-  const { control, handleSubmit } = useForm<FormValues>({
+
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId // Извлекаем ID пользователя из данных профиля
 
@@ -113,13 +106,42 @@ export const ProfilePageContent = () => {
     { id: currentUserId as string },
     { skip: !currentUserId } // Пропускаем запрос, если нет ID
   )
-  const [editProfile, { isError, isLoading: isloadingEditProfile }] = useEditProfileMutation()
+
+  const [getProfileData, result] = useLazyGetProfileQuery()
+
+  useEffect(() => {
+    const pollingProfileData = () => {
+      const intervalId = setInterval(async () => {
+        await getProfileData({ id: currentUserId as string })
+
+        if (result.data?.profileStatus === 'READY') {
+          setAvatar('ready')
+          clearInterval(intervalId)
+        }
+      }, 1000)
+
+      return intervalId
+    }
+
+    if (avatar === 'pending') {
+      const intervalId = pollingProfileData()
+
+      return () => {
+        clearInterval(intervalId)
+      }
+    }
+
+    return
+  }, [avatar, currentUserId, getProfileData, result.data?.profileStatus])
+
+  const [editProfile, { isError, isLoading: isLoadingEditProfile }] = useEditProfileMutation()
   const { modalJSX, openModal } = useModalFromSettingsProfile()
+
   const { control, handleSubmit, reset, setError } = useForm<FormValues>({
     defaultValues: {
       aboutMe: '',
-      city: '',
-      country: '',
+      // city: '',
+      // country: '',
       dateOfBirth: undefined,
       firstName: '',
       lastName: '',
@@ -133,8 +155,8 @@ export const ProfilePageContent = () => {
     if (profileData) {
       reset({
         aboutMe: profileData.aboutMe || '',
-        city: profileData.city || '',
-        country: profileData.country || '',
+        // city: profileData.city || '',
+        // country: profileData.country || '',
         dateOfBirth: profileData.dateOfBirth ? new Date(profileData.dateOfBirth) : undefined,
         firstName: profileData.firstName || '',
         lastName: profileData.lastName || '',
@@ -163,6 +185,8 @@ export const ProfilePageContent = () => {
 
       await editProfile({
         ...dataForm,
+        city: '',
+        country: '',
         dateOfBirth: formattedDateOfBirth,
         id: currentUserId,
       }).unwrap()
@@ -191,7 +215,7 @@ export const ProfilePageContent = () => {
     console.error('Profile update failed:', error)
   }
 
-  if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
+  if (startIsLoading || isLoadingProfile || isLoadingEditProfile) {
     return <Spinner />
   }
 
@@ -203,38 +227,34 @@ export const ProfilePageContent = () => {
     setIsAvatarRemoveModal(false)
   }
 
+  console.log('Status', profileData?.profileStatus)
+  console.log('AvatarUrl', profileData?.originalAvatarUrl)
+
   return (
     <>
       <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
         <div className={s.formContainer}>
           <div className={s.photoSection}>
             <div className={s.userPhoto}>
-              {!avatar ? (
+              {profileData?.profileStatus !== 'READY' ? (
                 <ImageOutline height={'48'} width={'48'} />
               ) : (
                 <>
                   <button className={s.removeAvatarBtn} onClick={handleRemoveAvatarBtn} type={'button'}>
                     <Close />
                   </button>
-                  <Image alt={'your avatar'} height={'192'} src={avatar} width={'192'} />
+                  {avatar === 'pending' && <span className={s.avatarImgIsLoading}>Loadind</span>}
+                  {profileData?.profileStatus === 'READY' && profileData?.originalAvatarUrl && (
+                    <img alt={'your avatar'} height={192} src={profileData.originalAvatarUrl} width={192} />
+                  )}
                 </>
               )}
             </div>
-            <AvatarDialog setAvatarPicture={setAvatar} />
+            <AvatarDialog setAvatar={setAvatar} />
           </div>
           <div className={s.dataSection}>
-            <FormInput
-              containerClassName={s.inputContainer}
-              control={control}
-              label={'Username'}
-              name={'userName'}
-            />
-            <FormInput
-              containerClassName={s.inputContainer}
-              control={control}
-              label={'Firstname'}
-              name={'firstName'}
-            />
+            <FormInput containerClassName={s.inputContainer} control={control} label={'Username'} name={'userName'} />
+            <FormInput containerClassName={s.inputContainer} control={control} label={'Firstname'} name={'firstName'} />
             <FormInput
               containerClassName={s.inputContainer}
               control={control}
@@ -242,27 +262,22 @@ export const ProfilePageContent = () => {
               name={'lastName'}
               // eslint-disable-next-line react/jsx-no-comment-textnodes
             />
-            //TODO make a choice via select
-            <FormInput
-              containerClassName={s.inputContainer}
-              control={control}
-              label={'Your city'}
-              name={'city'}
-              // eslint-disable-next-line react/jsx-no-comment-textnodes
-            />
-            //TODO make a choice via select
-            <FormInput
-              containerClassName={s.inputContainer}
-              control={control}
-              label={'Your country'}
-              name={'country'}
-            />
-            <FormDatePicker
-              control={control}
-              label={'Date of birth'}
-              name={'dateOfBirth'}
-              years={years}
-            />
+            {/*//TODO make a choice via select*/}
+            {/*<FormInput*/}
+            {/*  containerClassName={s.inputContainer}*/}
+            {/*  control={control}*/}
+            {/*  label={'Your city'}*/}
+            {/*  name={'city'}*/}
+            {/*  // eslint-disable-next-line react/jsx-no-comment-textnodes*/}
+            {/*/>*/}
+            {/*//TODO make a choice via select*/}
+            {/*<FormInput*/}
+            {/*  containerClassName={s.inputContainer}*/}
+            {/*  control={control}*/}
+            {/*  label={'Your country'}*/}
+            {/*  name={'country'}*/}
+            {/*/>*/}
+            <FormDatePicker control={control} label={'Date of birth'} name={'dateOfBirth'} years={years} />
             <div style={{ display: 'flex', gap: '24px' }}>
               <div style={{ flexGrow: 1 }}>
                 <div>Select your country</div>
