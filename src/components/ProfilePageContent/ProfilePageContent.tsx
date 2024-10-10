@@ -113,7 +113,7 @@ export const ProfilePageContent = () => {
     const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
 
     const countryValue = watch('country');
-    console.log(' countryValue: ', countryValue);
+    // console.log(' countryValue: ', countryValue);
 
     useEffect(() => {
         if (profileData) {
