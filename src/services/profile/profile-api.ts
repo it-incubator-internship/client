@@ -1,9 +1,10 @@
 import { inctagramApi } from '../inctagramApi'
 import {
+  CityReturnType,
   CountryLocale,
   CountryReturnType,
+  EditProfileArgs,
   TransformedType,
-  EditProfileArgs, CityReturnType,
 } from './profile-types'
 
 const transformDataCountry = (data: CountryReturnType[], locale: string) => {
@@ -31,7 +32,6 @@ const transformDataCountry = (data: CountryReturnType[], locale: string) => {
   localStorage.setItem(CountryLocale.ru, stringifiedRu)
 }
 
-
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
     editProfile: builder.mutation<void, EditProfileArgs>({
@@ -54,8 +54,8 @@ export const profileApi = inctagramApi.injectEndpoints({
       query: args => ({
         method: 'GET',
         url: `/v1/localization/cities/${args.id}`,
-      })
-  }),
+      }),
+    }),
     getCountries: builder.query<CountryReturnType[], void>({
       async onQueryStarted(_, { queryFulfilled }) {
         const { data } = await queryFulfilled
@@ -83,4 +83,9 @@ export const profileApi = inctagramApi.injectEndpoints({
     }),
   }),
 })
-export const { useEditProfileMutation, useGetProfileQuery,  useLazyGetCitiesQuery, useLazyGetCountriesQuery} = profileApi
+export const {
+  useEditProfileMutation,
+  useGetProfileQuery,
+  useLazyGetCitiesQuery,
+  useLazyGetCountriesQuery,
+} = profileApi
