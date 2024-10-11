@@ -1,3 +1,4 @@
+// region imports
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -27,6 +28,9 @@ import s from './ProfilePageContent.module.scss'
 
 import Spinner from '../Spinner/Spinner'
 
+// endregion imports
+
+//region zodSchema
 const updateProfileSchema = z.object({
   aboutMe: z
     .string()
@@ -61,6 +65,9 @@ const updateProfileSchema = z.object({
     .max(30),
 })
 
+//endregion zodSchema
+
+//region types
 type FormValues = z.infer<typeof updateProfileSchema>
 type ZodKeys = keyof FormValues
 
@@ -75,8 +82,10 @@ type ErrorType = {
   }
   message: string
 }
+//endregion types
 
 export const ProfilePageContent = () => {
+  //region hooks
   const router = useRouter()
 
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
@@ -116,7 +125,17 @@ export const ProfilePageContent = () => {
 
   const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
 
+  const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
+
   const countryValue = watch('country')
+
+  //endregion hooks
+
+  //region useEffects
+
+  useEffect(() => {
+    setArrowDownPressed(false)
+  }, [dataForCountry])
 
   useEffect(() => {
     if (profileData) {
@@ -139,7 +158,9 @@ export const ProfilePageContent = () => {
     }
   }, [countryValue, setValue])
 
-  const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
+  //endregion useEffects
+
+  // region functionality
 
   const getCountriesFromLocalStorage = () => {
     const currentLocale = `countries-${router.locale}`
@@ -257,6 +278,8 @@ export const ProfilePageContent = () => {
   if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
     return <Spinner />
   }
+
+  // endregion functionality
 
   return (
     <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
