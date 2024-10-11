@@ -2,7 +2,7 @@ import { useReducer } from 'react'
 
 const FILE_VALIDATION_CONFIG = {
   allowedFileTypes: ['image/png', 'image/jpeg'],
-  maxFileSize: 4 * 1024 * 1024,
+  maxFileSize: 10 * 1024 * 1024,
 }
 
 const initialState = {

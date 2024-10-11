@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { AvatarDialog } from '@/components/ProfilePageContent/avatar-dialog/ui/avatar-dialog'
+import { AvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-dialog'
 import { useDeleteAvatarFromServerMutation, useLazyGetProfileQuery } from '@/services/profile/profile-api'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import { Close, ImageOutline, Modal } from '@robur_/ui-kit'
