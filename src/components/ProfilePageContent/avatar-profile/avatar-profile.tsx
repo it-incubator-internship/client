@@ -66,7 +66,7 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
             <ImageOutline height={'48'} width={'48'} />
           ) : (
             <div>
-              {avatarProgress === 'loading' && <span className={s.avatarLoader}>Loadind</span>}
+              {avatarProgress === 'loading' && <span className={s.avatarLoader}>Loading</span>}
               {avatarProgress === 'success' && (
                 <>
                   <button className={s.removeAvatarBtn} onClick={openRemoveModal} type={'button'}>
