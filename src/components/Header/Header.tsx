@@ -1,14 +1,26 @@
+import { PATH } from '@/consts/route-paths'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { FlagRussia, FlagUnitedKingdom, OutlineBell, Select, SelectItem } from '@robur_/ui-kit'
+import {
+  Button,
+  FlagRussia,
+  FlagUnitedKingdom,
+  OutlineBell,
+  Select,
+  SelectItem,
+} from '@robur_/ui-kit'
 import clsx from 'clsx'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import s from './Header.module.scss'
 
 export const Header = () => {
   const { asPath, locale, pathname, push, query } = useRouter()
-  const { data, isLoading } = useMeQuery()
+  const { data } = useMeQuery()
   const isHomePage = pathname === '/'
+
+  const t = useTranslation()
 
   const logoClickHandler = () => {
     push('/')
@@ -53,6 +65,16 @@ export const Header = () => {
             </SelectItem>
           </Select>
         </div>
+        {!data && (
+          <div className={s.navOptions}>
+            <Button asChild variant={'ghost'}>
+              <Link href={PATH.LOGIN}>{t.auth.signIn}</Link>
+            </Button>
+            <Button asChild variant={'primary'}>
+              <Link href={PATH.REGISTRATION}>{t.auth.signUp}</Link>
+            </Button>
+          </div>
+        )}
       </div>
     </header>
   )

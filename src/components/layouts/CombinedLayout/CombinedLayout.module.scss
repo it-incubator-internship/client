@@ -3,10 +3,18 @@
 }
 
 .navbar {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+
   flex: 0 0 220px;
+
+  background-color: var(--color-dark-700);
 }
 
 .container {
   flex-grow: 1;
   padding-top: 36px;
+  padding-left: 279px;
 }

@@ -5,7 +5,6 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { useLogoutMutation, useMeQuery } from '@/services/auth/authApi'
 import {
   BookmarkOutline,
-  Button,
   HomeOutline,
   LogOut,
   MessageCircleOutline,

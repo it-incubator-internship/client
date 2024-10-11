@@ -1,8 +1,11 @@
 .SignUpContainer {
   display: flex;
   justify-content: center;
+
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
+  padding: 0 15px;
 
   .SignUpCard {
     display: flex;
@@ -11,10 +14,8 @@
     justify-content: start;
 
     width: 100%;
-    min-width: 378px;
     margin-top: 24px; // todo to delete after compose with layout
     padding: 24px;
-
 
     .SignUpCardTitle {
       margin-bottom: 13px;
@@ -70,6 +71,7 @@
       align-items: start;
 
       height: 48px;
+      margin-bottom: 16px;
 
       font-size: 12px;
       font-weight: 400;
@@ -110,9 +112,17 @@
       line-height: 24px;
       color: var(--color-accent-500);
     }
+
+    @media (width >= 768px) {
+      width: 378px;
+    }
+  }
+
+  @media (width >= 768px) {
+    width: 408px;
   }
 }
 
 .inputContainer {
-  margin-bottom: 24px;
+  margin-bottom: 4px;
 }

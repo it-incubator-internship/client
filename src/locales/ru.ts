@@ -1,9 +1,25 @@
+import { pluralizeEn, pluralizeRu } from '@/utils/createPluralize'
+
 export const ru = {
+  and: 'и',
   auth: {
+    EmailSent: 'Письмо отправлено',
+    agreeTo: 'Я согласен с',
+    email: 'Почта',
     forgotPassword: 'Восстановить пароль',
+    goToSignIn: 'Перейти на страницу Sign in',
+    haveAccount: 'У Вас уже есть аккаунт?',
     noAccount: 'Нет аккаунта?',
+    password: 'Пароль',
+    passwordConfirmation: 'Подтверждение пароля',
+    policy: 'Политикой',
+    sentConfirmationLink(responseEmail: string) {
+      return `Мы отправили ссылку для подтверждения почты на адрес: ${responseEmail}`
+    },
     signIn: 'Войти',
     signUp: 'Зарегистрироваться',
+    terms: 'Правилами',
+    username: 'Имя пользователя',
   },
   createNewPassword: {
     newPasswordForm: {
@@ -37,6 +53,11 @@ export const ru = {
     terminateOtherSessions: 'Закрыть все сессии кроме текущей',
   },
   english: 'Английский',
+  errors: {
+    401: 'Не правильный логин или пароль',
+    default: 'Что-то пошло не так',
+    fetch_error: 'Проблемы с Вашим интернет соединением',
+  },
   forgotPassword: {
     buttonBack: 'Вернуться на страницу входа',
     buttonSendInitial: 'Отправить',
@@ -55,14 +76,40 @@ export const ru = {
       'Письмо с инструкциями было отправлено на указанный адрес. Если вы не получили его, нажмите "Отправить заново"',
     title: 'Восстановление пароля',
   },
+  formErrors: {
+    email: 'Поле email должно соответствовать формату\nexample@example.com',
+    maxLength(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `Поле должно быть не более чем ${count} знак`
+        case 'few':
+          return `Поле должно быть не более ${count} знака`
+        case 'many':
+          return `Поле должно быть не более ${count} знаков`
+      }
+    },
+    passwordMatch: 'Пароли должны совпадать',
+    passwordRegex:
+      'Пароль может содержать символы: a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
+    required: 'Поле обязательно',
+    termsAgreement: 'Пожалуйста, поставьте галочку, что Вы согласны с нашими правилами',
+  },
   meta: {
     defaultDescriptionText:
       'Социальная сеть The Inctagram это безлимитная коммуникация людей по всему миру',
   },
+  myProfile: {
+    followers: 'Подписчики',
+    following: 'Подписки',
+    initialUrlProfile: 'Url пользователя',
+    publications: 'Публикации',
+  },
   nav: {
     create: 'Создать',
     favorites: 'Избранное',
-    home: 'На главную',
+    home: 'Главная',
     logout: 'Выйти',
     messenger: 'Сообщения',
     myProfile: 'Мой профиль',
