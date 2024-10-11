@@ -3,6 +3,12 @@ import { EditProfileArgs, EditProfileResponse } from './profile-types'
 
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
+    deleteAvatarFromServer: builder.mutation<void, void>({
+      query: () => ({
+        method: 'DELETE',
+        url: `/v1/file/avatar`,
+      }),
+    }),
     editProfile: builder.mutation<EditProfileResponse, EditProfileArgs>({
       invalidatesTags: ['Profile'],
       query: args => ({
@@ -35,5 +41,10 @@ export const profileApi = inctagramApi.injectEndpoints({
     }),
   }),
 })
-export const { useEditProfileMutation, useGetProfileQuery, useLazyGetProfileQuery, useSendAvatarToServerMutation } =
-  profileApi
+export const {
+  useDeleteAvatarFromServerMutation,
+  useEditProfileMutation,
+  useGetProfileQuery,
+  useLazyGetProfileQuery,
+  useSendAvatarToServerMutation,
+} = profileApi

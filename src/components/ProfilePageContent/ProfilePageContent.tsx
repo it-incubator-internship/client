@@ -1,24 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { AvatarDialog } from '@/components/ProfilePageContent/avatar-dialog/ui/avatar-dialog'
+import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
 import { useMeQuery } from '@/services/auth/authApi'
-import { useEditProfileMutation, useGetProfileQuery, useLazyGetProfileQuery } from '@/services/profile/profile-api'
+import { useEditProfileMutation, useGetProfileQuery } from '@/services/profile/profile-api'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  Button,
-  Close,
-  FormDatePicker,
-  FormInput,
-  FormTextarea,
-  ImageOutline,
-  Modal,
-  Select,
-  SelectItem,
-} from '@robur_/ui-kit'
-import Image from 'next/image'
+import { Button, FormDatePicker, FormInput, FormTextarea, Select, SelectItem } from '@robur_/ui-kit'
 import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
@@ -96,9 +85,6 @@ const cityOptions = [
 ]
 
 export const ProfilePageContent = () => {
-  const [avatar, setAvatar] = useState<string>()
-  const [isAvatarRemoveModal, setIsAvatarRemoveModal] = useState(false)
-
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId // Извлекаем ID пользователя из данных профиля
 
@@ -106,33 +92,6 @@ export const ProfilePageContent = () => {
     { id: currentUserId as string },
     { skip: !currentUserId } // Пропускаем запрос, если нет ID
   )
-
-  const [getProfileData, result] = useLazyGetProfileQuery()
-
-  useEffect(() => {
-    const pollingProfileData = () => {
-      const intervalId = setInterval(async () => {
-        await getProfileData({ id: currentUserId as string })
-
-        if (result.data?.profileStatus === 'READY') {
-          setAvatar('ready')
-          clearInterval(intervalId)
-        }
-      }, 1000)
-
-      return intervalId
-    }
-
-    if (avatar === 'pending') {
-      const intervalId = pollingProfileData()
-
-      return () => {
-        clearInterval(intervalId)
-      }
-    }
-
-    return
-  }, [avatar, currentUserId, getProfileData, result.data?.profileStatus])
 
   const [editProfile, { isError, isLoading: isLoadingEditProfile }] = useEditProfileMutation()
   const { modalJSX, openModal } = useModalFromSettingsProfile()
@@ -219,64 +178,15 @@ export const ProfilePageContent = () => {
     return <Spinner />
   }
 
-  const handleRemoveAvatarBtn = () => {
-    setIsAvatarRemoveModal(true)
-  }
-
-  function handleModalClosed() {
-    setIsAvatarRemoveModal(false)
-  }
-
-  console.log('Status', profileData?.profileStatus)
-  console.log('AvatarUrl', profileData?.originalAvatarUrl)
-
   return (
     <>
       <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
         <div className={s.formContainer}>
-          <div className={s.photoSection}>
-            <div className={s.userPhoto}>
-              {profileData?.profileStatus !== 'READY' ? (
-                <ImageOutline height={'48'} width={'48'} />
-              ) : (
-                <>
-                  <button className={s.removeAvatarBtn} onClick={handleRemoveAvatarBtn} type={'button'}>
-                    <Close />
-                  </button>
-                  {avatar === 'pending' && <span className={s.avatarImgIsLoading}>Loadind</span>}
-                  {profileData?.profileStatus === 'READY' && profileData?.originalAvatarUrl && (
-                    <img alt={'your avatar'} height={192} src={profileData.originalAvatarUrl} width={192} />
-                  )}
-                </>
-              )}
-            </div>
-            <AvatarDialog setAvatar={setAvatar} />
-          </div>
+          <AvatarProfile currentUserId={currentUserId || ''} profileData={profileData || undefined} />
           <div className={s.dataSection}>
             <FormInput containerClassName={s.inputContainer} control={control} label={'Username'} name={'userName'} />
             <FormInput containerClassName={s.inputContainer} control={control} label={'Firstname'} name={'firstName'} />
-            <FormInput
-              containerClassName={s.inputContainer}
-              control={control}
-              label={'Lastname'}
-              name={'lastName'}
-              // eslint-disable-next-line react/jsx-no-comment-textnodes
-            />
-            {/*//TODO make a choice via select*/}
-            {/*<FormInput*/}
-            {/*  containerClassName={s.inputContainer}*/}
-            {/*  control={control}*/}
-            {/*  label={'Your city'}*/}
-            {/*  name={'city'}*/}
-            {/*  // eslint-disable-next-line react/jsx-no-comment-textnodes*/}
-            {/*/>*/}
-            {/*//TODO make a choice via select*/}
-            {/*<FormInput*/}
-            {/*  containerClassName={s.inputContainer}*/}
-            {/*  control={control}*/}
-            {/*  label={'Your country'}*/}
-            {/*  name={'country'}*/}
-            {/*/>*/}
+            <FormInput containerClassName={s.inputContainer} control={control} label={'Lastname'} name={'lastName'} />
             <FormDatePicker control={control} label={'Date of birth'} name={'dateOfBirth'} years={years} />
             <div style={{ display: 'flex', gap: '24px' }}>
               <div style={{ flexGrow: 1 }}>
@@ -318,17 +228,6 @@ export const ProfilePageContent = () => {
         </Button>
         {modalJSX}
       </form>
-      <Modal
-        buttonRejectionTitle={'No'}
-        buttonTitle={'Yes'}
-        onClose={handleModalClosed}
-        onCloseWithApproval={() => setAvatar(undefined)}
-        open={isAvatarRemoveModal}
-        title={' '}
-        withConfirmation
-      >
-        Do you really want to delete your profile photo?
-      </Modal>
     </>
   )
 }

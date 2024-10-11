@@ -13,10 +13,10 @@ import { Button } from '@robur_/ui-kit'
 import s from './avatar-dialog.module.scss'
 
 type AvatarDialogProps = {
-  setAvatar: (picture: any) => void
+  setAvatarProgress: (picture: any) => void
 }
 
-export const AvatarDialog = ({ setAvatar }: AvatarDialogProps) => {
+export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
   const [shouldClick, setShouldClick] = useState(false)
 
   const { dispatch, state, validateFile } = useAvatarDialog()
@@ -26,10 +26,10 @@ export const AvatarDialog = ({ setAvatar }: AvatarDialogProps) => {
 
   const handleSaveAndClose = async () => {
     if (isPreview) {
+      setAvatarProgress('loading')
       const convertedAvatarImg = base64ImgToFormData(isPreview)
 
       await sendAvatarToServer(convertedAvatarImg).unwrap()
-      setAvatar('pending')
     }
     dispatch({ type: 'RESET' })
   }
