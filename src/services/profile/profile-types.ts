@@ -20,6 +20,20 @@ export enum CountryLocale {
   ru = 'countries-ru',
 }
 
+export enum RouterLocale {
+  en = 'en',
+  ru = 'ru',
+}
+
+export enum CityLocale {
+  ru = 'cities-ru',
+}
+
+export enum Terra {
+  city = 'city',
+  country = 'country',
+}
+
 export type TransformedType = {
   label: string
   value: { id: number; name: string }

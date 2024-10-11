@@ -60,7 +60,6 @@ export const profileApi = inctagramApi.injectEndpoints({
       async onQueryStarted(_, { queryFulfilled }) {
         const { data } = await queryFulfilled
 
-        console.log(' data: ', data)
         if (!data) {
           return
         }

@@ -10,7 +10,14 @@ import {
   useLazyGetCitiesQuery,
   useLazyGetCountriesQuery,
 } from '@/services/profile/profile-api'
-import { CityReturnType, TransformedType } from '@/services/profile/profile-types'
+import {
+  CityLocale,
+  CityReturnType,
+  CountryLocale,
+  RouterLocale,
+  Terra,
+  TransformedType,
+} from '@/services/profile/profile-types'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import {
   Button,
@@ -127,7 +134,9 @@ export const ProfilePageContent = () => {
 
   const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
 
-  const countryValue = watch('country')
+  const countryValue = watch(Terra.country)
+
+  const [didOnce, setDidOnce] = useState<boolean>(true)
 
   //endregion hooks
 
@@ -148,12 +157,19 @@ export const ProfilePageContent = () => {
         lastName: profileData.lastName || '',
         userName: profileData.userName || '',
       })
+      if (localStorage.getItem(getCurrentLocale()?.country as string)) {
+        getCountriesFromLocalStorage()
+        const countryObject = countriesValues.find(country => country.label === profileData.country)
+
+        console.log(' countryName: ', countryObject)
+        setGetDataForCountry(countryObject as TransformedType)
+      }
     }
   }, [profileData, reset])
 
   useEffect(() => {
     if (!countryValue) {
-      setValue('city', '') // Очистка значения city
+      setValue(Terra.city, '') // Очистка значения city
       setCitiesValues(null) // Также очищаем список городов, если необходимо
     }
   }, [countryValue, setValue])
@@ -162,9 +178,19 @@ export const ProfilePageContent = () => {
 
   // region functionality
 
+  const getCurrentLocale = () => {
+    if (router.locale === RouterLocale.en) {
+      return { city: CityLocale.ru, country: CountryLocale.en }
+    }
+    if (router.locale === RouterLocale.ru) {
+      return { city: CityLocale.ru, country: CountryLocale.ru }
+    }
+  }
+
   const getCountriesFromLocalStorage = () => {
-    const currentLocale = `countries-${router.locale}`
-    const storedCountries = localStorage.getItem(currentLocale)
+    const currentLocale = getCurrentLocale()
+
+    const storedCountries = localStorage.getItem(currentLocale?.country as string)
 
     try {
       if (storedCountries !== null) {
@@ -176,7 +202,7 @@ export const ProfilePageContent = () => {
         getCountries()
           .unwrap()
           .then(() => {
-            const storedCountries = localStorage.getItem(currentLocale)
+            const storedCountries = localStorage.getItem(currentLocale?.country as string)
 
             if (storedCountries !== null) {
               const countries: TransformedType[] = JSON.parse(storedCountries)
@@ -202,7 +228,6 @@ export const ProfilePageContent = () => {
     }))
   }
 
-  //todo заблокировать пока не получены страны
   const handleClickInputCity = () => {
     console.log(' dataForCountry: ', dataForCountry)
     if (dataForCountry?.value.id) {
@@ -212,6 +237,12 @@ export const ProfilePageContent = () => {
           const cities = transformDataCity(data)
 
           setCitiesValues(cities)
+
+          //todo to delete
+          if (didOnce && !localStorage.getItem(CityLocale.ru)) {
+            downloadLocalStorageAsJson()
+            setDidOnce(false)
+          }
         })
         .catch((error: any) => {
           console.log(error)
@@ -279,6 +310,15 @@ export const ProfilePageContent = () => {
     return <Spinner />
   }
 
+  const downloadLocalStorageAsJson = () => {
+    console.log(' citiesValues: ', citiesValues)
+
+    const currentLocale = getCurrentLocale()
+    const cities = JSON.stringify(citiesValues)
+
+    localStorage.setItem(currentLocale?.city as string, cities)
+  }
+
   // endregion functionality
 
   return (
@@ -324,10 +364,10 @@ export const ProfilePageContent = () => {
                 control={control}
                 getDataForCombobox={setGetDataForCountry}
                 isLoading={isCountriesLoading}
-                name={'country'}
+                name={Terra.country}
                 onInputClick={handleClickInputCountries}
                 options={countriesValues ?? []}
-                setValue={value => setValue('country', value)}
+                setValue={value => setValue(Terra.country, value)}
               />
             </div>
             <div style={{ flexGrow: 1 }}>
@@ -338,7 +378,7 @@ export const ProfilePageContent = () => {
                 disabled={!countryValue}
                 getDataForCombobox={setGetDataForCity}
                 isLoading={isCitiesLoading}
-                name={'city'}
+                name={Terra.city}
                 onInputClick={handleClickInputCity}
                 options={citiesValues ?? []}
                 requestItemOnKeyDown={() => {
@@ -347,7 +387,7 @@ export const ProfilePageContent = () => {
                     setArrowDownPressed(true)
                   }
                 }}
-                setValue={value => setValue('city', value)}
+                setValue={value => setValue(Terra.city, value)}
               />
             </div>
           </div>
