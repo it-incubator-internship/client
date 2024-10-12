@@ -23,9 +23,9 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
   useEffect(() => {
     const pollingProfileData = () => {
       const intervalId = setInterval(async () => {
-        await getProfileData({ id: currentUserId as string })
+        const response = await getProfileData({ id: currentUserId as string }).unwrap()
 
-        if (result.data?.profileStatus === 'READY') {
+        if (response.profileStatus === 'READY') {
           setAvatarProgress('success')
           clearInterval(intervalId)
         }
