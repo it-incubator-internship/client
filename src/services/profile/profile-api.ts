@@ -32,7 +32,6 @@ const transformDataCountry = (data: CountryReturnType[], locale: string) => {
 
   localStorage.setItem(CountryLocale.ru, stringifiedRu)
 }
-import { EditProfileArgs, EditProfileResponse } from './profile-types'
 
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
@@ -102,8 +101,8 @@ export const {
   useDeleteAvatarFromServerMutation,
   useEditProfileMutation,
   useGetProfileQuery,
-  useLazyGetProfileQuery,
-  useSendAvatarToServerMutation,
   useLazyGetCitiesQuery,
   useLazyGetCountriesQuery,
+  useLazyGetProfileQuery,
+  useSendAvatarToServerMutation,
 } = profileApi
