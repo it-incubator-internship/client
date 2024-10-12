@@ -15,6 +15,11 @@ export type CountryReturnType = {
   title_ru: string
 }
 
+export type CurrentLocaleType = {
+  city: string
+  country: string
+}
+
 export enum CountryLocale {
   en = 'countries-en',
   ru = 'countries-ru',

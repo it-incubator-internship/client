@@ -14,6 +14,7 @@ import {
   CityLocale,
   CityReturnType,
   CountryLocale,
+  CurrentLocaleType,
   RouterLocale,
   Terra,
   TransformedType,
@@ -136,8 +137,6 @@ export const ProfilePageContent = () => {
 
   const countryValue = watch(Terra.country)
 
-  const [didOnce, setDidOnce] = useState<boolean>(true)
-
   //endregion hooks
 
   //region useEffects
@@ -230,7 +229,9 @@ export const ProfilePageContent = () => {
 
   const handleClickInputCity = () => {
     console.log(' dataForCountry: ', dataForCountry)
-    if (dataForCountry?.value.id) {
+    const currentLocale = getCurrentLocale()
+
+    if (dataForCountry?.value.id && !localStorage.getItem(currentLocale?.city as string)) {
       getCities({ id: dataForCountry?.value.id })
         .unwrap()
         .then(data => {
@@ -238,15 +239,16 @@ export const ProfilePageContent = () => {
 
           setCitiesValues(cities)
 
-          //todo to delete
-          if (didOnce && !localStorage.getItem(CityLocale.ru)) {
-            downloadLocalStorageAsJson()
-            setDidOnce(false)
-          }
+          setCityToLocalStorage(cities, currentLocale as CurrentLocaleType)
         })
         .catch((error: any) => {
           console.log(error)
         })
+    } else {
+      const citiesStringified = localStorage.getItem(currentLocale?.city as string)
+      const parsed = JSON.parse(citiesStringified as string)
+
+      setCitiesValues(parsed as TransformedType[])
     }
   }
 
@@ -310,13 +312,12 @@ export const ProfilePageContent = () => {
     return <Spinner />
   }
 
-  const downloadLocalStorageAsJson = () => {
-    console.log(' citiesValues: ', citiesValues)
+  const setCityToLocalStorage = (cities: TransformedType[], currentLocale: CurrentLocaleType) => {
+    console.log(`!!!`)
 
-    const currentLocale = getCurrentLocale()
-    const cities = JSON.stringify(citiesValues)
+    const citiesStringified = JSON.stringify(cities)
 
-    localStorage.setItem(currentLocale?.city as string, cities)
+    localStorage.setItem(currentLocale?.city as string, citiesStringified)
   }
 
   // endregion functionality
