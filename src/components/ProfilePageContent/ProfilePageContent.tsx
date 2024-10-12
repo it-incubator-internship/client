@@ -221,9 +221,12 @@ export const ProfilePageContent = () => {
   const handleClickInputCity = (countryObject: TransformedType = null) => {
     const dataObject = countryObject ? countryObject : dataForCountry
 
+    console.log(' countryObject: ', countryObject)
+    console.log(' dataObject: ', dataObject)
+    console.log(' dataForCountry: ', dataForCountry)
     const currentLocale = getCurrentLocale()
 
-    if (dataObject?.value.id && !localStorage.getItem(currentLocale?.city as string)) {
+    if (dataObject?.value.id) {
       getCities({ id: dataObject?.value.id as number })
         .unwrap()
         .then(data => {
@@ -236,11 +239,6 @@ export const ProfilePageContent = () => {
         .catch((error: any) => {
           console.log(error)
         })
-    } else {
-      const citiesStringified = localStorage.getItem(currentLocale?.city as string)
-      const parsed = JSON.parse(citiesStringified as string)
-
-      setCitiesValues(parsed as TransformedType[])
     }
   }
 
