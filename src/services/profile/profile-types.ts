@@ -42,7 +42,7 @@ export enum Terra {
 export type TransformedType = {
   label: string
   value: { id: number; name: string }
-}
+} | null
 
 export type CityReturnType = {
   city_id: number

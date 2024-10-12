@@ -29,6 +29,8 @@ import {
   ImageOutline,
 } from '@demorest49de/ui-kit'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { store } from 'next/dist/build/output/store'
+import { logAppDirError } from 'next/dist/server/dev/log-app-dir-error'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
@@ -156,15 +158,22 @@ export const ProfilePageContent = () => {
         lastName: profileData.lastName || '',
         userName: profileData.userName || '',
       })
-      if (localStorage.getItem(getCurrentLocale()?.country as string)) {
-        getCountriesFromLocalStorage()
-        const countryObject = countriesValues.find(country => country.label === profileData.country)
 
-        console.log(' countryName: ', countryObject)
+      handleClickInputCountries()
+
+      const currentLocale = getCurrentLocale()
+
+      const storedCountries = localStorage.getItem(currentLocale?.country as string)
+
+      if (storedCountries) {
+        const parsed: TransformedType[] = JSON.parse(storedCountries as string)
+        const countryObject = parsed.find(country => country?.label === profileData?.country)
+
         setGetDataForCountry(countryObject as TransformedType)
+        handleClickInputCity(countryObject)
       }
     }
-  }, [profileData, reset])
+  }, [profileData, reset, router.locale])
 
   useEffect(() => {
     if (!countryValue) {
@@ -177,7 +186,7 @@ export const ProfilePageContent = () => {
 
   // region functionality
 
-  const getCurrentLocale = () => {
+  function getCurrentLocale() {
     if (router.locale === RouterLocale.en) {
       return { city: CityLocale.ru, country: CountryLocale.en }
     }
@@ -206,6 +215,13 @@ export const ProfilePageContent = () => {
             if (storedCountries !== null) {
               const countries: TransformedType[] = JSON.parse(storedCountries)
 
+              const countryObject = countries.find(
+                country => country?.label === profileData?.country
+              )
+
+              setGetDataForCountry(countryObject as TransformedType)
+              handleClickInputCity(countryObject)
+
               setCountriesValues(countries)
               setCitiesValues(null)
             }
@@ -216,23 +232,13 @@ export const ProfilePageContent = () => {
     }
   }
 
-  const handleClickInputCountries = () => {
-    getCountriesFromLocalStorage()
-  }
+  const handleClickInputCity = (countryObject: TransformedType = null) => {
+    const dataObject = countryObject ? countryObject : dataForCountry
 
-  const transformDataCity = (data: CityReturnType[]): TransformedType[] => {
-    return data.map(city => ({
-      label: city.title_ru,
-      value: { id: city.country_id, name: city.title_ru },
-    }))
-  }
-
-  const handleClickInputCity = () => {
-    console.log(' dataForCountry: ', dataForCountry)
     const currentLocale = getCurrentLocale()
 
-    if (dataForCountry?.value.id && !localStorage.getItem(currentLocale?.city as string)) {
-      getCities({ id: dataForCountry?.value.id })
+    if (dataObject?.value.id && !localStorage.getItem(currentLocale?.city as string)) {
+      getCities({ id: dataObject?.value.id as number })
         .unwrap()
         .then(data => {
           const cities = transformDataCity(data)
@@ -252,9 +258,18 @@ export const ProfilePageContent = () => {
     }
   }
 
-  const handleFormSubmit = async (dataForm: FormValues) => {
-    console.log(' dataForm: ', dataForm)
+  const handleClickInputCountries = () => {
+    getCountriesFromLocalStorage()
+  }
 
+  const transformDataCity = (data: CityReturnType[]): TransformedType[] => {
+    return data.map(city => ({
+      label: city.title_ru,
+      value: { id: city.country_id, name: city.title_ru },
+    }))
+  }
+
+  const handleFormSubmit = async (dataForm: FormValues) => {
     const result = updateProfileSchema.safeParse(dataForm)
 
     if (!result.success) {
@@ -313,8 +328,6 @@ export const ProfilePageContent = () => {
   }
 
   const setCityToLocalStorage = (cities: TransformedType[], currentLocale: CurrentLocaleType) => {
-    console.log(`!!!`)
-
     const citiesStringified = JSON.stringify(cities)
 
     localStorage.setItem(currentLocale?.city as string, citiesStringified)
@@ -380,7 +393,7 @@ export const ProfilePageContent = () => {
                 getDataForCombobox={setGetDataForCity}
                 isLoading={isCitiesLoading}
                 name={Terra.city}
-                onInputClick={handleClickInputCity}
+                onInputClick={() => handleClickInputCity()}
                 options={citiesValues ?? []}
                 requestItemOnKeyDown={() => {
                   if (!arrowDownPressed) {
