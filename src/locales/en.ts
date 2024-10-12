@@ -119,4 +119,17 @@ export const en: LocaleType = {
     statistics: 'Statistics',
   },
   russian: 'Russian',
+  signUp: {
+    and: 'and',
+    confirmPassword: 'Password confirmation',
+    email: 'Email',
+    haveAccount: 'Do you have an account?',
+    isAgreement: 'I agree to the ',
+    password: 'Password',
+    privacyPolicy: 'Privacy Policy',
+    signIn: 'Sign In',
+    signUp: 'Sign Up',
+    termsOfServices: 'Terms of Service',
+    userName: 'Username',
+  },
 }

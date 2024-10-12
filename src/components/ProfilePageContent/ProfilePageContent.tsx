@@ -1,13 +1,27 @@
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
 import { useMeQuery } from '@/services/auth/authApi'
-import { useEditProfileMutation, useGetProfileQuery } from '@/services/profile/profile-api'
+import {
+  useEditProfileMutation,
+  useGetProfileQuery,
+  useLazyGetCitiesQuery,
+  useLazyGetCountriesQuery,
+} from '@/services/profile/profile-api'
+import { CityReturnType, CountryLocale, TransformedType } from '@/services/profile/profile-types'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, FormDatePicker, FormInput, FormTextarea, Select, SelectItem } from '@robur_/ui-kit'
+import {
+  Button,
+  FormCombobox,
+  FormDatePicker,
+  FormInput,
+  FormTextarea,
+  ImageOutline,
+} from '@robur_/ui-kit'
+import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
@@ -15,12 +29,18 @@ import s from './ProfilePageContent.module.scss'
 import Spinner from '../Spinner/Spinner'
 
 const updateProfileSchema = z.object({
-  aboutMe: z.string().max(200, { message: 'This field about me must be no more than 200 characters' }).optional(),
-  // city: z
-  //   .string({ message: 'This field is required' })
-  //   .min(4, 'This field is required')
-  //   .max(30, 'This field is required'),
-  // country: z.string().min(4, 'This field is required').max(30, 'This field is required'),
+  aboutMe: z
+    .string()
+    .max(200, { message: 'This field about me must be no more than 200 characters' })
+    .optional(),
+  city: z
+    .string({ message: 'This field is required' })
+    .min(4, 'This field is required')
+    .max(30, 'This field is required'),
+  country: z
+    .string({ message: 'This field is required' })
+    .min(4, 'This field is required')
+    .max(30, 'This field is required'),
   dateOfBirth: z.date({ message: 'This field is required' }),
   firstName: z
     .string({ message: 'This field is required' })
@@ -36,7 +56,10 @@ const updateProfileSchema = z.object({
     .regex(/^[A-Za-zА-Яа-я]+$/, {
       message: 'Last name must contain only letters A-Z, a-z, А-Я, а-я',
     }),
-  userName: z.string({ message: 'This field is required' }).min(6, 'This field is required').max(30),
+  userName: z
+    .string({ message: 'This field is required' })
+    .min(6, 'This field is required')
+    .max(30),
 })
 
 type FormValues = z.infer<typeof updateProfileSchema>
@@ -54,53 +77,25 @@ type ErrorType = {
   message: string
 }
 
-const countryOptions = [
-  {
-    label: 'England',
-    value: '1',
-  },
-  {
-    label: 'Usa',
-    value: '2',
-  },
-  {
-    label: 'Germany',
-    value: '3',
-  },
-]
-
-const cityOptions = [
-  {
-    label: 'London',
-    value: '1',
-  },
-  {
-    label: 'Paris',
-    value: '2',
-  },
-  {
-    label: 'Berlin',
-    value: '3',
-  },
-]
-
 export const ProfilePageContent = () => {
+  const router = useRouter()
+
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
-  const currentUserId = meData?.userId // Извлекаем ID пользователя из данных профиля
+  const currentUserId = meData?.userId
 
   const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(
     { id: currentUserId as string },
-    { skip: !currentUserId } // Пропускаем запрос, если нет ID
+    { skip: !currentUserId }
   )
 
-  const [editProfile, { isError, isLoading: isLoadingEditProfile }] = useEditProfileMutation()
+  const [editProfile, { isError, isLoading: isloadingEditProfile }] = useEditProfileMutation()
   const { modalJSX, openModal } = useModalFromSettingsProfile()
 
-  const { control, handleSubmit, reset, setError } = useForm<FormValues>({
+  const { control, handleSubmit, reset, setError, setValue, watch } = useForm<FormValues>({
     defaultValues: {
       aboutMe: '',
-      // city: '',
-      // country: '',
+      city: '',
+      country: '',
       dateOfBirth: undefined,
       firstName: '',
       lastName: '',
@@ -110,12 +105,26 @@ export const ProfilePageContent = () => {
     resolver: zodResolver(updateProfileSchema),
   })
 
+  const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
+    useLazyGetCountriesQuery()
+  const [getCities, { isError: isCityError, isLoading: isCitiesLoading }] = useLazyGetCitiesQuery()
+
+  const [countriesValues, setCountriesValues] = useState<TransformedType[]>([])
+
+  const [citiesValues, setCitiesValues] = useState<TransformedType[] | null>([])
+
+  const [dataForCountry, setGetDataForCountry] = useState<TransformedType | null>(null)
+
+  const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
+
+  const countryValue = watch('country')
+
   useEffect(() => {
     if (profileData) {
       reset({
         aboutMe: profileData.aboutMe || '',
-        // city: profileData.city || '',
-        // country: profileData.country || '',
+        city: profileData.city || '',
+        country: profileData.country || '',
         dateOfBirth: profileData.dateOfBirth ? new Date(profileData.dateOfBirth) : undefined,
         firstName: profileData.firstName || '',
         lastName: profileData.lastName || '',
@@ -124,7 +133,79 @@ export const ProfilePageContent = () => {
     }
   }, [profileData, reset])
 
+  useEffect(() => {
+    if (!countryValue) {
+      setValue('city', '') // Очистка значения city
+      setCitiesValues(null) // Также очищаем список городов, если необходимо
+    }
+  }, [countryValue, setValue])
+
+  const getCountriesFromLocalStorage = () => {
+    const currentLocale = `countries-${router.locale}`
+    const storedCountries = localStorage.getItem(currentLocale)
+
+    try {
+      if (storedCountries !== null) {
+        const countries: TransformedType[] = JSON.parse(storedCountries)
+
+        setCountriesValues(countries)
+        setCitiesValues(null)
+      } else {
+        getCountries()
+          .unwrap()
+          .then(() => {
+            const storedCountries = localStorage.getItem(currentLocale)
+
+            if (storedCountries !== null) {
+              const countries: TransformedType[] = JSON.parse(storedCountries)
+
+              setCountriesValues(countries)
+              setCitiesValues(null)
+            }
+          })
+      }
+    } catch (error) {
+      console.error('Error parsing countries:', error)
+    }
+  }
+
+  const handleClickInputCountries = () => {
+    getCountriesFromLocalStorage()
+  }
+
+  const transformDataCity = (data: CityReturnType[]): TransformedType[] => {
+    return data.map(city => ({
+      label: city.title_ru,
+      value: { id: city.country_id, name: city.title_ru },
+    }))
+  }
+
+  //todo заблокировать пока не получены страны
+  const handleClickInputCity = () => {
+    console.log(' dataForCountry: ', dataForCountry)
+    if (dataForCountry?.value.id) {
+      getCities({ id: dataForCountry?.value.id })
+        .unwrap()
+        .then(data => {
+          const cities = transformDataCity(data)
+
+          setCitiesValues(cities)
+        })
+        .catch((error: any) => {
+          console.log(error)
+        })
+    }
+  }
+
   const handleFormSubmit = async (dataForm: FormValues) => {
+    console.log(' dataForm: ', dataForm)
+
+    const result = updateProfileSchema.safeParse(dataForm)
+
+    if (!result.success) {
+      console.log('Validation errors:', result.error.errors)
+    }
+
     if (!currentUserId) {
       console.error('User ID is missing')
 
@@ -144,8 +225,6 @@ export const ProfilePageContent = () => {
 
       await editProfile({
         ...dataForm,
-        city: '',
-        country: '',
         dateOfBirth: formattedDateOfBirth,
         id: currentUserId,
       }).unwrap()
@@ -174,60 +253,80 @@ export const ProfilePageContent = () => {
     console.error('Profile update failed:', error)
   }
 
-  if (startIsLoading || isLoadingProfile || isLoadingEditProfile) {
+  if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
     return <Spinner />
   }
 
   return (
-    <>
-      <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
-        <div className={s.formContainer}>
-          <AvatarProfile currentUserId={currentUserId || ''} profileData={profileData || undefined} />
-          <div className={s.dataSection}>
-            <FormInput containerClassName={s.inputContainer} control={control} label={'Username'} name={'userName'} />
-            <FormInput containerClassName={s.inputContainer} control={control} label={'Firstname'} name={'firstName'} />
-            <FormInput containerClassName={s.inputContainer} control={control} label={'Lastname'} name={'lastName'} />
-            <FormDatePicker control={control} label={'Date of birth'} name={'dateOfBirth'} years={years} />
-            <div style={{ display: 'flex', gap: '24px' }}>
-              <div style={{ flexGrow: 1 }}>
-                <div>Select your country</div>
-                <Select placeholder={'Country'}>
-                  {countryOptions.map(option => {
-                    return (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    )
-                  })}
-                </Select>
-              </div>
-              <div style={{ flexGrow: 1 }}>
-                <div>Select your city</div>
-                <Select placeholder={'City'}>
-                  {cityOptions.map(option => {
-                    return (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    )
-                  })}
-                </Select>
-              </div>
+    <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
+      <div className={s.formContainer}>
+        <AvatarProfile currentUserId={currentUserId || ''} profileData={profileData || undefined} />
+        <div className={s.dataSection}>
+          <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            label={'Username'}
+            name={'userName'}
+          />
+          <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            label={'Firstname'}
+            name={'firstName'}
+          />
+          <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            label={'Lastname'}
+            name={'lastName'}
+          />
+          <FormDatePicker
+            control={control}
+            label={'Date of birth'}
+            name={'dateOfBirth'}
+            years={years}
+          />
+          <div style={{ display: 'flex', gap: '24px' }}>
+            <div style={{ flexGrow: 1 }}>
+              <div>Select your country</div>
+              <FormCombobox
+                control={control}
+                getDataForCombobox={setGetDataForCountry}
+                isLoading={isCountriesLoading}
+                name={'country'}
+                onInputClick={handleClickInputCountries}
+                options={countriesValues ?? []}
+                setValue={value => setValue('country', value)}
+              />
             </div>
-            <FormTextarea
-              className={s.textArea}
-              control={control}
-              name={'aboutMe'}
-              placeholder={'Text-area'}
-              titleLabel={'About Me'}
-            />
+            <div style={{ flexGrow: 1 }}>
+              <div>Select your city</div>
+
+              <FormCombobox
+                control={control}
+                disabled={!countryValue}
+                getDataForCombobox={setGetDataForCity}
+                isLoading={isCitiesLoading}
+                name={'city'}
+                onInputClick={handleClickInputCity}
+                options={citiesValues ?? []}
+                setValue={value => setValue('city', value)}
+              />
+            </div>
           </div>
+          <FormTextarea
+            className={s.textArea}
+            control={control}
+            name={'aboutMe'}
+            placeholder={'Text-area'}
+            titleLabel={'About Me'}
+          />
         </div>
-        <Button className={s.submitBtn} type={'submit'}>
-          Save changes
-        </Button>
-        {modalJSX}
-      </form>
-    </>
+      </div>
+      <Button className={s.submitBtn} type={'submit'}>
+        Save changes
+      </Button>
+      {modalJSX}
+    </form>
   )
 }

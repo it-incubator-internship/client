@@ -117,6 +117,19 @@ export const ru = {
     statistics: 'Статистика',
   },
   russian: 'Русский',
+  signUp: {
+    and: 'и',
+    confirmPassword: 'Подтверждение пароля',
+    email: 'Почта',
+    haveAccount: 'У Вас уже есть аккаунт?',
+    isAgreement: 'Я согласен с ',
+    password: 'Пароль',
+    privacyPolicy: 'Политикой конфиденциальности',
+    signIn: 'Войти',
+    signUp: 'Зарегистрироваться',
+    termsOfServices: 'Правилами использования',
+    userName: 'Имя пользователя',
+  },
 }
 
 export type LocaleType = typeof ru
