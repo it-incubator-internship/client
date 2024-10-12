@@ -181,35 +181,34 @@ export const ProfilePageContent = () => {
     }
   }
 
+  function handleStoredCountries(storedCountries: string) {
+    const countries: TransformedType[] = JSON.parse(storedCountries)
+
+    const countryObject = countries.find(country => country?.label === profileData?.country)
+
+    setGetDataForCountry(countryObject as TransformedType)
+    handleClickInputCity(countryObject)
+
+    setCountriesValues(countries)
+    setCitiesValues(null)
+  }
+
   const getCountriesFromLocalStorage = () => {
     const currentLocale = getCurrentLocale()
 
     const storedCountries = localStorage.getItem(currentLocale?.country as string)
 
     try {
-      if (storedCountries !== null) {
-        const countries: TransformedType[] = JSON.parse(storedCountries)
-
-        setCountriesValues(countries)
-        setCitiesValues(null)
+      if (storedCountries) {
+        handleStoredCountries(storedCountries)
       } else {
         getCountries()
           .unwrap()
           .then(() => {
             const storedCountries = localStorage.getItem(currentLocale?.country as string)
 
-            if (storedCountries !== null) {
-              const countries: TransformedType[] = JSON.parse(storedCountries)
-
-              const countryObject = countries.find(
-                country => country?.label === profileData?.country
-              )
-
-              setGetDataForCountry(countryObject as TransformedType)
-              handleClickInputCity(countryObject)
-
-              setCountriesValues(countries)
-              setCitiesValues(null)
+            if (storedCountries) {
+              handleStoredCountries(storedCountries)
             }
           })
       }
@@ -220,6 +219,8 @@ export const ProfilePageContent = () => {
 
   const handleClickInputCity = (countryObject: TransformedType = null) => {
     const dataObject = countryObject ? countryObject : dataForCountry
+
+    console.log(' dataForCountry: ', dataForCountry)
 
     const currentLocale = getCurrentLocale()
 
