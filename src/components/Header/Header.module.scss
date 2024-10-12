@@ -1,6 +1,6 @@
 .header {
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   top: 0;
   left: 0;
 
@@ -28,13 +28,25 @@
 
 .options {
   display: flex;
-  flex: 0 0 234px;
+  flex-shrink: 0;
   gap: 48px;
   align-items: center;
 }
 
+.navOptions {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+
+  a {
+    justify-content: center;
+    min-width: 100px;
+    border-radius: 2px;
+  }
+}
+
 .langSelect{
-  flex: 0 0 163px;
+  min-width: 163px;
 }
 
 .notifications {
