@@ -221,9 +221,6 @@ export const ProfilePageContent = () => {
   const handleClickInputCity = (countryObject: TransformedType = null) => {
     const dataObject = countryObject ? countryObject : dataForCountry
 
-    console.log(' countryObject: ', countryObject)
-    console.log(' dataObject: ', dataObject)
-    console.log(' dataForCountry: ', dataForCountry)
     const currentLocale = getCurrentLocale()
 
     if (dataObject?.value.id) {
