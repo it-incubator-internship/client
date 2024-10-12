@@ -29,8 +29,6 @@ import {
   ImageOutline,
 } from '@demorest49de/ui-kit'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { store } from 'next/dist/build/output/store'
-import { logAppDirError } from 'next/dist/server/dev/log-app-dir-error'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
@@ -160,18 +158,6 @@ export const ProfilePageContent = () => {
       })
 
       handleClickInputCountries()
-
-      const currentLocale = getCurrentLocale()
-
-      const storedCountries = localStorage.getItem(currentLocale?.country as string)
-
-      if (storedCountries) {
-        const parsed: TransformedType[] = JSON.parse(storedCountries as string)
-        const countryObject = parsed.find(country => country?.label === profileData?.country)
-
-        setGetDataForCountry(countryObject as TransformedType)
-        handleClickInputCity(countryObject)
-      }
     }
   }, [profileData, reset, router.locale])
 
