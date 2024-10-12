@@ -1,14 +1,7 @@
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import {
-  Button,
-  FlagRussia,
-  FlagUnitedKingdom,
-  OutlineBell,
-  Select,
-  SelectItem,
-} from '@robur_/ui-kit'
+import { Button, FlagRussia, FlagUnitedKingdom, OutlineBell, Select, SelectItem } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -33,10 +26,10 @@ export const Header = () => {
   return (
     <header className={s.header}>
       {isHomePage ? (
-        <span className={clsx(s.logo, s.logoDisabled)}>Inctagram</span>
+        <span className={clsx(s.logo, s.logoDisabled)}>Navaibe</span>
       ) : (
         <button className={s.logo} onClick={logoClickHandler} type={'button'}>
-          Inctagram
+          Navaibe
         </button>
       )}
       <div className={s.options}>
@@ -46,11 +39,7 @@ export const Header = () => {
           </button>
         )}
         <div className={s.langSelect}>
-          <Select
-            defaultValue={locale}
-            onValueChange={localeChangeHandler}
-            placeholder={'Pick language'}
-          >
+          <Select defaultValue={locale} onValueChange={localeChangeHandler} placeholder={'Pick language'}>
             <SelectItem value={'en'}>
               <div className={s.langOption}>
                 <FlagUnitedKingdom className={s.flag} />
