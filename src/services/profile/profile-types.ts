@@ -15,15 +15,34 @@ export type CountryReturnType = {
   title_ru: string
 }
 
+export type CurrentLocaleType = {
+  city: string
+  country: string
+}
+
 export enum CountryLocale {
   en = 'countries-en',
   ru = 'countries-ru',
 }
 
+export enum RouterLocale {
+  en = 'en',
+  ru = 'ru',
+}
+
+export enum CityLocale {
+  ru = 'cities-ru',
+}
+
+export enum Terra {
+  city = 'city',
+  country = 'country',
+}
+
 export type TransformedType = {
   label: string
   value: { id: number; name: string }
-}
+} | null
 
 export type CityReturnType = {
   city_id: number
