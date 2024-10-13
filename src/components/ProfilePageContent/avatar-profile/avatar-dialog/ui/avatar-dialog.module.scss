@@ -1,0 +1,76 @@
+.DialogOverlay {
+  position: fixed;
+  inset: 0;
+
+  opacity: 0.6;
+  background-color: var(--color-dark-900);
+
+  animation: overlay-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 492px;
+  padding: 0 25px;
+
+  color: var(--color-light-100);
+
+  background-color: var(--color-dark-300);
+  border: 1px solid var(--color-dark-100);
+
+  animation: content-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent:focus {
+  outline: none;
+}
+
+
+.separator {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  left: 0;
+
+  height: 1px;
+
+  background-color: var(--color-dark-100);
+}
+
+
+.selectAvatarWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto;
+}
+
+
+@keyframes overlay-show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.6;
+  }
+}
+
+@keyframes content-show {
+  from {
+    transform: translate(-50%, -48%) scale(0.96);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+

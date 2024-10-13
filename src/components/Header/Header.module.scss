@@ -18,8 +18,13 @@
 
 .logo {
   cursor: pointer;
+
   font-size: var(--font-size-xxl);
   font-weight: var(--font-weight-semibold);
+  color: transparent;
+
+  background: linear-gradient(90deg, #2773b5, #46d9b1);
+  background-clip: text;
 }
 
 .logoDisabled {
@@ -45,7 +50,7 @@
   }
 }
 
-.langSelect{
+.langSelect {
   min-width: 163px;
 }
 
