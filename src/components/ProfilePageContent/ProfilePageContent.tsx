@@ -136,10 +136,17 @@ export const ProfilePageContent = () => {
   const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
 
   const countryValue = watch(Terra.country)
+  console.log(' countryValue: ', countryValue)
 
   //endregion hooks
 
   //region useEffects
+
+  useEffect(() => {
+    if (!countryValue) {
+      setValue(Terra.city, '')
+    }
+  }, [countryValue])
 
   useEffect(() => {
     setArrowDownPressed(false)
@@ -161,13 +168,6 @@ export const ProfilePageContent = () => {
       handleClickInputCountries()
     }
   }, [profileData, reset, router.locale])
-
-  useEffect(() => {
-    if (!countryValue) {
-      setValue(Terra.city, '') // Очистка значения city
-      setCitiesValues(null) // Также очищаем список городов, если необходимо
-    }
-  }, [countryValue, setValue])
 
   //endregion useEffects
 
