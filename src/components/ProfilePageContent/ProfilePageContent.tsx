@@ -143,6 +143,7 @@ export const ProfilePageContent = () => {
 
   useEffect(() => {
     setArrowDownPressed(false)
+    setCitiesValues(null)
   }, [dataForCountry])
 
   useEffect(() => {

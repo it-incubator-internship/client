@@ -11,7 +11,7 @@
     "open-browser": "node open-browser.js"
   },
   "dependencies": {
-    "@demorest49de/ui-kit": "^0.0.60",
+    "@demorest49de/ui-kit": "^0.0.63",
     "@hookform/resolvers": "^3.9.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/ua-parser-js": "^0.7.39",
