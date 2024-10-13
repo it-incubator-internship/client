@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
@@ -22,7 +22,10 @@ import s from './ProfilePageContent.module.scss'
 import Spinner from '../Spinner/Spinner'
 
 const updateProfileSchema = z.object({
-  aboutMe: z.string().max(200, { message: 'This field about me must be no more than 200 characters' }).optional(),
+  aboutMe: z
+    .string()
+    .max(200, { message: 'This field about me must be no more than 200 characters' })
+    .optional(),
   city: z
     .string({ message: 'This field is required' })
     .min(4, 'This field is required')
@@ -46,7 +49,10 @@ const updateProfileSchema = z.object({
     .regex(/^[A-Za-zА-Яа-я]+$/, {
       message: 'Last name must contain only letters A-Z, a-z, А-Я, а-я',
     }),
-  userName: z.string({ message: 'This field is required' }).min(6, 'This field is required').max(30),
+  userName: z
+    .string({ message: 'This field is required' })
+    .min(6, 'This field is required')
+    .max(30),
 })
 
 type FormValues = z.infer<typeof updateProfileSchema>
@@ -92,7 +98,8 @@ export const ProfilePageContent = () => {
     resolver: zodResolver(updateProfileSchema),
   })
 
-  const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] = useLazyGetCountriesQuery()
+  const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
+    useLazyGetCountriesQuery()
   const [getCities, { isError: isCityError, isLoading: isCitiesLoading }] = useLazyGetCitiesQuery()
 
   const [countriesValues, setCountriesValues] = useState<TransformedType[]>([])
@@ -247,10 +254,30 @@ export const ProfilePageContent = () => {
       <div className={s.formContainer}>
         <AvatarProfile currentUserId={currentUserId || ''} profileData={profileData || undefined} />
         <div className={s.dataSection}>
-          <FormInput containerClassName={s.inputContainer} control={control} label={'Username'} name={'userName'} />
-          <FormInput containerClassName={s.inputContainer} control={control} label={'Firstname'} name={'firstName'} />
-          <FormInput containerClassName={s.inputContainer} control={control} label={'Lastname'} name={'lastName'} />
-          <FormDatePicker control={control} label={'Date of birth'} name={'dateOfBirth'} years={years} />
+          <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            label={'Username'}
+            name={'userName'}
+          />
+          <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            label={'Firstname'}
+            name={'firstName'}
+          />
+          <FormInput
+            containerClassName={s.inputContainer}
+            control={control}
+            label={'Lastname'}
+            name={'lastName'}
+          />
+          <FormDatePicker
+            control={control}
+            label={'Date of birth'}
+            name={'dateOfBirth'}
+            years={years}
+          />
           <div style={{ display: 'flex', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>
               <div>Select your country</div>

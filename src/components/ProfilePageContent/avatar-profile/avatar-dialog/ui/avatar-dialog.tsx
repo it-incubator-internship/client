@@ -61,7 +61,9 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
 
   useEffect(() => {
     if (shouldClick) {
-      const fileInput = document.querySelector('input[type="file"][id^="avatar_loader-"]') as HTMLInputElement
+      const fileInput = document.querySelector(
+        'input[type="file"][id^="avatar_loader-"]'
+      ) as HTMLInputElement
 
       if (fileInput) {
         fileInput.click()

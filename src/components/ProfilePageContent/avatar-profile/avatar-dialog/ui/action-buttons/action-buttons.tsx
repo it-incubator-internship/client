@@ -10,7 +10,12 @@ type ActionButtonsProps = {
   onSelectClick: () => void
 }
 
-export const ActionButtons = ({ isError, isFileLoad, onSaveClick, onSelectClick }: ActionButtonsProps) => {
+export const ActionButtons = ({
+  isError,
+  isFileLoad,
+  onSaveClick,
+  onSelectClick,
+}: ActionButtonsProps) => {
   return (
     <>
       {!isFileLoad || isError ? (
