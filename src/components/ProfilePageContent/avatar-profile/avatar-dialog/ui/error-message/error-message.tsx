@@ -4,4 +4,6 @@ type ErrorMessageProps = {
   message: string
 }
 
-export const ErrorMessage = ({ message }: ErrorMessageProps) => <div className={s.errorMsg}>{message}</div>
+export const ErrorMessage = ({ message }: ErrorMessageProps) => (
+  <div className={s.errorMsg}>{message}</div>
+)

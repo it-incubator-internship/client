@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 
 import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
+import { useTranslation } from '@/hooks/useTranslation'
+import { updateProfileFormValues, updateProfileSchema } from '@/schemas/updateProfileSchema'
 import { useMeQuery } from '@/services/auth/authApi'
 import {
   useEditProfileMutation,
@@ -11,52 +13,17 @@ import {
   useLazyGetCountriesQuery,
 } from '@/services/profile/profile-api'
 import { CityReturnType, TransformedType } from '@/services/profile/profile-types'
+import { customErrorHandler } from '@/utils/customErrorHandler'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
-import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
 
 import Spinner from '../Spinner/Spinner'
 
-const updateProfileSchema = z.object({
-  aboutMe: z
-    .string()
-    .max(200, { message: 'This field about me must be no more than 200 characters' })
-    .optional(),
-  city: z
-    .string({ message: 'This field is required' })
-    .min(4, 'This field is required')
-    .max(30, 'This field is required'),
-  country: z
-    .string({ message: 'This field is required' })
-    .min(4, 'This field is required')
-    .max(30, 'This field is required'),
-  dateOfBirth: z.date({ message: 'This field is required' }),
-  firstName: z
-    .string({ message: 'This field is required' })
-    .min(1, 'This field is required')
-    .max(50, { message: 'This field firstname must be no more than 50 characters' })
-    .regex(/^[A-Za-zА-Яа-я]+$/, {
-      message: 'First name must contain only letters A-Z, a-z, А-Я, а-я',
-    }),
-  lastName: z
-    .string({ message: 'This field is required' })
-    .min(1, 'This field is required')
-    .max(50, { message: 'This field lastname must be no more than 50 characters' })
-    .regex(/^[A-Za-zА-Яа-я]+$/, {
-      message: 'Last name must contain only letters A-Z, a-z, А-Я, а-я',
-    }),
-  userName: z
-    .string({ message: 'This field is required' })
-    .min(6, 'This field is required')
-    .max(30),
-})
-
-type FormValues = z.infer<typeof updateProfileSchema>
-type ZodKeys = keyof FormValues
+type ZodKeys = keyof updateProfileFormValues
 
 type FieldError = {
   field: ZodKeys
@@ -72,6 +39,7 @@ type ErrorType = {
 
 export const ProfilePageContent = () => {
   const router = useRouter()
+  const t = useTranslation()
 
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
@@ -84,19 +52,20 @@ export const ProfilePageContent = () => {
   const [editProfile, { isError, isLoading: isloadingEditProfile }] = useEditProfileMutation()
   const { modalJSX, openModal } = useModalFromSettingsProfile()
 
-  const { control, handleSubmit, reset, setError, setValue, watch } = useForm<FormValues>({
-    defaultValues: {
-      aboutMe: '',
-      city: '',
-      country: '',
-      dateOfBirth: undefined,
-      firstName: '',
-      lastName: '',
-      userName: meData?.userName,
-    },
-    mode: 'onSubmit',
-    resolver: zodResolver(updateProfileSchema),
-  })
+  const { control, handleSubmit, reset, setError, setValue, watch } =
+    useForm<updateProfileFormValues>({
+      defaultValues: {
+        aboutMe: '',
+        city: '',
+        country: '',
+        dateOfBirth: undefined,
+        firstName: '',
+        lastName: '',
+        userName: meData?.userName,
+      },
+      mode: 'onSubmit',
+      resolver: zodResolver(updateProfileSchema(t)),
+    })
 
   const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
     useLazyGetCountriesQuery()
@@ -189,15 +158,7 @@ export const ProfilePageContent = () => {
     }
   }
 
-  const handleFormSubmit = async (dataForm: FormValues) => {
-    console.log(' dataForm: ', dataForm)
-
-    const result = updateProfileSchema.safeParse(dataForm)
-
-    if (!result.success) {
-      console.log('Validation errors:', result.error.errors)
-    }
-
+  const handleFormSubmit = async (dataForm: updateProfileFormValues) => {
     if (!currentUserId) {
       console.error('User ID is missing')
 
@@ -223,26 +184,9 @@ export const ProfilePageContent = () => {
 
       openModal(variantModals.successfulSaveProfile)
     } catch (error: unknown) {
-      handleFormSubmitError(error)
+      customErrorHandler<ZodKeys>({ error, setError, translations: t })
+      openModal(variantModals.failedSaveProfile)
     }
-  }
-
-  const handleFormSubmitError = (error: unknown) => {
-    if (error && typeof error === 'object' && 'data' in error) {
-      const errors = (error as ErrorType).data?.fields
-
-      if (errors) {
-        errors.forEach((error: FieldError) => {
-          setError(error.field, {
-            message: error.message,
-            type: 'manual',
-          })
-        })
-      }
-    }
-
-    openModal(variantModals.failedSaveProfile)
-    console.error('Profile update failed:', error)
   }
 
   if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
