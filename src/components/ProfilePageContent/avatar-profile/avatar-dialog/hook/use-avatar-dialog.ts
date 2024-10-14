@@ -46,7 +46,10 @@ export const useAvatarDialog = () => {
       return false
     }
     if (!FILE_VALIDATION_CONFIG.allowedFileTypes.includes(file.type)) {
-      dispatch({ payload: 'Error! The format of the uploaded photo must be PNG or JPEG', type: 'SET_ERROR' })
+      dispatch({
+        payload: 'Error! The format of the uploaded photo must be PNG or JPEG',
+        type: 'SET_ERROR',
+      })
 
       return false
     }
