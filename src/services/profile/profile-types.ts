@@ -9,6 +9,19 @@ export type EditProfileArgs = {
   userName: string
 }
 
+export type EditProfileResponse = {
+  aboutMe: string
+  city: string
+  country: string
+  dateOfBirth: string
+  firstName: string
+  lastName: string
+  originalAvatarUrl: string
+  profileStatus: string
+  smallAvatarUrl: string
+  userName: string
+}
+
 export type CountryReturnType = {
   country_id: number
   title_en: string

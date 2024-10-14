@@ -4,6 +4,7 @@ import {
   CountryLocale,
   CountryReturnType,
   EditProfileArgs,
+  EditProfileResponse,
   TransformedType,
 } from './profile-types'
 
@@ -34,7 +35,13 @@ const transformDataCountry = (data: CountryReturnType[], locale: string) => {
 
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
-    editProfile: builder.mutation<void, EditProfileArgs>({
+    deleteAvatarFromServer: builder.mutation<void, void>({
+      query: () => ({
+        method: 'DELETE',
+        url: `/v1/file/avatar`,
+      }),
+    }),
+    editProfile: builder.mutation<EditProfileResponse, EditProfileArgs>({
       invalidatesTags: ['Profile'],
       query: args => ({
         body: {
@@ -74,18 +81,28 @@ export const profileApi = inctagramApi.injectEndpoints({
       }),
     }),
 
-    getProfile: builder.query<EditProfileArgs, { id: string }>({
+    getProfile: builder.query<EditProfileResponse, { id: string }>({
       providesTags: ['Profile'],
       query: args => ({
         method: 'GET',
         url: `/v1/user/profile/${args.id}`,
       }),
     }),
+    sendAvatarToServer: builder.mutation<void, any>({
+      query: file => ({
+        body: file,
+        method: 'POST',
+        url: `/v1/file/avatar`,
+      }),
+    }),
   }),
 })
 export const {
+  useDeleteAvatarFromServerMutation,
   useEditProfileMutation,
   useGetProfileQuery,
   useLazyGetCitiesQuery,
   useLazyGetCountriesQuery,
+  useLazyGetProfileQuery,
+  useSendAvatarToServerMutation,
 } = profileApi

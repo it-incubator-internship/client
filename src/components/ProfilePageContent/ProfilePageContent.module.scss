@@ -12,21 +12,6 @@
   border-bottom: 1px solid var(--color-dark-300);
 }
 
-.photoSection {
-  flex: 0 0 192px;
-}
-
-.userPhoto {
-  display: grid;
-  place-items: center;
-
-  width: 192px;
-  height: 192px;
-  margin-bottom: 24px;
-
-  background-color: var(--color-dark-500);
-  border-radius: 50%;
-}
 
 .dataSection {
   flex-grow: 1;

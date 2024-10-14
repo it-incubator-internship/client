@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
 import { useTranslation } from '@/hooks/useTranslation'
 import { updateProfileFormValues, updateProfileSchema } from '@/schemas/updateProfileSchema'
@@ -23,14 +24,7 @@ import {
 import { customErrorHandler } from '@/utils/customErrorHandler'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  Button,
-  FormCombobox,
-  FormDatePicker,
-  FormInput,
-  FormTextarea,
-  ImageOutline,
-} from '@robur_/ui-kit'
+import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
 
 import s from './ProfilePageContent.module.scss'
@@ -223,14 +217,7 @@ export const ProfilePageContent = () => {
   return (
     <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
       <div className={s.formContainer}>
-        <div className={s.photoSection}>
-          <div className={s.userPhoto}>
-            <ImageOutline height={'48'} width={'48'} />
-          </div>
-          <Button fullWidth type={'button'} variant={'outlined'}>
-            Add a Profile Photo
-          </Button>
-        </div>
+        <AvatarProfile currentUserId={currentUserId || ''} profileData={profileData || undefined} />
         <div className={s.dataSection}>
           <FormInput
             containerClassName={s.inputContainer}
