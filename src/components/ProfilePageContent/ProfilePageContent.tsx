@@ -1,8 +1,9 @@
-// region imports
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
+import { useTranslation } from '@/hooks/useTranslation'
+import { updateProfileFormValues, updateProfileSchema } from '@/schemas/updateProfileSchema'
 import { useMeQuery } from '@/services/auth/authApi'
 import {
   useEditProfileMutation,
@@ -19,6 +20,7 @@ import {
   Terra,
   TransformedType,
 } from '@/services/profile/profile-types'
+import { customErrorHandler } from '@/utils/customErrorHandler'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -30,71 +32,16 @@ import {
   ImageOutline,
 } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
-import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
 
 import Spinner from '../Spinner/Spinner'
 
-// endregion imports
-
-//region zodSchema
-const updateProfileSchema = z.object({
-  aboutMe: z
-    .string()
-    .max(200, { message: 'This field about me must be no more than 200 characters' })
-    .optional(),
-  city: z
-    .string({ message: 'This field is required' })
-    .min(4, 'This field is required')
-    .max(30, 'This field is required'),
-  country: z
-    .string({ message: 'This field is required' })
-    .min(4, 'This field is required')
-    .max(30, 'This field is required'),
-  dateOfBirth: z.date({ message: 'This field is required' }),
-  firstName: z
-    .string({ message: 'This field is required' })
-    .min(1, 'This field is required')
-    .max(50, { message: 'This field firstname must be no more than 50 characters' })
-    .regex(/^[A-Za-zА-Яа-я]+$/, {
-      message: 'First name must contain only letters A-Z, a-z, А-Я, а-я',
-    }),
-  lastName: z
-    .string({ message: 'This field is required' })
-    .min(1, 'This field is required')
-    .max(50, { message: 'This field lastname must be no more than 50 characters' })
-    .regex(/^[A-Za-zА-Яа-я]+$/, {
-      message: 'Last name must contain only letters A-Z, a-z, А-Я, а-я',
-    }),
-  userName: z
-    .string({ message: 'This field is required' })
-    .min(6, 'This field is required')
-    .max(30),
-})
-
-//endregion zodSchema
-
-//region types
-type FormValues = z.infer<typeof updateProfileSchema>
-type ZodKeys = keyof FormValues
-
-type FieldError = {
-  field: ZodKeys
-  message: string
-}
-
-type ErrorType = {
-  data: {
-    fields: FieldError[]
-  }
-  message: string
-}
-//endregion types
+type ZodKeys = keyof updateProfileFormValues
 
 export const ProfilePageContent = () => {
-  //region hooks
   const router = useRouter()
+  const t = useTranslation()
 
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
@@ -107,40 +54,30 @@ export const ProfilePageContent = () => {
   const [editProfile, { isError, isLoading: isloadingEditProfile }] = useEditProfileMutation()
   const { modalJSX, openModal } = useModalFromSettingsProfile()
 
-  const { control, handleSubmit, reset, setError, setValue, watch } = useForm<FormValues>({
-    defaultValues: {
-      aboutMe: '',
-      city: '',
-      country: '',
-      dateOfBirth: undefined,
-      firstName: '',
-      lastName: '',
-      userName: meData?.userName,
-    },
-    mode: 'onSubmit',
-    resolver: zodResolver(updateProfileSchema),
-  })
+  const { control, handleSubmit, reset, setError, setValue, watch } =
+    useForm<updateProfileFormValues>({
+      defaultValues: {
+        aboutMe: '',
+        city: '',
+        country: '',
+        dateOfBirth: undefined,
+        firstName: '',
+        lastName: '',
+        userName: meData?.userName,
+      },
+      mode: 'onSubmit',
+      resolver: zodResolver(updateProfileSchema(t)),
+    })
 
   const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
     useLazyGetCountriesQuery()
   const [getCities, { isError: isCityError, isLoading: isCitiesLoading }] = useLazyGetCitiesQuery()
-
   const [countriesValues, setCountriesValues] = useState<TransformedType[]>([])
-
   const [citiesValues, setCitiesValues] = useState<TransformedType[] | null>([])
-
   const [dataForCountry, setGetDataForCountry] = useState<TransformedType | null>(null)
-
   const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
-
   const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
-
   const countryValue = watch(Terra.country)
-  console.log(' countryValue: ', countryValue)
-
-  //endregion hooks
-
-  //region useEffects
 
   useEffect(() => {
     if (!countryValue) {
@@ -169,10 +106,6 @@ export const ProfilePageContent = () => {
     }
   }, [profileData, reset, router.locale])
 
-  //endregion useEffects
-
-  // region functionality
-
   function getCurrentLocale() {
     if (router.locale === RouterLocale.en) {
       return { city: CityLocale.ru, country: CountryLocale.en }
@@ -196,7 +129,6 @@ export const ProfilePageContent = () => {
 
   const getCountriesFromLocalStorage = () => {
     const currentLocale = getCurrentLocale()
-
     const storedCountries = localStorage.getItem(currentLocale?.country as string)
 
     try {
@@ -220,9 +152,6 @@ export const ProfilePageContent = () => {
 
   const handleClickInputCity = (countryObject: TransformedType = null) => {
     const dataObject = countryObject ? countryObject : dataForCountry
-
-    console.log(' dataForCountry: ', dataForCountry)
-
     const currentLocale = getCurrentLocale()
 
     if (dataObject?.value.id) {
@@ -252,16 +181,8 @@ export const ProfilePageContent = () => {
     }))
   }
 
-  const handleFormSubmit = async (dataForm: FormValues) => {
-    const result = updateProfileSchema.safeParse(dataForm)
-
-    if (!result.success) {
-      console.log('Validation errors:', result.error.errors)
-    }
-
+  const handleFormSubmit = async (dataForm: updateProfileFormValues) => {
     if (!currentUserId) {
-      console.error('User ID is missing')
-
       return
     }
 
@@ -284,26 +205,9 @@ export const ProfilePageContent = () => {
 
       openModal(variantModals.successfulSaveProfile)
     } catch (error: unknown) {
-      handleFormSubmitError(error)
+      customErrorHandler<ZodKeys>({ error, setError, translations: t })
+      openModal(variantModals.failedSaveProfile)
     }
-  }
-
-  const handleFormSubmitError = (error: unknown) => {
-    if (error && typeof error === 'object' && 'data' in error) {
-      const errors = (error as ErrorType).data?.fields
-
-      if (errors) {
-        errors.forEach((error: FieldError) => {
-          setError(error.field, {
-            message: error.message,
-            type: 'manual',
-          })
-        })
-      }
-    }
-
-    openModal(variantModals.failedSaveProfile)
-    console.error('Profile update failed:', error)
   }
 
   if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
@@ -315,8 +219,6 @@ export const ProfilePageContent = () => {
 
     localStorage.setItem(currentLocale?.city as string, citiesStringified)
   }
-
-  // endregion functionality
 
   return (
     <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
