@@ -15,6 +15,8 @@ export const AvatarHeader = ({ onClose }: AvatarHeaderProps) => (
         <Close className={s.closeBtn} />
       </button>
     </Dialog.Close>
-    <Dialog.Description className={s.hiddenElement}>Click here and add your Profile Photo.</Dialog.Description>
+    <Dialog.Description className={s.hiddenElement}>
+      Click here and add your Profile Photo.
+    </Dialog.Description>
   </div>
 )

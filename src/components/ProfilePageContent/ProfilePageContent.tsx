@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 
 import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
 import { useModalFromSettingsProfile, variantModals } from '@/hooks/useModalFromSettingsProfile'
+import { useTranslation } from '@/hooks/useTranslation'
+import { updateProfileFormValues, updateProfileSchema } from '@/schemas/updateProfileSchema'
 import { useMeQuery } from '@/services/auth/authApi'
 import {
   useEditProfileMutation,
@@ -10,68 +12,30 @@ import {
   useLazyGetCitiesQuery,
   useLazyGetCountriesQuery,
 } from '@/services/profile/profile-api'
-import { CityReturnType, TransformedType } from '@/services/profile/profile-types'
+import {
+  CityLocale,
+  CityReturnType,
+  CountryLocale,
+  CurrentLocaleType,
+  RouterLocale,
+  Terra,
+  TransformedType,
+} from '@/services/profile/profile-types'
+import { customErrorHandler } from '@/utils/customErrorHandler'
 import { calculateAge, formatDateOfBirth, years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
-import { z } from 'zod'
 
 import s from './ProfilePageContent.module.scss'
 
 import Spinner from '../Spinner/Spinner'
 
-const updateProfileSchema = z.object({
-  aboutMe: z
-    .string()
-    .max(200, { message: 'This field about me must be no more than 200 characters' })
-    .optional(),
-  city: z
-    .string({ message: 'This field is required' })
-    .min(4, 'This field is required')
-    .max(30, 'This field is required'),
-  country: z
-    .string({ message: 'This field is required' })
-    .min(4, 'This field is required')
-    .max(30, 'This field is required'),
-  dateOfBirth: z.date({ message: 'This field is required' }),
-  firstName: z
-    .string({ message: 'This field is required' })
-    .min(1, 'This field is required')
-    .max(50, { message: 'This field firstname must be no more than 50 characters' })
-    .regex(/^[A-Za-zА-Яа-я]+$/, {
-      message: 'First name must contain only letters A-Z, a-z, А-Я, а-я',
-    }),
-  lastName: z
-    .string({ message: 'This field is required' })
-    .min(1, 'This field is required')
-    .max(50, { message: 'This field lastname must be no more than 50 characters' })
-    .regex(/^[A-Za-zА-Яа-я]+$/, {
-      message: 'Last name must contain only letters A-Z, a-z, А-Я, а-я',
-    }),
-  userName: z
-    .string({ message: 'This field is required' })
-    .min(6, 'This field is required')
-    .max(30),
-})
-
-type FormValues = z.infer<typeof updateProfileSchema>
-type ZodKeys = keyof FormValues
-
-type FieldError = {
-  field: ZodKeys
-  message: string
-}
-
-type ErrorType = {
-  data: {
-    fields: FieldError[]
-  }
-  message: string
-}
+type ZodKeys = keyof updateProfileFormValues
 
 export const ProfilePageContent = () => {
   const router = useRouter()
+  const t = useTranslation()
 
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
@@ -84,33 +48,41 @@ export const ProfilePageContent = () => {
   const [editProfile, { isError, isLoading: isloadingEditProfile }] = useEditProfileMutation()
   const { modalJSX, openModal } = useModalFromSettingsProfile()
 
-  const { control, handleSubmit, reset, setError, setValue, watch } = useForm<FormValues>({
-    defaultValues: {
-      aboutMe: '',
-      city: '',
-      country: '',
-      dateOfBirth: undefined,
-      firstName: '',
-      lastName: '',
-      userName: meData?.userName,
-    },
-    mode: 'onSubmit',
-    resolver: zodResolver(updateProfileSchema),
-  })
+  const { control, handleSubmit, reset, setError, setValue, watch } =
+    useForm<updateProfileFormValues>({
+      defaultValues: {
+        aboutMe: '',
+        city: '',
+        country: '',
+        dateOfBirth: undefined,
+        firstName: '',
+        lastName: '',
+        userName: meData?.userName,
+      },
+      mode: 'onSubmit',
+      resolver: zodResolver(updateProfileSchema(t)),
+    })
 
   const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
     useLazyGetCountriesQuery()
   const [getCities, { isError: isCityError, isLoading: isCitiesLoading }] = useLazyGetCitiesQuery()
-
   const [countriesValues, setCountriesValues] = useState<TransformedType[]>([])
-
   const [citiesValues, setCitiesValues] = useState<TransformedType[] | null>([])
-
   const [dataForCountry, setGetDataForCountry] = useState<TransformedType | null>(null)
-
   const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
+  const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
+  const countryValue = watch(Terra.country)
 
-  const countryValue = watch('country')
+  useEffect(() => {
+    if (!countryValue) {
+      setValue(Terra.city, '')
+    }
+  }, [countryValue])
+
+  useEffect(() => {
+    setArrowDownPressed(false)
+    setCitiesValues(null)
+  }, [dataForCountry])
 
   useEffect(() => {
     if (profileData) {
@@ -123,42 +95,72 @@ export const ProfilePageContent = () => {
         lastName: profileData.lastName || '',
         userName: profileData.userName || '',
       })
-    }
-  }, [profileData, reset])
 
-  useEffect(() => {
-    if (!countryValue) {
-      setValue('city', '') // Очистка значения city
-      setCitiesValues(null) // Также очищаем список городов, если необходимо
+      handleClickInputCountries()
     }
-  }, [countryValue, setValue])
+  }, [profileData, reset, router.locale])
+
+  function getCurrentLocale() {
+    if (router.locale === RouterLocale.en) {
+      return { city: CityLocale.ru, country: CountryLocale.en }
+    }
+    if (router.locale === RouterLocale.ru) {
+      return { city: CityLocale.ru, country: CountryLocale.ru }
+    }
+  }
+
+  function handleStoredCountries(storedCountries: string) {
+    const countries: TransformedType[] = JSON.parse(storedCountries)
+
+    const countryObject = countries.find(country => country?.label === profileData?.country)
+
+    setGetDataForCountry(countryObject as TransformedType)
+    handleClickInputCity(countryObject)
+
+    setCountriesValues(countries)
+    setCitiesValues(null)
+  }
 
   const getCountriesFromLocalStorage = () => {
-    const currentLocale = `countries-${router.locale}`
-    const storedCountries = localStorage.getItem(currentLocale)
+    const currentLocale = getCurrentLocale()
+    const storedCountries = localStorage.getItem(currentLocale?.country as string)
 
     try {
-      if (storedCountries !== null) {
-        const countries: TransformedType[] = JSON.parse(storedCountries)
-
-        setCountriesValues(countries)
-        setCitiesValues(null)
+      if (storedCountries) {
+        handleStoredCountries(storedCountries)
       } else {
         getCountries()
           .unwrap()
           .then(() => {
-            const storedCountries = localStorage.getItem(currentLocale)
+            const storedCountries = localStorage.getItem(currentLocale?.country as string)
 
-            if (storedCountries !== null) {
-              const countries: TransformedType[] = JSON.parse(storedCountries)
-
-              setCountriesValues(countries)
-              setCitiesValues(null)
+            if (storedCountries) {
+              handleStoredCountries(storedCountries)
             }
           })
       }
     } catch (error) {
       console.error('Error parsing countries:', error)
+    }
+  }
+
+  const handleClickInputCity = (countryObject: TransformedType = null) => {
+    const dataObject = countryObject ? countryObject : dataForCountry
+    const currentLocale = getCurrentLocale()
+
+    if (dataObject?.value.id) {
+      getCities({ id: dataObject?.value.id as number })
+        .unwrap()
+        .then(data => {
+          const cities = transformDataCity(data)
+
+          setCitiesValues(cities)
+
+          setCityToLocalStorage(cities, currentLocale as CurrentLocaleType)
+        })
+        .catch((error: any) => {
+          console.log(error)
+        })
     }
   }
 
@@ -173,34 +175,8 @@ export const ProfilePageContent = () => {
     }))
   }
 
-  const handleClickInputCity = () => {
-    console.log(' dataForCountry: ', dataForCountry)
-    if (dataForCountry?.value.id) {
-      getCities({ id: dataForCountry?.value.id })
-        .unwrap()
-        .then(data => {
-          const cities = transformDataCity(data)
-
-          setCitiesValues(cities)
-        })
-        .catch((error: any) => {
-          console.log(error)
-        })
-    }
-  }
-
-  const handleFormSubmit = async (dataForm: FormValues) => {
-    console.log(' dataForm: ', dataForm)
-
-    const result = updateProfileSchema.safeParse(dataForm)
-
-    if (!result.success) {
-      console.log('Validation errors:', result.error.errors)
-    }
-
+  const handleFormSubmit = async (dataForm: updateProfileFormValues) => {
     if (!currentUserId) {
-      console.error('User ID is missing')
-
       return
     }
 
@@ -223,30 +199,19 @@ export const ProfilePageContent = () => {
 
       openModal(variantModals.successfulSaveProfile)
     } catch (error: unknown) {
-      handleFormSubmitError(error)
+      customErrorHandler<ZodKeys>({ error, setError, translations: t })
+      openModal(variantModals.failedSaveProfile)
     }
-  }
-
-  const handleFormSubmitError = (error: unknown) => {
-    if (error && typeof error === 'object' && 'data' in error) {
-      const errors = (error as ErrorType).data?.fields
-
-      if (errors) {
-        errors.forEach((error: FieldError) => {
-          setError(error.field, {
-            message: error.message,
-            type: 'manual',
-          })
-        })
-      }
-    }
-
-    openModal(variantModals.failedSaveProfile)
-    console.error('Profile update failed:', error)
   }
 
   if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
     return <Spinner />
+  }
+
+  const setCityToLocalStorage = (cities: TransformedType[], currentLocale: CurrentLocaleType) => {
+    const citiesStringified = JSON.stringify(cities)
+
+    localStorage.setItem(currentLocale?.city as string, citiesStringified)
   }
 
   return (
@@ -285,10 +250,10 @@ export const ProfilePageContent = () => {
                 control={control}
                 getDataForCombobox={setGetDataForCountry}
                 isLoading={isCountriesLoading}
-                name={'country'}
+                name={Terra.country}
                 onInputClick={handleClickInputCountries}
                 options={countriesValues ?? []}
-                setValue={value => setValue('country', value)}
+                setValue={value => setValue(Terra.country, value)}
               />
             </div>
             <div style={{ flexGrow: 1 }}>
@@ -299,10 +264,16 @@ export const ProfilePageContent = () => {
                 disabled={!countryValue}
                 getDataForCombobox={setGetDataForCity}
                 isLoading={isCitiesLoading}
-                name={'city'}
-                onInputClick={handleClickInputCity}
+                name={Terra.city}
+                onInputClick={() => handleClickInputCity()}
                 options={citiesValues ?? []}
-                setValue={value => setValue('city', value)}
+                requestItemOnKeyDown={() => {
+                  if (!arrowDownPressed) {
+                    handleClickInputCity()
+                    setArrowDownPressed(true)
+                  }
+                }}
+                setValue={value => setValue(Terra.city, value)}
               />
             </div>
           </div>

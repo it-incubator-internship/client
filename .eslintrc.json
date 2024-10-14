@@ -11,6 +11,7 @@
   "rules": {
     "@typescript-eslint/no-unused-vars": "warn",
     "import/order": "off",
+    "max-lines": ["error", {"max": 320, "skipComments": true}],
     "react/no-unknown-property": [
       2,
       {
