@@ -136,7 +136,8 @@ export const ProfilePageContent = () => {
   const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
 
   const countryValue = watch(Terra.country)
-  console.log(' countryValue: ', countryValue)
+  console.log(' dataForCountry: ', dataForCountry);
+  console.log(' dataForCity: ', dataForCity);
 
   //endregion hooks
 
