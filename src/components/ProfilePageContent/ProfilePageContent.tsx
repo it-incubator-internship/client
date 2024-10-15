@@ -1,5 +1,5 @@
 import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
-import { useProfileForm } from '@/components/ProfilePageContent/formcombobox/useProfileForm'
+import { useProfileForm } from '@/components/ProfilePageContent/form-profile/useProfileForm'
 import { Terra } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
 import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
