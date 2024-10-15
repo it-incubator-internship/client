@@ -13,7 +13,7 @@ export const updateProfileSchema = (t: LocaleType) => {
       .max(30, 'This field is required'),
     country: z
       .string({ message: 'This field is required' })
-      .min(4, 'This field is required')
+      .min(2, 'This field is required')
       .max(30, 'This field is required'),
     dateOfBirth: z.date({ message: 'This field is required' }),
     firstName: z
