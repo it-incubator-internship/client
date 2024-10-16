@@ -30,12 +30,20 @@ const authApi = inctagramApi.injectEndpoints({
 
         localStorage.setItem('accessToken', data.accessToken)
       },
-      query: ({ email, password }) => ({
-        body: { email, password },
-        credentials: 'include',
-        method: 'POST',
-        url: `/v1/auth/login`,
-      }),
+      query: ({ email, password }) => {
+        const storedIp = sessionStorage.getItem('clientIp') || ''
+
+        return {
+          body: { email, password },
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Client-IP': storedIp,
+          },
+          method: 'POST',
+          url: `/v1/auth/login`,
+        }
+      },
     }),
     logout: builder.mutation<void, void>({
       onQueryStarted: async (args, { dispatch, queryFulfilled }) => {
