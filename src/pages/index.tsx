@@ -1,7 +1,6 @@
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PATH } from '@/consts/route-paths'
-import Profile from '@/pages/profile'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useRouter } from 'next/router'
 
