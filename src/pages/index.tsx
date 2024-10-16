@@ -17,7 +17,11 @@ function Home() {
     return <Spinner />
   }
 
-  void router.replace(PATH.PROFILE)
+  return (
+    <div style={{ display: 'grid', height: '100vh', placeItems: 'center', width: '100%' }}>
+      <h2>HOME PAGE</h2>
+    </div>
+  )
 }
 
 Home.getLayout = getCombinedLayout
