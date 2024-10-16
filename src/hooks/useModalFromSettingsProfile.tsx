@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Modal } from '@robur_/ui-kit'
+import { Modal } from '@demorest49de/ui-kit'
 import Link from 'next/link'
 
 export const variantModals = {

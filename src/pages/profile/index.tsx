@@ -5,7 +5,7 @@ import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedL
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
-import { Button } from '@robur_/ui-kit'
+import { Button } from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 import { NextPage } from 'next'
 import Image from 'next/image'

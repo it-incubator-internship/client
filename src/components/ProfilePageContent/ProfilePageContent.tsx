@@ -2,7 +2,7 @@ import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/av
 import { useProfileForm } from '@/components/ProfilePageContent/form-profile/useProfileForm'
 import { Terra } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
-import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
+import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@demorest49de/ui-kit'
 
 import s from './ProfilePageContent.module.scss'
 

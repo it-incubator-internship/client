@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { useRegistrationConfirmationMutation } from '@/services/auth/authApi'
-import { Button } from '@robur_/ui-kit'
+import { Button } from '@demorest49de/ui-kit'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 

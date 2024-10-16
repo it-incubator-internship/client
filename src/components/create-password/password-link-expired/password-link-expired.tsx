@@ -5,7 +5,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { useResendEmailMutation } from '@/services/password-recovery/password-recovery-api'
 import { ServerError } from '@/services/password-recovery/password-recovery-types'
 import { showErrorToast } from '@/utils/toastConfig'
-import { Button, Modal } from '@robur_/ui-kit'
+import { Button, Modal } from '@demorest49de/ui-kit'
 
 import s from './password-link-expired.module.scss'
 

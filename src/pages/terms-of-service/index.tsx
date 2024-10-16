@@ -1,4 +1,4 @@
-import { ArrowBackOutline, Button } from '@robur_/ui-kit'
+import { ArrowBackOutline, Button } from '@demorest49de/ui-kit'
 
 import s from './terms-of-service.module.scss'
 

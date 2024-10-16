@@ -2,7 +2,7 @@ import { Devices } from '@/components/Devices/Devices'
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 // import { useMeQuery } from '@/services/auth/authApi'
-import { TabContent, Tabs } from '@robur_/ui-kit'
+import { TabContent, Tabs } from '@demorest49de/ui-kit'
 
 function ProfileEdit() {
   // const { data } = useMeQuery()

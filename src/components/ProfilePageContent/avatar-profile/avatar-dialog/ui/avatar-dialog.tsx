@@ -8,7 +8,7 @@ import { ErrorMessage } from '@/components/ProfilePageContent/avatar-profile/ava
 import { useSendAvatarToServerMutation } from '@/services/profile/profile-api'
 import { base64ImgToFormData } from '@/utils/base64ImgToFormData'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Button } from '@robur_/ui-kit'
+import { Button } from '@demorest49de/ui-kit'
 
 import s from './avatar-dialog.module.scss'
 

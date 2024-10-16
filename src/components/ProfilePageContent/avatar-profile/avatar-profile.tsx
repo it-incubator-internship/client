@@ -6,7 +6,7 @@ import {
   useLazyGetProfileQuery,
 } from '@/services/profile/profile-api'
 import { EditProfileResponse } from '@/services/profile/profile-types'
-import { Close, ImageOutline, Modal } from '@robur_/ui-kit'
+import { Close, ImageOutline, Modal } from '@demorest49de/ui-kit'
 
 import s from './avatar-profile.module.scss'
 
