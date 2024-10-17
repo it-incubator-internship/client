@@ -55,8 +55,10 @@ export const en: LocaleType = {
     cropTitle: 'Cropping',
     filterDescription: 'lick here and filter new Photo',
     filterTitle: 'Filters',
+    openDraft: 'Open draft',
     publishDescription: 'lick here and publish new Photo',
     publishTitle: 'Publication',
+    selectFromComputer: 'Select from computer',
   },
   devices: {
     activeSessions: 'Active sessions',

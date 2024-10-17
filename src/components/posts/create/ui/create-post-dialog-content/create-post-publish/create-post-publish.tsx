@@ -1,5 +1,3 @@
-const CreatePostPublish = () => {
+export const CreatePostPublish = () => {
   return <div>CreatePostPublish</div>
 }
-
-export default CreatePostPublish

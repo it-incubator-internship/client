@@ -10,6 +10,7 @@ export const createPostSlice = createSlice({
     croppedImages: [] as ImageType[],
     images: [] as ImageType[],
     page: 1,
+    photoUploadError: '',
   },
   name: 'createPost',
   reducers: {
@@ -42,9 +43,19 @@ export const createPostSlice = createSlice({
     setPage: (state, action: PayloadAction<{ page: number }>) => {
       state.page = action.payload.page
     },
+    setPhotoUploadError: (state, action: PayloadAction<{ uploadError: string }>) => {
+      state.photoUploadError = action.payload.uploadError
+    },
   },
 })
 
 export const createPostReducer = createPostSlice.reducer
-export const { deleteImg, nextPage, prevPage, setCroppedImage, setImage, setPage } =
-  createPostSlice.actions
+export const {
+  deleteImg,
+  nextPage,
+  prevPage,
+  setCroppedImage,
+  setImage,
+  setPage,
+  setPhotoUploadError,
+} = createPostSlice.actions

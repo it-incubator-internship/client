@@ -1,5 +1,3 @@
-const CreatePostCrop = () => {
+export const CreatePostCrop = () => {
   return <div>CreatePostCrop</div>
 }
-
-export default CreatePostCrop

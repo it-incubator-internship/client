@@ -53,8 +53,10 @@ export const ru = {
     cropTitle: 'Обрезать фото',
     filterDescription: 'Нажмите сюда, чтобы добавить фильтры для фото',
     filterTitle: 'Добавить фильтр',
+    openDraft: 'Открыть черновик',
     publishDescription: 'Нажмите сюда, чтобы опубликовать новое фото',
     publishTitle: 'Опубликовать',
+    selectFromComputer: 'Выбрать на этом компьютере',
   },
   devices: {
     activeSessions: 'Активные сессии',

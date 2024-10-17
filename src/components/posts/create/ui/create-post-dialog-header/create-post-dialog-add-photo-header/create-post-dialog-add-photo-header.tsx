@@ -6,7 +6,6 @@ import s from '../create-post-dialog-header.module.scss'
 
 export const CreatePostDialogAddPhotoHeader = () => {
   const t = useTranslation()
-
   const onClose = () => {
     console.log('closed')
   }
