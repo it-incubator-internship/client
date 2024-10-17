@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { CreatePostDialog } from '@/components/posts/create/ui/create-post-dialog/create-post-dialog'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLogoutMutation, useMeQuery } from '@/services/auth/authApi'
@@ -44,7 +45,7 @@ export const Navbar = ({ className }: Props) => {
     <nav className={className}>
       <Sidebar>
         <SidebarItem Icon={HomeOutline} href={PATH.HOME} item={t.nav.home} />
-        <SidebarItem Icon={PlusSquareOutline} href={PATH.CREATE} item={t.nav.create} />
+        <CreatePostDialog />
         <SidebarItem
           Icon={Person}
           href={`${PATH.PROFILE}/${data?.userId}`}
