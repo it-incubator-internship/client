@@ -5,11 +5,17 @@ export type ImageType = {
   img: string
 }
 
+export const FILE_VALIDATION_CONFIG = {
+  allowedFileTypes: ['image/png', 'image/jpeg'],
+  maxFileSize: 10 * 1024 * 1024,
+}
+// 'image/webp'
+
 export const createPostSlice = createSlice({
   initialState: {
     croppedImages: [] as ImageType[],
     images: [] as ImageType[],
-    page: 1,
+    page: 0,
     photoUploadError: '',
   },
   name: 'createPost',
