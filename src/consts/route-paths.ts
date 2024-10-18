@@ -34,4 +34,4 @@ export const commonRoutes = [
   PATH.PROFILE,
 ]
 
-export const privateRoutes = [PATH.PROFILE_EDIT, PATH.PROFILE]
+export const privateRoutes = [PATH.PROFILE_EDIT]

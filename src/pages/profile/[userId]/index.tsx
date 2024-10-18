@@ -6,9 +6,11 @@ import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
+import { Button } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import { NextPage } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 
@@ -41,6 +43,7 @@ const USER_ACHIEVEMENTS = {
 
 const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar.png' }) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
+  const currentUserId = meData?.userId
   const router = useRouter()
   const { userId } = useParams()
 
@@ -53,10 +56,6 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
     return <Spinner />
   }
 
-  if (meData?.userId === userId) {
-    void router.replace(PATH.PROFILE)
-  }
-
   if (!isLoadingProfile && !profileData) {
     void router.replace(PATH.NOT_FOUND)
   }
@@ -65,14 +64,16 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
     <div className={s.profile}>
       <div className={s.header}>
         <div className={s.avatar}>
-          <Image
-            alt={'User Avatar'}
-            className={s.avatarImage}
-            height={204}
-            layout={'intrinsic'}
-            src={avatar}
-            width={204}
-          />
+          {profileData && (
+            <Image
+              alt={'User Avatar'}
+              className={s.avatarImage}
+              height={204}
+              layout={'intrinsic'}
+              src={profileData?.originalAvatarUrl}
+              width={204}
+            />
+          )}
         </div>
         <div className={s.info}>
           <div className={s.profileUrl}>
@@ -84,6 +85,11 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
             <p>{profileData?.aboutMe}</p>
           </div>
         </div>
+        {currentUserId === userId && (
+          <Button asChild className={s.profileSettingsBtn} variant={'secondary'}>
+            <Link href={`/profile-settings/${currentUserId}`}>Profile settings</Link>
+          </Button>
+        )}
       </div>
       <PublicationsPhoto />
     </div>

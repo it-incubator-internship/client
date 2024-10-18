@@ -47,7 +47,7 @@ export const Navbar = ({ className }: Props) => {
         <SidebarItem Icon={PlusSquareOutline} href={PATH.CREATE} item={t.nav.create} />
         <SidebarItem
           Icon={Person}
-          href={`/profile-settings/${data?.userId}`}
+          href={`${PATH.PROFILE}/${data?.userId}`}
           item={t.nav.myProfile}
         />
         <SidebarItem Icon={MessageCircleOutline} href={PATH.MESSAGES} item={t.nav.messenger} />
