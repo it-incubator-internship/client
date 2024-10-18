@@ -1,11 +1,17 @@
-import { CreatePostAddPhoto } from '@/components/posts/create/ui/create-post-dialog-content/create-post-add-photo/create-post-add-photo'
-import { CreatePostCrop } from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/create-post-crop'
-import { CreatePostFilter } from '@/components/posts/create/ui/create-post-dialog-content/create-post-filter/create-post-filter'
-import { CreatePostPublish } from '@/components/posts/create/ui/create-post-dialog-content/create-post-publish/create-post-publish'
-import { CreatePostDialogAddPhotoHeader } from '@/components/posts/create/ui/create-post-dialog-header/create-post-dialog-add-photo-header/create-post-dialog-add-photo-header'
-import { CreatePostDialogCropHeader } from '@/components/posts/create/ui/create-post-dialog-header/create-post-dialog-crop-header/create-post-dialog-crop-header'
-import { CreatePostDialogFilterHeader } from '@/components/posts/create/ui/create-post-dialog-header/create-post-dialog-filter-header/create-post-dialog-filter-header'
-import { CreatePostDialogPublishHeader } from '@/components/posts/create/ui/create-post-dialog-header/create-post-dialog-publish-header/create-post-dialog-publish-header'
+import React from 'react'
+
+import {
+  CreatePostAddPhoto,
+  CreatePostCrop,
+  CreatePostFilter,
+  CreatePostPublish,
+} from '@/components/posts/create/ui/create-post-dialog-content'
+import {
+  CreatePostDialogAddPhotoHeader,
+  CreatePostDialogCropHeader,
+  CreatePostDialogFilterHeader,
+  CreatePostDialogPublishHeader,
+} from '@/components/posts/create/ui/create-post-dialog-header'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppSelector } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
