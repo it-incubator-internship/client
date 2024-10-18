@@ -3,37 +3,31 @@ import { z } from 'zod'
 
 export const updateProfileSchema = (t: LocaleType) => {
   return z.object({
-    aboutMe: z
-      .string()
-      .max(200, { message: 'This field about me must be no more than 200 characters' })
-      .optional(),
+    aboutMe: z.string().max(200, { message: t.formErrors.noMoreThan200Characters }).optional(),
     city: z
-      .string({ message: 'This field is required' })
-      .min(4, 'This field is required')
-      .max(30, 'This field is required'),
+      .string({ message: t.formErrors.required })
+      .min(4, t.formErrors.required)
+      .max(30, t.formErrors.required),
     country: z
-      .string({ message: 'This field is required' })
-      .min(4, 'This field is required')
-      .max(30, 'This field is required'),
-    dateOfBirth: z.date({ message: 'This field is required' }),
+      .string({ message: t.formErrors.required })
+      .min(4, t.formErrors.required)
+      .max(30, t.formErrors.required),
+    dateOfBirth: z.date({ message: t.formErrors.required }),
     firstName: z
-      .string({ message: 'This field is required' })
-      .min(1, 'This field is required')
-      .max(50, { message: 'This field firstname must be no more than 50 characters' })
+      .string({ message: t.formErrors.required })
+      .min(1, t.formErrors.required)
+      .max(50, { message: t.formErrors.firstnameNoMoreThan50Characters })
       .regex(/^[A-Za-zА-Яа-я]+$/, {
-        message: 'First name must contain only letters A-Z, a-z, А-Я, а-я',
+        message: t.formErrors.firstNameMustContainOnlyLettersAZaz,
       }),
     lastName: z
-      .string({ message: 'This field is required' })
-      .min(1, 'This field is required')
-      .max(50, { message: 'This field lastname must be no more than 50 characters' })
+      .string({ message: t.formErrors.required })
+      .min(1, t.formErrors.required)
+      .max(50, { message: t.formErrors.lastnameNoMoreThan50Characters })
       .regex(/^[A-Za-zА-Яа-я]+$/, {
-        message: 'Last name must contain only letters A-Z, a-z, А-Я, а-я',
+        message: t.formErrors.lastNameMustContainOnlyLettersAZaz,
       }),
-    userName: z
-      .string({ message: 'This field is required' })
-      .min(6, 'This field is required')
-      .max(30),
+    userName: z.string({ message: t.formErrors.required }).min(6, t.formErrors.required).max(30),
   })
 }
 

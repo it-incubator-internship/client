@@ -57,8 +57,15 @@ export const en: LocaleType = {
   english: 'English',
   errors: {
     401: 'Incorrect login or password',
+    anUnexpectedErrorHasOccurredServer:
+      'An unexpected error has occurred on the server. Please wait, it will be fixed soon.',
     default: 'Something went wrong',
     fetch_error: 'Some problems with your connection',
+    homePage: 'home page.',
+    oopsInternalServerError: 'OOPS! INTERNAL SERVER ERROR',
+    oopsPageNotFound: 'OOPS! PAGE NOT FOUND',
+    tryToReturnToThe: 'Try to return to the',
+    youCanReturnToThe: 'You can return to the',
   },
   forgotPassword: {
     buttonBack: 'Back to Sign In',
@@ -80,6 +87,11 @@ export const en: LocaleType = {
   },
   formErrors: {
     email: 'The email must match the format\nexample@example.com',
+    firstNameMustContainOnlyLettersAZaz: 'First name must contain only letters A-Z, a-z, А-Я, а-я',
+    firstnameNoMoreThan50Characters: 'This field firstname must be no more than 50 characters',
+    invalidEmail: 'Invalid email',
+    lastNameMustContainOnlyLettersAZaz: 'Last name must contain only letters A-Z, a-z, А-Я, а-я',
+    lastnameNoMoreThan50Characters: 'This field last name must be no more than 50 characters',
     maxLength(count: number) {
       const str = pluralizeEn(count)
 
@@ -92,6 +104,7 @@ export const en: LocaleType = {
           return `Field must be ${count} characters long at least`
       }
     },
+    noMoreThan200Characters: 'This field about me must be no more than 200 characters',
     passwordMatch: 'Password should match',
     passwordRegex:
       'password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
@@ -106,17 +119,45 @@ export const en: LocaleType = {
     followers: 'Followers',
     following: 'Following',
     initialUrlProfile: 'UrlProfile',
+    profileSettings: 'Profile settings',
     publications: 'Publications',
   },
+  myProfileSettings: {
+    aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',
+    aboutMe: 'About me',
+    accountManagement: 'Account management',
+    addProfilePhoto: 'Add a profile photo',
+    clickHereAddProfilePhoto: 'Click here add profile photo',
+    dateOfBirth: 'Date of birth',
+    devices: 'Devices',
+    error: 'Error',
+    errorServerIsNotAvailable: 'Error! Server is not available!',
+    firstName: 'First name',
+    generalInformation: 'General information',
+    lastName: 'Last name',
+    myPayments: 'My payments',
+    privacyPolicy: 'Privacy Policy',
+    profileSaved: 'Profile saved',
+    save: 'Save',
+    saveChanges: 'Save changes',
+    selectFromComputer: 'Select from computer',
+    selectYourCity: 'Select your city',
+    selectYourCountry: 'Select your city',
+    userName: 'User name',
+    yourSettingsAreSaved: 'Your settings are saved!',
+  },
   nav: {
+    areYouWantToLogOut: 'Are you really want to log out of your account',
     create: 'Create',
     favorites: 'Favorites',
     home: 'Home',
     logout: 'Logout',
     messenger: 'Messenger',
     myProfile: 'My profile',
+    no: 'No',
     search: 'Search',
     statistics: 'Statistics',
+    yes: 'Yes',
   },
   russian: 'Russian',
   signUp: {

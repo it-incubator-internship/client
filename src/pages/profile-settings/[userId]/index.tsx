@@ -1,11 +1,13 @@
 import { Devices } from '@/components/Devices/Devices'
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
+import { useTranslation } from '@/hooks/useTranslation'
 // import { useMeQuery } from '@/services/auth/authApi'
 import { TabContent, Tabs } from '@robur_/ui-kit'
 
 function ProfileEdit() {
   // const { data } = useMeQuery()
+  const t = useTranslation()
 
   return (
     <div className={'container'}>
@@ -13,10 +15,10 @@ function ProfileEdit() {
         defaultValue={'information'}
         fullWidth
         tabs={[
-          { title: 'General information', value: 'information' },
-          { title: 'Devices', value: 'devices' },
-          { disabled: true, title: 'Account Management', value: 'account' },
-          { disabled: true, title: 'My payments', value: 'payments' },
+          { title: t.myProfileSettings.generalInformation, value: 'information' },
+          { title: t.myProfileSettings.devices, value: 'devices' },
+          { disabled: true, title: t.myProfileSettings.accountManagement, value: 'account' },
+          { disabled: true, title: t.myProfileSettings.myPayments, value: 'payments' },
         ]}
       >
         <>

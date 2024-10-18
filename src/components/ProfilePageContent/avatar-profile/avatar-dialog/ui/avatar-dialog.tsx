@@ -5,6 +5,7 @@ import { ActionButtons } from '@/components/ProfilePageContent/avatar-profile/av
 import { AvatarHeader } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-header'
 import { AvatarSelector } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-selector'
 import { ErrorMessage } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/error-message'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useSendAvatarToServerMutation } from '@/services/profile/profile-api'
 import { base64ImgToFormData } from '@/utils/base64ImgToFormData'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -71,12 +72,13 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
       setShouldClick(false)
     }
   }, [shouldClick])
+  const t = useTranslation()
 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <Button fullWidth type={'button'} variant={'outlined'}>
-          Add a Profile Photo
+          {t.myProfileSettings.addProfilePhoto}
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>

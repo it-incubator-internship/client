@@ -17,12 +17,16 @@ import { z } from 'zod'
 
 import s from './signIn.module.scss'
 
-const SigninSchema = z.object({
-  email: z.string().min(1, { message: 'This field is required' }).email(),
-  password: z.string().min(1, { message: 'This field is required' }),
-})
+const createSigninSchema = (t: { formErrors: { invalidEmail: string; required: string } }) =>
+  z.object({
+    email: z
+      .string()
+      .min(1, { message: t.formErrors.required })
+      .email({ message: t.formErrors.invalidEmail }),
+    password: z.string().min(1, { message: t.formErrors.required }),
+  })
 
-type FormValues = z.infer<typeof SigninSchema>
+type FormValues = z.infer<ReturnType<typeof createSigninSchema>>
 type ZodKeys = keyof FormValues
 
 function SignIn() {
@@ -32,6 +36,7 @@ function SignIn() {
   const router = useRouter()
 
   const t = useTranslation()
+  const SigninSchema = createSigninSchema(t)
 
   const {
     control,
@@ -83,14 +88,14 @@ function SignIn() {
             containerClassName={s.inputContainer}
             control={control}
             error={errors?.email}
-            label={'Email'}
+            label={t.auth.email}
             name={'email'}
           />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
             error={errors?.password}
-            label={'Password'}
+            label={t.auth.password}
             name={'password'}
             type={'password'}
           />

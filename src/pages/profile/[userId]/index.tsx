@@ -47,6 +47,8 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
   const router = useRouter()
   const { userId } = useParams()
 
+  const t = useTranslation()
+
   const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(
     { id: userId as string },
     { skip: !userId }
@@ -87,7 +89,7 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
         </div>
         {currentUserId === userId && (
           <Button asChild className={s.profileSettingsBtn} variant={'secondary'}>
-            <Link href={`/profile-settings/${currentUserId}`}>Profile settings</Link>
+            <Link href={`/profile-settings/${currentUserId}`}>{t.myProfile.profileSettings}</Link>
           </Button>
         )}
       </div>
