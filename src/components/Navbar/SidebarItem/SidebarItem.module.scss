@@ -1,32 +1,43 @@
 .Tag {
-	color: var(--color-light-100);
-	font-size: 14px;
-	line-height: 24px;
-	max-width: 100px;
+	cursor: pointer;
+
 	display: flex;
 	gap: 12px;
+
+	max-width: 90%;
+
+	font-size: 14px;
 	font-weight: 500;
-	cursor: pointer;
+	line-height: 24px;
+	color: var(--color-light-100);
+
+	border: 2px solid transparent;
+
 	.Svg {
 	 min-width: 24px;
 	 min-height: 24px;
   }
+
   &:not(:last-child) {
 	 margin-bottom: 24px;
   }
+
   &:focus-within {
 	 border: 2px solid var(--color-accent-700);
 	 border-radius: 4px;
   }
+
 	&:active {
 	  color: var(--color-accent-500);
 	}
+
 	&:hover {
 	  color: var(--color-accent-100);
 	}
  }
+
  .TagDisabled {
-	color: var(--color-dark-300);
 	pointer-events: none; /* Отключает все события, такие как клики */
 	cursor: not-allowed; /* Показывает курсор, который символизирует запрет */
+	color: var(--color-dark-300);
  }

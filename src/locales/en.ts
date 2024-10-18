@@ -48,6 +48,18 @@ export const en: LocaleType = {
       title: 'Resend link',
     },
   },
+  createPost: {
+    addPhotoDescription: 'Click here and add new Photo',
+    addPhotoTitle: 'Add Photo',
+    cropDescription: 'lick here and crop new Photo',
+    cropTitle: 'Cropping',
+    filterDescription: 'lick here and filter new Photo',
+    filterTitle: 'Filters',
+    openDraft: 'Open draft',
+    publishDescription: 'lick here and publish new Photo',
+    publishTitle: 'Publication',
+    selectFromComputer: 'Select from computer',
+  },
   devices: {
     activeSessions: 'Active sessions',
     currentDevice: 'Current device',
