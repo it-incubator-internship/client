@@ -1,5 +1,6 @@
 import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
 import { useProfileForm } from '@/components/ProfilePageContent/form-profile/useProfileForm'
+import { useTranslation } from '@/hooks/useTranslation'
 import { Terra } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
 import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
@@ -9,6 +10,7 @@ import s from './ProfilePageContent.module.scss'
 import Spinner from '../Spinner/Spinner'
 
 export const ProfilePageContent = () => {
+  const t = useTranslation()
   const {
     arrowDownPressed,
     citiesValues,
