@@ -1,17 +1,20 @@
 import { useRef, useState } from 'react'
+import Cropper, { ReactCropperElement } from 'react-cropper'
 
 import { useAppSelector } from '@/services/store'
 import { Button, ExpandOutline, ImageOutline, MaximizeOutline } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Image from 'next/image'
 
+import 'cropperjs/dist/cropper.css'
+
 import s from './create-post-crop.module.scss'
 
 export const CreatePostCrop = () => {
   const images = useAppSelector(state => state.createPost.images)
 
-  const [croppedImage, setCroppedImage] = useState<string | null>(null);
-  const cropperRef = useRef<HTMLImageElement>(null)
+  const [croppedImage, setCroppedImage] = useState<null | string>(null)
+  const cropperRef = useRef<ReactCropperElement>(null)
 
   const cropImage = () => {
     const cropper = cropperRef.current?.cropper
@@ -19,6 +22,7 @@ export const CreatePostCrop = () => {
     if (cropper) {
       const cropped = cropper.getCroppedCanvas().toDataURL()
 
+      console.log(cropper.getCroppedCanvas().toDataURL())
       setCroppedImage(cropped) // Сохраняем обрезанное изображение
     }
   }
