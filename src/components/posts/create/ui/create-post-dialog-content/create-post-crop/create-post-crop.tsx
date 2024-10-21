@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Cropper, { ReactCropperElement } from 'react-cropper'
 
 import { useAppSelector } from '@/services/store'
@@ -16,6 +16,8 @@ export const CreatePostCrop = () => {
   const [croppedImage, setCroppedImage] = useState<null | string>(null)
   const cropperRef = useRef<ReactCropperElement>(null)
 
+  useEffect(() => {}, [])
+
   console.log(' croppedImage: ', croppedImage)
   const cropImage = () => {
     const cropper = cropperRef.current?.cropper
@@ -31,11 +33,14 @@ export const CreatePostCrop = () => {
     <div className={s['create-post-cropp-wrapper']}>
       {images.length && (
         <Cropper
+          autoCrop={false}
           className={s['create-post-cropp-image']}
+          draggable={false}
           guides={false}
           initialAspectRatio={1}
           ref={cropperRef}
           src={images[0].img}
+          style={{ height: '504px', width: '491px' }}
           zoomTo={1}
         />
       )}
