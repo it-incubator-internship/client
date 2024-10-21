@@ -59,7 +59,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
 
-  width: 492px;
+  max-width: 492px;
+  width: 100%;
 
   color: var(--color-light-100);
 

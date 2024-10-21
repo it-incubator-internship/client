@@ -1,10 +1,39 @@
 .create-post-cropp-wrapper {
+  max-width: 490px;
   width: 100%;
-  //margin: 96px 0;
+  height: 503px;
   position: relative;
 }
 
 .create-post-cropp-image {
+  object-fit: cover;
+  object-position: center center;
+  height: 503px;
+}
 
+.create-post-cropp-action-buttons {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  bottom: 11px;
+  left: 11px;
+  right: 11px;
+}
 
+.create-post-cropp-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  svg {
+    margin: 0;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.create-post-cropp-btns-block {
+  display: flex;
+  gap: 24px;
 }
