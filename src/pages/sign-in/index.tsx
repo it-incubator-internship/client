@@ -17,6 +17,8 @@ import { z } from 'zod'
 
 import s from './signIn.module.scss'
 
+import fetchUserIpAndStore from '../../utils/fetchUserIp'
+
 const createSigninSchema = (t: { formErrors: { invalidEmail: string; required: string } }) =>
   z.object({
     email: z
@@ -52,6 +54,7 @@ function SignIn() {
   })
   const handleSignIn = async (data: LoginArgs) => {
     try {
+      await fetchUserIpAndStore()
       await login(data).unwrap()
 
       const meRes = await getMe()

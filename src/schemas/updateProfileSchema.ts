@@ -10,7 +10,7 @@ export const updateProfileSchema = (t: LocaleType) => {
       .max(30, t.formErrors.required),
     country: z
       .string({ message: t.formErrors.required })
-      .min(4, t.formErrors.required)
+      .min(2, t.formErrors.required)
       .max(30, t.formErrors.required),
     dateOfBirth: z.date({ message: t.formErrors.required }),
     firstName: z
