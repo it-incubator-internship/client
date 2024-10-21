@@ -59,12 +59,13 @@ export const CreatePostAddPhoto = () => {
 
   return (
     <div className={s.header}>
-      {photoUploadError && <ErrorMessage message={photoUploadError} />}
       <div className={s.selectWrapper}>
+        {photoUploadError && <ErrorMessage className={s.errorMessage} message={photoUploadError} />}
         <FileUploader
           accept={'image/*'}
           btnClassName={s.selectBtn}
           btnText={t.createPost.selectFromComputer}
+          className={s.fileUploader}
           name={'image'}
           onChange={uploadHandler}
         >

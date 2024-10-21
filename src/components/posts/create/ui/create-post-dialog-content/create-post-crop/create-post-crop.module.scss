@@ -1,0 +1,15 @@
+.container {
+  position: relative;
+  max-height: 504px;
+}
+
+.slide {
+  max-height: 504px;
+}
+
+.image {
+  width: 100%;
+  max-width: 100%;
+  height: 504px;
+  object-fit: contain;
+}
