@@ -36,6 +36,7 @@ export const CreatePostCrop = () => {
           initialAspectRatio={1}
           ref={cropperRef}
           src={images[0].img}
+          zoomTo={1}
         />
       )}
       <div className={s['create-post-cropp-action-buttons']}>
