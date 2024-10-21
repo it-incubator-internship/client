@@ -16,38 +16,33 @@ export const CreatePostCrop = () => {
   const [croppedImage, setCroppedImage] = useState<null | string>(null)
   const cropperRef = useRef<ReactCropperElement>(null)
 
+  console.log(' croppedImage: ', croppedImage)
   const cropImage = () => {
     const cropper = cropperRef.current?.cropper
 
     if (cropper) {
       const cropped = cropper.getCroppedCanvas().toDataURL()
 
-      console.log(cropper.getCroppedCanvas().toDataURL())
       setCroppedImage(cropped) // Сохраняем обрезанное изображение
     }
-  }
-
-  const imgStyle = {
-    height: 503,
-    width: 490,
   }
 
   return (
     <div className={s['create-post-cropp-wrapper']}>
       {images.length && (
-        <Image
-          alt={'image to crop'}
+        <Cropper
           className={s['create-post-cropp-image']}
-          height={imgStyle.height}
+          guides={false}
+          initialAspectRatio={1}
+          ref={cropperRef}
           src={images[0].img}
-          width={imgStyle.width}
         />
       )}
       <div className={s['create-post-cropp-action-buttons']}>
         <div className={s['create-post-cropp-btns-block']}>
           <Button
             className={clsx(s['create-post-cropp-btn'], s['create-post-cropp-btn-fullscreen'])}
-            onClick={() => {}}
+            onClick={cropImage}
             variant={'secondary'}
           >
             <ExpandOutline />
@@ -62,7 +57,6 @@ export const CreatePostCrop = () => {
         </div>
         <Button
           className={clsx(s['create-post-cropp-btn'], s['create-post-cropp-btn-add-change-photo'])}
-          onClick={() => {}}
           variant={'secondary'}
         >
           <ImageOutline />
