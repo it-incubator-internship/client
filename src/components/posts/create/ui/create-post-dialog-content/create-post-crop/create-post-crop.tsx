@@ -10,10 +10,18 @@ import s from './create-post-crop.module.scss'
 export const CreatePostCrop = () => {
   const images = useAppSelector(state => state.createPost.images)
 
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const cropperRef = useRef<HTMLImageElement>(null)
-  const [imageSrc, setImageSrc] = useState<null | string>(null)
 
-  console.log('images', images)
+  const cropImage = () => {
+    const cropper = cropperRef.current?.cropper
+
+    if (cropper) {
+      const cropped = cropper.getCroppedCanvas().toDataURL()
+
+      setCroppedImage(cropped) // Сохраняем обрезанное изображение
+    }
+  }
 
   const imgStyle = {
     height: 503,
