@@ -1,5 +1,6 @@
 import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
 import { useProfileForm } from '@/components/ProfilePageContent/form-profile/useProfileForm'
+import { useTranslation } from '@/hooks/useTranslation'
 import { Terra } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
 import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
@@ -9,6 +10,7 @@ import s from './ProfilePageContent.module.scss'
 import Spinner from '../Spinner/Spinner'
 
 export const ProfilePageContent = () => {
+  const t = useTranslation()
   const {
     arrowDownPressed,
     citiesValues,
@@ -45,30 +47,30 @@ export const ProfilePageContent = () => {
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
-            label={'Username'}
+            label={t.myProfileSettings.userName}
             name={'userName'}
           />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
-            label={'Firstname'}
+            label={t.myProfileSettings.firstName}
             name={'firstName'}
           />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
-            label={'Lastname'}
+            label={t.myProfileSettings.lastName}
             name={'lastName'}
           />
           <FormDatePicker
             control={control}
-            label={'Date of birth'}
+            label={t.myProfileSettings.dateOfBirth}
             name={'dateOfBirth'}
             years={years}
           />
           <div style={{ display: 'flex', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>
-              <div>Select your country</div>
+              <div>{t.myProfileSettings.selectYourCountry}</div>
               <FormCombobox
                 control={control}
                 getDataForCombobox={setGetDataForCountry}
@@ -80,7 +82,7 @@ export const ProfilePageContent = () => {
               />
             </div>
             <div style={{ flexGrow: 1 }}>
-              <div>Select your city</div>
+              <div>{t.myProfileSettings.selectYourCity}</div>
 
               <FormCombobox
                 control={control}
@@ -105,12 +107,12 @@ export const ProfilePageContent = () => {
             control={control}
             name={'aboutMe'}
             placeholder={'Text-area'}
-            titleLabel={'About Me'}
+            titleLabel={t.myProfileSettings.aboutMe}
           />
         </div>
       </div>
       <Button className={s.submitBtn} type={'submit'}>
-        Save changes
+        {t.myProfileSettings.saveChanges}
       </Button>
       {modalJSX}
     </form>

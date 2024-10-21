@@ -69,15 +69,15 @@ export const Navbar = ({ className }: Props) => {
         </div>
       </Sidebar>
       <Modal
-        buttonRejectionTitle={'No'}
-        buttonTitle={'Yes'}
+        buttonRejectionTitle={t.nav.no}
+        buttonTitle={t.nav.yes}
         onClose={handleModalClosed}
         onCloseWithApproval={handleModalApproved}
         open={modalIsOpen}
-        title={'Log out'}
+        title={t.nav.logout}
         withConfirmation
       >
-        <p>{`Are you really want to log out of your account ${data?.userName}?`}</p>
+        <p>{`${t.nav.areYouWantToLogOut} ${data?.userName}?`}</p>
       </Modal>
     </nav>
   )
