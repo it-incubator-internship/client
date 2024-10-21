@@ -46,6 +46,18 @@ export const ru = {
       title: 'Срок действия ссылки истек',
     },
   },
+  createPost: {
+    addPhotoDescription: 'Нажмите сюда, чтобы добавить новое фото',
+    addPhotoTitle: 'Добавить фото',
+    cropDescription: 'Нажмите сюда, чтобы обрезать новое фото',
+    cropTitle: 'Обрезать фото',
+    filterDescription: 'Нажмите сюда, чтобы добавить фильтры для фото',
+    filterTitle: 'Добавить фильтр',
+    openDraft: 'Открыть черновик',
+    publishDescription: 'Нажмите сюда, чтобы опубликовать новое фото',
+    publishTitle: 'Опубликовать',
+    selectFromComputer: 'Выбрать на этом компьютере',
+  },
   devices: {
     activeSessions: 'Активные сессии',
     currentDevice: 'Текущее устройство',

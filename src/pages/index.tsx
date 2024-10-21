@@ -1,7 +1,6 @@
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PATH } from '@/consts/route-paths'
-import Profile from '@/pages/profile'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useRouter } from 'next/router'
 
@@ -17,7 +16,11 @@ function Home() {
     return <Spinner />
   }
 
-  void router.replace(PATH.PROFILE)
+  return (
+    <div style={{ display: 'grid', height: '100vh', placeItems: 'center', width: '100%' }}>
+      <h2>HOME PAGE</h2>
+    </div>
+  )
 }
 
 Home.getLayout = getCombinedLayout

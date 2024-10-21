@@ -1,0 +1,34 @@
+.photoContainer {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 222px;
+  height: 228px;
+  margin-top: 47px;
+  margin-bottom: 60px;
+
+  background: var(--color-dark-500);
+  border-radius: 2px;
+
+  svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.hidden {
+  overflow: hidden;
+  display: none;
+
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+
+  line-height: 0;
+
+  opacity: 0;
+}

@@ -12,6 +12,12 @@ const nextConfig = {
         hostname: "navaibe.1.0.storage.yandexcloud.net",
         port: "",
         pathname: "/content/images/**"
+      },
+      {
+        protocol: "https",
+        hostname: "storage.yandexcloud.net",
+        port: "",
+        pathname: "/navaibe.1.0/content/images/**"
       }
     ]
   }
