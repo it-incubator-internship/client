@@ -1,0 +1,19 @@
+:root {
+  --swiper-navigation-color: '#fff';
+  --swiper-navigation-size: '8px' !important;
+
+  //--swiper-pagination-color: '#fff';
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  display: grid;
+  place-items: center;
+
+  width: 36px !important;
+  height: 36px !important;
+  padding: 5px 10px;
+
+  background-color: var(--color-dark-500);
+border-radius: 2px;
+}

@@ -19,7 +19,6 @@ export const CreatePostCrop = () => {
     <div className={s.container}>
       <Swiper
         modules={[Pagination]}
-        // navigation
         onSlideChange={() => console.log('slide change')}
         onSwiper={swiper => console.log(swiper)}
         pagination={{ clickable: true }}

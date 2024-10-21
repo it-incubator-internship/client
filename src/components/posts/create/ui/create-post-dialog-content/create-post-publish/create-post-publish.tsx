@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/services/store'
 import Image from 'next/image'
-import { Pagination } from 'swiper/modules'
+import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 // eslint-disable-next-line import/extensions
@@ -19,7 +19,7 @@ export const CreatePostPublish = () => {
     <div className={s.container}>
       <div className={s.swiperContainer}>
         <Swiper
-          modules={[Pagination]}
+          modules={[Pagination, Navigation]}
           navigation
           onSlideChange={() => console.log('slide change')}
           onSwiper={swiper => console.log(swiper)}
