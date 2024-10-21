@@ -14,7 +14,7 @@ export const CreatePostDialogCropHeader = () => {
 
   return (
     <div className={s.header}>
-      <button onClick={onPrevPage} type={'button'}>
+      <button className={s.back} onClick={onPrevPage} type={'button'}>
         <ArrowIosBackOutline />
       </button>
       <Dialog.Title className={s.title}>{t.createPost.cropTitle}</Dialog.Title>

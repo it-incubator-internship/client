@@ -1,7 +1,12 @@
 .container {
   position: relative;
-  width: 492px;
+  display: flex;
+  width: 972px;
   max-height: 504px;
+}
+
+.swiperContainer {
+  width: 50%;
 }
 
 .slide {
