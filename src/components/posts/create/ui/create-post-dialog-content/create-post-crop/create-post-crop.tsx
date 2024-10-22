@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import Cropper, { ReactCropperElement } from 'react-cropper'
 
+import {
+  CreatePostCroppOptions,
+  optionsArray,
+} from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/create-post-cropp-options/create-post-cropp-options'
 import { useAppSelector } from '@/services/store'
-import { Button, ExpandOutline, ImageOutline, MaximizeOutline } from '@robur_/ui-kit'
+import { Button, ExpandOutline, ImageOutline, Label, MaximizeOutline } from '@robur_/ui-kit'
 import clsx from 'clsx'
-import Image from 'next/image'
 
 import 'cropperjs/dist/cropper.css'
 
@@ -15,8 +18,7 @@ export const CreatePostCrop = () => {
 
   const [croppedImage, setCroppedImage] = useState<null | string>(null)
   const cropperRef = useRef<ReactCropperElement>(null)
-
-  useEffect(() => {}, [])
+  const [isCroppingOptionsShowed, setIsCroppingOptionsShowed] = useState(false)
 
   console.log(' croppedImage: ', croppedImage)
   const cropImage = () => {
@@ -27,6 +29,10 @@ export const CreatePostCrop = () => {
 
       setCroppedImage(cropped) // Сохраняем обрезанное изображение
     }
+  }
+
+  function showCroppingOptions() {
+    setIsCroppingOptionsShowed(!isCroppingOptionsShowed)
   }
 
   return (
@@ -46,9 +52,20 @@ export const CreatePostCrop = () => {
       )}
       <div className={s['create-post-cropp-action-buttons']}>
         <div className={s['create-post-cropp-btns-block']}>
+          {isCroppingOptionsShowed && (
+            <CreatePostCroppOptions>
+              {optionsArray.map(option => (
+                <div className={s.btnBlock} key={option.id}>
+                  <Label className={s.btnLabel} label={option.name}>
+                    {option.button}
+                  </Label>
+                </div>
+              ))}
+            </CreatePostCroppOptions>
+          )}
           <Button
             className={clsx(s['create-post-cropp-btn'], s['create-post-cropp-btn-fullscreen'])}
-            onClick={cropImage}
+            onClick={showCroppingOptions}
             variant={'secondary'}
           >
             <ExpandOutline />
