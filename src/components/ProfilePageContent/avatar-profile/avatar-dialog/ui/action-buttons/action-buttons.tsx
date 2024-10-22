@@ -1,3 +1,4 @@
+import { useTranslation } from '@/hooks/useTranslation'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button } from '@robur_/ui-kit'
 
@@ -16,16 +17,18 @@ export const ActionButtons = ({
   onSaveClick,
   onSelectClick,
 }: ActionButtonsProps) => {
+  const t = useTranslation()
+
   return (
     <>
       {!isFileLoad || isError ? (
         <Button className={s.selectBtn} onClick={onSelectClick}>
-          Select from Computer
+          {t.myProfileSettings.selectFromComputer}
         </Button>
       ) : (
         <Dialog.Close asChild>
           <Button className={s.saveBtn} onClick={onSaveClick}>
-            Save
+            {t.myProfileSettings.save}
           </Button>
         </Dialog.Close>
       )}
