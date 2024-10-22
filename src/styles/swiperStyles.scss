@@ -17,6 +17,9 @@ border-radius: 2px;
 }
 
 .swiper-pagination--custom {
+  right: 0;
+  left: 0;
+
   width: fit-content !important;
   margin: auto !important;
   padding: 0 4px;

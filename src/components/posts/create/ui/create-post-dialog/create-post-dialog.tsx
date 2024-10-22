@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import {
   CreatePostAddPhoto,
@@ -12,16 +12,16 @@ import {
   CreatePostDialogFilterHeader,
   CreatePostDialogPublishHeader,
 } from '@/components/posts/create/ui/create-post-dialog-header'
-import { useTranslation } from '@/hooks/useTranslation'
 import { useAppSelector } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
-import { PlusSquareOutline } from '@robur_/ui-kit'
-import clsx from 'clsx'
 
 import s from './create-post-dialog.module.scss'
 
-export const CreatePostDialog = () => {
-  const t = useTranslation()
+type Props = {
+  children: ReactNode
+}
+
+export const CreatePostDialog = ({ children }: Props) => {
   const currentPage = useAppSelector(state => state.createPost.page)
   const pages = [
     { content: <CreatePostAddPhoto />, header: <CreatePostDialogAddPhotoHeader /> },
@@ -32,12 +32,7 @@ export const CreatePostDialog = () => {
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger asChild>
-        <button className={clsx(s.Tag)} type={'button'}>
-          <PlusSquareOutline aria-hidden={'true'} className={s.Svg} />
-          <span className={s.A}>{t.nav.create}</span>
-        </button>
-      </Dialog.Trigger>
+      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className={s.DialogOverlay} />
         <Dialog.Content className={s.DialogContent}>
