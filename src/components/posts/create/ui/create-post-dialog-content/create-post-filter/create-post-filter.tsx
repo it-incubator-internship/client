@@ -1,4 +1,7 @@
+import { useEffect, useRef } from 'react'
+
 import { useAppSelector } from '@/services/store'
+import clsx from 'clsx'
 import Image from 'next/image'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -19,14 +22,19 @@ export const CreatePostFilter = () => {
     <div className={s.container}>
       <div className={s.swiperContainer}>
         <Swiper
+          className={s.customSwiper}
           modules={[Pagination, Navigation]}
           navigation
-          onSlideChange={() => console.log('slide change')}
-          onSwiper={swiper => console.log(swiper)}
-          pagination={{ clickable: true }}
+          pagination={{
+            bulletActiveClass: clsx('swiper-pagination-bullet-active', s.bulletActiveClass),
+            bulletClass: clsx('swiper-pagination-bullet', s.bulletClass),
+            clickable: true,
+            el: '.swiper-pagination--custom',
+          }}
           slidesPerView={1}
           spaceBetween={5}
         >
+          {/*swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal*/}
           {images.map(image => {
             return (
               <SwiperSlide className={s.slide} key={image.id}>
@@ -40,6 +48,7 @@ export const CreatePostFilter = () => {
               </SwiperSlide>
             )
           })}
+          <div className={'swiper-pagination swiper-pagination--custom'}></div>
         </Swiper>
       </div>
       <div>Filters</div>

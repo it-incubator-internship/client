@@ -19,3 +19,12 @@
   height: 504px;
   object-fit: contain;
 }
+
+.bulletClass {
+  opacity: 1;
+  background-color: var(--color-light-100);
+}
+
+.bulletActiveClass {
+  background-color: var(--color-accent-500);
+}
