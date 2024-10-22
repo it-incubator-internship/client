@@ -1,9 +1,12 @@
 import React, { ReactNode } from 'react'
 
-import { randomUUID } from 'node:crypto'
-
-import { Button, ImageOutline } from '@robur_/ui-kit'
+import AspectRatio1to1 from '@/assets/AspectRatio1to1'
+import AspectRatio4to5 from '@/assets/AspectRatio4to5'
+import AspectRatio16to9 from '@/assets/AspectRatio16to9'
+import ImageOutline from '@/assets/ImageOutline'
+import { Button } from '@robur_/ui-kit'
 import clsx from 'clsx'
+import { nanoid } from 'nanoid'
 
 import s from './create-post-cropp-options.module.scss'
 
@@ -26,34 +29,34 @@ export const optionsArray: OptionsArrayProps[] = [
         <ImageOutline />
       </Button>
     ),
-    id: randomUUID(),
+    id: nanoid(),
     name: 'Оригинал',
   },
   {
     button: (
       <Button variant={'ghost'}>
-        <ImageOutline />
+        <AspectRatio1to1 />
       </Button>
     ),
-    id: randomUUID(),
+    id: nanoid(),
     name: '1:1',
   },
   {
     button: (
       <Button variant={'ghost'}>
-        <ImageOutline />
+        <AspectRatio4to5 />
       </Button>
     ),
-    id: randomUUID(),
+    id: nanoid(),
     name: '4:5',
   },
   {
     button: (
       <Button variant={'ghost'}>
-        <ImageOutline />
+        <AspectRatio16to9 />
       </Button>
     ),
-    id: randomUUID(),
+    id: nanoid(),
     name: '16:9',
   },
 ]

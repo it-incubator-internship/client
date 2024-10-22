@@ -3,7 +3,26 @@
   height: 152px;
   padding: 10px 13px;
 
-  background: var(--color-dark-500);
+  background-color: var(--color-dark-500);
   opacity: 0.8;
   border-radius: 2px;
+
+  label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button {
+      padding: 0;
+      svg {
+        margin: 0;
+        width: 18px;
+        height: 18px;
+        color: var(--color-light-900);
+      }
+    }
+  }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
