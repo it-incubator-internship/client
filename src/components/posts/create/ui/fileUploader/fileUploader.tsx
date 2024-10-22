@@ -1,6 +1,7 @@
 import { ChangeEvent, MouseEvent, ReactNode, useRef } from 'react'
 
 import { Button } from '@robur_/ui-kit'
+import clsx from 'clsx'
 
 import s from './fileUploader.module.scss'
 
@@ -9,6 +10,7 @@ export type FileUploaderProps = {
   btnClassName?: string
   btnText: string
   children: ReactNode
+  className?: string
   name: string
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
 }
@@ -18,6 +20,7 @@ export const FileUploader = ({
   btnClassName,
   btnText,
   children,
+  className,
   name,
   onChange,
 }: FileUploaderProps) => {
@@ -30,7 +33,11 @@ export const FileUploader = ({
 
   return (
     <>
-      <button className={s.photoContainer} onClick={uploadFileHandler} type={'button'}>
+      <button
+        className={clsx(s.photoContainer, className)}
+        onClick={uploadFileHandler}
+        type={'button'}
+      >
         {children}
       </button>
       <Button className={btnClassName} onClick={uploadFileHandler} variant={'primary'}>
