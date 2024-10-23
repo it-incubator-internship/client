@@ -72,8 +72,15 @@ export const ru = {
   english: 'Английский',
   errors: {
     401: 'Не правильный логин или пароль',
+    anUnexpectedErrorHasOccurredServer:
+      'На сервере произошла непредвиденная ошибка. Пожалуйста, подождите, она будет исправлена в ближайшее время.',
     default: 'Что-то пошло не так',
     fetch_error: 'Проблемы с Вашим интернет соединением',
+    homePage: 'домашнюю страницу.',
+    oopsInternalServerError: 'УПС! ВНУТРЕННЯЯ ОШИБКА СЕРВЕРА',
+    oopsPageNotFound: 'УПС! СТРАНИЦА НЕ НАЙДЕНА',
+    tryToReturnToThe: 'Try to return to the',
+    youCanReturnToThe: 'Попытайтесь вернуться на',
   },
   forgotPassword: {
     buttonBack: 'Вернуться на страницу входа',
@@ -95,6 +102,11 @@ export const ru = {
   },
   formErrors: {
     email: 'Поле email должно соответствовать формату\nexample@example.com',
+    firstNameMustContainOnlyLettersAZaz: 'Имя должно состоять только из букв А-Я, a-z, A-Я, a-я',
+    firstnameNoMoreThan50Characters: 'Длина имени в этом поле не должна превышать 50 символов',
+    invalidEmail: 'Неверный адрес электронной почты',
+    lastNameMustContainOnlyLettersAZaz: 'Фамилия должна состоять только из букв А-Я, a-z, A-Я, a-я',
+    lastnameNoMoreThan50Characters: 'Длина фамилии в этом поле не должна превышать 50 символов',
     maxLength(count: number) {
       const str = pluralizeRu(count)
 
@@ -107,6 +119,7 @@ export const ru = {
           return `Поле должно быть не более ${count} знаков`
       }
     },
+    noMoreThan200Characters: 'Это поле "Обо мне" должно содержать не более 200 символов',
     passwordMatch: 'Пароли должны совпадать',
     passwordRegex:
       'Пароль может содержать символы: a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
@@ -121,17 +134,45 @@ export const ru = {
     followers: 'Подписчики',
     following: 'Подписки',
     initialUrlProfile: 'Url пользователя',
+    profileSettings: 'Настройки профиля',
     publications: 'Публикации',
   },
+  myProfileSettings: {
+    aUserUnder13CannotCreateProfile: 'Пользователь младше 13 лет не может создать профиль.',
+    aboutMe: 'Обо мне',
+    accountManagement: 'Управление учетными записями',
+    addProfilePhoto: 'Добавьте фото профиля',
+    clickHereAddProfilePhoto: 'Нажмите здесь, чтобы добавить фотографию профиля',
+    dateOfBirth: 'Дата рождения',
+    devices: 'Устройства',
+    error: 'Ошибка',
+    errorServerIsNotAvailable: 'Ошибка! Сервер недоступен!',
+    firstName: 'Имя',
+    generalInformation: 'Основная информация',
+    lastName: 'Фамилия',
+    myPayments: 'Мои платежи',
+    privacyPolicy: 'Политика конфиденциальности',
+    profileSaved: 'Профиль сохранен',
+    save: 'Сохранить',
+    saveChanges: 'Сохранить изменения',
+    selectFromComputer: 'Выберите с компьютера',
+    selectYourCity: 'Выберите свой город',
+    selectYourCountry: 'Выберите свою страну',
+    userName: 'Имя пользователя',
+    yourSettingsAreSaved: 'Ваши настройки сохранены!',
+  },
   nav: {
+    areYouWantToLogOut: 'Вы действительно хотите выйти из своей учетной записи',
     create: 'Создать',
     favorites: 'Избранное',
     home: 'Главная',
     logout: 'Выйти',
     messenger: 'Сообщения',
     myProfile: 'Мой профиль',
+    no: 'Нет',
     search: 'Поиск',
     statistics: 'Статистика',
+    yes: 'Да',
   },
   russian: 'Русский',
   signUp: {

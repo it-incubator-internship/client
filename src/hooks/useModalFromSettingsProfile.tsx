@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { useTranslation } from '@/hooks/useTranslation'
 import { Modal } from '@robur_/ui-kit'
 import Link from 'next/link'
 
@@ -10,27 +11,30 @@ export const variantModals = {
 }
 
 const getModalContent = (variant: string) => {
+  // eslint-disable-next-line
+  const t = useTranslation()
+
   switch (variant) {
     case variantModals.failedSaveProfile:
       return (
         <div>
-          <p>Error! Server is not available!</p>
+          <p>{t.myProfileSettings.errorServerIsNotAvailable}</p>
         </div>
       )
 
     case variantModals.successfulSaveProfile:
       return (
         <div>
-          <p>Your settings are saved!</p>
+          <p>{t.myProfileSettings.yourSettingsAreSaved}</p>
         </div>
       )
 
     case variantModals.youngUser:
       return (
         <div>
-          <p>A user under 13 cannot create a profile.</p>
+          <p>{t.myProfileSettings.aUserUnder13CannotCreateProfile}</p>
           <Link href={'/privacy-policy'} target={'_blank'}>
-            Privacy Policy
+            {t.myProfileSettings.privacyPolicy}
           </Link>
         </div>
       )
@@ -41,11 +45,17 @@ const getModalContent = (variant: string) => {
 }
 
 const getModalArgs = (variant: string, onClose: () => void) => {
+  // eslint-disable-next-line
+  const t = useTranslation()
+
   return {
     children: getModalContent(variant),
     onClose,
     open: true,
-    title: variant === variantModals.successfulSaveProfile ? 'Profile saved' : 'Error',
+    title:
+      variant === variantModals.successfulSaveProfile
+        ? t.myProfileSettings.profileSaved
+        : t.myProfileSettings.error,
   }
 }
 
