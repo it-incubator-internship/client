@@ -59,6 +59,11 @@ export const en: LocaleType = {
     publishDescription: 'lick here and publish new Photo',
     publishTitle: 'Publication',
     selectFromComputer: 'Select from computer',
+    titleButtonDiscardDraft: 'Discard',
+    titleButtonSaveDraft: 'Save',
+    titleHeaderModalDiscardDraft: 'Close',
+    titleModalSavedDraft:
+      'Do you really want to close the creation of a publication? If you close everything will be deleted.',
   },
   devices: {
     activeSessions: 'Active sessions',

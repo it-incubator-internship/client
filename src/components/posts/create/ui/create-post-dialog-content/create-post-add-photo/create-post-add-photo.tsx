@@ -57,6 +57,13 @@ export const CreatePostAddPhoto = () => {
     }
   }
 
+  async function handleCickDraft() {
+    // croppedImages: [] as ImageType[],
+    // images: [] as ImageType[],
+    // page: 0,
+    // photoUploadError: '',
+  }
+
   return (
     <div className={s.header}>
       {photoUploadError && <ErrorMessage message={photoUploadError} />}
