@@ -10,6 +10,13 @@ import { nanoid } from 'nanoid'
 
 import s from './create-post-cropp-options.module.scss'
 
+export const enum AspectRatio {
+  ar1to1 = '1:1',
+  ar4to5 = '4:5',
+  ar16to9 = '16:9',
+  original = 'Оригинал',
+}
+
 type OptionsProps = {
   children: ReactNode
   className?: string
@@ -30,7 +37,7 @@ export const optionsArray: OptionsArrayProps[] = [
       </Button>
     ),
     id: nanoid(),
-    name: 'Оригинал',
+    name: AspectRatio.original,
   },
   {
     button: (
@@ -39,7 +46,7 @@ export const optionsArray: OptionsArrayProps[] = [
       </Button>
     ),
     id: nanoid(),
-    name: '1:1',
+    name: AspectRatio.ar1to1,
   },
   {
     button: (
@@ -48,7 +55,7 @@ export const optionsArray: OptionsArrayProps[] = [
       </Button>
     ),
     id: nanoid(),
-    name: '4:5',
+    name: AspectRatio.ar4to5,
   },
   {
     button: (
@@ -57,7 +64,7 @@ export const optionsArray: OptionsArrayProps[] = [
       </Button>
     ),
     id: nanoid(),
-    name: '16:9',
+    name: AspectRatio.ar16to9,
   },
 ]
 

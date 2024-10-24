@@ -8,6 +8,7 @@ import clsx from 'clsx'
 import s from './create-post-crop.module.scss'
 
 import {
+  AspectRatio,
   CreatePostCroppOptions,
   optionsArray,
 } from './create-post-cropp-options/create-post-cropp-options'
@@ -34,6 +35,26 @@ export const CreatePostCrop = () => {
     setIsCroppingOptionsShowed(!isCroppingOptionsShowed)
   }
 
+  function handleOptionClick(name: string) {
+    const cropper = cropperRef.current?.cropper
+
+    if (cropper) {
+      switch (true) {
+        case name === AspectRatio.ar1to1:
+          cropper.setAspectRatio(1)
+          break
+        case name === AspectRatio.ar4to5:
+          cropper.setAspectRatio(4 / 5)
+          break
+        case name === AspectRatio.ar16to9:
+          cropper.setAspectRatio(16 / 9)
+          break
+        default:
+          console.warn(`Unknown option clicked: ${name}`)
+      }
+    }
+  }
+
   return (
     // <></>
     <div className={s.createPostCroppWrapper}>
@@ -57,7 +78,11 @@ export const CreatePostCrop = () => {
               {optionsArray.map(option => (
                 <div className={s.btnBlock} key={option.id}>
                   <Label label={option.name}>
-                    {option.button}
+                    {React.cloneElement(option.button, {
+                      onClick: () => {
+                        handleOptionClick(option.name)
+                      },
+                    })}
                   </Label>
                 </div>
               ))}
