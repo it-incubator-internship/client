@@ -7,10 +7,17 @@
   opacity: 0.8;
   border-radius: 2px;
 
+  position: absolute;
+  bottom: 37px;
+  left: 0;
+
   label {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    div[class*="label"]{
+      flex-grow: 1;
+    }
     button {
       padding: 0;
       svg {

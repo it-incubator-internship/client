@@ -6,7 +6,6 @@ import { Button, ExpandOutline, ImageOutline, Label, MaximizeOutline } from '@ro
 import clsx from 'clsx'
 
 import s from './create-post-crop.module.scss'
-import s2 from './create-post-cropp-options/temporary/mystyles.module.scss'
 
 import {
   CreatePostCroppOptions,
