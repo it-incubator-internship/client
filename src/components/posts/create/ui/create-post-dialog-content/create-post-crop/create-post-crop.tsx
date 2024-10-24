@@ -40,6 +40,8 @@ export const CreatePostCrop = () => {
 
     if (cropper) {
       switch (true) {
+        case name === AspectRatio.original:
+          cropper.reset()
         case name === AspectRatio.ar1to1:
           cropper.setAspectRatio(1)
           break
@@ -60,7 +62,6 @@ export const CreatePostCrop = () => {
     <div className={s.createPostCroppWrapper}>
       {images.length && (
         <Cropper
-          autoCrop={false}
           className={s.createPostCroppImage}
           draggable={false}
           guides={false}
@@ -68,7 +69,7 @@ export const CreatePostCrop = () => {
           ref={cropperRef}
           src={images[0].img}
           style={{ height: '504px', width: '491px' }}
-          zoomTo={1}
+          // zoomTo={1}
         />
       )}
       <div className={s.createPostCroppActionButtons}>
