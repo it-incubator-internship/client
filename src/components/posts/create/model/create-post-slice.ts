@@ -1,3 +1,4 @@
+import { commonVariables } from '@/consts/common-variables'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export type ImageType = {
@@ -17,6 +18,8 @@ export const createPostSlice = createSlice({
     images: [] as ImageType[],
     page: 0,
     photoUploadError: '',
+    postDescription: '',
+    postDescriptionError: '',
   },
   name: 'createPost',
   reducers: {
@@ -52,6 +55,17 @@ export const createPostSlice = createSlice({
     setPhotoUploadError: (state, action: PayloadAction<{ uploadError: string }>) => {
       state.photoUploadError = action.payload.uploadError
     },
+    setPostDescription: (
+      state,
+      action: PayloadAction<{ description: string; errorText: string }>
+    ) => {
+      if (action.payload.description.length > commonVariables.POST_DESCRIPTION_LIMIT) {
+        state.postDescriptionError = action.payload.errorText
+      } else {
+        state.postDescriptionError = ''
+      }
+      state.postDescription = action.payload.description
+    },
   },
 })
 
@@ -64,4 +78,5 @@ export const {
   setImage,
   setPage,
   setPhotoUploadError,
+  setPostDescription,
 } = createPostSlice.actions

@@ -49,11 +49,13 @@ export const ru = {
   createPost: {
     addPhotoDescription: 'Нажмите сюда, чтобы добавить новое фото',
     addPhotoTitle: 'Добавить фото',
+    addPublicationTitle: 'Добавить описание поста',
     cropDescription: 'Нажмите сюда, чтобы обрезать новое фото',
     cropTitle: 'Обрезать фото',
     filterDescription: 'Нажмите сюда, чтобы добавить фильтры для фото',
     filterTitle: 'Добавить фильтр',
     openDraft: 'Открыть черновик',
+    postDescriptionError: 'Текст описания поста должен быть не более 500 символов',
     publishDescription: 'Нажмите сюда, чтобы опубликовать новое фото',
     publishTitle: 'Опубликовать',
     selectFromComputer: 'Выбрать на этом компьютере',

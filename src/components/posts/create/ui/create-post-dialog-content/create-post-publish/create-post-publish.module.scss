@@ -19,3 +19,39 @@
   height: 504px;
   object-fit: contain;
 }
+
+.info {
+  flex-grow: 1;
+  padding: 24px 0;
+}
+
+.infoTop {
+  padding: 0 24px 35px;
+  border-bottom: 1px solid var(--color-dark-100);
+}
+
+.user {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  margin-bottom: 24px;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.textArea {
+  textarea {
+    height: 120px;
+  }
+}
+
+.limit {
+  font-size: var(--font-size-xs);
+  font-weight: 400;
+  line-height: var(--line-height-s);
+  color: var(--color-light-900);
+  text-align: right;
+}
