@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import { CreatePostDialog } from '@/components/posts/create/ui/create-post-dialog/create-post-dialog'
 import { PATH } from '@/consts/route-paths'
@@ -16,6 +16,8 @@ import {
   Sidebar,
   TrendingUpOutline,
 } from '@robur_/ui-kit'
+
+import s from '@/components/Navbar/SidebarItem/SidebarItem.module.scss'
 
 import { SidebarItem } from './SidebarItem/SidebarItem'
 
@@ -44,28 +46,41 @@ export const Navbar = ({ className }: Props) => {
   return (
     <nav className={className}>
       <Sidebar>
-        <SidebarItem Icon={HomeOutline} href={PATH.HOME} item={t.nav.home} />
-        <CreatePostDialog />
-        <SidebarItem
-          Icon={Person}
-          href={`${PATH.PROFILE}/${data?.userId}`}
-          item={t.nav.myProfile}
-        />
-        <SidebarItem Icon={MessageCircleOutline} href={PATH.MESSAGES} item={t.nav.messenger} />
-        <SidebarItem Icon={Search} href={PATH.SEARCH} item={t.nav.search} />
+        <SidebarItem Icon={HomeOutline} href={PATH.HOME}>
+          <span>{t.nav.home}</span>
+        </SidebarItem>
+        <CreatePostDialog>
+          <SidebarItem Icon={PlusSquareOutline} as={'div'} href={''}>
+            <button type={'button'}>{t.nav.create}</button>
+          </SidebarItem>
+        </CreatePostDialog>
+        <SidebarItem Icon={Person} href={`${PATH.PROFILE}/${data?.userId}`}>
+          <span>{t.nav.myProfile}</span>
+        </SidebarItem>
+        <SidebarItem Icon={MessageCircleOutline} href={PATH.MESSAGES}>
+          <span>{t.nav.messenger}</span>
+        </SidebarItem>
+        <SidebarItem Icon={Search} href={PATH.SEARCH}>
+          <span>{t.nav.search}</span>
+        </SidebarItem>
         <div style={{ marginTop: '60px' }}>
-          <SidebarItem Icon={TrendingUpOutline} href={PATH.STATISTICS} item={t.nav.statistics} />
-          <SidebarItem Icon={BookmarkOutline} href={PATH.BOOKMARKS} item={t.nav.favorites} />
+          <SidebarItem Icon={TrendingUpOutline} href={PATH.STATISTICS}>
+            <span>{t.nav.statistics}</span>
+          </SidebarItem>
+          <SidebarItem Icon={BookmarkOutline} href={PATH.BOOKMARKS}>
+            <span>{t.nav.favorites}</span>
+          </SidebarItem>
         </div>
         <div style={{ marginTop: '150px' }}>
           <SidebarItem
             Icon={LogOut}
             as={'button'}
             href={''}
-            item={t.nav.logout}
             onClick={() => handleModalOpened()}
             type={'button'}
-          />
+          >
+            <span>{t.nav.logout}</span>
+          </SidebarItem>
         </div>
       </Sidebar>
       <Modal

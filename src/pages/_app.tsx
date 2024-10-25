@@ -12,6 +12,7 @@ import { wrapper } from '@/services/store'
 import '@/styles/index.scss'
 import '@/styles/nprogress.scss'
 import '@/styles/toastStyles.scss'
+import '@/styles/swiperStyles.scss'
 import '@robur_/ui-kit/style.css'
 import 'react-toastify/dist/ReactToastify.css'
 
