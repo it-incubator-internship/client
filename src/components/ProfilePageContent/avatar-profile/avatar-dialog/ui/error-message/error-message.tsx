@@ -1,6 +1,7 @@
 import s from './error-message.module.scss'
 
 type ErrorMessageProps = {
+  className?: string
   message: string
 }
 
