@@ -1,0 +1,96 @@
+.container {
+  position: relative;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.iconContainer {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-dark-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2%;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.imageIcon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.customModal {
+  position: fixed;
+  bottom: 50px;
+  right: 10px;
+  background-color: rgba(23, 23, 23, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  min-width: 152px;
+  height: 106px;
+  padding: 10px;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modalImageList {
+  opacity: 100%;
+  display: flex;
+  gap: 10px;
+}
+
+.imageWrapper {
+  position: relative;
+}
+
+.previewImage {
+  width: 82px;
+  height: 82px;
+  object-fit: cover;
+}
+
+.closeButton {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 15px;
+  height: 15px;
+  background-color: var(--color-dark-500);
+  border: none;
+  color: var(--color-light-100);
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plusIconContainer {
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-dark-500);
+  border-radius: 50%;
+  opacity: 0.8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

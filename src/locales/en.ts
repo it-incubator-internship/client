@@ -51,14 +51,18 @@ export const en: LocaleType = {
   createPost: {
     addPhotoDescription: 'Click here and add new Photo',
     addPhotoTitle: 'Add Photo',
-    cropDescription: 'lick here and crop new Photo',
+    cropDescription: 'Click here and crop new Photo',
     cropTitle: 'Cropping',
-    filterDescription: 'lick here and filter new Photo',
+    filterDescription: 'Click here and filter new Photo',
     filterTitle: 'Filters',
     openDraft: 'Open draft',
-    publishDescription: 'lick here and publish new Photo',
+    publishDescription: 'Click here and publish new Photo',
     publishTitle: 'Publication',
     selectFromComputer: 'Select from computer',
+    errorFileSize:
+      'The selected file exceeds the maximum allowed size of 10MB. Please choose a smaller file.',
+    errorFileType: 'The selected file type is not supported. Please upload a PNG or JPEG image.',
+    errorMaxPhotos: 'You can upload a maximum of 5 photos.',
   },
   devices: {
     activeSessions: 'Active sessions',
