@@ -37,7 +37,7 @@ const styles = {
 }
 
 const RangeSlider = () => {
-  const [value, setValue] = useState<number[]>([50]) // Начальное значение 50%
+  const [value, setValue] = useState<number[]>([0]) // Начальное значение 50%
 
   const handleValueChange = (newValue: number[]) => {
     setValue(newValue)
