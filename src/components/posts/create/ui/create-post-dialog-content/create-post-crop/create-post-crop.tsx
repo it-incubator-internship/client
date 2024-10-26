@@ -1,9 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Cropper, { ReactCropperElement } from 'react-cropper'
 
 import { useAppSelector } from '@/services/store'
+import * as Dialog from '@radix-ui/react-dialog'
 import { Button, ExpandOutline, ImageOutline, Label, MaximizeOutline } from '@robur_/ui-kit'
 import clsx from 'clsx'
+import { FaCropSimple } from 'react-icons/fa6'
 
 import s from './create-post-crop.module.scss'
 
@@ -18,7 +20,7 @@ export const CreatePostCrop = () => {
 
   const [croppedImage, setCroppedImage] = useState<null | string>(null)
   const cropperRef = useRef<ReactCropperElement>(null)
-  const [isCroppingOptionsShowed, setIsCroppingOptionsShowed] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
 
   console.log(' croppedImage: ', croppedImage)
   const cropImage = () => {
@@ -31,10 +33,6 @@ export const CreatePostCrop = () => {
     }
   }
 
-  function showCroppingOptions() {
-    setIsCroppingOptionsShowed(!isCroppingOptionsShowed)
-  }
-
   function handleOptionClick(name: string) {
     const cropper = cropperRef.current?.cropper
 
@@ -42,6 +40,7 @@ export const CreatePostCrop = () => {
       switch (true) {
         case name === AspectRatio.original:
           cropper.reset()
+          break
         case name === AspectRatio.ar1to1:
           cropper.setAspectRatio(1)
           break
@@ -55,10 +54,10 @@ export const CreatePostCrop = () => {
           console.warn(`Unknown option clicked: ${name}`)
       }
     }
+    setIsDialogOpen(false)
   }
 
   return (
-    // <></>
     <div className={s.createPostCroppWrapper}>
       {images.length && (
         <Cropper
@@ -69,39 +68,42 @@ export const CreatePostCrop = () => {
           ref={cropperRef}
           src={images[0].img}
           style={{ height: '504px', width: '491px' }}
-          // zoomTo={1}
         />
       )}
       <div className={s.createPostCroppActionButtons}>
         <div className={s.createPostCropBtnsBlock}>
-          {isCroppingOptionsShowed && (
-            <CreatePostCroppOptions>
-              {optionsArray.map(option => (
-                <div className={s.btnBlock} key={option.id}>
-                  <Label label={option.name}>
-                    {React.cloneElement(option.button, {
-                      onClick: () => {
-                        handleOptionClick(option.name)
-                      },
-                    })}
-                  </Label>
-                </div>
-              ))}
-            </CreatePostCroppOptions>
-          )}
+          <Dialog.Root onOpenChange={setIsDialogOpen} open={isDialogOpen}>
+            <Dialog.Trigger asChild>
+              <Button
+                className={clsx(s.createPostCroppBtn, s['create-post-cropp-btn-fullscreen'])}
+                variant={'secondary'}
+              >
+                <ExpandOutline />
+              </Button>
+            </Dialog.Trigger>
 
-          <Button
-            className={clsx(s.createPostCroppBtn, s['create-post-cropp-btn-fullscreen'])}
-            onClick={showCroppingOptions}
-            variant={'secondary'}
-          >
-            <ExpandOutline />
+            <Dialog.Portal>
+              <Dialog.Overlay className={s.dialogOverlay} />
+              <Dialog.Content className={s.dialogContent}>
+                <CreatePostCroppOptions>
+                  {optionsArray.map(option => (
+                    <div className={s.btnBlock} key={option.id}>
+                      <Label label={option.name}>
+                        {React.cloneElement(option.button, {
+                          onClick: () => handleOptionClick(option.name),
+                        })}
+                      </Label>
+                    </div>
+                  ))}
+                </CreatePostCroppOptions>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
+
+          <Button className={clsx(s.createPostCroppBtn)} onClick={cropImage} variant={'secondary'}>
+            <FaCropSimple />
           </Button>
-          <Button
-            className={clsx(s.createPostCroppBtn, s['create-post-cropp-btn-zoom'])}
-            onClick={() => {}}
-            variant={'secondary'}
-          >
+          <Button className={clsx(s.createPostCroppBtn)} onClick={() => {}} variant={'secondary'}>
             <MaximizeOutline />
           </Button>
         </div>
