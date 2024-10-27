@@ -1,3 +1,16 @@
+import { useAppSelector } from '@/services/store'
+import Image from 'next/image'
+import { Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+// eslint-disable-next-line import/extensions
+import 'swiper/scss'
+// eslint-disable-next-line import/extensions
+import 'swiper/scss/navigation'
+// eslint-disable-next-line import/extensions
+import 'swiper/scss/pagination'
+
+import s from './create-post-crop.module.scss'
 import { useState } from 'react'
 import { useAppSelector, useAppDispatch } from '@/services/store'
 import { ChangeEvent, useRef } from 'react'
@@ -54,59 +67,87 @@ export const CreatePostCrop = () => {
     setModalOpen(!isModalOpen)
   }
 
-  const handleDeleteImage = (id: number) => {
-    dispatch(deleteImg({ id }))
-    if (croppedImages.length === 1) {
-      dispatch(setPage({ page: 0 }))
-    }
-  }
-
   return (
-    <div className={styles.container}>
-      {images.length > 0 && (
-        <div className={styles.imageContainer}>
-          <img
-            src={croppedImages[0].img}
-            alt="Uploaded"
-            style={{ width: '100%', height: '504px', objectFit: 'cover' }}
-          />
-          <div className={styles.iconContainer} onClick={toggleModal}>
-            <ImageOutline className={styles.imageIcon} />
-          </div>
-        </div>
-      )}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleFileUpload}
-        style={{ display: 'none' }}
-      />
-
-      {isModalOpen && (
-        <div className={styles.customModal}>
-          <div className={styles.modalContent}>
-            <div className={styles.modalImageList}>
-              {croppedImages.map((image, index) => (
-                <div key={image.id} className={styles.imageWrapper}>
-                  <img
-                    src={image.img}
-                    alt={`Uploaded image ${index}`}
-                    className={styles.previewImage}
-                  />
-                  <div className={styles.closeButtonContainer}>
-                    <CloseOutline
-                      className={styles.closeButton}
-                      onClick={() => handleDeleteImage(image.id)}
-                    ></CloseOutline>
-                  </div>
-                </div>
-              ))}
-              <PlusCircleOutline className={styles.plusIconContainer} onClick={openFileUploader} />
-            </div>
-          </div>
-        </div>
-      )}
+    <div className={s.container}>
+      <Swiper
+        modules={[Pagination]}
+        onSlideChange={() => console.log('slide change')}
+        onSwiper={swiper => console.log(swiper)}
+        pagination={{ clickable: true }}
+        slidesPerView={1}
+        spaceBetween={5}
+      >
+        {images.map(image => {
+          return (
+            <SwiperSlide className={s.slide} key={image.id}>
+              <Image
+                alt={image.id.toString()}
+                className={s.image}
+                height={504}
+                src={image.img}
+                width={490}
+              />
+            </SwiperSlide>
+          )
+        })}
+      </Swiper>
     </div>
   )
 }
+
+// const handleDeleteImage = (id: number) => {
+//   dispatch(deleteImg({ id }))
+//   if (croppedImages.length === 1) {
+//     dispatch(setPage({ page: 0 }))
+//   }
+// }
+//
+// return (
+//   <div className={styles.container}>
+//     {images.length > 0 && (
+//       <div className={styles.imageContainer}>
+//         <img
+//           src={croppedImages[0].img}
+//           alt="Uploaded"
+//           style={{ width: '100%', height: '504px', objectFit: 'cover' }}
+//         />
+//         <div className={styles.iconContainer} onClick={toggleModal}>
+//           <ImageOutline className={styles.imageIcon} />
+//         </div>
+//       </div>
+//     )}
+//     <input
+//       ref={fileInputRef}
+//       type="file"
+//       accept="image/*"
+//       onChange={handleFileUpload}
+//       style={{ display: 'none' }}
+//     />
+//
+//     {isModalOpen && (
+//       <div className={styles.customModal}>
+//         <div className={styles.modalContent}>
+//           <div className={styles.modalImageList}>
+//             {croppedImages.map((image, index) => (
+//               <div key={image.id} className={styles.imageWrapper}>
+//                 <img
+//                   src={image.img}
+//                   alt={`Uploaded image ${index}`}
+//                   className={styles.previewImage}
+//                 />
+//                 <div className={styles.closeButtonContainer}>
+//                   <CloseOutline
+//                     className={styles.closeButton}
+//                     onClick={() => handleDeleteImage(image.id)}
+//                   ></CloseOutline>
+//                 </div>
+//               </div>
+//             ))}
+//             <PlusCircleOutline className={styles.plusIconContainer} onClick={openFileUploader} />
+//           </div>
+//         </div>
+//       </div>
+//     )}
+//   </div>
+// )
+// }

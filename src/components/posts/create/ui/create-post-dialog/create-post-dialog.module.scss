@@ -4,7 +4,6 @@
   display: flex;
   gap: 12px;
 
-  max-width: 90%;
 
   font-size: 14px;
   font-weight: 500;
@@ -44,6 +43,7 @@
 
 .DialogOverlay {
   position: fixed;
+  z-index: 10;
   inset: 0;
 
   opacity: 0.6;
@@ -54,6 +54,7 @@
 
 .DialogContent {
   position: fixed;
+  z-index: 10;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
