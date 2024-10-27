@@ -21,9 +21,11 @@ interface ExpandButtonProps {
   setIsCropped: (isCropped: boolean) => void
 }
 
+type ScaleType = 0 | 1;
+
 export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: ExpandButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
-  const [scale, setScale] = useState(0)
+  const [scale, setScale] = useState<ScaleType>(0)
   const images = useAppSelector(state => state.createPost.images)
   const croppedImages = useAppSelector(state => state.createPost.croppedImages)
   const dispatch = useAppDispatch()
@@ -49,7 +51,7 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
       switch (true) {
         case name === AspectRatio.original || name === AspectRatio.ar100percent:
           {
-            setScale(prevState => (prevState + 1) % 2)
+            setScale(prevState => ((prevState + 1) % 3) as ScaleType)
 
             switch (true) {
               case scale === 1:
