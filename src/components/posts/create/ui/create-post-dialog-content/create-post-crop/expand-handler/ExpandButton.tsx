@@ -18,14 +18,44 @@ interface ExpandButtonProps {
 
 export const ExpandButton = ({ cropperRef }: ExpandButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
+  const [scale, setScale] = useState(0)
 
-  function handleOptionClick(name: string) {
+  console.log(' scale: ', scale)
+
+  function handleOptionClick(name: string, id: string) {
     const cropper = cropperRef.current?.cropper
 
     if (cropper) {
       switch (true) {
-        case name === AspectRatio.original:
-          cropper.reset()
+        case name === AspectRatio.original || name === AspectRatio.ar100percent:
+          {
+            setScale(prevState => (prevState + 1) % 2)
+
+            switch (true) {
+              case scale === 1:
+                {
+                  cropper.reset()
+                  const option = optionsArray.find(option => option.id === id)
+
+                  if (option) {
+                    option.name = AspectRatio.ar100percent
+                  }
+                }
+                break
+              case scale === 0:
+                {
+                  cropper.zoomTo(1)
+                  const option = optionsArray.find(option => option.id === id)
+
+                  if (option) {
+                    option.name = AspectRatio.original
+                  }
+                }
+                break
+              default:
+                console.warn(`Unknown scale: ${scale}`)
+            }
+          }
           break
         case name === AspectRatio.ar1to1:
           cropper.setAspectRatio(1)
@@ -59,7 +89,7 @@ export const ExpandButton = ({ cropperRef }: ExpandButtonProps) => {
               <div className={s.btnBlock} key={option.id}>
                 <Label label={option.name}>
                   {React.cloneElement(option.button, {
-                    onClick: () => handleOptionClick(option.name),
+                    onClick: () => handleOptionClick(option.name, option.id),
                   })}
                 </Label>
               </div>
@@ -95,4 +125,3 @@ export const ExpandButton = ({ cropperRef }: ExpandButtonProps) => {
 //     </Dialog.Content>
 //   </Dialog.Portal>
 // </Dialog.Root>
-
