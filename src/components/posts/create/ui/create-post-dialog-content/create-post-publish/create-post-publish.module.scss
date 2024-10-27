@@ -20,6 +20,15 @@
   object-fit: cover;
 }
 
+.bulletClass {
+  opacity: 1;
+  background-color: var(--color-light-100);
+}
+
+.bulletActiveClass {
+  background-color: var(--color-accent-500);
+}
+
 .normal {
   filter: none;
 }
