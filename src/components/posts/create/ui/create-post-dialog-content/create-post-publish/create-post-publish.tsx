@@ -14,7 +14,6 @@ import s from './create-post-publish.module.scss'
 
 export const CreatePostPublish = () => {
   const images = useAppSelector(state => state.createPost.images)
-  const filters = useAppSelector(state => state.createPost.filters)
 
   return (
     <div className={s.container}>
@@ -22,19 +21,18 @@ export const CreatePostPublish = () => {
         <Swiper
           modules={[Pagination, Navigation]}
           navigation
+          onSlideChange={() => console.log('slide change')}
+          onSwiper={swiper => console.log(swiper)}
           pagination={{ clickable: true }}
           slidesPerView={1}
           spaceBetween={5}
         >
           {images.map(image => {
-            const appliedFilter = filters[image.id] || 'Normal'
-            const filterClass = s[appliedFilter.toLowerCase()] || s.normal
-
             return (
               <SwiperSlide className={s.slide} key={image.id}>
                 <Image
-                  alt={`image-${image.id}`}
-                  className={`${s.image} ${filterClass}`}
+                  alt={image.id.toString()}
+                  className={s.image}
                   height={504}
                   src={image.img}
                   width={490}
@@ -44,7 +42,7 @@ export const CreatePostPublish = () => {
           })}
         </Swiper>
       </div>
-      <div className={s.publishButtonContainer}>Publish</div>
+      <div>Publish</div>
     </div>
   )
 }
