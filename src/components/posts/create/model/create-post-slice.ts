@@ -15,6 +15,7 @@ export const FILE_VALIDATION_CONFIG = {
 export const createPostSlice = createSlice({
   initialState: {
     croppedImages: [] as ImageType[],
+    filters: {} as { [key: number]: string },
     images: [] as ImageType[],
     page: 0,
     photoUploadError: '',
@@ -49,6 +50,11 @@ export const createPostSlice = createSlice({
       state.images.push(newImage)
       state.croppedImages.push(newImage)
     },
+    setImageFilter: (state, action: PayloadAction<{ filter: string; id: number }>) => {
+      const { filter, id } = action.payload
+
+      state.filters[id] = filter
+    },
     setPage: (state, action: PayloadAction<{ page: number }>) => {
       state.page = action.payload.page
     },
@@ -76,6 +82,7 @@ export const {
   prevPage,
   setCroppedImage,
   setImage,
+  setImageFilter,
   setPage,
   setPhotoUploadError,
   setPostDescription,

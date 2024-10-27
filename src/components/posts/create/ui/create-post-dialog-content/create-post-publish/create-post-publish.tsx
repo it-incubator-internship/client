@@ -1,3 +1,5 @@
+import { useAppSelector } from '@/services/store'
+import clsx from 'clsx'
 import React, { ChangeEvent, useRef } from 'react'
 
 import { setPostDescription } from '@/components/posts/create/model/create-post-slice'
@@ -32,6 +34,7 @@ export const CreatePostPublish = () => {
   const t = useTranslation()
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const images = useAppSelector(state => state.createPost.images)
+  const filters = useAppSelector(state => state.createPost.filters)
   const description = useAppSelector(state => state.createPost.postDescription)
   const descriptionError = useAppSelector(state => state.createPost.postDescriptionError)
   const dispatch = useAppDispatch()
@@ -50,16 +53,24 @@ export const CreatePostPublish = () => {
         <Swiper
           modules={[Pagination, Navigation]}
           navigation
-          pagination={{ clickable: true }}
+          pagination={{
+            bulletActiveClass: clsx('swiper-pagination-bullet-active', s.bulletActiveClass),
+            bulletClass: clsx('swiper-pagination-bullet', s.bulletClass),
+            clickable: true,
+            el: '.swiper-pagination--custom',
+          }}
           slidesPerView={1}
           spaceBetween={5}
         >
           {images.map(image => {
+            const appliedFilter = filters[image.id] || 'Normal'
+            const filterClass = s[appliedFilter.toLowerCase()] || s.normal
+
             return (
               <SwiperSlide className={s.slide} key={image.id}>
                 <Image
-                  alt={image.id.toString()}
-                  className={s.image}
+                  alt={`image-${image.id}`}
+                  className={`${s.image} ${filterClass}`}
                   height={504}
                   src={image.img}
                   width={490}
@@ -67,6 +78,7 @@ export const CreatePostPublish = () => {
               </SwiperSlide>
             )
           })}
+          <div className={'swiper-pagination swiper-pagination--custom'}></div>
         </Swiper>
       </div>
       <div className={s.info}>

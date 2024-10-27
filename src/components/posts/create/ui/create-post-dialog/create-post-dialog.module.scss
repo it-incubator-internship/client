@@ -41,7 +41,6 @@
   color: var(--color-dark-300);
 }
 
-
 .DialogOverlay {
   position: fixed;
   z-index: 10;
@@ -72,7 +71,6 @@
   outline: none;
 }
 
-
 .separator {
   position: absolute;
   top: 60px;
@@ -84,7 +82,6 @@
   background-color: var(--color-dark-100);
 }
 
-
 .selectAvatarWrapper {
   display: flex;
   flex-direction: column;
@@ -93,7 +90,6 @@
 
   margin: 0 auto;
 }
-
 
 @keyframes overlay-show {
   from {
@@ -116,4 +112,3 @@
     opacity: 1;
   }
 }
-
