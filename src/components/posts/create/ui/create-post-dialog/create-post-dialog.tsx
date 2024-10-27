@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   CreatePostAddPhoto,
@@ -23,8 +23,11 @@ import s from './create-post-dialog.module.scss'
 import { useSaveDraftCreatePost } from '../../draft/useSaveDraftCreatePost'
 
 //import { addData, openDatabase } from '../../draft/draftIndexed'
+type Props = {
+  children: ReactNode
+}
 
-export const CreatePostDialog = () => {
+export const CreatePostDialog = ({ children }: Props) => {
   const t = useTranslation()
   const { getModalArgs, handleClickOverlay, isDialogOpen, isModalDraftsavedOpen } =
     useSaveDraftCreatePost()
@@ -38,14 +41,9 @@ export const CreatePostDialog = () => {
 
   return (
     <Dialog.Root onOpenChange={handleClickOverlay} open={isDialogOpen}>
-      <Dialog.Trigger asChild>
-        <button className={clsx(s.Tag)} type={'button'}>
-          <PlusSquareOutline aria-hidden={'true'} className={s.Svg} />
-          <span className={s.A}>{t.nav.create}</span>
-        </button>
-      </Dialog.Trigger>
+      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
       <Dialog.Portal>
-        {/* <Dialog.Overlay className={s.DialogOverlay} /> */}
+        <Dialog.Overlay className={s.DialogOverlay} />
         <Dialog.Content className={s.DialogContent}>
           {isModalDraftsavedOpen && <Modal {...getModalArgs()} />}
           {pages[currentPage].header}

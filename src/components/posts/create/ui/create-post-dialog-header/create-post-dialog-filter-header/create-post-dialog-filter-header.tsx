@@ -4,17 +4,20 @@ import { useAppDispatch } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ArrowIosBackOutline, Button } from '@robur_/ui-kit'
 
-import s from '../create-post-dialog-header.module.scss'
+import s from './create-post-dialog-filter-header.module.scss'
 
 export const CreatePostDialogFilterHeader = () => {
   const t = useTranslation()
   const dispatch = useAppDispatch()
-  const onPrevPage = () => dispatch(prevPage())
-  const onNextPage = () => dispatch(nextPage())
+
+  const onNextPage = () => {
+    // Переход на следующую страницу
+    dispatch(nextPage())
+  }
 
   return (
     <div className={s.header}>
-      <button onClick={onPrevPage} type={'button'}>
+      <button className={s.back} onClick={() => dispatch(prevPage())} type={'button'}>
         <ArrowIosBackOutline />
       </button>
       <Dialog.Title className={s.title}>{t.createPost.filterTitle}</Dialog.Title>

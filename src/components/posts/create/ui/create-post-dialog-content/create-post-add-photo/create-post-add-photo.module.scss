@@ -1,3 +1,7 @@
+.container {
+  width: 490px;
+}
+
 .selectWrapper {
   display: flex;
   flex-direction: column;
@@ -5,7 +9,7 @@
   justify-content: center;
 
   margin: 0 auto;
-  padding-bottom: 48px;
+  padding: 0 25px 48px;
 }
 
 .selectBtn,
@@ -16,4 +20,14 @@
 
 .selectBtn {
   margin-bottom: 24px;
+}
+
+.errorMessage {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.errorMessage + .fileUploader {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }

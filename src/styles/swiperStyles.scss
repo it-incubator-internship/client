@@ -1,0 +1,29 @@
+:root {
+  --swiper-navigation-color: '#fff';
+  --swiper-navigation-size: '8px' !important;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  display: grid;
+  place-items: center;
+
+  width: 36px !important;
+  height: 36px !important;
+  padding: 5px 10px;
+
+  background-color: var(--color-dark-500);
+border-radius: 2px;
+}
+
+.swiper-pagination--custom {
+  right: 0;
+  left: 0;
+
+  width: fit-content !important;
+  margin: auto !important;
+  padding: 0 4px;
+
+  background-color: rgba(#333, 0.5);
+  border-radius: 2px;
+}
