@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import {
   CreatePostAddPhoto,
@@ -15,21 +15,19 @@ import {
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppSelector } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Modal, PlusSquareOutline } from '@robur_/ui-kit'
-import clsx from 'clsx'
+import { Modal } from '@robur_/ui-kit'
 
 import s from './create-post-dialog.module.scss'
 
 import { useSaveDraftCreatePost } from '../../draft/useSaveDraftCreatePost'
 
-//import { addData, openDatabase } from '../../draft/draftIndexed'
 type Props = {
   children: ReactNode
 }
 
 export const CreatePostDialog = ({ children }: Props) => {
   const t = useTranslation()
-  const { getModalArgs, handleClickOverlay, isDialogOpen, isModalDraftsavedOpen } =
+  const { getModalArgs, handleClickOverlay, isDialogOpen, isModalDraftSavedOpen } =
     useSaveDraftCreatePost()
   const currentPage = useAppSelector(state => state.createPost.page)
   const pages = [
@@ -45,7 +43,7 @@ export const CreatePostDialog = ({ children }: Props) => {
       <Dialog.Portal>
         <Dialog.Overlay className={s.DialogOverlay} />
         <Dialog.Content className={s.DialogContent}>
-          {isModalDraftsavedOpen && <Modal {...getModalArgs()} />}
+          {isModalDraftSavedOpen && <Modal {...getModalArgs()} />}
           {pages[currentPage].header}
           <div className={s.separator}></div>
           {pages[currentPage].content}

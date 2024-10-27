@@ -334,6 +334,6 @@ export const useSaveDraftCreatePost = () => {
     getModalArgs,
     handleClickOverlay,
     isDialogOpen,
-    isModalDraftsavedOpen,
+    isModalDraftSavedOpen: isModalDraftsavedOpen,
   }
 }
