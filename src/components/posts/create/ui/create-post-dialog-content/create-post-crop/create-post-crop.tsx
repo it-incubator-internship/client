@@ -35,7 +35,8 @@ export const CreatePostCrop = () => {
 
   const cropImage = () => {
     const cropper = cropperRef.current?.cropper
-    console.log(' cropper: ', cropper);
+
+    console.log(' cropper: ', cropper)
     if (cropper) {
       setIsCropped(true)
       cropper.getCroppedCanvas().toBlob(blob => {
@@ -62,7 +63,7 @@ export const CreatePostCrop = () => {
       )}
       <div className={s.createPostCroppActionButtons}>
         <div className={s.createPostCropBtnsBlock}>
-          <ExpandButton cropperRef={cropperRef} id={currentImage.id} isCropped={isCropped} />
+          <ExpandButton cropperRef={cropperRef} id={currentImage.id} isCropped={isCropped} setIsCropped={setIsCropped} />
 
           <Button className={clsx(s.createPostCroppBtn)} onClick={cropImage} variant={'secondary'}>
             <FaCropSimple />

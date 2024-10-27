@@ -18,9 +18,10 @@ interface ExpandButtonProps {
   cropperRef: React.RefObject<ReactCropperElement>
   id: number
   isCropped: boolean
+  setIsCropped: (isCropped: boolean) => void
 }
 
-export const ExpandButton = ({ cropperRef, id, isCropped }: ExpandButtonProps) => {
+export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: ExpandButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
   const [scale, setScale] = useState(0)
   const images = useAppSelector(state => state.createPost.images)
@@ -31,6 +32,7 @@ export const ExpandButton = ({ cropperRef, id, isCropped }: ExpandButtonProps) =
     const cropper = cropperRef.current?.cropper
 
     if (cropper && isCropped) {
+      setIsCropped(false)
       cropper.reset()
       console.log(' original: ')
       optionsArray[0].name = AspectRatio.original
