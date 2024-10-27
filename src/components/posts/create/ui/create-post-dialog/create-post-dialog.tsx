@@ -20,10 +20,14 @@ import clsx from 'clsx'
 
 import s from './create-post-dialog.module.scss'
 
+import { useSaveDraftCreatePost } from '../../draft/useSaveDraftCreatePost'
+
 //import { addData, openDatabase } from '../../draft/draftIndexed'
 
 export const CreatePostDialog = () => {
   const t = useTranslation()
+  const { getModalArgs, handleClickOverlay, isDialogOpen, isModalDraftsavedOpen } =
+    useSaveDraftCreatePost()
   const currentPage = useAppSelector(state => state.createPost.page)
   const pages = [
     { content: <CreatePostAddPhoto />, header: <CreatePostDialogAddPhotoHeader /> },
@@ -31,7 +35,6 @@ export const CreatePostDialog = () => {
     { content: <CreatePostFilter />, header: <CreatePostDialogFilterHeader /> },
     { content: <CreatePostPublish />, header: <CreatePostDialogPublishHeader /> },
   ]
-
 
   return (
     <Dialog.Root onOpenChange={handleClickOverlay} open={isDialogOpen}>
@@ -44,7 +47,7 @@ export const CreatePostDialog = () => {
       <Dialog.Portal>
         {/* <Dialog.Overlay className={s.DialogOverlay} /> */}
         <Dialog.Content className={s.DialogContent}>
-          {isModalDraftsavedlOpen && <Modal {...getModalArgs()} />}
+          {isModalDraftsavedOpen && <Modal {...getModalArgs()} />}
           {pages[currentPage].header}
           <div className={s.separator}></div>
           {pages[currentPage].content}

@@ -11,6 +11,13 @@ export const FILE_VALIDATION_CONFIG = {
 }
 // 'image/webp'
 
+export type CreatePostState = {
+  croppedImages: ImageType[]
+  images: ImageType[]
+  page: number
+  photoUploadError: string
+}
+
 export const createPostSlice = createSlice({
   initialState: {
     croppedImages: [] as ImageType[],
@@ -37,6 +44,9 @@ export const createPostSlice = createSlice({
         state.croppedImages[index].img = img
       }
     },
+    setDraftData: (state, action: PayloadAction<CreatePostState>) => {
+      return action.payload
+    },
     setImage: (state, action: PayloadAction<{ img: string }>) => {
       const newImage: ImageType = {
         id: state.images.length,
@@ -61,6 +71,7 @@ export const {
   nextPage,
   prevPage,
   setCroppedImage,
+  setDraftData,
   setImage,
   setPage,
   setPhotoUploadError,
