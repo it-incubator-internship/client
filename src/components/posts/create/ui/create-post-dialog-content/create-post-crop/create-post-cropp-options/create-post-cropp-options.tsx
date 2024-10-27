@@ -38,7 +38,7 @@ export const optionsArray: OptionsArrayProps[] = [
       </Button>
     ),
     id: nanoid(),
-    name: AspectRatio.original,
+    name: AspectRatio.ar100percent,
   },
   {
     button: (

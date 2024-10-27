@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ReactCropperElement } from 'react-cropper'
 
+import { setCroppedImage } from '@/components/posts/create/model/create-post-slice'
 import { CreatePostCroppOptions } from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop'
 import {
   AspectRatio,
   optionsArray,
 } from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/create-post-cropp-options/create-post-cropp-options'
+import { useAppDispatch, useAppSelector } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button, ExpandOutline, Label } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -14,15 +16,31 @@ import s from '@/components/posts/create/ui/create-post-dialog-content/create-po
 
 interface ExpandButtonProps {
   cropperRef: React.RefObject<ReactCropperElement>
+  id: number
+  isCropped: boolean
 }
 
-export const ExpandButton = ({ cropperRef }: ExpandButtonProps) => {
+export const ExpandButton = ({ cropperRef, id, isCropped }: ExpandButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
   const [scale, setScale] = useState(0)
+  const images = useAppSelector(state => state.createPost.images)
+  const croppedImages = useAppSelector(state => state.createPost.croppedImages)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    const cropper = cropperRef.current?.cropper
+
+    if (cropper && isCropped) {
+      cropper.reset()
+      console.log(' original: ')
+      optionsArray[0].name = AspectRatio.original
+      setScale(1)
+    }
+  }, [croppedImages])
 
   console.log(' scale: ', scale)
 
-  function handleOptionClick(name: string, id: string) {
+  function handleOptionClick(name: string) {
     const cropper = cropperRef.current?.cropper
 
     if (cropper) {
@@ -34,22 +52,20 @@ export const ExpandButton = ({ cropperRef }: ExpandButtonProps) => {
             switch (true) {
               case scale === 1:
                 {
+                  console.log(' 1: ', 1)
                   cropper.reset()
-                  const option = optionsArray.find(option => option.id === id)
 
-                  if (option) {
-                    option.name = AspectRatio.ar100percent
-                  }
+                  dispatch(setCroppedImage({ id: id, img: images[id].img }))
+
+                  optionsArray[0].name = AspectRatio.ar100percent
                 }
                 break
               case scale === 0:
                 {
+                  console.log(' 0: ', 0)
                   cropper.zoomTo(1)
-                  const option = optionsArray.find(option => option.id === id)
 
-                  if (option) {
-                    option.name = AspectRatio.original
-                  }
+                  optionsArray[0].name = AspectRatio.original
                 }
                 break
               default:
@@ -89,7 +105,7 @@ export const ExpandButton = ({ cropperRef }: ExpandButtonProps) => {
               <div className={s.btnBlock} key={option.id}>
                 <Label label={option.name}>
                   {React.cloneElement(option.button, {
-                    onClick: () => handleOptionClick(option.name, option.id),
+                    onClick: () => handleOptionClick(option.name),
                   })}
                 </Label>
               </div>

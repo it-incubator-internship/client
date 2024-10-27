@@ -16,6 +16,9 @@ import {
   Sidebar,
   TrendingUpOutline,
 } from '@robur_/ui-kit'
+import clsx from 'clsx'
+
+import s from './Navbar.module.scss'
 
 import { SidebarItem } from './SidebarItem/SidebarItem'
 
@@ -42,7 +45,7 @@ export const Navbar = ({ className }: Props) => {
   }
 
   return (
-    <nav className={className}>
+    <nav className={clsx(s.navbar, className)}>
       <Sidebar>
         <SidebarItem Icon={HomeOutline} href={PATH.HOME} item={t.nav.home} />
         <CreatePostDialog />

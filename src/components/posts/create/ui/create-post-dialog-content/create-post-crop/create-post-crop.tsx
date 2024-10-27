@@ -20,6 +20,7 @@ export const CreatePostCrop = () => {
   const cropperRef = useRef<ReactCropperElement>(null)
 
   const [currentImage, setCurrentImage] = useState<ImageType>({ id: 0, img: '' } as ImageType)
+  const [isCropped, setIsCropped] = useState<boolean>(false)
 
   useEffect(() => {
     //todo пока нет выбора между картинками используем этот способ
@@ -28,14 +29,15 @@ export const CreatePostCrop = () => {
 
   const dispatch = useAppDispatch()
 
-  console.log(' images: ', images)
-  console.log(' currentImage: ', currentImage)
-  console.log(' croppeDimages: ', croppedImages)
+  // console.log(' images: ', images)
+  // console.log(' currentImage: ', currentImage)
+  // console.log(' croppeDimages: ', croppedImages)
 
   const cropImage = () => {
     const cropper = cropperRef.current?.cropper
-
+    console.log(' cropper: ', cropper);
     if (cropper) {
+      setIsCropped(true)
       cropper.getCroppedCanvas().toBlob(blob => {
         const url = URL.createObjectURL(blob as Blob)
 
@@ -60,7 +62,7 @@ export const CreatePostCrop = () => {
       )}
       <div className={s.createPostCroppActionButtons}>
         <div className={s.createPostCropBtnsBlock}>
-          <ExpandButton cropperRef={cropperRef} />
+          <ExpandButton cropperRef={cropperRef} id={currentImage.id} isCropped={isCropped} />
 
           <Button className={clsx(s.createPostCroppBtn)} onClick={cropImage} variant={'secondary'}>
             <FaCropSimple />
