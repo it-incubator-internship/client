@@ -9,12 +9,15 @@ import s from './create-post-dialog-filter-header.module.scss'
 export const CreatePostDialogFilterHeader = () => {
   const t = useTranslation()
   const dispatch = useAppDispatch()
-  const onPrevPage = () => dispatch(prevPage())
-  const onNextPage = () => dispatch(nextPage())
+
+  const onNextPage = () => {
+    // Переход на следующую страницу
+    dispatch(nextPage())
+  }
 
   return (
     <div className={s.header}>
-      <button className={s.back} onClick={onPrevPage} type={'button'}>
+      <button className={s.back} onClick={() => dispatch(prevPage())} type={'button'}>
         <ArrowIosBackOutline />
       </button>
       <Dialog.Title className={s.title}>{t.createPost.filterTitle}</Dialog.Title>
