@@ -70,3 +70,29 @@ export const ExpandButton = ({ cropperRef }: ExpandButtonProps) => {
     </Dialog.Root>
   )
 }
+
+// <Dialog.Root onOpenChange={setIsDialogOpen} open={isDialogOpen}>
+//   <Dialog.Trigger asChild>
+//     <Button className={clsx(s.createPostCroppBtn)} variant={'secondary'}>
+//       <ExpandOutline />
+//     </Button>
+//   </Dialog.Trigger>
+//
+//   <Dialog.Portal>
+//     <Dialog.Overlay className={s.dialogOverlay} />
+//     <Dialog.Content className={s.dialogContent}>
+//       <CreatePostCroppOptions>
+//         {optionsArray.map(option => (
+//             <div className={s.btnBlock} key={option.id}>
+//               <Label label={option.name}>
+//                 {React.cloneElement(option.button, {
+//                   onClick: () => handleOptionClick(option.name),
+//                 })}
+//               </Label>
+//             </div>
+//         ))}
+//       </CreatePostCroppOptions>
+//     </Dialog.Content>
+//   </Dialog.Portal>
+// </Dialog.Root>
+
