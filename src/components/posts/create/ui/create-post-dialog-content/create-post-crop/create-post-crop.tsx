@@ -63,7 +63,12 @@ export const CreatePostCrop = () => {
       )}
       <div className={s.createPostCroppActionButtons}>
         <div className={s.createPostCropBtnsBlock}>
-          <ExpandButton cropperRef={cropperRef} id={currentImage.id} isCropped={isCropped} setIsCropped={setIsCropped} />
+          <ExpandButton
+            cropperRef={cropperRef}
+            id={currentImage.id}
+            isCropped={isCropped}
+            setIsCropped={setIsCropped}
+          />
 
           <Button className={clsx(s.createPostCroppBtn)} onClick={cropImage} variant={'secondary'}>
             <FaCropSimple />

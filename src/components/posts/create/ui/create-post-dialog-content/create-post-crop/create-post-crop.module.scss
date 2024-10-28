@@ -34,28 +34,27 @@
 }
 
 .createPostCropBtnsBlock {
+  position: relative;
   display: flex;
   gap: 24px;
 }
 
 .dialogOverlay {
   background-color: rgba(0, 0, 0, 0.5);  // затемненный фон
-  position: fixed;
+  position: absolute;
   inset: 0;  // растягивается на весь экран
   z-index: 10;  // поверх других элементов
 }
 
 .dialogContent {
-  background-color: white;
+  background-color: transparent;
   border-radius: 8px;
-  padding: 20px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);  // центрирует окно
-  width: 300px;  // ширина окна
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  transform: translate(-50%);  // центрирует окно
+  width: fit-content;  // ширина окна
   max-width: 100%;
-  max-height: 90vh;
   overflow-y: auto;  // если контент превышает высоту окна
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);  // тень для модального окна
   z-index: 20;  // чтобы модал был поверх overlay

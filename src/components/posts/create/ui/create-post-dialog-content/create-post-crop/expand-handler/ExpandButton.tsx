@@ -9,6 +9,8 @@ import {
 } from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/create-post-cropp-options/create-post-cropp-options'
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
+import { DialogTitle } from '@radix-ui/react-dialog'
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Button, ExpandOutline, Label } from '@robur_/ui-kit'
 import clsx from 'clsx'
 
@@ -21,7 +23,7 @@ interface ExpandButtonProps {
   setIsCropped: (isCropped: boolean) => void
 }
 
-type ScaleType = 0 | 1;
+type ScaleType = 0 | 1
 
 export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: ExpandButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
@@ -51,7 +53,7 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
       switch (true) {
         case name === AspectRatio.original || name === AspectRatio.ar100percent:
           {
-            setScale(prevState => ((prevState + 1) % 3) as ScaleType)
+            setScale(prevState => ((prevState + 1) % 2) as ScaleType)
 
             switch (true) {
               case scale === 1:
@@ -101,9 +103,12 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
         </Button>
       </Dialog.Trigger>
 
-      <Dialog.Portal>
+      <Dialog.Portal container={document.querySelector(`[class*="createPostCropBtnsBlock"]`)}>
         <Dialog.Overlay className={s.dialogOverlay} />
         <Dialog.Content className={s.dialogContent}>
+          <VisuallyHidden>
+            <DialogTitle></DialogTitle>
+          </VisuallyHidden>
           <CreatePostCroppOptions>
             {optionsArray.map(option => (
               <div className={s.btnBlock} key={option.id}>
@@ -120,28 +125,3 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
     </Dialog.Root>
   )
 }
-
-// <Dialog.Root onOpenChange={setIsDialogOpen} open={isDialogOpen}>
-//   <Dialog.Trigger asChild>
-//     <Button className={clsx(s.createPostCroppBtn)} variant={'secondary'}>
-//       <ExpandOutline />
-//     </Button>
-//   </Dialog.Trigger>
-//
-//   <Dialog.Portal>
-//     <Dialog.Overlay className={s.dialogOverlay} />
-//     <Dialog.Content className={s.dialogContent}>
-//       <CreatePostCroppOptions>
-//         {optionsArray.map(option => (
-//             <div className={s.btnBlock} key={option.id}>
-//               <Label label={option.name}>
-//                 {React.cloneElement(option.button, {
-//                   onClick: () => handleOptionClick(option.name),
-//                 })}
-//               </Label>
-//             </div>
-//         ))}
-//       </CreatePostCroppOptions>
-//     </Dialog.Content>
-//   </Dialog.Portal>
-// </Dialog.Root>
