@@ -51,7 +51,7 @@ export const en: LocaleType = {
   createPost: {
     addPhotoDescription: 'Click here and add new Photo',
     addPhotoTitle: 'Add Photo',
-    addPublicationTitle: 'Add publication descriptions',
+    addPublicationTitle: 'Add post description',
     cropDescription: 'Click here and crop new Photo',
     cropTitle: 'Cropping',
     errorFileSize:
@@ -61,7 +61,7 @@ export const en: LocaleType = {
     filterDescription: 'Click here and filter new Photo',
     filterTitle: 'Filters',
     openDraft: 'Open draft',
-    postDescriptionError: 'Post description should be less than 500 symbols',
+    postDescriptionError: 'Post description must be 500 symbols length or less',
     publishDescription: 'Click here and publish new Photo',
     publishTitle: 'Publication',
     selectFromComputer: 'Select from computer',

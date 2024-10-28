@@ -1,11 +1,7 @@
 import { ChangeEvent, useRef, useState } from 'react'
 
-import {
-  FILE_VALIDATION_CONFIG,
-  deleteImg,
-  setImage,
-  setPage,
-} from '@/components/posts/create/model/create-post-slice'
+import { deleteImg, setImage, setPage } from '@/components/posts/create/model/create-post-slice'
+import { FILE_VALIDATION_CONFIG } from '@/consts/common-variables'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import { showErrorToast } from '@/utils/toastConfig'

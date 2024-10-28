@@ -4,13 +4,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 export type ImageType = {
   id: number
   img: string
+  type: string
 }
-
-export const FILE_VALIDATION_CONFIG = {
-  allowedFileTypes: ['image/png', 'image/jpeg'],
-  maxFileSize: 10 * 1024 * 1024,
-}
-// 'image/webp'
 
 export const createPostSlice = createSlice({
   initialState: {
@@ -39,12 +34,14 @@ export const createPostSlice = createSlice({
 
       if (index !== -1) {
         state.croppedImages[index].img = img
+        state.croppedImages[index].type = state.images[index].type
       }
     },
-    setImage: (state, action: PayloadAction<{ img: string }>) => {
+    setImage: (state, action: PayloadAction<{ img: string; type: string }>) => {
       const newImage: ImageType = {
         id: state.images.length,
         img: action.payload.img,
+        type: action.payload.type,
       }
 
       state.images.push(newImage)

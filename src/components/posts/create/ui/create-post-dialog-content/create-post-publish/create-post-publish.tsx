@@ -1,5 +1,3 @@
-import { useAppSelector } from '@/services/store'
-import clsx from 'clsx'
 import React, { ChangeEvent, useRef } from 'react'
 
 import { setPostDescription } from '@/components/posts/create/model/create-post-slice'
@@ -10,6 +8,7 @@ import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import { Textarea } from '@robur_/ui-kit'
+import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Navigation, Pagination } from 'swiper/modules'
