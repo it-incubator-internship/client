@@ -3,6 +3,8 @@ import { ReactCropperElement } from 'react-cropper'
 
 import RangeSlider from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/range-slider/range-slider'
 import * as Dialog from '@radix-ui/react-dialog'
+import { DialogTitle } from '@radix-ui/react-dialog'
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Button, MaximizeOutline } from '@robur_/ui-kit'
 import clsx from 'clsx'
 
@@ -27,6 +29,9 @@ export const ZoomButton = ({ cropperRef }: ExpandButtonProps) => {
       <Dialog.Portal container={document.querySelector(`[class*="createPostCropBtnsBlock"]`)}>
         <Dialog.Overlay className={s.dialogOverlay} />
         <Dialog.Content className={s.dialogContent}>
+          <VisuallyHidden>
+            <DialogTitle></DialogTitle>
+          </VisuallyHidden>
           <RangeSlider />
         </Dialog.Content>
       </Dialog.Portal>
