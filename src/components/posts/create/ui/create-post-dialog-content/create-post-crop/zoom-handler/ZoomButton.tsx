@@ -32,7 +32,20 @@ export const ZoomButton = ({ cropperRef }: ExpandButtonProps) => {
           <VisuallyHidden>
             <DialogTitle></DialogTitle>
           </VisuallyHidden>
-          <RangeSlider />
+          <RangeSlider
+            getValue={(value: number) => {
+              const canvasData = cropperRef.current?.cropper.getCanvasData()
+
+              const zoomRatio = canvasData && canvasData.width / canvasData.naturalWidth
+
+              console.log(' zoomRatio: ', zoomRatio)
+
+              const ratio = value / 100
+
+              console.log(' ratio: ', ratio)
+              cropperRef.current?.cropper.zoomTo(ratio + (zoomRatio as number))
+            }}
+          />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

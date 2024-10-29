@@ -4,11 +4,16 @@ import * as Slider from '@radix-ui/react-slider'
 
 import s from './range-slider.module.scss'
 
-const RangeSlider = () => {
-  const [value, setValue] = useState<number[]>([50])
+type RangeSliderProps = {
+  getValue: (value: number) => void
+}
+
+const RangeSlider = ({ getValue }: RangeSliderProps) => {
+  const [value, setValue] = useState<number[]>([0])
 
   const handleValueChange = (newValue: number[]) => {
     setValue(newValue)
+    getValue(newValue[0])
   }
 
   return (

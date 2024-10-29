@@ -6,6 +6,7 @@ import { ZoomButton } from '@/components/posts/create/ui/create-post-dialog-cont
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import { Button, ImageOutline } from '@robur_/ui-kit'
 import clsx from 'clsx'
+import * as cropperjs from 'cropperjs'
 import { FaCropSimple } from 'react-icons/fa6'
 
 import s from './create-post-crop.module.scss'
@@ -16,7 +17,6 @@ export const CreatePostCrop = () => {
   const images = useAppSelector(state => state.createPost.images)
   const croppedImages = useAppSelector(state => state.createPost.croppedImages)
 
-  // const [localCroppedImage, setLocalCroppedImage] = useState<null | string>(null)
   const cropperRef = useRef<ReactCropperElement>(null)
 
   const [currentImage, setCurrentImage] = useState<ImageType>({ id: 0, img: '' } as ImageType)
@@ -27,16 +27,23 @@ export const CreatePostCrop = () => {
     croppedImages.length && setCurrentImage(croppedImages[croppedImages.length - 1])
   }, [croppedImages])
 
-  const dispatch = useAppDispatch()
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     const canvasData = cropperRef.current?.cropper.getCanvasData()
+  //
+  //     if (canvasData) {
+  //       const zoomRatio = canvasData.width / canvasData.naturalWidth
+  //
+  //       console.log(' zoomRatio: ', zoomRatio)
+  //     }
+  //   }, 100)
+  // }, [])
 
-  // console.log(' images: ', images)
-  // console.log(' currentImage: ', currentImage)
-  // console.log(' croppeDimages: ', croppedImages)
+  const dispatch = useAppDispatch()
 
   const cropImage = () => {
     const cropper = cropperRef.current?.cropper
 
-    console.log(' cropper: ', cropper)
     if (cropper) {
       setIsCropped(true)
       cropper.getCroppedCanvas().toBlob(blob => {
@@ -53,7 +60,7 @@ export const CreatePostCrop = () => {
       {images.length && (
         <Cropper
           className={s.createPostCroppImage}
-          draggable={false}
+          movable={true}
           guides={false}
           initialAspectRatio={1}
           ref={cropperRef}
