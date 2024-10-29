@@ -1,46 +1,3 @@
-.createPostCroppWrapper {
-  max-width: 490px;
-  width: 100%;
-  height: 503px;
-}
-
-.createPostCroppImage {
-  object-fit: cover;
-  object-position: center center;
-  height: 503px;
-}
-
-.createPostCroppActionButtons {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  bottom: 11px;
-  left: 11px;
-  right: 11px;
-}
-
-.createPostCroppBtn {
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  svg {
-    margin: 0;
-    width: 22px;
-    height: 22px;
-  }
-}
-
-.createPostCroppOverlayBlock{
-position: absolute;
-  inset: 0
-}
-
-.createPostCropBtnsBlock {
-  display: flex;
-  gap: 24px;
-}
 
 .dialogOverlay {
   background-color: rgba(0, 0, 0, 0.5);  // затемненный фон
@@ -56,9 +13,8 @@ position: absolute;
   background-color: transparent;
   border-radius: 8px;
   position: fixed;
-  bottom: 50px;
-  left: 89px;
-  transform: translate(-50%);  // центрирует окно
+  bottom: 51px;
+  left: 133px;
   width: fit-content;  // ширина окна
   max-width: 100%;
   overflow-y: auto;  // если контент превышает высоту окна
