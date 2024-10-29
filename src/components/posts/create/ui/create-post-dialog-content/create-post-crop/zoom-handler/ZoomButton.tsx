@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ReactCropperElement } from 'react-cropper'
 
 import RangeSlider from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/range-slider/range-slider'
@@ -17,6 +17,18 @@ interface ExpandButtonProps {
 
 export const ZoomButton = ({ cropperRef }: ExpandButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
+  const [prevRatio, setPrevRation] = useState(0)
+  const [zoomRatio, setZoomRatio] = useState<number>(0)
+
+  useEffect(() => {
+    setTimeout(() => {
+      const canvasData = cropperRef.current?.cropper.getCanvasData()
+
+      const zoomRatio = canvasData && canvasData.width / canvasData.naturalWidth
+
+      setZoomRatio(zoomRatio as number)
+    }, 100)
+  }, [])
 
   return (
     <Dialog.Root onOpenChange={setIsDialogOpen} open={isDialogOpen}>
@@ -34,16 +46,16 @@ export const ZoomButton = ({ cropperRef }: ExpandButtonProps) => {
           </VisuallyHidden>
           <RangeSlider
             getValue={(value: number) => {
-              const canvasData = cropperRef.current?.cropper.getCanvasData()
 
-              const zoomRatio = canvasData && canvasData.width / canvasData.naturalWidth
+              let ratio = value / 100
 
-              console.log(' zoomRatio: ', zoomRatio)
-
-              const ratio = value / 100
-
+              if (Math.abs(ratio) === 0) {
+                ratio = 0
+              }
+              console.log(' prevRatio: ', prevRatio)
               console.log(' ratio: ', ratio)
-              cropperRef.current?.cropper.zoomTo(ratio + (zoomRatio as number))
+              cropperRef.current?.cropper.zoomTo((zoomRatio as number) + ratio)
+              setPrevRation(Math.abs(ratio))
             }}
           />
         </Dialog.Content>
