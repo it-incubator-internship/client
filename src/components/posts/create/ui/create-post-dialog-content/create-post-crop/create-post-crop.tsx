@@ -6,7 +6,6 @@ import { ZoomButton } from '@/components/posts/create/ui/create-post-dialog-cont
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import { Button, ImageOutline } from '@robur_/ui-kit'
 import clsx from 'clsx'
-import * as cropperjs from 'cropperjs'
 import { FaCropSimple } from 'react-icons/fa6'
 
 import s from './create-post-crop.module.scss'
@@ -21,25 +20,31 @@ export const CreatePostCrop = () => {
 
   const [currentImage, setCurrentImage] = useState<ImageType>({ id: 0, img: '' } as ImageType)
   const [isCropped, setIsCropped] = useState<boolean>(false)
+  const [isCropperReady, setIsCropperReady] = useState<boolean>(false) // Состояние для отслеживания готовности cropper
 
   useEffect(() => {
     //todo пока нет выбора между картинками используем этот способ
     croppedImages.length && setCurrentImage(croppedImages[croppedImages.length - 1])
   }, [croppedImages])
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     const canvasData = cropperRef.current?.cropper.getCanvasData()
-  //
-  //     if (canvasData) {
-  //       const zoomRatio = canvasData.width / canvasData.naturalWidth
-  //
-  //       console.log(' zoomRatio: ', zoomRatio)
-  //     }
-  //   }, 100)
-  // }, [])
+  useEffect(() => {
+    if (isCropperReady) {
+      const cropper = cropperRef.current?.cropper
+
+      if (cropper) {
+        // const r = cropper.getCroppedCanvas()
+        //
+        // r?.addEventListener('wheel', handleWheel)
+      }
+    }
+  }, [isCropperReady])
 
   const dispatch = useAppDispatch()
+
+  // function handleWheel(event: MouseEvent) {
+  //   console.log(`111`);
+  //   event.preventDefault()
+  // }
 
   const cropImage = () => {
     const cropper = cropperRef.current?.cropper
@@ -55,14 +60,20 @@ export const CreatePostCrop = () => {
     }
   }
 
+  // Обработчик инициализации cropper
+  const handleCropperInitialized = () => {
+    setIsCropperReady(true) // Устанавливаем состояние готовности в true
+  }
+
   return (
     <div className={s.createPostCroppWrapper}>
       {images.length && (
         <Cropper
           className={s.createPostCroppImage}
-          movable={true}
+          dragMode={'none'}
           guides={false}
           initialAspectRatio={1}
+          onInitialized={handleCropperInitialized} // Обработчик инициализации
           ref={cropperRef}
           src={currentImage.img}
           style={{ height: '504px', width: '491px' }}
