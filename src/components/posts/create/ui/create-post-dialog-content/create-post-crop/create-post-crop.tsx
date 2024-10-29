@@ -29,22 +29,10 @@ export const CreatePostCrop = () => {
 
   useEffect(() => {
     if (isCropperReady) {
-      const cropper = cropperRef.current?.cropper
-
-      if (cropper) {
-        // const r = cropper.getCroppedCanvas()
-        //
-        // r?.addEventListener('wheel', handleWheel)
-      }
     }
   }, [isCropperReady])
 
   const dispatch = useAppDispatch()
-
-  // function handleWheel(event: MouseEvent) {
-  //   console.log(`111`);
-  //   event.preventDefault()
-  // }
 
   const cropImage = () => {
     const cropper = cropperRef.current?.cropper
@@ -77,6 +65,7 @@ export const CreatePostCrop = () => {
           ref={cropperRef}
           src={currentImage.img}
           style={{ height: '504px', width: '491px' }}
+          zoomOnWheel={false}
         />
       )}
       <div className={s.createPostCroppActionButtons}>
