@@ -52,8 +52,7 @@ export const ZoomButton = ({ cropperRef }: ExpandButtonProps) => {
               if (Math.abs(ratio) === 0) {
                 ratio = 0
               }
-              console.log(' prevRatio: ', prevRatio)
-              console.log(' ratio: ', ratio)
+
               cropperRef.current?.cropper.zoomTo((zoomRatio as number) + ratio)
               setPrevRation(Math.abs(ratio))
             }}

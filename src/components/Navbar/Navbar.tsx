@@ -18,8 +18,6 @@ import {
 } from '@robur_/ui-kit'
 import clsx from 'clsx'
 
-import s from './Navbar.module.scss'
-
 import { SidebarItem } from './SidebarItem/SidebarItem'
 
 type Props = {
@@ -45,7 +43,7 @@ export const Navbar = ({ className }: Props) => {
   }
 
   return (
-    <nav className={clsx(s.navbar, className)}>
+    <nav className={clsx(className)}>
       <Sidebar>
         <SidebarItem Icon={HomeOutline} href={PATH.HOME} item={t.nav.home} />
         <CreatePostDialog />

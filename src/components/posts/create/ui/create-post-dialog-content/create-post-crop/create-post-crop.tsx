@@ -42,7 +42,6 @@ export const CreatePostCrop = () => {
       cropper.getCroppedCanvas().toBlob(blob => {
         const url = URL.createObjectURL(blob as Blob)
 
-        console.log(' blobUrl: ', url)
         dispatch(setCroppedImage({ id: currentImage.id, img: url }))
       })
     }

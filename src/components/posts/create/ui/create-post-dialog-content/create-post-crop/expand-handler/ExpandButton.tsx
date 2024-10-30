@@ -38,13 +38,12 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
     if (cropper && isCropped) {
       setIsCropped(false)
       cropper.reset()
-      console.log(' original: ')
+
       optionsArray[0].name = AspectRatio.original
       setScale(1)
     }
   }, [croppedImages])
 
-  console.log(' scale: ', scale)
 
   function handleOptionClick(name: string) {
     const cropper = cropperRef.current?.cropper
@@ -58,7 +57,7 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
             switch (true) {
               case scale === 1:
                 {
-                  console.log(' 1: ', 1)
+
                   cropper.reset()
 
                   dispatch(setCroppedImage({ id: id, img: images[id].img }))
@@ -68,7 +67,7 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
                 break
               case scale === 0:
                 {
-                  console.log(' 0: ', 0)
+
                   cropper.zoomTo(1)
 
                   optionsArray[0].name = AspectRatio.original
