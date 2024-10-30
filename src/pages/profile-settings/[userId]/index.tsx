@@ -2,11 +2,9 @@ import { Devices } from '@/components/Devices/Devices'
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { useTranslation } from '@/hooks/useTranslation'
-// import { useMeQuery } from '@/services/auth/authApi'
 import { TabContent, Tabs } from '@robur_/ui-kit'
 
 function ProfileEdit() {
-  // const { data } = useMeQuery()
   const t = useTranslation()
 
   return (

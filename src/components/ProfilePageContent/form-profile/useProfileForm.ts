@@ -51,6 +51,29 @@ export const useProfileForm = () => {
 
   const [editProfile, { isError, isLoading: isloadingEditProfile }] = useEditProfileMutation()
 
+  const getCountriesFromLocalStorage = () => {
+    const currentLocale = getCurrentLocale()
+    const storedCountries = localStorage.getItem(currentLocale?.country as string)
+
+    try {
+      if (storedCountries) {
+        handleStoredCountries(storedCountries)
+      } else {
+        getCountries()
+          .unwrap()
+          .then(() => {
+            const storedCountries = localStorage.getItem(currentLocale?.country as string)
+
+            if (storedCountries) {
+              handleStoredCountries(storedCountries)
+            }
+          })
+      }
+    } catch (error) {
+      console.error('Error parsing countries:', error)
+    }
+  }
+
   const { control, handleSubmit, reset, setError, setValue, watch } =
     useForm<updateProfileFormValues>({
       defaultValues: {
@@ -91,7 +114,7 @@ export const useProfileForm = () => {
         userName: profileData.userName || '',
       })
 
-      handleClickInputCountries()
+      getCountriesFromLocalStorage()
     }
   }, [profileData, reset, router.locale])
 
@@ -116,31 +139,8 @@ export const useProfileForm = () => {
     setCitiesValues(null)
   }
 
-  const getCountriesFromLocalStorage = () => {
-    const currentLocale = getCurrentLocale()
-    const storedCountries = localStorage.getItem(currentLocale?.country as string)
-
-    try {
-      if (storedCountries) {
-        handleStoredCountries(storedCountries)
-      } else {
-        getCountries()
-          .unwrap()
-          .then(() => {
-            const storedCountries = localStorage.getItem(currentLocale?.country as string)
-
-            if (storedCountries) {
-              handleStoredCountries(storedCountries)
-            }
-          })
-      }
-    } catch (error) {
-      console.error('Error parsing countries:', error)
-    }
-  }
-
   const handleClickInputCity = (countryObject: TransformedType = null) => {
-    const dataObject = countryObject ? countryObject : dataForCountry
+    const dataObject = countryObject || dataForCountry
     const currentLocale = getCurrentLocale()
 
     if (dataObject?.value.id) {
@@ -163,10 +163,6 @@ export const useProfileForm = () => {
     const citiesStringified = JSON.stringify(cities)
 
     localStorage.setItem(currentLocale?.city as string, citiesStringified)
-  }
-
-  const handleClickInputCountries = () => {
-    getCountriesFromLocalStorage()
   }
 
   const transformDataCity = (data: CityReturnType[]): TransformedType[] => {
@@ -216,8 +212,8 @@ export const useProfileForm = () => {
     dataForCountry,
     getCities,
     getCountries,
+    getCountriesFromLocalStorage,
     handleClickInputCity,
-    handleClickInputCountries,
     handleFormSubmit,
     handleSubmit,
     isCitiesLoading,

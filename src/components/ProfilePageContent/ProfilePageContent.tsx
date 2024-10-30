@@ -18,8 +18,8 @@ export const ProfilePageContent = () => {
     countriesValues,
     countryValue,
     currentUserId,
+    getCountriesFromLocalStorage,
     handleClickInputCity,
-    handleClickInputCountries,
     handleFormSubmit,
     handleSubmit,
     isCitiesLoading,
@@ -76,7 +76,7 @@ export const ProfilePageContent = () => {
                 getDataForCombobox={setGetDataForCountry}
                 isLoading={isCountriesLoading}
                 name={Terra.country}
-                onInputClick={handleClickInputCountries}
+                onInputClick={getCountriesFromLocalStorage}
                 options={countriesValues ?? []}
                 setValue={value => setValue(Terra.country, value)}
               />
