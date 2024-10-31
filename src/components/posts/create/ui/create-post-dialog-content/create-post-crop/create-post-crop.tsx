@@ -21,6 +21,7 @@ import clsx from 'clsx'
 // import clsx from 'clsx'
 // import Image from 'next/image'
 import { FaCropSimple } from 'react-icons/fa6'
+import { Swiper as SwiperInstance } from 'swiper'
 // import { FaCropSimple } from 'react-icons/fa6'
 import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -54,7 +55,8 @@ export const CreatePostCrop = () => {
 
   useEffect(() => {
     //todo пока нет выбора между картинками используем этот способ
-    croppedImages.length && setCurrentImage(croppedImages[croppedImages.length - 1])
+    croppedImages.length &&
+      setCurrentImage(croppedImages.length === 1 ? croppedImages[0] : currentImage)
   }, [croppedImages])
 
   const dispatch = useAppDispatch()
@@ -120,43 +122,38 @@ export const CreatePostCrop = () => {
     }
   }
 
+  function handleSlideChange(swiper: SwiperInstance) {
+    setCurrentImage(croppedImages[swiper.activeIndex])
+  }
+
   //endregion moy cod
 
   return (
     <div className={styles.container}>
       <Swiper
         modules={[Pagination]}
-        onSlideChange={() => console.log('slide change')}
+        onSlideChange={handleSlideChange}
         onSwiper={(swiper: any) => console.log(swiper)}
         pagination={{ clickable: true }}
         slidesPerView={1}
         spaceBetween={5}
       >
-        {images.map(image => {
+        {croppedImages.map(croppedImage => {
           return (
-            <SwiperSlide className={styles.slide} key={image.id}>
+            <SwiperSlide className={styles.slide} key={croppedImage.id}>
               {images.length && (
                 <Cropper
-                  alt={image.id.toString()}
+                  alt={croppedImage.id.toString()}
                   className={s.createPostCroppImage}
                   dragMode={'none'}
                   guides={false}
                   initialAspectRatio={1}
-                  // onInitialized={handleCropperInitialized} // Обработчик инициализации
                   ref={cropperRef}
-                  src={image.img}
+                  src={croppedImage.img}
                   style={{ height: '504px', width: '491px' }}
                   zoomOnWheel={false}
                 />
               )}
-
-              {/*<Image*/}
-              {/*  alt={image.id.toString()}*/}
-              {/*  className={styles.image}*/}
-              {/*  height={504}*/}
-              {/*  src={image.img}*/}
-              {/*  width={490}*/}
-              {/*/>*/}
             </SwiperSlide>
           )
         })}
