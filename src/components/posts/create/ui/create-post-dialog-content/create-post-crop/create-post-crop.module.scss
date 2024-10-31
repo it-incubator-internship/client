@@ -17,6 +17,7 @@
   bottom: 11px;
   left: 11px;
   right: 11px;
+  z-index: 1;
 }
 
 .createPostCroppBtn {
@@ -65,6 +66,8 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);  // тень для модального окна
   z-index: 20;  // чтобы модал был поверх overlay
 }
+
+//todo moe
 
 .container {
   position: relative;
