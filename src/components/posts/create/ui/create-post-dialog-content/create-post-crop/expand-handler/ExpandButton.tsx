@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ReactCropperElement } from 'react-cropper'
+import Cropper from 'react-cropper'
 
 import { setCroppedImage } from '@/components/posts/create/model/create-post-slice'
 import { CreatePostCroppOptions } from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop'
@@ -17,7 +17,7 @@ import clsx from 'clsx'
 import s from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/create-post-crop.module.scss'
 
 interface ExpandButtonProps {
-  cropperRef: React.RefObject<ReactCropperElement>
+  cropper: Cropper | undefined
   id: number
   isCropped: boolean
   setIsCropped: (isCropped: boolean) => void
@@ -25,7 +25,7 @@ interface ExpandButtonProps {
 
 type ScaleType = 0 | 1
 
-export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: ExpandButtonProps) => {
+export const ExpandButton = ({ cropper, id, isCropped, setIsCropped }: ExpandButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
   const [scale, setScale] = useState<ScaleType>(0)
   const images = useAppSelector(state => state.createPost.images)
@@ -33,8 +33,6 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const cropper = cropperRef.current?.cropper
-
     if (cropper && isCropped) {
       setIsCropped(false)
       cropper.reset()
@@ -44,10 +42,7 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
     }
   }, [croppedImages])
 
-
   function handleOptionClick(name: string) {
-    const cropper = cropperRef.current?.cropper
-
     if (cropper) {
       switch (true) {
         case name === AspectRatio.original || name === AspectRatio.ar100percent:
@@ -57,7 +52,6 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
             switch (true) {
               case scale === 1:
                 {
-
                   cropper.reset()
 
                   dispatch(setCroppedImage({ id: id, img: images[id].img }))
@@ -67,7 +61,6 @@ export const ExpandButton = ({ cropperRef, id, isCropped, setIsCropped }: Expand
                 break
               case scale === 0:
                 {
-
                   cropper.zoomTo(1)
 
                   optionsArray[0].name = AspectRatio.original

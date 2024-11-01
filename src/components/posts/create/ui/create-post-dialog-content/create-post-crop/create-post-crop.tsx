@@ -48,7 +48,8 @@ export const CreatePostCrop = () => {
   const images = useAppSelector(state => state.createPost.images)
   const croppedImages = useAppSelector(state => state.createPost.croppedImages)
 
-  const cropperRef = useRef<ReactCropperElement>(null)
+  // const cropperRef = useRef<ReactCropperElement>(null)
+  const cropperRefs = useRef<Array<ReactCropperElement | null>>([])
 
   const [currentImage, setCurrentImage] = useState<ImageType>({ id: 0, img: '' } as ImageType)
   const [isCropped, setIsCropped] = useState<boolean>(false)
@@ -110,7 +111,7 @@ export const CreatePostCrop = () => {
   //region moy cod
 
   const cropImage = () => {
-    const cropper = cropperRef.current?.cropper
+    const cropper = cropperRefs.current[currentImage.id]?.cropper
 
     if (cropper) {
       setIsCropped(true)
@@ -126,6 +127,10 @@ export const CreatePostCrop = () => {
     setCurrentImage(croppedImages[swiper.activeIndex])
   }
 
+  function handleCroppRef(el: ReactCropperElement | null, index: number) {
+    cropperRefs.current[index] = el
+  }
+
   //endregion moy cod
 
   return (
@@ -133,12 +138,12 @@ export const CreatePostCrop = () => {
       <Swiper
         modules={[Pagination]}
         onSlideChange={handleSlideChange}
-        onSwiper={(swiper: any) => console.log(swiper)}
+        onSwiper={() => {}}
         pagination={{ clickable: true }}
         slidesPerView={1}
         spaceBetween={5}
       >
-        {croppedImages.map(croppedImage => {
+        {croppedImages.map((croppedImage, index) => {
           return (
             <SwiperSlide className={styles.slide} key={croppedImage.id}>
               {images.length && (
@@ -148,8 +153,10 @@ export const CreatePostCrop = () => {
                   dragMode={'none'}
                   guides={false}
                   initialAspectRatio={1}
-                  ref={cropperRef}
-                  src={croppedImage.img}
+                  ref={(el: ReactCropperElement) => {
+                    handleCroppRef(el, index)
+                  }}
+                  src={currentImage.img}
                   style={{ height: '504px', width: '491px' }}
                   zoomOnWheel={false}
                 />
@@ -172,7 +179,7 @@ export const CreatePostCrop = () => {
       <div className={s.createPostCroppActionButtons}>
         <div className={s.createPostCropBtnsBlock}>
           <ExpandButton
-            cropperRef={cropperRef}
+            cropper={cropperRefs.current[currentImage.id]?.cropper}
             id={currentImage.id}
             isCropped={isCropped}
             setIsCropped={setIsCropped}
@@ -182,7 +189,7 @@ export const CreatePostCrop = () => {
             <FaCropSimple />
           </Button>
 
-          <ZoomButton cropperRef={cropperRef} />
+          <ZoomButton cropper={cropperRefs.current[currentImage.id]?.cropper} />
         </div>
         <Button
           className={clsx(s.createPostCroppBtn, s['create-post-cropp-btn-add-change-photo'])}
