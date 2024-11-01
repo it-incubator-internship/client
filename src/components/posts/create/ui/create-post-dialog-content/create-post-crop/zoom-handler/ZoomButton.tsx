@@ -16,7 +16,7 @@ interface ExpandButtonProps {
 }
 
 export const ZoomButton = ({ cropper }: ExpandButtonProps) => {
-  // console.log(' cropper: ', cropper)
+  console.log(' cropper: ', cropper)
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
   const [isZoomRatio, setIsZoomRatio] = useState<boolean>(false)
   const [zoomRatio, setZoomRatio] = useState<number>(0)

@@ -9,20 +9,14 @@ import {
   setImage,
   setPage,
 } from '@/components/posts/create/model/create-post-slice'
-// import { ImageType, setCroppedImage } from '@/components/posts/create/model/create-post-slice'
-// import { Button, ImageOutline } from '@robur_/ui-kit'
 import { ZoomButton } from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/zoom-handler/ZoomButton'
-// import { ZoomButton } from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/zoom-handler/ZoomButton'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import { showErrorToast } from '@/utils/toastConfig'
 import { Button, CloseOutline, ImageOutline, PlusCircleOutline } from '@robur_/ui-kit'
 import clsx from 'clsx'
-// import clsx from 'clsx'
-// import Image from 'next/image'
 import { FaCropSimple } from 'react-icons/fa6'
 import { Swiper as SwiperInstance } from 'swiper'
-// import { FaCropSimple } from 'react-icons/fa6'
 import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -34,7 +28,6 @@ import 'swiper/scss/navigation'
 import 'swiper/scss/pagination'
 
 //todo isparvit
-import styles from './create-post-crop.module.scss'
 import s from './create-post-crop.module.scss'
 
 import { ExpandButton } from './expand-handler/ExpandButton'
@@ -48,14 +41,13 @@ export const CreatePostCrop = () => {
   const images = useAppSelector(state => state.createPost.images)
   const croppedImages = useAppSelector(state => state.createPost.croppedImages)
 
-  // const cropperRef = useRef<ReactCropperElement>(null)
   const cropperRefs = useRef<Array<ReactCropperElement | null>>([])
+  const swiperRef = useRef<SwiperInstance | null>(null)
 
   const [currentImage, setCurrentImage] = useState<ImageType>({ id: 0, img: '' } as ImageType)
   const [isCropped, setIsCropped] = useState<boolean>(false)
 
   useEffect(() => {
-    //todo пока нет выбора между картинками используем этот способ
     croppedImages.length &&
       setCurrentImage(croppedImages.length === 1 ? croppedImages[0] : currentImage)
   }, [croppedImages])
@@ -119,33 +111,41 @@ export const CreatePostCrop = () => {
         const url = URL.createObjectURL(blob as Blob)
 
         dispatch(setCroppedImage({ id: currentImage.id, img: url }))
+        swiperRef.current?.update()
       })
     }
   }
 
   function handleSlideChange(swiper: SwiperInstance) {
     setCurrentImage(croppedImages[swiper.activeIndex])
+    swiperRef.current?.update()
   }
 
   function handleCroppRef(el: ReactCropperElement | null, index: number) {
     cropperRefs.current[index] = el
   }
 
+  function handleImageRef(croppedImage: ImageType) {
+    return croppedImage.id === currentImage.id ? currentImage : croppedImage
+  }
+
   //endregion moy cod
 
   return (
-    <div className={styles.container}>
+    <div className={s.container}>
       <Swiper
         modules={[Pagination]}
         onSlideChange={handleSlideChange}
-        onSwiper={() => {}}
+        onSwiper={(swiper: SwiperInstance) => {
+          swiperRef.current = swiper
+        }}
         pagination={{ clickable: true }}
         slidesPerView={1}
         spaceBetween={5}
       >
         {croppedImages.map((croppedImage, index) => {
           return (
-            <SwiperSlide className={styles.slide} key={croppedImage.id}>
+            <SwiperSlide className={s.slide} key={croppedImage.id}>
               {images.length && (
                 <Cropper
                   alt={croppedImage.id.toString()}
@@ -156,7 +156,7 @@ export const CreatePostCrop = () => {
                   ref={(el: ReactCropperElement) => {
                     handleCroppRef(el, index)
                   }}
-                  src={currentImage.img}
+                  src={croppedImage.img}
                   style={{ height: '504px', width: '491px' }}
                   zoomOnWheel={false}
                 />
@@ -166,8 +166,8 @@ export const CreatePostCrop = () => {
         })}
       </Swiper>
 
-      <div className={styles.iconContainer} onClick={toggleModal}>
-        <ImageOutline className={styles.imageIcon} />
+      <div className={s.iconContainer} onClick={toggleModal}>
+        <ImageOutline className={s.imageIcon} />
       </div>
       <input
         accept={'image/*'}
@@ -200,25 +200,21 @@ export const CreatePostCrop = () => {
       </div>
 
       {isModalOpen && (
-        <div className={styles.customModal}>
-          <div className={styles.modalContent}>
-            <div className={styles.modalImageList}>
+        <div className={s.customModal}>
+          <div className={s.modalContent}>
+            <div className={s.modalImageList}>
               {croppedImages.map((image, index) => (
-                <div className={styles.imageWrapper} key={image.id}>
-                  <img
-                    alt={`Uploaded image ${index}`}
-                    className={styles.previewImage}
-                    src={image.img}
-                  />
-                  <div className={styles.closeButtonContainer}>
+                <div className={s.imageWrapper} key={image.id}>
+                  <img alt={`Uploaded image ${index}`} className={s.previewImage} src={image.img} />
+                  <div className={s.closeButtonContainer}>
                     <CloseOutline
-                      className={styles.closeButton}
+                      className={s.closeButton}
                       onClick={() => handleDeleteImage(image.id)}
                     ></CloseOutline>
                   </div>
                 </div>
               ))}
-              <PlusCircleOutline className={styles.plusIconContainer} onClick={openFileUploader} />
+              <PlusCircleOutline className={s.plusIconContainer} onClick={openFileUploader} />
             </div>
           </div>
         </div>
