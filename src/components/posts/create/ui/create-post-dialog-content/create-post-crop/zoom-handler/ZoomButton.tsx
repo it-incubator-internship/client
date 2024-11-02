@@ -13,21 +13,28 @@ import s from './create-post-cropp-zoom-button.module.scss'
 
 interface ExpandButtonProps {
   cropper: Cropper | undefined
+  isCropped: boolean
 }
 
-export const ZoomButton = ({ cropper }: ExpandButtonProps) => {
-  console.log(' cropper: ', cropper)
+export const ZoomButton = ({ cropper, isCropped }: ExpandButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
-  const [isZoomRatio, setIsZoomRatio] = useState<boolean>(false)
   const [zoomRatio, setZoomRatio] = useState<number>(0)
 
   useEffect(() => {
-    const canvasData = cropper?.getCanvasData()
+    const interval = setInterval(() => {
+      if (cropper) {
+        clearInterval(interval)
+        const canvasData = cropper.getCanvasData()
 
-    const zoomRatio = canvasData && canvasData.width / canvasData.naturalWidth
+        const zoomRatio = canvasData && canvasData.width / canvasData.naturalWidth
 
-    setZoomRatio(zoomRatio as number)
-  }, [isZoomRatio])
+        console.log(' zoomRatio: ', zoomRatio)
+        setZoomRatio(zoomRatio as number)
+      }
+    }, 100)
+
+    return () => clearInterval(interval)
+  }, [cropper, isCropped])
 
   return (
     <Dialog.Root onOpenChange={setIsDialogOpen} open={isDialogOpen}>
@@ -50,11 +57,8 @@ export const ZoomButton = ({ cropper }: ExpandButtonProps) => {
               if (Math.abs(ratio) === 0) {
                 ratio = 0
               }
-              console.log(' ratio: ', ratio)
 
-              if (!isZoomRatio) {
-                setIsZoomRatio(true)
-              }
+              console.log(' zoomRatio: ', zoomRatio)
 
               cropper?.zoomTo((zoomRatio as number) + ratio)
             }}

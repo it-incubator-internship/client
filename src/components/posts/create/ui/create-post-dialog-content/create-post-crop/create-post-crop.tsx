@@ -48,6 +48,7 @@ export const CreatePostCrop = () => {
   const [isCropped, setIsCropped] = useState<boolean>(false)
 
   useEffect(() => {
+    swiperRef.current?.update()
     croppedImages.length &&
       setCurrentImage(croppedImages.length === 1 ? croppedImages[0] : currentImage)
   }, [croppedImages])
@@ -117,7 +118,8 @@ export const CreatePostCrop = () => {
   }
 
   function handleSlideChange(swiper: SwiperInstance) {
-    setCurrentImage(croppedImages[swiper.activeIndex])
+    setCurrentImage(croppedImages[swiperRef.current?.activeIndex as number])
+    // setCurrentImage(croppedImages[swiper.activeIndex])
     swiperRef.current?.update()
   }
 
@@ -129,6 +131,7 @@ export const CreatePostCrop = () => {
     return croppedImage.id === currentImage.id ? currentImage : croppedImage
   }
 
+  console.log('  isCropped = {isCropped}:  ', isCropped)
   //endregion moy cod
 
   return (
@@ -189,7 +192,10 @@ export const CreatePostCrop = () => {
             <FaCropSimple />
           </Button>
 
-          <ZoomButton cropper={cropperRefs.current[currentImage.id]?.cropper} />
+          <ZoomButton
+            cropper={cropperRefs.current[currentImage.id]?.cropper}
+            isCropped={isCropped}
+          />
         </div>
         <Button
           className={clsx(s.createPostCroppBtn, s['create-post-cropp-btn-add-change-photo'])}
