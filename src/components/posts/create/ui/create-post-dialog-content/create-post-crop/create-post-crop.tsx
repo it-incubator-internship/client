@@ -53,8 +53,46 @@ export const CreatePostCrop = () => {
       setCurrentImage(croppedImages.length === 1 ? croppedImages[0] : currentImage)
   }, [croppedImages])
 
+  // Устанавливаем слушатель событий нажатия клавиш
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Удаляем слушатель при размонтировании
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [currentImage])
+
   const dispatch = useAppDispatch()
   //endregion moy cod
+
+  function handleKeyDown(event: KeyboardEvent) {
+
+    const cropper = cropperRefs.current[currentImage.id]?.cropper
+
+    if (cropper) {
+      switch (event.key) {
+        case 'ArrowUp':
+          // Увеличить масштаб
+          cropper.zoom(0.1) // Увеличивает масштаб на 10%
+          break
+        case 'ArrowDown':
+          // Уменьшить масштаб
+          cropper.zoom(-0.1) // Уменьшает масштаб на 10%
+          break
+        case 'ArrowLeft':
+          // Переместить изображение влево
+          cropper.move(-10, 0) // Перемещает на 10 пикселей влево
+          break
+        case 'ArrowRight':
+          // Переместить изображение вправо
+          cropper.move(10, 0) // Перемещает на 10 пикселей вправо
+          break
+        default:
+          break
+      }
+    }
+  }
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
