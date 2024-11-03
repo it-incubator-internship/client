@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useState } from "react";
 
 import {
   CreatePostAddPhoto,
@@ -19,7 +19,7 @@ import { Modal } from '@robur_/ui-kit'
 
 import s from './create-post-dialog.module.scss'
 
-import { useSaveDraftCreatePost } from '../../draft/useSaveDraftCreatePost'
+import { useSaveDraftCreatePost } from '../../draft/hooks/useSaveDraftCreatePost'
 
 type Props = {
   children: ReactNode
@@ -30,6 +30,18 @@ export const CreatePostDialog = ({ children }: Props) => {
   const { getModalArgs, handleClickOverlay, isDialogOpen, isModalDraftSavedOpen } =
     useSaveDraftCreatePost()
   const currentPage = useAppSelector(state => state.createPost.page)
+  const { checkSpecificDraftExists } = useSaveDraftCreatePost()
+  const [ifTheDraftIsSaved, setIfTheDraftIsSaved] = useState(false)
+
+  useEffect(() => {
+    const fetchDraftStatus = async () => {
+      const exists = await checkSpecificDraftExists()
+
+      setIfTheDraftIsSaved(exists)
+    }
+
+    void fetchDraftStatus()
+  }, [checkSpecificDraftExists])
   const pages = [
     { content: <CreatePostAddPhoto />, header: <CreatePostDialogAddPhotoHeader /> },
     { content: <CreatePostCrop />, header: <CreatePostDialogCropHeader /> },

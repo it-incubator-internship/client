@@ -14,7 +14,7 @@ import { Button, ImageOutline } from '@robur_/ui-kit'
 
 import s from './create-post-add-photo.module.scss'
 
-import { useSaveDraftCreatePost } from '../../../draft/useSaveDraftCreatePost'
+import { useSaveDraftCreatePost } from '../../../draft/hooks/useSaveDraftCreatePost'
 
 export const CreatePostAddPhoto = () => {
   const t = useTranslation()
@@ -30,7 +30,7 @@ export const CreatePostAddPhoto = () => {
       setIfTheDraftIsSaved(exists)
     }
 
-    fetchDraftStatus()
+    void fetchDraftStatus()
   }, [checkSpecificDraftExists])
 
   const validateFile = (file: File) => {
@@ -73,8 +73,6 @@ export const CreatePostAddPhoto = () => {
 
   async function handleCickDraft() {
     await getDraftData()
-	 console.log('зашли в хэндлклик')
-
   }
 
   return (

@@ -65,6 +65,7 @@ export const en: LocaleType = {
     selectFromComputer: 'Select from computer',
     titleButtonDiscardDraft: 'Discard',
     titleButtonSaveDraft: 'Save',
+    titleFromAlertChangeVersion: 'Database was updated in another tab. Please reload the page.',
     titleHeaderModalDiscardDraft: 'Close',
     titleModalSavedDraft:
       'Do you really want to close the creation of a publication? If you close everything will be deleted.',
