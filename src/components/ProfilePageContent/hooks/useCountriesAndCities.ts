@@ -13,6 +13,7 @@ import {
   Terra,
   TransformedType,
 } from '@/services/profile/profile-types'
+import { Storage } from '@/utils/storage'
 import { NextRouter } from 'next/router'
 
 type Props = {
@@ -31,10 +32,11 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
   const [dataForCountry, setGetDataForCountry] = useState<TransformedType | null>(null)
   const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
   const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
+  const storage = new Storage()
 
   const getCountriesFromLocalStorage = () => {
     const currentLocale = getCurrentLocale()
-    const storedCountries = localStorage.getItem(currentLocale?.country as string)
+    const storedCountries = storage.getItem(currentLocale?.country as string)
 
     try {
       if (storedCountries) {
@@ -43,7 +45,7 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
         getCountries()
           .unwrap()
           .then(() => {
-            const storedCountries = localStorage.getItem(currentLocale?.country as string)
+            const storedCountries = storage.getItem(currentLocale?.country as string)
 
             if (storedCountries) {
               handleStoredCountries(storedCountries)
@@ -99,7 +101,7 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
   function setCityToLocalStorage(cities: TransformedType[], currentLocale: CurrentLocaleType) {
     const citiesStringified = JSON.stringify(cities)
 
-    localStorage.setItem(currentLocale?.city as string, citiesStringified)
+    storage.setItem(currentLocale?.city as string, citiesStringified)
   }
 
   const transformDataCity = (data: CityReturnType[]): TransformedType[] => {
