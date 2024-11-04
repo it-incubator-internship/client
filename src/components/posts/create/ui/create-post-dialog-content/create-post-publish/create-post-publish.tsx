@@ -16,6 +16,7 @@ import s from './create-post-publish.module.scss'
 export const CreatePostPublish = () => {
   const images = useAppSelector(state => state.createPost.images)
   const filters = useAppSelector(state => state.createPost.filters)
+  const croppedImages = useAppSelector(state => state.createPost.croppedImages)
 
   return (
     <div className={s.container}>
@@ -32,7 +33,7 @@ export const CreatePostPublish = () => {
           slidesPerView={1}
           spaceBetween={5}
         >
-          {images.map(image => {
+          {croppedImages.map(image => {
             const appliedFilter = filters[image.id] || 'Normal'
             const filterClass = s[appliedFilter.toLowerCase()] || s.normal
 
