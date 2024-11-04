@@ -14,7 +14,7 @@ export const enum AspectRatio {
   ar1to1 = '1:1',
   ar4to5 = '4:5',
   ar16to9 = '16:9',
-  original = 'Оригинал',
+  original = 'Original',
 }
 
 type OptionsProps = {

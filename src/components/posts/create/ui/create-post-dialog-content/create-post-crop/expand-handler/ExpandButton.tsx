@@ -7,6 +7,7 @@ import {
   AspectRatio,
   optionsArray,
 } from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/create-post-cropp-options/create-post-cropp-options'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
 import { DialogTitle } from '@radix-ui/react-dialog'
@@ -26,8 +27,9 @@ interface ExpandButtonProps {
 type ScaleType = 0 | 1
 
 export const ExpandButton = ({ cropper, id, isCropped, setIsCropped }: ExpandButtonProps) => {
+  const t = useTranslation()
   const [isDialogOpen, setIsDialogOpen] = useState(false) // состояние диалога
-  const [scale, setScale] = useState<ScaleType>(0)
+  const [_, setScale] = useState<ScaleType>(0)
   const images = useAppSelector(state => state.createPost.images)
   const croppedImages = useAppSelector(state => state.createPost.croppedImages)
   const dispatch = useAppDispatch()
@@ -44,7 +46,7 @@ export const ExpandButton = ({ cropper, id, isCropped, setIsCropped }: ExpandBut
   function handleOptionClick(name: string) {
     if (cropper) {
       switch (true) {
-        case name === AspectRatio.original:
+        case name === AspectRatio.original || t.createPost.cropping.original:
           dispatch(setCroppedImage({ id: id, img: images[id].img }))
           cropper.reset()
           break
@@ -81,7 +83,13 @@ export const ExpandButton = ({ cropper, id, isCropped, setIsCropped }: ExpandBut
           <CreatePostCroppOptions>
             {optionsArray.map(option => (
               <div className={s.btnBlock} key={option.id}>
-                <Label label={option.name}>
+                <Label
+                  label={
+                    option.name === AspectRatio.original
+                      ? t.createPost.cropping.original
+                      : option.name
+                  }
+                >
                   {React.cloneElement(option.button, {
                     onClick: () => handleOptionClick(option.name),
                   })}

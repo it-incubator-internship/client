@@ -51,6 +51,9 @@ export const ru = {
     addPhotoTitle: 'Добавить фото',
     cropDescription: 'Нажмите сюда, чтобы обрезать новое фото',
     cropTitle: 'Обрезать фото',
+    cropping: {
+      original: 'Оригинал',
+    },
     errorFileSize:
       'Выбранный файл превышает максимальный допустимый размер 10МБ. Пожалуйста, выберите файл меньшего размера.',
     errorFileType:
