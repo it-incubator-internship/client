@@ -31,6 +31,8 @@ const FILTERS = [
 export const CreatePostFilter = () => {
   const images = useAppSelector(state => state.createPost.images)
   const imageFilters = useAppSelector(state => state.createPost.filters)
+  const croppedImages = useAppSelector(state => state.createPost.croppedImages)
+
   const dispatch = useAppDispatch()
 
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0)
@@ -60,7 +62,7 @@ export const CreatePostFilter = () => {
           slidesPerView={1}
           spaceBetween={5}
         >
-          {images.map(image => (
+          {croppedImages.map(image => (
             <SwiperSlide className={s.slide} key={image.id}>
               <Image
                 alt={image.id.toString()}

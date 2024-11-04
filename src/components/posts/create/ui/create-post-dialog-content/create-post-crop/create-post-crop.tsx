@@ -153,7 +153,7 @@ export const CreatePostCrop = () => {
 
   function handleSlideChange(swiper: SwiperInstance) {
     setCurrentImage(croppedImages[swiperRef.current?.activeIndex as number])
-    // setCurrentImage(croppedImages[swiper.activeIndex])
+    //todo proverit zdesj i na  55
     swiperRef.current?.update()
   }
 
@@ -161,7 +161,6 @@ export const CreatePostCrop = () => {
     cropperRefs.current[index] = el
   }
 
-  console.log('  isCropped = {isCropped}:  ', isCropped)
   //endregion moy cod
 
   return (
