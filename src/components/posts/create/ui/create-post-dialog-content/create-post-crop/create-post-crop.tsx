@@ -193,6 +193,7 @@ export const CreatePostCrop = () => {
               {images.length && (
                 <Cropper
                   alt={croppedImage.id.toString()}
+                  background={false}
                   className={s.createPostCroppImage}
                   dragMode={'none'}
                   guides={false}
