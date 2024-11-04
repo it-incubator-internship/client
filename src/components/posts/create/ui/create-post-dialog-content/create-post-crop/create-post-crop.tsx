@@ -47,10 +47,18 @@ export const CreatePostCrop = () => {
   const [isCropped, setIsCropped] = useState<boolean>(false)
 
   useEffect(() => {
-    swiperRef.current?.update()
     croppedImages.length &&
       setCurrentImage(croppedImages.length === 1 ? croppedImages[0] : currentImage)
   }, [croppedImages])
+
+  console.log(' currentImage: ', currentImage)
+
+  useEffect(() => {
+    if (!currentImage.img) {
+      console.log('currentImage is empty')
+      setCurrentImage(croppedImages[0])
+    }
+  }, [cropperRefs.current])
 
   // Устанавливаем слушатель событий нажатия клавиш
   useEffect(() => {
@@ -153,7 +161,7 @@ export const CreatePostCrop = () => {
 
   function handleSlideChange(swiper: SwiperInstance) {
     setCurrentImage(croppedImages[swiperRef.current?.activeIndex as number])
-    //todo proverit zdesj i na  55
+    //todo proverit
     swiperRef.current?.update()
   }
 
