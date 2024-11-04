@@ -161,10 +161,6 @@ export const CreatePostCrop = () => {
     cropperRefs.current[index] = el
   }
 
-  function handleImageRef(croppedImage: ImageType) {
-    return croppedImage.id === currentImage.id ? currentImage : croppedImage
-  }
-
   console.log('  isCropped = {isCropped}:  ', isCropped)
   //endregion moy cod
 

@@ -78,6 +78,8 @@
   z-index: 1;
   cursor: pointer;
   bottom: 15px !important;
+  background-color: var(--color-dark-500);
+  opacity: 0.8;
 }
 
 //todo moe
@@ -210,10 +212,10 @@
 }
 
 .bulletActiveClass {
-  background-color: var(--color-accent-500);
+  background-color: var(--color-accent-500) !important;
+  z-index: 1;
 }
 
 .bulletClass {
   opacity: 1;
-  background-color: var(--color-light-100);
 }
