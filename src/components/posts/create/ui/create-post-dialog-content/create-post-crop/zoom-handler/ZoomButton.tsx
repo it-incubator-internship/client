@@ -48,7 +48,7 @@ export const ZoomButton = ({ cropper, isCropped }: ExpandButtonProps) => {
         <Dialog.Overlay className={s.dialogOverlay} />
         <Dialog.Content className={s.dialogContent}>
           <VisuallyHidden>
-            <DialogTitle></DialogTitle>
+            <DialogTitle>Zoom button</DialogTitle>
           </VisuallyHidden>
           <RangeSlider
             getValue={(value: number) => {

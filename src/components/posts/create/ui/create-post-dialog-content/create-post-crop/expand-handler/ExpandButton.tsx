@@ -76,7 +76,7 @@ export const ExpandButton = ({ cropper, id, isCropped, setIsCropped }: ExpandBut
         <Dialog.Overlay className={s.dialogOverlay} />
         <Dialog.Content className={s.dialogContent}>
           <VisuallyHidden>
-            <DialogTitle></DialogTitle>
+            <DialogTitle>Expand button</DialogTitle>
           </VisuallyHidden>
           <CreatePostCroppOptions>
             {optionsArray.map(option => (
