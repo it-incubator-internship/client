@@ -67,6 +67,18 @@
   z-index: 20;  // чтобы модал был поверх overlay
 }
 
+.createPostCroppSwiperPagination{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 24px;
+  padding: 0 4px;
+  border-radius: 2px;
+  z-index: 1;
+  cursor: pointer;
+}
+
 //todo moe
 
 .container {
@@ -196,3 +208,11 @@
   border-radius: 50%;
 }
 
+.bulletActiveClass {
+  background-color: var(--color-accent-500);
+}
+
+.bulletClass {
+  opacity: 1;
+  background-color: var(--color-light-100);
+}

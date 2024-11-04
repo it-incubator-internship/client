@@ -17,7 +17,7 @@ import { Button, CloseOutline, ImageOutline, PlusCircleOutline } from '@robur_/u
 import clsx from 'clsx'
 import { FaCropSimple } from 'react-icons/fa6'
 import { Swiper as SwiperInstance } from 'swiper'
-import { Pagination } from 'swiper/modules'
+import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 // eslint-disable-next-line import/extensions
@@ -27,7 +27,6 @@ import 'swiper/scss/navigation'
 // eslint-disable-next-line import/extensions
 import 'swiper/scss/pagination'
 
-//todo isparvit
 import s from './create-post-crop.module.scss'
 
 import { ExpandButton } from './expand-handler/ExpandButton'
@@ -172,12 +171,19 @@ export const CreatePostCrop = () => {
   return (
     <div className={s.container}>
       <Swiper
-        modules={[Pagination]}
+        allowTouchMove={false}
+        modules={[Pagination, Navigation]}
+        navigation
         onSlideChange={handleSlideChange}
         onSwiper={(swiper: SwiperInstance) => {
           swiperRef.current = swiper
         }}
-        pagination={{ clickable: true }}
+        pagination={{
+          bulletActiveClass: clsx('swiper-pagination-bullet-active', s.bulletActiveClass),
+          bulletClass: clsx('swiper-pagination-bullet', s.bulletClass),
+          clickable: true,
+          el: '.swiper-pagination--custom',
+        }}
         slidesPerView={1}
         spaceBetween={5}
       >
@@ -240,6 +246,12 @@ export const CreatePostCrop = () => {
         </Button>
       </div>
 
+      <div
+        className={clsx(
+          'swiper-pagination swiper-pagination--custom',
+          s.createPostCroppSwiperPagination
+        )}
+      ></div>
       {isModalOpen && (
         <div className={s.customModal}>
           <div className={s.modalContent}>
@@ -261,43 +273,5 @@ export const CreatePostCrop = () => {
         </div>
       )}
     </div>
-
-    // <div className={s.createPostCroppWrapper}>
-    //   {images.length && (
-    //     <Cropper
-    //       className={s.createPostCroppImage}
-    //       dragMode={'none'}
-    //       guides={false}
-    //       initialAspectRatio={1}
-    //       onInitialized={handleCropperInitialized} // Обработчик инициализации
-    //       ref={cropperRef}
-    //       src={currentImage.img}
-    //       style={{ height: '504px', width: '491px' }}
-    //       zoomOnWheel={false}
-    //     />
-    //   )}
-    //   <div className={s.createPostCroppActionButtons}>
-    //     <div className={s.createPostCropBtnsBlock}>
-    //       <ExpandButton
-    //         cropperRef={cropperRef}
-    //         id={currentImage.id}
-    //         isCropped={isCropped}
-    //         setIsCropped={setIsCropped}
-    //       />
-    //
-    //       <Button className={clsx(s.createPostCroppBtn)} onClick={cropImage} variant={'secondary'}>
-    //         <FaCropSimple />
-    //       </Button>
-    //
-    //       <ZoomButton cropperRef={cropperRef} />
-    //     </div>
-    //     <Button
-    //       className={clsx(s.createPostCroppBtn, s['create-post-cropp-btn-add-change-photo'])}
-    //       variant={'secondary'}
-    //     >
-    //       <ImageOutline />
-    //     </Button>
-    //   </div>
-    // </div>
   )
 }
