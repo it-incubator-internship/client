@@ -51,7 +51,7 @@ export const CreatePostCrop = () => {
       setCurrentImage(croppedImages.length === 1 ? croppedImages[0] : currentImage)
   }, [croppedImages])
 
-  console.log(' currentImage: ', currentImage)
+  console.log(' cropperRefs.current: ', cropperRefs.current);
 
   useEffect(() => {
     if (!currentImage.img) {
@@ -154,15 +154,12 @@ export const CreatePostCrop = () => {
         const url = URL.createObjectURL(blob as Blob)
 
         dispatch(setCroppedImage({ id: currentImage.id, img: url }))
-        swiperRef.current?.update()
       })
     }
   }
 
   function handleSlideChange(swiper: SwiperInstance) {
     setCurrentImage(croppedImages[swiperRef.current?.activeIndex as number])
-    //todo proverit
-    swiperRef.current?.update()
   }
 
   function handleCroppRef(el: ReactCropperElement | null, index: number) {
