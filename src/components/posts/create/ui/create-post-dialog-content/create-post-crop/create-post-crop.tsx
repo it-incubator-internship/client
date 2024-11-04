@@ -51,16 +51,12 @@ export const CreatePostCrop = () => {
       setCurrentImage(croppedImages.length === 1 ? croppedImages[0] : currentImage)
   }, [croppedImages])
 
-  console.log(' cropperRefs.current: ', cropperRefs.current);
-
   useEffect(() => {
     if (!currentImage.img) {
-      console.log('currentImage is empty')
       setCurrentImage(croppedImages[0])
     }
   }, [cropperRefs.current])
 
-  // Устанавливаем слушатель событий нажатия клавиш
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
 

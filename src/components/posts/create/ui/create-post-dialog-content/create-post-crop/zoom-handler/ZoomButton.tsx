@@ -28,7 +28,6 @@ export const ZoomButton = ({ cropper, isCropped }: ExpandButtonProps) => {
 
         const zoomRatio = canvasData && canvasData.width / canvasData.naturalWidth
 
-        console.log(' zoomRatio: ', zoomRatio)
         setZoomRatio(zoomRatio as number)
       }
     }, 100)
@@ -57,8 +56,6 @@ export const ZoomButton = ({ cropper, isCropped }: ExpandButtonProps) => {
               if (Math.abs(ratio) === 0) {
                 ratio = 0
               }
-
-              console.log(' zoomRatio: ', zoomRatio)
 
               cropper?.zoomTo((zoomRatio as number) + ratio)
             }}

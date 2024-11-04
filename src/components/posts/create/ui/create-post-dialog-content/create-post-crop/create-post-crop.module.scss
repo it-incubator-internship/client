@@ -33,9 +33,9 @@
   }
 }
 
-.createPostCroppOverlayBlock{
+.createPostCroppOverlayBlock {
   position: absolute;
-  inset: 0
+  inset: 0;
 }
 
 .createPostCropBtnsBlock {
@@ -44,7 +44,7 @@
 }
 
 .dialogOverlay {
-  background-color: rgba(0, 0, 0, 0.5);  // затемненный фон
+  background-color: rgba(0, 0, 0, 0.5); // затемненный фон
   position: fixed; // устанавливаем фиксированное позиционирование
   top: 0; // сверху
   left: 0; // слева
@@ -59,15 +59,15 @@
   position: fixed;
   bottom: 50px;
   left: 89px;
-  transform: translate(-50%);  // центрирует окно
-  width: fit-content;  // ширина окна
+  transform: translate(-50%); // центрирует окно
+  width: fit-content; // ширина окна
   max-width: 100%;
-  overflow-y: auto;  // если контент превышает высоту окна
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);  // тень для модального окна
-  z-index: 20;  // чтобы модал был поверх overlay
+  overflow-y: auto; // если контент превышает высоту окна
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); // тень для модального окна
+  z-index: 20; // чтобы модал был поверх overlay
 }
 
-.createPostCroppSwiperPagination{
+.createPostCroppSwiperPagination {
   display: flex;
   justify-content: center;
   align-items: center;
