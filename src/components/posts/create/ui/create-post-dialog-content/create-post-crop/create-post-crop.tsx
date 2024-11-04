@@ -67,26 +67,23 @@ export const CreatePostCrop = () => {
   //endregion moy cod
 
   function handleKeyDown(event: KeyboardEvent) {
-
     const cropper = cropperRefs.current[currentImage.id]?.cropper
 
     if (cropper) {
       switch (event.key) {
         case 'ArrowUp':
-          // Увеличить масштаб
-          cropper.zoom(0.1) // Увеличивает масштаб на 10%
+          cropper.move(0, 10)
           break
         case 'ArrowDown':
-          // Уменьшить масштаб
-          cropper.zoom(-0.1) // Уменьшает масштаб на 10%
+          cropper.move(0, -10)
           break
         case 'ArrowLeft':
           // Переместить изображение влево
-          cropper.move(-10, 0) // Перемещает на 10 пикселей влево
+          cropper.move(-10, 0)
           break
         case 'ArrowRight':
           // Переместить изображение вправо
-          cropper.move(10, 0) // Перемещает на 10 пикселей вправо
+          cropper.move(10, 0)
           break
         default:
           break

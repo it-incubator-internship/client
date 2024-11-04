@@ -14,7 +14,6 @@ export const enum AspectRatio {
   ar1to1 = '1:1',
   ar4to5 = '4:5',
   ar16to9 = '16:9',
-  ar100percent = '100%',
   original = 'Оригинал',
 }
 
@@ -38,7 +37,7 @@ export const optionsArray: OptionsArrayProps[] = [
       </Button>
     ),
     id: nanoid(),
-    name: AspectRatio.ar100percent,
+    name: AspectRatio.original,
   },
   {
     button: (
