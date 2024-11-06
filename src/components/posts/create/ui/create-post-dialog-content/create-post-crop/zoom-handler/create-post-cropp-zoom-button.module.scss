@@ -1,0 +1,23 @@
+
+.dialogOverlay {
+  background-color: rgba(0, 0, 0, 0.5);  // затемненный фон
+  position: fixed; // устанавливаем фиксированное позиционирование
+  top: 0; // сверху
+  left: 0; // слева
+  right: 0; // справа
+  bottom: 0; // снизу
+  z-index: 0; // чтобы находился под другими элементами
+}
+
+.dialogContent {
+  background-color: transparent;
+  border-radius: 8px;
+  position: fixed;
+  bottom: 51px;
+  left: 133px;
+  width: fit-content;  // ширина окна
+  max-width: 100%;
+  overflow-y: auto;  // если контент превышает высоту окна
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);  // тень для модального окна
+  z-index: 20;  // чтобы модал был поверх overlay
+}

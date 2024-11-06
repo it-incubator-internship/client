@@ -1,41 +1,73 @@
+import { useForm } from 'react-hook-form'
+
 import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
-import { useProfileForm } from '@/components/ProfilePageContent/form-profile/useProfileForm'
+import { useCountriesAndCities } from '@/components/ProfilePageContent/hooks/useCountriesAndCities'
+import { useProfileForm } from '@/components/ProfilePageContent/hooks/useProfileForm'
 import { useTranslation } from '@/hooks/useTranslation'
+import { updateProfileFormValues, updateProfileSchema } from '@/schemas/updateProfileSchema'
+import { useMeQuery } from '@/services/auth/authApi'
+import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { Terra } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
+import { useRouter } from 'next/router'
 
 import s from './ProfilePageContent.module.scss'
 
 import Spinner from '../Spinner/Spinner'
 
 export const ProfilePageContent = () => {
+  const router = useRouter()
   const t = useTranslation()
+  const { data: meData, isLoading: startIsLoading } = useMeQuery()
+  const currentUserId = meData?.userId
+
+  const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(
+    { id: currentUserId as string },
+    { skip: !currentUserId }
+  )
+
+  const { control, handleSubmit, reset, setError, setValue, watch } =
+    useForm<updateProfileFormValues>({
+      defaultValues: {
+        aboutMe: '',
+        city: '',
+        country: '',
+        dateOfBirth: undefined,
+        firstName: '',
+        lastName: '',
+        userName: meData?.userName,
+      },
+      mode: 'onSubmit',
+      resolver: zodResolver(updateProfileSchema(t)),
+    })
+
   const {
     arrowDownPressed,
     citiesValues,
-    control,
     countriesValues,
     countryValue,
-    currentUserId,
+    getCountriesFromLocalStorage,
     handleClickInputCity,
-    handleClickInputCountries,
-    handleFormSubmit,
-    handleSubmit,
     isCitiesLoading,
     isCountriesLoading,
-    isLoadingProfile,
-    isloadingEditProfile,
-    modalJSX,
-    profileData,
     setArrowDownPressed,
     setGetDataForCity,
     setGetDataForCountry,
-    setValue,
-    startIsLoading,
-  } = useProfileForm()
+  } = useCountriesAndCities({ profileData, router, setValue, watch })
 
-  if (startIsLoading || isLoadingProfile || isloadingEditProfile) {
+  const { handleFormSubmit, isLoadingEditProfile, modalJSX } = useProfileForm({
+    currentUserId,
+    getCountriesFromLocalStorage,
+    meData,
+    profileData,
+    reset,
+    router,
+    setError,
+  })
+
+  if (startIsLoading || isLoadingProfile || isLoadingEditProfile) {
     return <Spinner />
   }
 
@@ -76,7 +108,7 @@ export const ProfilePageContent = () => {
                 getDataForCombobox={setGetDataForCountry}
                 isLoading={isCountriesLoading}
                 name={Terra.country}
-                onInputClick={handleClickInputCountries}
+                onInputClick={getCountriesFromLocalStorage}
                 options={countriesValues ?? []}
                 setValue={value => setValue(Terra.country, value)}
               />

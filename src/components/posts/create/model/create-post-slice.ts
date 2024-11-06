@@ -7,8 +7,15 @@ export type ImageType = {
   type: string
 }
 
-export const createPostSlice = createSlice({
-  initialState: {
+export type CreatePostState = {
+  croppedImages: ImageType[]
+  filters: { [key: number]: string }
+  images: ImageType[]
+  page: number
+  photoUploadError: string
+}
+
+const initialState: CreatePostState ={
     croppedImages: [] as ImageType[],
     filters: {} as { [key: number]: string },
     images: [] as ImageType[],
@@ -16,7 +23,8 @@ export const createPostSlice = createSlice({
     photoUploadError: '',
     postDescription: '',
     postDescriptionError: '',
-  },
+  }export const createPostSlice = createSlice({
+  initialState,
   name: 'createPost',
   reducers: {
     deleteImg: (state, action: PayloadAction<{ id: number }>) => {
@@ -28,6 +36,7 @@ export const createPostSlice = createSlice({
     prevPage: state => {
       state.page = state.page - 1
     },
+    resetState: () => initialState,
     setCroppedImage: (state, action: PayloadAction<{ id: number; img: string }>) => {
       const { id, img } = action.payload
       const index = state.croppedImages.findIndex(item => item.id === id)
@@ -36,6 +45,9 @@ export const createPostSlice = createSlice({
         state.croppedImages[index].img = img
         state.croppedImages[index].type = state.images[index].type
       }
+    },
+    setDraftData: (state, action: PayloadAction<CreatePostState>) => {
+      return action.payload
     },
     setImage: (state, action: PayloadAction<{ img: string; type: string }>) => {
       const newImage: ImageType = {
@@ -77,7 +89,9 @@ export const {
   deleteImg,
   nextPage,
   prevPage,
+  resetState,
   setCroppedImage,
+  setDraftData,
   setImage,
   setImageFilter,
   setPage,

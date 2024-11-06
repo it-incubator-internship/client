@@ -54,6 +54,9 @@ export const en: LocaleType = {
     addPublicationTitle: 'Add post description',
     cropDescription: 'Click here and crop new Photo',
     cropTitle: 'Cropping',
+    cropping: {
+      original: 'Original',
+    },
     errorFileSize:
       'The selected file exceeds the maximum allowed size of 10MB. Please choose a smaller file.',
     errorFileType: 'The selected file type is not supported. Please upload a PNG or JPEG image.',
@@ -65,6 +68,12 @@ export const en: LocaleType = {
     publishDescription: 'Click here and publish new Photo',
     publishTitle: 'Publication',
     selectFromComputer: 'Select from computer',
+    titleButtonDiscardDraft: 'Discard',
+    titleButtonSaveDraft: 'Save',
+    titleFromAlertChangeVersion: 'Database was updated in another tab. Please reload the page.',
+    titleHeaderModalDiscardDraft: 'Close',
+    titleModalSavedDraft:
+      'Do you really want to close the creation of a publication? If you close everything will be deleted.',
   },
   devices: {
     activeSessions: 'Active sessions',

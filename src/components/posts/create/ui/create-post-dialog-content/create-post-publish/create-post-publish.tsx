@@ -32,8 +32,8 @@ export const CreatePostPublish = () => {
   )
   const t = useTranslation()
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
-  const images = useAppSelector(state => state.createPost.images)
   const filters = useAppSelector(state => state.createPost.filters)
+  const croppedImages = useAppSelector(state => state.createPost.croppedImages)
   const description = useAppSelector(state => state.createPost.postDescription)
   const descriptionError = useAppSelector(state => state.createPost.postDescriptionError)
   const dispatch = useAppDispatch()
@@ -61,7 +61,7 @@ export const CreatePostPublish = () => {
           slidesPerView={1}
           spaceBetween={5}
         >
-          {images.map(image => {
+          {croppedImages.map(image => {
             const appliedFilter = filters[image.id] || 'Normal'
             const filterClass = s[appliedFilter.toLowerCase()] || s.normal
 
