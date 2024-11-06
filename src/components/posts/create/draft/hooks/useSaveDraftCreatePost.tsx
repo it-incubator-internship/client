@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-import { draftDataConfig } from '@/components/posts/create/draft/consts/consts'
 import { useDataBaseVersionChange } from '@/components/posts/create/draft/hooks/useDataBaseVersionChange'
 import {
   convertBlobToFile,
   convertFileToBase64,
 } from '@/components/posts/create/draft/utils/dataConversion'
+import { draftDataConfig } from '@/consts/draftDataConfig'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppDispatch, useAppSelector } from '@/services/store'
 
@@ -136,9 +136,21 @@ export const useSaveDraftCreatePost = () => {
           return { ...image, img: base64 as string }
         })
       )
+      const croppedImagesBase64 = await Promise.all(
+        stateCreatePost.croppedImages.map(async (image, index) => {
+          const response = await fetch(image.img)
+          const blob = await response.blob()
+
+          // Создаем объект File из Blob
+          const file = convertBlobToFile(blob, `image-${index}.jpg`)
+          const base64 = await convertFileToBase64(file)
+
+          return { ...image, img: base64 as string }
+        })
+      )
       const updatedStateCreatePost: CreatePostState = {
         ...stateCreatePost,
-        croppedImages: imagesBase64 as ImageType[],
+        croppedImages: croppedImagesBase64 as ImageType[],
         images: imagesBase64 as ImageType[],
       }
 

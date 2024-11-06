@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import Cropper, { ReactCropperElement } from 'react-cropper'
 
-import { FILE_VALIDATION_CONFIG } from '@/consts/common-variables'
 import {
   ImageType,
   deleteImg,
@@ -10,6 +9,7 @@ import {
   setPage,
 } from '@/components/posts/create/model/create-post-slice'
 import { ZoomButton } from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/zoom-handler/ZoomButton'
+import { FILE_VALIDATION_CONFIG } from '@/consts/common-variables'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import { showErrorToast } from '@/utils/toastConfig'
@@ -119,7 +119,7 @@ export const CreatePostCrop = () => {
       if (file) {
         const fileURL = URL.createObjectURL(file)
 
-        dispatch(setImage({ img: fileURL }))
+        dispatch(setImage({ img: fileURL, type: file.type }))
       }
     }
   }
