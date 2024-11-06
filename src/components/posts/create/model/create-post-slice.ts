@@ -11,14 +11,24 @@ export const FILE_VALIDATION_CONFIG = {
 }
 // 'image/webp'
 
+export type CreatePostState = {
+  croppedImages: ImageType[]
+  filters: { [key: number]: string }
+  images: ImageType[]
+  page: number
+  photoUploadError: string
+}
+
+const initialState = {
+  croppedImages: [] as ImageType[],
+  filters: {} as { [key: number]: string },
+  images: [] as ImageType[],
+  page: 0,
+  photoUploadError: '',
+}
+
 export const createPostSlice = createSlice({
-  initialState: {
-    croppedImages: [] as ImageType[],
-    filters: {} as { [key: number]: string },
-    images: [] as ImageType[],
-    page: 0,
-    photoUploadError: '',
-  },
+  initialState,
   name: 'createPost',
   reducers: {
     deleteImg: (state, action: PayloadAction<{ id: number }>) => {
@@ -30,6 +40,7 @@ export const createPostSlice = createSlice({
     prevPage: state => {
       state.page = state.page - 1
     },
+    resetState: () => initialState,
     setCroppedImage: (state, action: PayloadAction<{ id: number; img: string }>) => {
       const { id, img } = action.payload
       const index = state.croppedImages.findIndex(item => item.id === id)
@@ -37,6 +48,9 @@ export const createPostSlice = createSlice({
       if (index !== -1) {
         state.croppedImages[index].img = img
       }
+    },
+    setDraftData: (state, action: PayloadAction<CreatePostState>) => {
+      return action.payload
     },
     setImage: (state, action: PayloadAction<{ img: string }>) => {
       const newImage: ImageType = {
@@ -66,7 +80,9 @@ export const {
   deleteImg,
   nextPage,
   prevPage,
+  resetState,
   setCroppedImage,
+  setDraftData,
   setImage,
   setImageFilter,
   setPage,

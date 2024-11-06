@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { ErrorMessage } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/error-message'
 import {
@@ -14,10 +14,24 @@ import { Button, ImageOutline } from '@robur_/ui-kit'
 
 import s from './create-post-add-photo.module.scss'
 
+import { useSaveDraftCreatePost } from '../../../draft/hooks/useSaveDraftCreatePost'
+
 export const CreatePostAddPhoto = () => {
   const t = useTranslation()
   const photoUploadError = useAppSelector(state => state.createPost.photoUploadError)
   const dispatch = useAppDispatch()
+  const { checkSpecificDraftExists, getDraftData } = useSaveDraftCreatePost()
+  const [ifTheDraftIsSaved, setIfTheDraftIsSaved] = useState(false)
+
+  useEffect(() => {
+    const fetchDraftStatus = async () => {
+      const exists = await checkSpecificDraftExists()
+
+      setIfTheDraftIsSaved(exists)
+    }
+
+    void fetchDraftStatus()
+  }, [checkSpecificDraftExists])
 
   const validateFile = (file: File) => {
     if (file.size > FILE_VALIDATION_CONFIG.maxFileSize) {
@@ -57,6 +71,10 @@ export const CreatePostAddPhoto = () => {
     }
   }
 
+  async function handleCickDraft() {
+    await getDraftData()
+  }
+
   return (
     <div className={s.container}>
       <div className={s.selectWrapper}>
@@ -71,9 +89,11 @@ export const CreatePostAddPhoto = () => {
         >
           <ImageOutline />
         </FileUploader>
-        <Button className={s.openDraftBtn} variant={'outlined'}>
-          {t.createPost.openDraft}
-        </Button>
+        {ifTheDraftIsSaved && (
+          <Button className={s.openDraftBtn} onClick={handleCickDraft} variant={'outlined'}>
+            {t.createPost.openDraft}
+          </Button>
+        )}
       </div>
     </div>
   )
