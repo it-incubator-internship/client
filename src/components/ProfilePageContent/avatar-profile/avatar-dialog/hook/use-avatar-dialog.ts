@@ -23,7 +23,7 @@ type Action =
   | { type: 'FILE_LOADED' }
   | { type: 'RESET' }
 
-const reducer = (state: State, action: Action): State => {
+const reducer = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case 'SET_ERROR':
       return { ...state, isError: action.payload }

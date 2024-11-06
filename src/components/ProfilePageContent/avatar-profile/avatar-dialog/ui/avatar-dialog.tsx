@@ -25,6 +25,10 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
 
   const [sendAvatarToServer] = useSendAvatarToServerMutation()
 
+  const resetAvatar = () => {
+    dispatch({ type: 'RESET' })
+  }
+
   const handleSaveAndClose = async () => {
     if (isPreview) {
       setAvatarProgress('loading')
@@ -32,11 +36,11 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
 
       await sendAvatarToServer(convertedAvatarImg).unwrap()
     }
-    dispatch({ type: 'RESET' })
+    resetAvatar()
   }
 
-  const handleCloseWithoutSave = () => {
-    dispatch({ type: 'RESET' })
+  const handleFileLoad = () => {
+    dispatch({ type: 'FILE_LOADED' })
   }
 
   const handleCrop = (view: string) => {
@@ -47,17 +51,13 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
     const file = event.target.files?.[0]
 
     if (file && validateFile(file)) {
-      dispatch({ type: 'FILE_LOADED' })
+      handleFileLoad()
     }
-  }
-
-  const handleFileLoad = () => {
-    dispatch({ type: 'FILE_LOADED' })
   }
 
   const handleSelectClick = () => {
     setShouldClick(true)
-    dispatch({ type: 'RESET' })
+    resetAvatar()
   }
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
       <Dialog.Portal>
         <Dialog.Overlay className={s.DialogOverlay} />
         <Dialog.Content className={s.DialogContent}>
-          <AvatarHeader onClose={handleCloseWithoutSave} />
+          <AvatarHeader onClose={resetAvatar} />
           <div className={s.separator}></div>
           {isError && <ErrorMessage message={isError} />}
           <div className={s.selectAvatarWrapper}>
