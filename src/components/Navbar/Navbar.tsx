@@ -16,8 +16,7 @@ import {
   Sidebar,
   TrendingUpOutline,
 } from '@robur_/ui-kit'
-
-import s from '@/components/Navbar/SidebarItem/SidebarItem.module.scss'
+import clsx from 'clsx'
 
 import { SidebarItem } from './SidebarItem/SidebarItem'
 
@@ -44,7 +43,7 @@ export const Navbar = ({ className }: Props) => {
   }
 
   return (
-    <nav className={className}>
+    <nav className={clsx(className)}>
       <Sidebar>
         <SidebarItem Icon={HomeOutline} href={PATH.HOME}>
           <span>{t.nav.home}</span>

@@ -19,7 +19,7 @@ export type CreatePostState = {
   photoUploadError: string
 }
 
-const initialState = {
+const initialState: CreatePostState = {
   croppedImages: [] as ImageType[],
   filters: {} as { [key: number]: string },
   images: [] as ImageType[],

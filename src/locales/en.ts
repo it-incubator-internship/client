@@ -53,6 +53,9 @@ export const en: LocaleType = {
     addPhotoTitle: 'Add Photo',
     cropDescription: 'Click here and crop new Photo',
     cropTitle: 'Cropping',
+    cropping: {
+      original: 'Original',
+    },
     errorFileSize:
       'The selected file exceeds the maximum allowed size of 10MB. Please choose a smaller file.',
     errorFileType: 'The selected file type is not supported. Please upload a PNG or JPEG image.',

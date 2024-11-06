@@ -15,6 +15,7 @@ import '@/styles/toastStyles.scss'
 import '@/styles/swiperStyles.scss'
 import '@robur_/ui-kit/style.css'
 import 'react-toastify/dist/ReactToastify.css'
+import '@/styles/cropper.css'
 
 export type NextPageWithLayout<P = {}, IP = P> = {
   getLayout?: (page: ReactElement) => ReactNode
