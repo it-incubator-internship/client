@@ -41,7 +41,7 @@ const USER_ACHIEVEMENTS = {
   countPublications: '2 764',
 }
 
-const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar.png' }) => {
+const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar.jpg' }) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
   const router = useRouter()
@@ -72,7 +72,7 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
               className={s.avatarImage}
               height={204}
               layout={'intrinsic'}
-              src={profileData?.originalAvatarUrl}
+              src={profileData?.originalAvatarUrl || avatar}
               width={204}
             />
           )}

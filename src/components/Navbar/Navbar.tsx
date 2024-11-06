@@ -20,6 +20,8 @@ import clsx from 'clsx'
 
 import s from '@/components/Navbar/SidebarItem/SidebarItem.module.scss'
 
+import s from '@/components/Navbar/SidebarItem/SidebarItem.module.scss'
+
 import { SidebarItem } from './SidebarItem/SidebarItem'
 
 type Props = {

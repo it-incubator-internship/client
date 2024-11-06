@@ -1,3 +1,5 @@
+import { Storage } from '@/utils/storage'
+
 import { inctagramApi } from '../inctagramApi'
 import {
   CityReturnType,
@@ -11,6 +13,7 @@ import {
 const transformDataCountry = (data: CountryReturnType[], locale: string) => {
   const countryEn: Array<TransformedType> = []
   const countryRu: Array<TransformedType> = []
+  const storage = new Storage()
 
   data.forEach(country => {
     countryEn.push({
@@ -26,11 +29,11 @@ const transformDataCountry = (data: CountryReturnType[], locale: string) => {
 
   const stringifiedEn = JSON.stringify(countryEn)
 
-  localStorage.setItem(CountryLocale.en, stringifiedEn)
+  storage.setItem(CountryLocale.en, stringifiedEn)
 
   const stringifiedRu = JSON.stringify(countryRu)
 
-  localStorage.setItem(CountryLocale.ru, stringifiedRu)
+  storage.setItem(CountryLocale.ru, stringifiedRu)
 }
 
 export const profileApi = inctagramApi.injectEndpoints({
@@ -67,7 +70,6 @@ export const profileApi = inctagramApi.injectEndpoints({
       async onQueryStarted(_, { queryFulfilled }) {
         const { data } = await queryFulfilled
 
-        console.log(' data: ', data)
         if (!data) {
           return
         }

@@ -65,6 +65,13 @@ export const ru = {
     publishDescription: 'Нажмите сюда, чтобы опубликовать новое фото',
     publishTitle: 'Опубликовать',
     selectFromComputer: 'Выбрать на этом компьютере',
+    titleButtonDiscardDraft: 'Закрыть',
+    titleButtonSaveDraft: 'Сохранить',
+    titleFromAlertChangeVersion:
+      'База данных обновлена в другой вкладке. Пожалуйста, перезагрузите страницу.',
+    titleHeaderModalDiscardDraft: 'Отказаться',
+    titleModalSavedDraft:
+      'Вы действительно хотите закрыть создание публикации? Если вы закроете, все будет удалено.',
   },
   devices: {
     activeSessions: 'Активные сессии',
