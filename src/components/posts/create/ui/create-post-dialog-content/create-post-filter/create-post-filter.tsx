@@ -29,7 +29,6 @@ const FILTERS = [
 ]
 
 export const CreatePostFilter = () => {
-  const images = useAppSelector(state => state.createPost.images)
   const imageFilters = useAppSelector(state => state.createPost.filters)
   const croppedImages = useAppSelector(state => state.createPost.croppedImages)
 
@@ -38,7 +37,7 @@ export const CreatePostFilter = () => {
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0)
 
   const handleFilterChange = (filterName: string) => {
-    const imageId = images[activeImageIndex]?.id
+    const imageId = croppedImages[activeImageIndex]?.id
 
     if (imageId !== undefined) {
       dispatch(setImageFilter({ filter: filterName, id: imageId }))
@@ -96,7 +95,7 @@ export const CreatePostFilter = () => {
               <Image
                 alt={filter.name}
                 height={100}
-                src={images[activeImageIndex]?.img || '/placeholder.png'}
+                src={croppedImages[activeImageIndex]?.img || '/placeholder.png'}
                 width={100}
               />
             </div>

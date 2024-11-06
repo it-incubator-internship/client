@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { CreatePostDialog } from '@/components/posts/create/ui/create-post-dialog/create-post-dialog'
 import { PATH } from '@/consts/route-paths'
@@ -17,10 +17,6 @@ import {
   TrendingUpOutline,
 } from '@robur_/ui-kit'
 import clsx from 'clsx'
-
-import s from '@/components/Navbar/SidebarItem/SidebarItem.module.scss'
-
-import s from '@/components/Navbar/SidebarItem/SidebarItem.module.scss'
 
 import { SidebarItem } from './SidebarItem/SidebarItem'
 

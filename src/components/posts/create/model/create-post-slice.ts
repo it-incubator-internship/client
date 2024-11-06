@@ -19,13 +19,15 @@ export type CreatePostState = {
   photoUploadError: string
 }
 
-const initialState = {
-    croppedImages: [] as ImageType[],
-    filters: {} as { [key: number]: string },
-    images: [] as ImageType[],
-    page: 0,
-    photoUploadError: '',
-  }export const createPostSlice = createSlice({
+const initialState: CreatePostState = {
+  croppedImages: [] as ImageType[],
+  filters: {} as { [key: number]: string },
+  images: [] as ImageType[],
+  page: 0,
+  photoUploadError: '',
+}
+
+export const createPostSlice = createSlice({
   initialState,
   name: 'createPost',
   reducers: {
