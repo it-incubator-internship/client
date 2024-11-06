@@ -86,5 +86,5 @@ export const {
   setImage,
   setImageFilter,
   setPage,
-  setPhotoUploadError
+  setPhotoUploadError,
 } = createPostSlice.actions

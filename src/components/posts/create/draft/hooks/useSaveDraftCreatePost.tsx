@@ -20,7 +20,7 @@ export const useSaveDraftCreatePost = () => {
   const stateCreatePost = useAppSelector(state => state.createPost)
   const currentPage = useAppSelector(state => state.createPost.page)
   const t = useTranslation()
-  const [isModalDraftsavedOpen, setIsModalDraftSavedOpen] = useState(false)
+  const [isModalDraftSavedOpen, setIsModalDraftSavedOpen] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const dispatch = useAppDispatch()
   const { channel } = useDataBaseVersionChange()
@@ -283,7 +283,7 @@ export const useSaveDraftCreatePost = () => {
       // eslint-disable-next-line max-lines
       onCloseWithApproval: setDataIndexedDB,
       onCloseWithoutApproval: closeAllModals,
-      open: isModalDraftsavedOpen,
+      open: isModalDraftSavedOpen,
       title: t.createPost.titleHeaderModalDiscardDraft,
       withConfirmation: true,
     }
@@ -295,6 +295,6 @@ export const useSaveDraftCreatePost = () => {
     getModalArgs,
     handleClickOverlay,
     isDialogOpen,
-    isModalDraftSavedOpen: isModalDraftsavedOpen,
+    isModalDraftSavedOpen: isModalDraftSavedOpen,
   }
 }

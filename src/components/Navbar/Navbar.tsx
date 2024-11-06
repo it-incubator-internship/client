@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { CreatePostDialog } from '@/components/posts/create/ui/create-post-dialog/create-post-dialog'
 import { PATH } from '@/consts/route-paths'
