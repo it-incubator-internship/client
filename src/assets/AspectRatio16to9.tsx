@@ -1,4 +1,5 @@
 import type { SVGProps } from 'react'
+// eslint-disable-next-line no-duplicate-imports
 import { Ref, forwardRef, memo } from 'react'
 const SvgImage = (props: SVGProps<SVGSVGElement>, ref: Ref<SVGSVGElement>) => (
   <svg
