@@ -80,23 +80,27 @@ export const ProfilePageContent = () => {
             containerClassName={s.inputContainer}
             control={control}
             label={t.myProfileSettings.userName}
+            markedAsRequired
             name={'userName'}
           />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
             label={t.myProfileSettings.firstName}
+            markedAsRequired
             name={'firstName'}
           />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
             label={t.myProfileSettings.lastName}
+            markedAsRequired
             name={'lastName'}
           />
           <FormDatePicker
             control={control}
             label={t.myProfileSettings.dateOfBirth}
+            markedAsRequired
             name={'dateOfBirth'}
             years={years}
           />
@@ -107,6 +111,7 @@ export const ProfilePageContent = () => {
                 control={control}
                 getDataForCombobox={setGetDataForCountry}
                 isLoading={isCountriesLoading}
+                markedAsRequired
                 name={Terra.country}
                 onInputClick={getCountriesFromLocalStorage}
                 options={countriesValues ?? []}
@@ -121,6 +126,7 @@ export const ProfilePageContent = () => {
                 disabled={!countryValue}
                 getDataForCombobox={setGetDataForCity}
                 isLoading={isCitiesLoading}
+                markedAsRequired
                 name={Terra.city}
                 onInputClick={() => handleClickInputCity()}
                 options={citiesValues ?? []}
