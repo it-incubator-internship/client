@@ -14,12 +14,6 @@ import { inctagramApi } from '../inctagramApi'
 
 const authApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
-    githubLogin: builder.query<undefined, void>({
-      query: () => `/v1/auth/github`,
-    }),
-    googleLogin: builder.query<undefined, void>({
-      query: () => `/v1/auth/google`,
-    }),
     login: builder.mutation<LoginResponse, LoginArgs>({
       async onQueryStarted(_, { queryFulfilled }) {
         const { data } = await queryFulfilled
@@ -94,8 +88,6 @@ const authApi = inctagramApi.injectEndpoints({
 })
 
 export const {
-  useLazyGithubLoginQuery,
-  useLazyGoogleLoginQuery,
   useLazyMeQuery,
   useLoginMutation,
   useLogoutMutation,
