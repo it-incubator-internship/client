@@ -8,11 +8,15 @@ export const signUpSchema = (t: LocaleType) => {
       isAgreement: z.boolean(),
       password: z
         .string({ message: t.formErrors.required })
-        .min(8, t.formErrors.required)
+        .min(6, t.formErrors.minLength)
         .max(20, t.formErrors.maxLength(20))
         .regex(/^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]+$/g, t.formErrors.passwordRegex),
       passwordConfirmation: z.string().min(1, { message: t.formErrors.required }),
-      userName: z.string().min(1, { message: t.formErrors.required }),
+      userName: z
+        .string()
+        .min(6, t.formErrors.minLength)
+        .max(30, { message: t.formErrors.maxLength(30) })
+        .regex(/^[a-zA-Z0-9_-]+$/, { message: t.formErrors.userName }),
     })
     .refine(data => data.password === data.passwordConfirmation, {
       message: t.formErrors.passwordMatch,

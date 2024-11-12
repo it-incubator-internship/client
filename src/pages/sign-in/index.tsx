@@ -5,6 +5,7 @@ import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
+import { signInSchema } from '@/schemas/signInSchema'
 import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { customErrorHandler } from '@/utils/customErrorHandler'
@@ -19,16 +20,7 @@ import s from './signIn.module.scss'
 
 import fetchUserIpAndStore from '../../utils/fetchUserIp'
 
-const createSigninSchema = (t: { formErrors: { invalidEmail: string; required: string } }) =>
-  z.object({
-    email: z
-      .string()
-      .min(1, { message: t.formErrors.required })
-      .email({ message: t.formErrors.invalidEmail }),
-    password: z.string().min(1, { message: t.formErrors.required }),
-  })
-
-type FormValues = z.infer<ReturnType<typeof createSigninSchema>>
+type FormValues = z.infer<ReturnType<typeof signInSchema>>
 type ZodKeys = keyof FormValues
 
 function SignIn() {
@@ -38,7 +30,7 @@ function SignIn() {
   const router = useRouter()
 
   const t = useTranslation()
-  const SigninSchema = createSigninSchema(t)
+  const SigninSchema = signInSchema(t)
 
   const {
     control,
