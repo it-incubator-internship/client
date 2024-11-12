@@ -5,6 +5,7 @@ import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedL
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
+import { useGetUserPostsQuery } from '@/services/posts/posts-api'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { Button } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -54,6 +55,11 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
     { skip: !userId }
   )
 
+  const { data: userPosts, isLoading: isLoadingUserPosts } = useGetUserPostsQuery(
+    { userId: userId as string },
+    { skip: !userId }
+  )
+
   if (!userId || startIsLoading || isLoadingProfile) {
     return <Spinner />
   }
@@ -61,6 +67,8 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
   if (!isLoadingProfile && !profileData) {
     void router.replace(PATH.NOT_FOUND)
   }
+
+  console.log('userPosts', userPosts)
 
   return (
     <div className={s.profile}>

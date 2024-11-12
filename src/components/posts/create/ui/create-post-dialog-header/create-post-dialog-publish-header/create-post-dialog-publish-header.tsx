@@ -1,5 +1,8 @@
+import { useState } from 'react'
+
 import { prevPage } from '@/components/posts/create/model/create-post-slice'
 import { useTranslation } from '@/hooks/useTranslation'
+import { useCreatePostMutation, useUploadPostPhotosMutation } from '@/services/posts/posts-api'
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import { createFormData } from '@/utils/createFormData'
 import { getBinaryImageData } from '@/utils/getBinaryImageData'
@@ -10,7 +13,10 @@ import s from './create-post-dialog-publish-header.module.scss'
 
 export const CreatePostDialogPublishHeader = () => {
   const t = useTranslation()
+  const [createPost, { isLoading: isCreatingPostLoading }] = useCreatePostMutation()
+  const [uploadPostPhotos] = useUploadPostPhotosMutation()
   const croppedImages = useAppSelector(state => state.createPost.croppedImages)
+  const newPostDescription = useAppSelector(state => state.createPost.postDescription)
   const dispatch = useAppDispatch()
   const onPrevPage = () => dispatch(prevPage())
 
@@ -18,7 +24,20 @@ export const CreatePostDialogPublishHeader = () => {
     const binaryImages = await getBinaryImageData(croppedImages)
     const formattedToFormData = createFormData(binaryImages)
 
-    console.log(formattedToFormData)
+    console.log('formattedToFormData', formattedToFormData)
+
+    try {
+      const { postId } = await createPost({
+        description: newPostDescription,
+        imageCount: croppedImages.length,
+      }).unwrap()
+
+      if (postId) {
+        await uploadPostPhotos({ photos: formattedToFormData, postId: postId }).unwrap()
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
