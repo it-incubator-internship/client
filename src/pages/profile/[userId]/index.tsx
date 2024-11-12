@@ -6,6 +6,7 @@ import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetUserPostsQuery } from '@/services/posts/posts-api'
+import { Post } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { Button } from '@robur_/ui-kit'
 import clsx from 'clsx'
@@ -33,7 +34,8 @@ type MyProfileProps = {
 }
 
 type PublicationsPhotoProps = {
-  publicImages?: string[]
+  // publicImages?: string[]
+  posts: Post[]
 }
 
 const USER_ACHIEVEMENTS = {
@@ -101,7 +103,11 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
           </Button>
         )}
       </div>
-      <PublicationsPhoto />
+      {userPosts ? (
+        <PublicationsPhoto posts={userPosts.posts} />
+      ) : (
+        <div>There is no any data...</div>
+      )}
     </div>
   )
 }
@@ -133,39 +139,44 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
   )
 }
 
-const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
-  publicImages = [
-    '/photo-default-1.png',
-    '/photo-default-2.png',
-    '/photo-default-3.png',
-    '/photo-default-4.png',
-    '/photo-default-5.png',
-    '/photo-default-6.png',
-    '/photo-default-7.png',
-    '/photo-default-8.png',
-    '/photo-default-1.png',
-    '/photo-default-2.png',
-    '/photo-default-3.png',
-    '/photo-default-4.png',
-    '/photo-default-5.png',
-    '/photo-default-6.png',
-    '/photo-default-7.png',
-    '/photo-default-8.png',
-  ],
-}) => {
+// publicImages = [
+//   '/photo-default-1.png',
+//   '/photo-default-2.png',
+//   '/photo-default-3.png',
+//   '/photo-default-4.png',
+//   '/photo-default-5.png',
+//   '/photo-default-6.png',
+//   '/photo-default-7.png',
+//   '/photo-default-8.png',
+//   '/photo-default-1.png',
+//   '/photo-default-2.png',
+//   '/photo-default-3.png',
+//   '/photo-default-4.png',
+//   '/photo-default-5.png',
+//   '/photo-default-6.png',
+//   '/photo-default-7.png',
+//   '/photo-default-8.png',
+// ]
+const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts }) => {
   return (
     <div className={s.photoGrid}>
-      {publicImages.map((image, index) => (
-        <div className={s.photoItem} key={index}>
-          <Image
-            alt={`User photo ${index + 1}`}
-            height={228}
-            layout={'responsive'}
-            src={image}
-            width={234}
-          />
-        </div>
-      ))}
+      {posts.map(post => {
+        const imagePreview = post.images.find(item => {
+          return item.originalImageUrl
+        })
+
+        return (
+          <div className={s.photoItem} key={post.postId}>
+            <Image
+              alt={`User photo ${post.postId}`}
+              height={228}
+              layout={'responsive'}
+              src={imagePreview?.originalImageUrl}
+              width={234}
+            />
+          </div>
+        )
+      })}
     </div>
   )
 }
