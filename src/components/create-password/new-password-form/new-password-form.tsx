@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import Spinner from '@/components/Spinner/Spinner'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
+import { createNewPasswordFormSchema } from '@/schemas/createNewPasswordFormSchema'
 import { useLogoutMutation } from '@/services/auth/authApi'
 import { useChangePasswordMutation } from '@/services/password-recovery/password-recovery-api'
 import { ServerError } from '@/services/password-recovery/password-recovery-types'
@@ -19,23 +20,7 @@ type NewPasswordFormProps = {
   recoveryCode: string
 }
 
-const FormSchema = z
-  .object({
-    confirmPassword: z
-      .string()
-      .min(6, 'Password must be at least 6 characters')
-      .max(20, 'Password must be no more than 20 characters'),
-    newPassword: z
-      .string()
-      .min(6, 'Password must be at least 6 characters')
-      .max(20, 'Password must be no more than 20 characters'),
-  })
-  .refine(data => data.newPassword === data.confirmPassword, {
-    message: 'The passwords must match',
-    path: ['confirmPassword'],
-  })
-
-type FormValues = z.infer<typeof FormSchema>
+type FormValues = z.infer<ReturnType<typeof createNewPasswordFormSchema>>
 
 export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
   const [showModal, setShowModal] = useState(false)
@@ -48,7 +33,7 @@ export function NewPasswordForm({ recoveryCode }: NewPasswordFormProps) {
       confirmPassword: '',
       newPassword: '',
     },
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(createNewPasswordFormSchema(t)),
   })
   const handleSubmitHandler = async (data: FormValues) => {
     await changePassword({

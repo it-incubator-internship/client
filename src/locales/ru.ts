@@ -24,6 +24,11 @@ export const ru = {
   createNewPassword: {
     newPasswordForm: {
       button: 'Создать новый пароль',
+      errors: {
+        passwordMaxCharacters: 'Пароль должен быть не более 20 символов',
+        passwordMinCharacters: 'Пароль должен быть не менее 6 символов',
+        passwordsMustMatch: 'Пароли должны совпадать',
+      },
       inputConfirmPassLabel: 'Подтвердите новый пароль',
       inputNewPassLabel: 'Введите новый пароль',
       modal: {
@@ -131,12 +136,15 @@ export const ru = {
           return `Поле должно быть не более ${count} знаков`
       }
     },
+    minLength: 'Минимальное количество символов 6',
     noMoreThan200Characters: 'Это поле "Обо мне" должно содержать не более 200 символов',
+    notValidEmail: 'Недействительный адрес электронной почты',
     passwordMatch: 'Пароли должны совпадать',
     passwordRegex:
       'Пароль может содержать символы: a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
     required: 'Поле обязательно',
     termsAgreement: 'Пожалуйста, поставьте галочку, что Вы согласны с нашими правилами',
+    userName: 'Имя пользователя должно содержать только буквы A-Z, a-z, А-Я, а-я, 0-9.',
   },
   meta: {
     defaultDescriptionText:
