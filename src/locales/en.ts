@@ -129,12 +129,14 @@ export const en: LocaleType = {
           return `Field must be ${count} characters long at least`
       }
     },
+    minLength: 'Minimum number of characters 6',
     noMoreThan200Characters: 'This field about me must be no more than 200 characters',
     passwordMatch: 'Password should match',
     passwordRegex:
-      'password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
+      'Password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
     required: 'This field is required',
     termsAgreement: 'Please, mark the checkbox, if you agree to our terms',
+    userName: 'User name must contain only letters A-Z, a-z, А-Я, а-я, 0-9',
   },
   meta: {
     defaultDescriptionText:
