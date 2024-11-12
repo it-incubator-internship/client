@@ -25,6 +25,11 @@ export const en: LocaleType = {
   createNewPassword: {
     newPasswordForm: {
       button: 'Create new password',
+      errors: {
+        passwordMaxCharacters: 'Password must be no more than 20 characters',
+        passwordMinCharacters: 'Password must be at least 6 characters',
+        passwordsMustMatch: 'Passwords must match',
+      },
       inputConfirmPassLabel: 'Password confirmation',
       inputNewPassLabel: 'New password',
       modal: {
@@ -131,6 +136,7 @@ export const en: LocaleType = {
     },
     minLength: 'Minimum number of characters 6',
     noMoreThan200Characters: 'This field about me must be no more than 200 characters',
+    notValidEmail: 'Not valid email',
     passwordMatch: 'Password should match',
     passwordRegex:
       'Password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',

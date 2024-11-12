@@ -6,6 +6,7 @@ import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
+import { forgotPasswordRecaptchaFormSchema } from '@/schemas/forgotPasswordRecaptchaSchema'
 import {
   useCheckEmailMutation,
   useResendEmailMutation,
@@ -14,15 +15,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Card, FormInput, Modal, Recaptcha } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
-import { z } from 'zod'
 
 import s from './forgot-password.module.scss'
 
 type FlowState = 'initial' | 'success'
-
-const FormSchema = z.object({
-  email: z.string({ message: 'This field is required' }).email({ message: 'Not valid email' }),
-})
 
 function ForgotPasswordRecaptchaWrapper() {
   return (
@@ -54,7 +50,7 @@ const ForgotPassword = () => {
   const t = useTranslation()
   const { executeRecaptcha } = useGoogleReCaptcha()
   const { control, handleSubmit, reset, setError } = useForm({
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(forgotPasswordRecaptchaFormSchema(t)),
   })
   const [checkEmail, { isError, isLoading: isLoadingCheckEmail }] = useCheckEmailMutation()
 
