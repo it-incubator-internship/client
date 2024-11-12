@@ -175,7 +175,7 @@ export const en: LocaleType = {
     saveChanges: 'Save changes',
     selectFromComputer: 'Select from computer',
     selectYourCity: 'Select your city',
-    selectYourCountry: 'Select your city',
+    selectYourCountry: 'Select your country',
     userName: 'User name',
     yourSettingsAreSaved: 'Your settings are saved!',
   },

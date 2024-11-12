@@ -111,7 +111,8 @@ export const ProfilePageContent = () => {
                 control={control}
                 getDataForCombobox={setGetDataForCountry}
                 isLoading={isCountriesLoading}
-                markedAsRequired
+                // todo разкомментировать когда будет смерджена либа
+                // markedAsRequired
                 name={Terra.country}
                 onInputClick={getCountriesFromLocalStorage}
                 options={countriesValues ?? []}
@@ -126,7 +127,8 @@ export const ProfilePageContent = () => {
                 disabled={!countryValue}
                 getDataForCombobox={setGetDataForCity}
                 isLoading={isCitiesLoading}
-                markedAsRequired
+                  // todo разкомментировать когда будет смерджена либа
+                // markedAsRequired
                 name={Terra.city}
                 onInputClick={() => handleClickInputCity()}
                 options={citiesValues ?? []}
