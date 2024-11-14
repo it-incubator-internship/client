@@ -2,6 +2,7 @@ import { commonVariables } from '@/consts/common-variables'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export type ImageType = {
+  filter?: string
   id: number
   img: string
   type: string

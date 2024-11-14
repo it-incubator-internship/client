@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef } from 'react'
+import { ChangeEvent, useRef } from 'react'
 
 import { setPostDescription } from '@/components/posts/create/model/create-post-slice'
 import { commonVariables } from '@/consts/common-variables'

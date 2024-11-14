@@ -276,7 +276,9 @@ export const useSaveDraftCreatePost = () => {
 
       if (recordExists) {
         await deleteRecord(dbInstance, draftDataConfig.objectStorage, lastKey)
+        console.log('record deleted')
       }
+      console.log('discard')
     } catch (error) {
       console.error('Error deleting draft data:', error)
     }
@@ -303,6 +305,7 @@ export const useSaveDraftCreatePost = () => {
 
   return {
     checkSpecificDraftExists,
+    closeAllModals,
     getDraftData,
     getModalArgs,
     handleClickOverlay,
