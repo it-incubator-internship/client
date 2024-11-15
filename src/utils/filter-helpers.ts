@@ -1,5 +1,44 @@
 import { ImageType } from '@/components/posts/create/model/create-post-slice'
 
+const FILTERS = [
+  {
+    filter: 'none',
+    name: 'No filter',
+  },
+  {
+    filter: 'grayscale(100%)',
+    name: 'Lark',
+  },
+  {
+    filter: 'contrast(160%)',
+    name: 'Gingham',
+  },
+  {
+    filter: 'invert(80%)',
+    name: 'Clarendon',
+  },
+  {
+    filter: 'brightness(90%) grayscale(100%)',
+    name: 'Moon',
+  },
+  {
+    filter: 'contrast(110%) saturate(120%)',
+    name: 'Mayfair',
+  },
+  {
+    filter: 'sepia(40%) contrast(105%) brightness(110%)',
+    name: 'Reyes',
+  },
+  {
+    filter: 'brightness(90%) contrast(120%)',
+    name: 'Hudson',
+  },
+  {
+    filter: 'contrast(115%) sepia(10%)',
+    name: 'Valencia',
+  },
+]
+
 const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const image = new Image()
@@ -25,7 +64,12 @@ async function getFilteredImg(imageSrc: string, filter: string = 'none'): Promis
   ctx.translate(image.width / 2, image.height / 2)
   ctx.translate(-image.width / 2, -image.height / 2)
 
-  ctx.filter = filter || 'none'
+  ctx.filter =
+    FILTERS.find(item => {
+      return item.name === filter
+    })?.filter || 'none'
+
+  console.log('ctx.filter', ctx.filter)
   ctx.drawImage(image, 0, 0)
 
   return canvas.toDataURL('image/jpeg')
