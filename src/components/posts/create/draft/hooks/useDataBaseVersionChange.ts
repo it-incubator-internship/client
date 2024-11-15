@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { draftDataConfig } from '@/components/posts/create/draft/consts/consts'
+import { draftDataConfig } from '@/consts/draftDataConfig'
 import { useTranslation } from '@/hooks/useTranslation'
 
 export const useDataBaseVersionChange = () => {

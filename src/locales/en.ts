@@ -56,6 +56,7 @@ export const en: LocaleType = {
   createPost: {
     addPhotoDescription: 'Click here and add new Photo',
     addPhotoTitle: 'Add Photo',
+    addPublicationTitle: 'Add post description',
     cropDescription: 'Click here and crop new Photo',
     cropTitle: 'Cropping',
     cropping: {
@@ -68,6 +69,9 @@ export const en: LocaleType = {
     filterDescription: 'Click here and filter new Photo',
     filterTitle: 'Filters',
     openDraft: 'Open draft',
+    postCreated: 'Post has been created successfully. It will appear in your profile soon',
+    postDescriptionError: 'Post description must be 500 symbols length or less',
+    postNotCreated: 'Something went wrong, new post has not been created',
     publishDescription: 'Click here and publish new Photo',
     publishTitle: 'Publication',
     selectFromComputer: 'Select from computer',
