@@ -26,7 +26,6 @@ type Props = {
 }
 
 export const CreatePostDialog = ({ children }: Props) => {
-  const t = useTranslation()
   const { closeAllModals, getModalArgs, handleClickOverlay, isDialogOpen, isModalDraftSavedOpen } =
     useSaveDraftCreatePost()
   const currentPage = useAppSelector(state => state.createPost.page)

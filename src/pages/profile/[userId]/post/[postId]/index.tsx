@@ -16,7 +16,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 
-import s from '../profile.module.scss'
+import s from '../../../profile.module.scss'
 
 // Тип страницы с поддержкой getLayout
 type NextPageWithLayout<P = {}> = {
@@ -34,8 +34,8 @@ type MyProfileProps = {
 }
 
 type PublicationsPhotoProps = {
+  // publicImages?: string[]
   posts: Post[]
-  userId: string
 }
 
 const USER_ACHIEVEMENTS = {
@@ -44,11 +44,14 @@ const USER_ACHIEVEMENTS = {
   countPublications: '2 764',
 }
 
-const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar.jpg' }) => {
+const ProfilePost: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar.jpg' }) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
   const router = useRouter()
-  const { userId } = useParams()
+  const { postId, userId } = useParams()
+
+  console.log('userId', userId)
+  console.log('postId', postId)
 
   const t = useTranslation()
 
@@ -104,7 +107,7 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
         )}
       </div>
       {userPosts ? (
-        <PublicationsPhoto posts={userPosts.posts} userId={userId as string} />
+        <PublicationsPhoto posts={userPosts.posts} />
       ) : (
         <div>There is no any data...</div>
       )}
@@ -138,7 +141,8 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
     </div>
   )
 }
-const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, userId }) => {
+
+const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts }) => {
   return (
     <div className={s.photoGrid}>
       {posts.map(post => {
@@ -147,11 +151,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, 
         })
 
         return (
-          <Link
-            className={s.photoItem}
-            href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
-            key={post.postId}
-          >
+          <div className={s.photoItem} key={post.postId}>
             <Image
               alt={`User photo ${post.postId}`}
               height={228}
@@ -159,13 +159,13 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, 
               src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
               width={234}
             />
-          </Link>
+          </div>
         )
       })}
     </div>
   )
 }
 
-Profile.getLayout = getCombinedLayout
+ProfilePost.getLayout = getCombinedLayout
 
-export default Profile
+export default ProfilePost
