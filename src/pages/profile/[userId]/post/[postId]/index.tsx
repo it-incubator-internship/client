@@ -2,6 +2,7 @@ import { ReactElement, ReactNode } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
+import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
@@ -50,9 +51,6 @@ const ProfilePost: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-av
   const router = useRouter()
   const { postId, userId } = useParams()
 
-  console.log('userId', userId)
-  console.log('postId', postId)
-
   const t = useTranslation()
 
   const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(
@@ -73,7 +71,9 @@ const ProfilePost: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-av
     void router.replace(PATH.NOT_FOUND)
   }
 
-  console.log('userPosts', userPosts)
+  const openedPost = userPosts?.posts.find(post => {
+    return post.postId === postId
+  })
 
   return (
     <div className={s.profile}>
@@ -110,6 +110,9 @@ const ProfilePost: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-av
         <PublicationsPhoto posts={userPosts.posts} />
       ) : (
         <div>There is no any data...</div>
+      )}
+      {openedPost && (
+        <PostDialog post={openedPost} profileData={profileData} userId={userId as string} />
       )}
     </div>
   )

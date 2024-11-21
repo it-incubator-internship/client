@@ -153,11 +153,16 @@ export const en: LocaleType = {
       'The Inctagram social network is a limitless communication of people all over the world',
   },
   myProfile: {
+    addComment: 'Add a Comment...',
+    answer: 'Answer',
     followers: 'Followers',
     following: 'Following',
     initialUrlProfile: 'UrlProfile',
+    like: 'Like',
     profileSettings: 'Profile settings',
     publications: 'Publications',
+    publish: 'Publish',
+    time: 'Hours ago',
   },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',
