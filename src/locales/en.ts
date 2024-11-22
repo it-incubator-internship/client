@@ -159,6 +159,7 @@ export const en: LocaleType = {
     following: 'Following',
     initialUrlProfile: 'UrlProfile',
     like: 'Like',
+    postModalTitle: 'Post view',
     profileSettings: 'Profile settings',
     publications: 'Publications',
     publish: 'Publish',

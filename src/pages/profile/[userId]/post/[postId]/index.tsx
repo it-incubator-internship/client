@@ -19,7 +19,6 @@ import { useRouter } from 'next/router'
 
 import s from '../../../profile.module.scss'
 
-// Тип страницы с поддержкой getLayout
 type NextPageWithLayout<P = {}> = {
   getLayout?: (page: ReactElement) => ReactNode
 } & NextPage<P>

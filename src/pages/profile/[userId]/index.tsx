@@ -5,12 +5,13 @@ import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedL
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { useGetUserPostsQuery } from '@/services/posts/posts-api'
-import { Post } from '@/services/posts/posts-types'
+import { getRunningQueriesThunk, getUserPosts } from '@/services/posts/posts-api'
+import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
+import { wrapper } from '@/services/store'
 import { Button } from '@robur_/ui-kit'
 import clsx from 'clsx'
-import { NextPage } from 'next'
+import { GetServerSidePropsContext, NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -18,7 +19,6 @@ import { useRouter } from 'next/router'
 
 import s from '../profile.module.scss'
 
-// Тип страницы с поддержкой getLayout
 type NextPageWithLayout<P = {}> = {
   getLayout?: (page: ReactElement) => ReactNode
 } & NextPage<P>
@@ -29,13 +29,14 @@ type ProfileStatsProps = {
   countPublications?: string
 }
 
-type MyProfileProps = {
-  avatar?: string
-}
-
 type PublicationsPhotoProps = {
   posts: Post[]
   userId: string
+}
+
+type Props = {
+  avatar?: string
+  posts: getUserPostsResponse
 }
 
 const USER_ACHIEVEMENTS = {
@@ -44,21 +45,45 @@ const USER_ACHIEVEMENTS = {
   countPublications: '2 764',
 }
 
-const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar.jpg' }) => {
+export const getServerSideProps = wrapper.getServerSideProps(
+  store => async (context: GetServerSidePropsContext) => {
+    const userId = context.query?.userId
+    let posts
+
+    if (userId) {
+      const response = await store.dispatch(getUserPosts.initiate({ userId: userId as string }))
+
+      posts = response?.data
+    }
+
+    if (!posts) {
+      return {
+        notFound: true,
+      }
+    }
+
+    await Promise.all(store.dispatch(getRunningQueriesThunk()))
+
+    return {
+      props: {
+        posts,
+      },
+    }
+  }
+)
+
+const Profile: NextPageWithLayout<Props> = ({ avatar = '/default-avatar.jpg', posts }: Props) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
   const router = useRouter()
   const { userId } = useParams()
 
+  console.log('initial posts', posts)
+
   const t = useTranslation()
 
   const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(
     { id: userId as string },
-    { skip: !userId }
-  )
-
-  const { data: userPosts, isLoading: isLoadingUserPosts } = useGetUserPostsQuery(
-    { userId: userId as string },
     { skip: !userId }
   )
 
@@ -69,8 +94,6 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
   if (!isLoadingProfile && !profileData) {
     void router.replace(PATH.NOT_FOUND)
   }
-
-  console.log('userPosts', userPosts)
 
   return (
     <div className={s.profile}>
@@ -103,8 +126,8 @@ const Profile: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar
           </Button>
         )}
       </div>
-      {userPosts ? (
-        <PublicationsPhoto posts={userPosts.posts} userId={userId as string} />
+      {posts.posts ? (
+        <PublicationsPhoto posts={posts.posts} userId={userId as string} />
       ) : (
         <div>There is no any data...</div>
       )}

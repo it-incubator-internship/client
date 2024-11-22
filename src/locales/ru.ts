@@ -159,6 +159,7 @@ export const ru = {
     following: 'Подписки',
     initialUrlProfile: 'Url пользователя',
     like: 'Нравится',
+    postModalTitle: 'Просмотр поста',
     profileSettings: 'Настройки профиля',
     publications: 'Публикации',
     publish: 'Опубликовать',

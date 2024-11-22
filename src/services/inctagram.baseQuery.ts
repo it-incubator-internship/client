@@ -10,7 +10,13 @@ const mutex = new Mutex()
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_BASE_API_URL,
   prepareHeaders: (headers: Headers) => {
-    const token = localStorage.getItem('accessToken')
+    let token
+
+    try {
+      token = localStorage.getItem('accessToken')
+    } catch (e) {
+      console.log('localStorage is not accessible')
+    }
 
     if (headers.get('Authorization')) {
       return headers
@@ -56,7 +62,11 @@ export const baseQueryWithReauth: BaseQueryFn<
           refreshResult.data?.accessToken &&
           typeof refreshResult.data?.accessToken === 'string'
         ) {
-          localStorage.setItem('accessToken', refreshResult.data?.accessToken)
+          try {
+            localStorage.setItem('accessToken', refreshResult.data?.accessToken)
+          } catch (e) {
+            console.log('localStorage is not accessible')
+          }
           // retry the initial query
           result = await baseQuery(args, api, extraOptions)
         } else {

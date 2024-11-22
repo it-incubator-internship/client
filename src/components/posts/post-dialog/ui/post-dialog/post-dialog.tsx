@@ -30,6 +30,7 @@ export const PostDialog = ({ post, profileData, userId }: Props) => {
       <Dialog.Portal>
         <Dialog.Overlay className={s.DialogOverlay} />
         <Dialog.Content className={s.DialogContent}>
+          <Dialog.Title hidden>{t.myProfile.postModalTitle}</Dialog.Title>
           <div className={s.container}>
             <div className={s.swiperContainer}>
               <Swiper

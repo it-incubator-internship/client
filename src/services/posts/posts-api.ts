@@ -28,4 +28,10 @@ export const postsApi = inctagramApi.injectEndpoints({
     }),
   }),
 })
+
+export const { getUserPosts } = postsApi.endpoints
+
+export const {
+  util: { getRunningQueriesThunk },
+} = postsApi
 export const { useCreatePostMutation, useGetUserPostsQuery, useUploadPostPhotosMutation } = postsApi
