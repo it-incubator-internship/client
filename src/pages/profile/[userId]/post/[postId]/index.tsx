@@ -6,12 +6,13 @@ import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-d
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { useGetUserPostsQuery } from '@/services/posts/posts-api'
-import { Post } from '@/services/posts/posts-types'
+import { getRunningQueriesThunk, getUserPost, getUserPosts } from '@/services/posts/posts-api'
+import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
+import { wrapper } from '@/services/store'
 import { Button } from '@robur_/ui-kit'
 import clsx from 'clsx'
-import { NextPage } from 'next'
+import { GetServerSidePropsContext, NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -29,10 +30,6 @@ type ProfileStatsProps = {
   countPublications?: string
 }
 
-type MyProfileProps = {
-  avatar?: string
-}
-
 type PublicationsPhotoProps = {
   // publicImages?: string[]
   posts: Post[]
@@ -44,21 +41,57 @@ const USER_ACHIEVEMENTS = {
   countPublications: '2 764',
 }
 
-const ProfilePost: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-avatar.jpg' }) => {
+type Props = {
+  currentPost: Post
+  posts: getUserPostsResponse
+}
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  store => async (context: GetServerSidePropsContext) => {
+    const userId = context.query?.userId
+    const postId = context.query?.postId
+    let posts
+    let currentPost
+
+    if (userId) {
+      const response = await store.dispatch(getUserPosts.initiate({ userId: userId as string }))
+
+      posts = response?.data
+    }
+
+    if (postId) {
+      const response = await store.dispatch(getUserPost.initiate({ postId: postId as string }))
+
+      currentPost = response?.data
+    }
+
+    if (!currentPost) {
+      return {
+        notFound: true,
+      }
+    }
+
+    await Promise.all(store.dispatch(getRunningQueriesThunk()))
+
+    return {
+      props: {
+        currentPost,
+        posts,
+      },
+    }
+  }
+)
+
+const ProfilePost: NextPageWithLayout<Props> = ({ currentPost, posts }) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
   const router = useRouter()
-  const { postId, userId } = useParams()
+  const { userId } = useParams()
 
   const t = useTranslation()
 
   const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(
     { id: userId as string },
-    { skip: !userId }
-  )
-
-  const { data: userPosts, isLoading: isLoadingUserPosts } = useGetUserPostsQuery(
-    { userId: userId as string },
     { skip: !userId }
   )
 
@@ -70,10 +103,6 @@ const ProfilePost: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-av
     void router.replace(PATH.NOT_FOUND)
   }
 
-  const openedPost = userPosts?.posts.find(post => {
-    return post.postId === postId
-  })
-
   return (
     <div className={s.profile}>
       <div className={s.header}>
@@ -84,7 +113,7 @@ const ProfilePost: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-av
               className={s.avatarImage}
               height={204}
               layout={'intrinsic'}
-              src={profileData?.originalAvatarUrl || avatar}
+              src={profileData?.originalAvatarUrl || '/default-avatar.jpg'}
               width={204}
             />
           )}
@@ -105,13 +134,9 @@ const ProfilePost: NextPageWithLayout<MyProfileProps> = ({ avatar = '/default-av
           </Button>
         )}
       </div>
-      {userPosts ? (
-        <PublicationsPhoto posts={userPosts.posts} />
-      ) : (
-        <div>There is no any data...</div>
-      )}
-      {openedPost && (
-        <PostDialog post={openedPost} profileData={profileData} userId={userId as string} />
+      {posts ? <PublicationsPhoto posts={posts.posts} /> : <div>There is no any data...</div>}
+      {currentPost && (
+        <PostDialog post={currentPost} profileData={profileData} userId={userId as string} />
       )}
     </div>
   )

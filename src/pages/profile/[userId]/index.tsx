@@ -35,7 +35,6 @@ type PublicationsPhotoProps = {
 }
 
 type Props = {
-  avatar?: string
   posts: getUserPostsResponse
 }
 
@@ -72,7 +71,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 )
 
-const Profile: NextPageWithLayout<Props> = ({ avatar = '/default-avatar.jpg', posts }: Props) => {
+const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
   const router = useRouter()
@@ -105,7 +104,7 @@ const Profile: NextPageWithLayout<Props> = ({ avatar = '/default-avatar.jpg', po
               className={s.avatarImage}
               height={204}
               layout={'intrinsic'}
-              src={profileData?.originalAvatarUrl || avatar}
+              src={profileData?.originalAvatarUrl || '/default-avatar.jpg'}
               width={204}
             />
           )}
