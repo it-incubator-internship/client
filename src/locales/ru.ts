@@ -13,9 +13,7 @@ export const ru = {
     password: 'Пароль',
     passwordConfirmation: 'Подтверждение пароля',
     policy: 'Политикой',
-    sentConfirmationLink(responseEmail: string) {
-      return `Мы отправили ссылку для подтверждения почты на адрес: ${responseEmail}`
-    },
+    sentConfirmationLink: 'Мы отправили ссылку для подтверждения почты на адрес:',
     signIn: 'Войти',
     signUp: 'Зарегистрироваться',
     terms: 'Правилами',
@@ -62,8 +60,7 @@ export const ru = {
     },
     errorFileSize:
       'Выбранный файл превышает максимальный допустимый размер 10МБ. Пожалуйста, выберите файл меньшего размера.',
-    errorFileType:
-      'Выбранный тип файла не поддерживается. Пожалуйста, загрузите изображение в формате PNG или JPEG.',
+    errorFileType: 'Выбранный тип файла не поддерживается. Пожалуйста, загрузите изображение в формате PNG или JPEG.',
     errorMaxPhotos: 'Вы можете загрузить максимум 5 фотографий.',
     filterDescription: 'Нажмите сюда, чтобы добавить фильтры для фото',
     filterTitle: 'Добавить фильтр',
@@ -76,17 +73,20 @@ export const ru = {
     selectFromComputer: 'Выбрать на этом компьютере',
     titleButtonDiscardDraft: 'Закрыть',
     titleButtonSaveDraft: 'Сохранить',
-    titleFromAlertChangeVersion:
-      'База данных обновлена в другой вкладке. Пожалуйста, перезагрузите страницу.',
+    titleFromAlertChangeVersion: 'База данных обновлена в другой вкладке. Пожалуйста, перезагрузите страницу.',
     titleHeaderModalDiscardDraft: 'Отказаться',
-    titleModalSavedDraft:
-      'Вы действительно хотите закрыть создание публикации? Если вы закроете, все будет удалено.',
+    titleModalSavedDraft: 'Вы действительно хотите закрыть создание публикации? Если вы закроете, все будет удалено.',
   },
   devices: {
     activeSessions: 'Активные сессии',
     currentDevice: 'Текущее устройство',
     logOut: 'Выйти',
     terminateOtherSessions: 'Закрыть все сессии кроме текущей',
+  },
+  emailConfirmed: {
+    buttonText: 'Войти',
+    text: 'Ваш email успешно подтвержден',
+    title: 'Поздравляем!',
   },
   english: 'Английский',
   errors: {
@@ -149,8 +149,9 @@ export const ru = {
     userName: 'Имя пользователя должно содержать только буквы A-Z, a-z, А-Я, а-я, 0-9.',
   },
   meta: {
-    defaultDescriptionText:
-      'Социальная сеть The Inctagram это безлимитная коммуникация людей по всему миру',
+    defaultDescriptionText: 'Социальная сеть The Inctagram это безлимитная коммуникация людей по всему миру',
+    readOnlyNotification:
+      'Режим просмотра. Для перехода к полной функциональности заполните и сохраните обязательные поля в настройках профиля.',
   },
   myProfile: {
     followers: 'Подписчики',
@@ -164,6 +165,7 @@ export const ru = {
     aboutMe: 'Обо мне',
     accountManagement: 'Управление учетными записями',
     addProfilePhoto: 'Добавьте фото профиля',
+    addProfilePhotoBlocked: 'Добавление фото профиля недоступно в режиме просмотра',
     clickHereAddProfilePhoto: 'Нажмите здесь, чтобы добавить фотографию профиля',
     dateOfBirth: 'Дата рождения',
     devices: 'Устройства',
@@ -209,6 +211,18 @@ export const ru = {
     signUp: 'Зарегистрироваться',
     termsOfServices: 'Правилами использования',
     userName: 'Имя пользователя',
+  },
+  verificationLinkExpired: {
+    button: 'Получить заново',
+    modal: {
+      buttonTitle: 'Хорошо',
+      subtitle: 'Инструкции успешно отправлены на ваш адрес ',
+      throttleSubtitleEnd: ' секунд перед следующей попыткой.',
+      throttleSubtitleStart: 'Пожалуйста, подождите ',
+      title: 'Письмо отправлено',
+    },
+    subtitle: 'Кажется, прошло слишком много времени и срок действия ссылки истек',
+    title: 'Срок действия ссылки истек',
   },
 }
 

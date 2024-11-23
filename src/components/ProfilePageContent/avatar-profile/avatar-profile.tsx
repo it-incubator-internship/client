@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { AvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-dialog'
-import {
-  useDeleteAvatarFromServerMutation,
-  useLazyGetProfileQuery,
-} from '@/services/profile/profile-api'
+import { useDeleteAvatarFromServerMutation, useLazyGetProfileQuery } from '@/services/profile/profile-api'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import { Close, ImageOutline, Modal } from '@robur_/ui-kit'
 
@@ -75,12 +72,7 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
                   <button className={s.removeAvatarBtn} onClick={openRemoveModal} type={'button'}>
                     <Close />
                   </button>
-                  <img
-                    alt={'your avatar'}
-                    height={192}
-                    src={profileData?.originalAvatarUrl}
-                    width={192}
-                  />
+                  <img alt={'your avatar'} height={192} src={profileData?.originalAvatarUrl} width={192} />
                 </>
               )}
             </div>

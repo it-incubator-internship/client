@@ -28,20 +28,19 @@ export const ProfilePageContent = () => {
     { skip: !currentUserId }
   )
 
-  const { control, handleSubmit, reset, setError, setValue, watch } =
-    useForm<updateProfileFormValues>({
-      defaultValues: {
-        aboutMe: '',
-        city: '',
-        country: '',
-        dateOfBirth: undefined,
-        firstName: '',
-        lastName: '',
-        userName: meData?.userName,
-      },
-      mode: 'onSubmit',
-      resolver: zodResolver(updateProfileSchema(t)),
-    })
+  const { control, handleSubmit, reset, setError, setValue, watch } = useForm<updateProfileFormValues>({
+    defaultValues: {
+      aboutMe: '',
+      city: '',
+      country: '',
+      dateOfBirth: undefined,
+      firstName: '',
+      lastName: '',
+      userName: meData?.userName,
+    },
+    mode: 'onSubmit',
+    resolver: zodResolver(updateProfileSchema(t)),
+  })
 
   const {
     arrowDownPressed,
@@ -71,6 +70,13 @@ export const ProfilePageContent = () => {
     return <Spinner />
   }
 
+  const setRequiredLabel = (mainText: string) => (
+    <>
+      {mainText}
+      <span className={s.colorDanger}>*</span>
+    </>
+  )
+
   return (
     <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
       <div className={s.formContainer}>
@@ -79,66 +85,60 @@ export const ProfilePageContent = () => {
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
-            label={t.myProfileSettings.userName}
+            label={setRequiredLabel(t.myProfileSettings.userName)}
             name={'userName'}
           />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
-            label={t.myProfileSettings.firstName}
+            label={setRequiredLabel(t.myProfileSettings.firstName)}
             name={'firstName'}
           />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
-            label={t.myProfileSettings.lastName}
+            label={setRequiredLabel(t.myProfileSettings.lastName)}
             name={'lastName'}
           />
           <FormDatePicker
             control={control}
-            label={t.myProfileSettings.dateOfBirth}
+            label={setRequiredLabel(t.myProfileSettings.dateOfBirth)}
             name={'dateOfBirth'}
             years={years}
           />
-          <div style={{ display: 'flex', gap: '24px' }}>
-            <div style={{ flexGrow: 1 }}>
-              <div>{t.myProfileSettings.selectYourCountry}</div>
-              <FormCombobox
-                control={control}
-                getDataForCombobox={setGetDataForCountry}
-                isLoading={isCountriesLoading}
-                name={Terra.country}
-                onInputClick={getCountriesFromLocalStorage}
-                options={countriesValues ?? []}
-                setValue={value => setValue(Terra.country, value)}
-              />
-            </div>
-            <div style={{ flexGrow: 1 }}>
-              <div>{t.myProfileSettings.selectYourCity}</div>
-
-              <FormCombobox
-                control={control}
-                disabled={!countryValue}
-                getDataForCombobox={setGetDataForCity}
-                isLoading={isCitiesLoading}
-                name={Terra.city}
-                onInputClick={() => handleClickInputCity()}
-                options={citiesValues ?? []}
-                requestItemOnKeyDown={() => {
-                  if (!arrowDownPressed) {
-                    handleClickInputCity()
-                    setArrowDownPressed(true)
-                  }
-                }}
-                setValue={value => setValue(Terra.city, value)}
-              />
-            </div>
+          <div className={s.locationInputWrapper}>
+            <FormCombobox
+              control={control}
+              getDataForCombobox={setGetDataForCountry}
+              isLoading={isCountriesLoading}
+              label={setRequiredLabel(t.myProfileSettings.selectYourCountry)}
+              name={Terra.country}
+              onInputClick={getCountriesFromLocalStorage}
+              options={countriesValues ?? []}
+              setValue={value => setValue(Terra.country, value)}
+            />
+            <FormCombobox
+              control={control}
+              disabled={!countryValue}
+              getDataForCombobox={setGetDataForCity}
+              isLoading={isCitiesLoading}
+              label={setRequiredLabel(t.myProfileSettings.selectYourCity)}
+              name={Terra.city}
+              onInputClick={() => handleClickInputCity()}
+              options={citiesValues ?? []}
+              requestItemOnKeyDown={() => {
+                if (!arrowDownPressed) {
+                  handleClickInputCity()
+                  setArrowDownPressed(true)
+                }
+              }}
+              setValue={value => setValue(Terra.city, value)}
+            />
           </div>
           <FormTextarea
             className={s.textArea}
             control={control}
             name={'aboutMe'}
-            placeholder={'Text-area'}
             titleLabel={t.myProfileSettings.aboutMe}
           />
         </div>

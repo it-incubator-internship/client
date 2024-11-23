@@ -71,13 +71,7 @@ export const Navbar = ({ className }: Props) => {
           </SidebarItem>
         </div>
         <div style={{ marginTop: '150px' }}>
-          <SidebarItem
-            Icon={LogOut}
-            as={'button'}
-            href={''}
-            onClick={() => handleModalOpened()}
-            type={'button'}
-          >
+          <SidebarItem Icon={LogOut} as={'button'} href={''} onClick={() => handleModalOpened()} type={'button'}>
             <span>{t.nav.logout}</span>
           </SidebarItem>
         </div>

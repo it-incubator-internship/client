@@ -6,7 +6,8 @@ import { AvatarHeader } from '@/components/ProfilePageContent/avatar-profile/ava
 import { AvatarSelector } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-selector'
 import { ErrorMessage } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/error-message'
 import { useTranslation } from '@/hooks/useTranslation'
-import { useSendAvatarToServerMutation } from '@/services/profile/profile-api'
+import { useMeQuery } from '@/services/auth/authApi'
+import { useGetProfileQuery, useSendAvatarToServerMutation } from '@/services/profile/profile-api'
 import { base64ImgToFormData } from '@/utils/base64ImgToFormData'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button } from '@robur_/ui-kit'
@@ -18,6 +19,10 @@ type AvatarDialogProps = {
 }
 
 export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
+  const { data } = useMeQuery()
+  const currentUserId = data?.userId
+  const { error: profileError } = useGetProfileQuery({ id: currentUserId as string })
+
   const [shouldClick, setShouldClick] = useState(false)
 
   const { dispatch, state, validateFile } = useAvatarDialog()
@@ -62,9 +67,7 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
 
   useEffect(() => {
     if (shouldClick) {
-      const fileInput = document.querySelector(
-        'input[type="file"][id^="avatar_loader-"]'
-      ) as HTMLInputElement
+      const fileInput = document.querySelector('input[type="file"][id^="avatar_loader-"]') as HTMLInputElement
 
       if (fileInput) {
         fileInput.click()
@@ -74,11 +77,19 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
   }, [shouldClick])
   const t = useTranslation()
 
+  const setOpenModalButtonText = (profileError: any) => {
+    if (!profileError) {
+      return t.myProfileSettings.addProfilePhoto
+    } else {
+      return t.myProfileSettings.addProfilePhotoBlocked
+    }
+  }
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <Button fullWidth type={'button'} variant={'outlined'}>
-          {t.myProfileSettings.addProfilePhoto}
+        <Button className={s.openModalButton} disabled={!!profileError} fullWidth type={'button'} variant={'outlined'}>
+          {setOpenModalButtonText(profileError)}
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
