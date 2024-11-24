@@ -1,5 +1,6 @@
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
+import { en, ru } from '@/locales'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { Button, FlagRussia, FlagUnitedKingdom, OutlineBell, Select, SelectItem } from '@robur_/ui-kit'
@@ -23,6 +24,7 @@ export const Header = () => {
   }
 
   const localeChangeHandler = (newLocale: string) => {
+    localStorage.setItem('currentLocale', JSON.stringify(newLocale))
     push({ pathname, query }, asPath, { locale: newLocale })
   }
 

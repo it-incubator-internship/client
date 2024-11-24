@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 import { useAvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/hook/use-avatar-dialog'
 import { ActionButtons } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/action-buttons'
@@ -15,10 +16,12 @@ import { Button } from '@robur_/ui-kit'
 import s from './avatar-dialog.module.scss'
 
 type AvatarDialogProps = {
+  setAvatar: (avatar: any) => void
   setAvatarProgress: (picture: any) => void
 }
 
-export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
+export const AvatarDialog = ({ setAvatar, setAvatarProgress }: AvatarDialogProps) => {
+  const t = useTranslation()
   const { data } = useMeQuery()
   const currentUserId = data?.userId
   const { error: profileError } = useGetProfileQuery({ id: currentUserId as string })
@@ -28,7 +31,7 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
   const { dispatch, state, validateFile } = useAvatarDialog()
   const { isError, isFileLoad, isPreview } = state
 
-  const [sendAvatarToServer] = useSendAvatarToServerMutation()
+  const [sendAvatarToServer, { isError: sendAvatarError }] = useSendAvatarToServerMutation()
 
   const resetAvatar = () => {
     dispatch({ type: 'RESET' })
@@ -36,12 +39,18 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
 
   const handleSaveAndClose = async () => {
     if (isPreview) {
+      setAvatar(isPreview)
       setAvatarProgress('loading')
       const convertedAvatarImg = base64ImgToFormData(isPreview)
 
       await sendAvatarToServer(convertedAvatarImg).unwrap()
     }
     resetAvatar()
+  }
+
+  if (sendAvatarError) {
+    setAvatarProgress('none')
+    toast.error(t.myProfileAvatar.saveAvatarServerError)
   }
 
   const handleFileLoad = () => {
@@ -75,7 +84,6 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
       setShouldClick(false)
     }
   }, [shouldClick])
-  const t = useTranslation()
 
   const setOpenModalButtonText = (profileError: any) => {
     if (!profileError) {

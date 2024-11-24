@@ -166,6 +166,14 @@ export const en: LocaleType = {
     publish: 'Publish',
     time: 'Hours ago',
   },
+  myProfileAvatar: {
+    deleteDialog: {
+      buttonRejectionTitle: 'No',
+      buttonTitle: 'Yes',
+      text: 'Do you really want to delete your profile photo?',
+    },
+    saveAvatarServerError: 'Unable to upload the avatar. If the issue persists, please contact our support team.',
+  },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',
     aboutMe: 'About me',

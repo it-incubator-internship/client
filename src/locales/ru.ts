@@ -166,6 +166,15 @@ export const ru = {
     publish: 'Опубликовать',
     time: 'Часов назад',
   },
+  myProfileAvatar: {
+    deleteDialog: {
+      buttonRejectionTitle: 'Нет',
+      buttonTitle: 'Да',
+      text: 'Вы действительно хотите удалить фото профиля?',
+    },
+    saveAvatarServerError:
+      'Не удалось загрузить аватарку. Если проблема повторяется, пожалуйста, свяжитесь с нашей службой поддержки',
+  },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'Пользователь младше 13 лет не может создать профиль.',
     aboutMe: 'Обо мне',

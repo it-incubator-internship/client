@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 import { AvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-dialog'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useDeleteAvatarFromServerMutation, useLazyGetProfileQuery } from '@/services/profile/profile-api'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import { Close, ImageOutline, Modal } from '@robur_/ui-kit'
+import Image from 'next/image'
 
 import s from './avatar-profile.module.scss'
 
@@ -13,6 +16,8 @@ type AvatarProfileProps = {
 }
 
 export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps) => {
+  const t = useTranslation()
+  const [avatar, setAvatar] = useState<any>(null)
   const [isAvatarRemoveModal, setIsAvatarRemoveModal] = useState(false)
   const [avatarProgress, setAvatarProgress] = useState<'loading' | 'none' | 'success'>(
     profileData?.originalAvatarUrl ? 'success' : 'none'
@@ -26,6 +31,7 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
         const response = await getProfileData({ id: currentUserId as string }).unwrap()
 
         if (response.profileStatus === 'READY') {
+          setAvatar(null)
           setAvatarProgress('success')
           clearInterval(intervalId)
         }
@@ -63,10 +69,17 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
       <div className={s.photoSection}>
         <div className={s.userPhoto}>
           {avatarProgress === 'none' ? (
-            <ImageOutline height={'48'} width={'48'} />
+            <Image
+              alt={'User Avatar'}
+              className={s.avatarImage}
+              height={208}
+              layout={'intrinsic'}
+              src={'/default-avatar.jpg'}
+              width={208}
+            />
           ) : (
             <div>
-              {avatarProgress === 'loading' && <span className={s.avatarLoader}>Loading</span>}
+              {avatarProgress === 'loading' && <img alt={'your avatar'} height={192} src={avatar} width={192} />}
               {avatarProgress === 'success' && (
                 <>
                   <button className={s.removeAvatarBtn} onClick={openRemoveModal} type={'button'}>
@@ -78,18 +91,18 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
             </div>
           )}
         </div>
-        <AvatarDialog setAvatarProgress={setAvatarProgress} />
+        <AvatarDialog setAvatar={setAvatar} setAvatarProgress={setAvatarProgress} />
       </div>
       <Modal
-        buttonRejectionTitle={'No'}
-        buttonTitle={'Yes'}
+        buttonRejectionTitle={t.myProfileAvatar.deleteDialog.buttonRejectionTitle}
+        buttonTitle={t.myProfileAvatar.deleteDialog.buttonTitle}
         onClose={handleModalNoConfirm}
         onCloseWithApproval={handleModalWithConfirm}
         open={isAvatarRemoveModal}
         title={' '}
         withConfirmation
       >
-        Do you really want to delete your profile photo?
+        {t.myProfileAvatar.deleteDialog.text}
       </Modal>
     </>
   )
