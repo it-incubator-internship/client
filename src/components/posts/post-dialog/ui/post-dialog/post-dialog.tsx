@@ -102,7 +102,7 @@ export const PostDialog = ({ post, profileData, userId }: Props) => {
                       <BookmarkOutline className={s.optionsIcon} />
                     </button>
                   </div>
-                  <div className={s.likes}>2 243 "Like"</div>
+                  <div className={s.likes}>2 243 Like</div>
                   <div className={s.date}>July 3, 2021</div>
                 </div>
                 <div className={s.send}>
