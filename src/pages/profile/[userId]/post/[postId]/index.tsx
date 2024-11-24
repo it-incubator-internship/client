@@ -2,10 +2,11 @@ import { ReactElement, ReactNode } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
+import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { getRunningQueriesThunk, getUserPosts } from '@/services/posts/posts-api'
+import { getRunningQueriesThunk, getUserPost, getUserPosts } from '@/services/posts/posts-api'
 import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
@@ -17,7 +18,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 
-import s from '../profile.module.scss'
+import s from '../../../profile.module.scss'
 
 type NextPageWithLayout<P = {}> = {
   getLayout?: (page: ReactElement) => ReactNode
@@ -30,12 +31,8 @@ type ProfileStatsProps = {
 }
 
 type PublicationsPhotoProps = {
+  // publicImages?: string[]
   posts: Post[]
-  userId: string
-}
-
-type Props = {
-  posts: getUserPostsResponse
 }
 
 const USER_ACHIEVEMENTS = {
@@ -44,10 +41,17 @@ const USER_ACHIEVEMENTS = {
   countPublications: '2 764',
 }
 
+type Props = {
+  currentPost: Post
+  posts: getUserPostsResponse
+}
+
 export const getServerSideProps = wrapper.getServerSideProps(
   store => async (context: GetServerSidePropsContext) => {
     const userId = context.query?.userId
+    const postId = context.query?.postId
     let posts
+    let currentPost
 
     if (userId) {
       const response = await store.dispatch(getUserPosts.initiate({ userId: userId as string }))
@@ -55,7 +59,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
       posts = response?.data
     }
 
-    if (!posts) {
+    if (postId) {
+      const response = await store.dispatch(getUserPost.initiate({ postId: postId as string }))
+
+      currentPost = response?.data
+    }
+
+    if (!currentPost) {
       return {
         notFound: true,
       }
@@ -65,19 +75,18 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     return {
       props: {
+        currentPost,
         posts,
       },
     }
   }
 )
 
-const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
+const ProfilePost: NextPageWithLayout<Props> = ({ currentPost, posts }) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
   const router = useRouter()
   const { userId } = useParams()
-
-  console.log('initial posts', posts)
 
   const t = useTranslation()
 
@@ -125,10 +134,9 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
           </Button>
         )}
       </div>
-      {posts.posts ? (
-        <PublicationsPhoto posts={posts.posts} userId={userId as string} />
-      ) : (
-        <div>There is no any data...</div>
+      {posts ? <PublicationsPhoto posts={posts.posts} /> : <div>There is no any data...</div>}
+      {currentPost && (
+        <PostDialog post={currentPost} profileData={profileData} userId={userId as string} />
       )}
     </div>
   )
@@ -160,7 +168,8 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
     </div>
   )
 }
-const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, userId }) => {
+
+const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts }) => {
   return (
     <div className={s.photoGrid}>
       {posts.map(post => {
@@ -169,11 +178,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, 
         })
 
         return (
-          <Link
-            className={s.photoItem}
-            href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
-            key={post.postId}
-          >
+          <div className={s.photoItem} key={post.postId}>
             <Image
               alt={`User photo ${post.postId}`}
               height={228}
@@ -181,13 +186,13 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, 
               src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
               width={234}
             />
-          </Link>
+          </div>
         )
       })}
     </div>
   )
 }
 
-Profile.getLayout = getCombinedLayout
+ProfilePost.getLayout = getCombinedLayout
 
-export default Profile
+export default ProfilePost
