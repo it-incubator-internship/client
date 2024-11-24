@@ -154,11 +154,17 @@ export const ru = {
       'Режим просмотра. Для перехода к полной функциональности заполните и сохраните обязательные поля в настройках профиля.',
   },
   myProfile: {
+    addComment: 'Добавить комментарий...',
+    answer: 'Ответить',
     followers: 'Подписчики',
     following: 'Подписки',
     initialUrlProfile: 'Url пользователя',
+    like: 'Нравится',
+    postModalTitle: 'Просмотр поста',
     profileSettings: 'Настройки профиля',
     publications: 'Публикации',
+    publish: 'Опубликовать',
+    time: 'Часов назад',
   },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'Пользователь младше 13 лет не может создать профиль.',

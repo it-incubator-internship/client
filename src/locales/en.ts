@@ -154,11 +154,17 @@ export const en: LocaleType = {
       'View mode. To access full functionality, please fill out and save the required fields in your profile settings.',
   },
   myProfile: {
+    addComment: 'Add a Comment...',
+    answer: 'Answer',
     followers: 'Followers',
     following: 'Following',
     initialUrlProfile: 'UrlProfile',
+    like: 'Like',
+    postModalTitle: 'Post view',
     profileSettings: 'Profile settings',
     publications: 'Publications',
+    publish: 'Publish',
+    time: 'Hours ago',
   },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',

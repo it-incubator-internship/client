@@ -1,0 +1,180 @@
+.DialogOverlay {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+
+  opacity: 0.6;
+  background-color: var(--color-dark-900);
+
+  animation: overlay-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent {
+  position: fixed;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  color: var(--color-light-100);
+
+  background-color: var(--color-dark-300);
+  border: 1px solid var(--color-dark-100);
+
+  animation: content-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent:focus {
+  outline: none;
+}
+
+.separator {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  left: 0;
+
+  height: 1px;
+
+  background-color: var(--color-dark-100);
+}
+
+.user {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  padding: 12px 24px;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+
+  border-bottom: 1px solid var(--color-dark-100);
+}
+
+.container {
+  position: relative;
+  display: flex;
+  width: 972px;
+  max-height: 504px;
+}
+
+.swiperContainer {
+  width: 50%;
+}
+
+.slide {
+  max-height: 504px;
+}
+
+.image {
+  width: 100%;
+  max-width: 100%;
+  height: 504px;
+  object-fit: cover;
+}
+
+.bulletClass {
+  opacity: 1;
+  background-color: var(--color-light-100);
+}
+
+.bulletActiveClass {
+  background-color: var(--color-accent-500);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.comments {
+  padding: 24px 24px 8px;
+}
+
+.feed {
+  padding: 12px 24px 7px;
+  border-bottom: 1px solid var(--color-dark-100);
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 19px;
+}
+
+.optionsBlock {
+  display: flex;
+  flex-shrink: 0;
+  gap: 24px;
+}
+
+.optionsIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.iconBtn {
+    cursor: pointer;
+    flex: 0 0 24px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+}
+
+.bottom {
+  margin-top: auto;
+  border-top: 1px solid var(--color-dark-100);
+}
+
+.date {
+  font-size: var(--font-size-xs);
+  font-weight: 400;
+  line-height: var(--font-size-m);
+  color: var(--color-light-900);
+}
+
+.send {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 18px 24px;
+}
+
+.inputContainer {
+  flex-grow: 1;
+}
+
+.input {
+  background-color: transparent;
+  border: none;
+}
+
+@keyframes overlay-show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.6;
+  }
+}
+
+@keyframes content-show {
+  from {
+    transform: translate(-50%, -48%) scale(0.96);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
