@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 
 import { AvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-dialog'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useDeleteAvatarFromServerMutation, useLazyGetProfileQuery } from '@/services/profile/profile-api'
 import { EditProfileResponse } from '@/services/profile/profile-types'
-import { Close, ImageOutline, Modal } from '@robur_/ui-kit'
+import { Close, Modal } from '@robur_/ui-kit'
 import Image from 'next/image'
 
 import s from './avatar-profile.module.scss'
@@ -69,14 +68,7 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
       <div className={s.photoSection}>
         <div className={s.userPhoto}>
           {avatarProgress === 'none' ? (
-            <Image
-              alt={'User Avatar'}
-              className={s.avatarImage}
-              height={208}
-              layout={'intrinsic'}
-              src={'/default-avatar.jpg'}
-              width={208}
-            />
+            <Image alt={'User Avatar'} className={s.avatarImage} height={208} src={'/default-avatar.jpg'} width={208} />
           ) : (
             <div>
               {avatarProgress === 'loading' && <img alt={'your avatar'} height={192} src={avatar} width={192} />}

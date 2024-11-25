@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 
 import { useAvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/hook/use-avatar-dialog'
 import { ActionButtons } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/action-buttons'
@@ -10,6 +9,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery, useSendAvatarToServerMutation } from '@/services/profile/profile-api'
 import { base64ImgToFormData } from '@/utils/base64ImgToFormData'
+import { showErrorToast } from '@/utils/toastConfig'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button } from '@robur_/ui-kit'
 
@@ -33,6 +33,14 @@ export const AvatarDialog = ({ setAvatar, setAvatarProgress }: AvatarDialogProps
 
   const [sendAvatarToServer, { isError: sendAvatarError }] = useSendAvatarToServerMutation()
 
+  useEffect(() => {
+    if (sendAvatarError) {
+      setAvatarProgress('none')
+      resetAvatar()
+      showErrorToast(t.myProfileAvatar.saveAvatarServerError)
+    }
+  }, [sendAvatarError])
+
   const resetAvatar = () => {
     dispatch({ type: 'RESET' })
   }
@@ -46,11 +54,6 @@ export const AvatarDialog = ({ setAvatar, setAvatarProgress }: AvatarDialogProps
       await sendAvatarToServer(convertedAvatarImg).unwrap()
     }
     resetAvatar()
-  }
-
-  if (sendAvatarError) {
-    setAvatarProgress('none')
-    toast.error(t.myProfileAvatar.saveAvatarServerError)
   }
 
   const handleFileLoad = () => {
