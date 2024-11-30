@@ -146,7 +146,7 @@ export const en: LocaleType = {
       'Password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
     required: 'This field is required',
     termsAgreement: 'Please, mark the checkbox, if you agree to our terms',
-    userName: 'User name must contain only letters A-Z, a-z, А-Я, а-я, 0-9',
+    userName: 'User name must contain only letters A-Z, a-z, 0-9',
   },
   meta: {
     defaultDescriptionText: 'The Inctagram social network is a limitless communication of people all over the world',

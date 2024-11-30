@@ -63,9 +63,7 @@ function SignUp() {
   const args = {
     children: (
       <div>
-        <p>
-          `${t.auth.sentConfirmationLink} ${responseEmail}`
-        </p>
+        <p>{`${t.auth.sentConfirmationLink} ${responseEmail}`}</p>
       </div>
     ),
     onClose: () => {

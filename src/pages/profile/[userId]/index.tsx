@@ -15,7 +15,6 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useRouter } from 'next/router'
 
 import s from '../profile.module.scss'
 
@@ -72,7 +71,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
 const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
-  const router = useRouter()
+  const currentUserName = meData?.userName
   const { userId } = useParams()
 
   console.log('initial posts', posts)
@@ -88,28 +87,22 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
     return <Spinner />
   }
 
-  if (!isLoadingProfile && !profileData) {
-    void router.replace(PATH.NOT_FOUND)
-  }
-
   return (
     <div className={s.profile}>
       <div className={s.header}>
         <div className={s.avatar}>
-          {profileData && (
-            <Image
-              alt={'User Avatar'}
-              className={s.avatarImage}
-              height={204}
-              layout={'intrinsic'}
-              src={profileData?.originalAvatarUrl || '/default-avatar.jpg'}
-              width={204}
-            />
-          )}
+          <Image
+            alt={'User Avatar'}
+            className={s.avatarImage}
+            height={204}
+            layout={'intrinsic'}
+            src={profileData?.originalAvatarUrl || '/default-avatar.jpg'}
+            width={204}
+          />
         </div>
         <div className={s.info}>
           <div className={s.profileUrl}>
-            <h1>{profileData?.userName}</h1>
+            <h1>{currentUserName}</h1>
           </div>
           <ProfileStats />
 
@@ -134,25 +127,33 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
 
 const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
   const t = useTranslation()
+  const { data: meData } = useMeQuery()
+  const currentUserId = meData?.userId
+  const { error: profileError } = useGetProfileQuery({ id: currentUserId as string })
+  let noProfile = false
+
+  if (profileError && 'status' in profileError && profileError.status === 404) {
+    noProfile = true
+  }
 
   return (
     <div className={s.stats}>
       <p className={clsx(s.statsItem, s.statsFollowing)}>
         <a href={'#'}>
-          <div>{USER_ACHIEVEMENTS.countFollowing}</div>
-          <span className={s.statsItemName}> {t.myProfile.following} </span>{' '}
+          <div>{!noProfile ? USER_ACHIEVEMENTS.countFollowing : '0'}</div>
+          <span className={s.statsItemName}> {t.myProfile.following} </span>
         </a>
       </p>
 
       <p className={clsx(s.statsItem, s.statsFollowers)}>
         <a href={'#'}>
-          <div>{USER_ACHIEVEMENTS.countFollowers}</div>
+          <div>{!noProfile ? USER_ACHIEVEMENTS.countFollowers : '0'}</div>
           <span className={s.statsItemName}> {t.myProfile.followers} </span>
         </a>
       </p>
 
       <p className={clsx(s.statsItem, s.statsPublications)}>
-        <div>{USER_ACHIEVEMENTS.countPublications} </div>
+        <div>{!noProfile ? USER_ACHIEVEMENTS.countPublications : '0'} </div>
         <span className={s.statsItemName}> {t.myProfile.publications} </span>
       </p>
     </div>

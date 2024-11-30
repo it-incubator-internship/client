@@ -1,6 +1,5 @@
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
-import { en, ru } from '@/locales'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { Button, FlagRussia, FlagUnitedKingdom, OutlineBell, Select, SelectItem } from '@robur_/ui-kit'
@@ -14,7 +13,13 @@ export const Header = () => {
   const { asPath, locale, pathname, push, query } = useRouter()
   const { data } = useMeQuery()
   const currentUserId = data?.userId
+  let noProfile = false
   const { error: profileError } = useGetProfileQuery({ id: currentUserId as string })
+
+  if (profileError && 'status' in profileError && profileError.status === 404) {
+    noProfile = true
+  }
+
   const isHomePage = pathname === '/'
 
   const t = useTranslation()
@@ -38,7 +43,7 @@ export const Header = () => {
         </button>
       )}
       <div className={s.options}>
-        {!currentUserId || (profileError && <p className={s.readOnlyNotification}>{t.meta.readOnlyNotification}</p>)}
+        {!currentUserId || (noProfile && <p className={s.readOnlyNotification}>{t.meta.readOnlyNotification}</p>)}
 
         {data && (
           <button className={s.notifications} type={'button'}>

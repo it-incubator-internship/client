@@ -1,4 +1,4 @@
-import { pluralizeEn, pluralizeRu } from '@/utils/createPluralize'
+import { pluralizeRu } from '@/utils/createPluralize'
 
 export const ru = {
   and: 'и',
@@ -146,7 +146,7 @@ export const ru = {
       'Пароль может содержать символы: a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
     required: 'Поле обязательно',
     termsAgreement: 'Пожалуйста, поставьте галочку, что Вы согласны с нашими правилами',
-    userName: 'Имя пользователя должно содержать только буквы A-Z, a-z, А-Я, а-я, 0-9.',
+    userName: 'Имя пользователя должно содержать только буквы A-Z, a-z, 0-9.',
   },
   meta: {
     defaultDescriptionText: 'Социальная сеть The Inctagram это безлимитная коммуникация людей по всему миру',
