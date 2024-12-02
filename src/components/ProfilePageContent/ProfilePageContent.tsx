@@ -28,19 +28,20 @@ export const ProfilePageContent = () => {
     { skip: !currentUserId }
   )
 
-  const { control, handleSubmit, reset, setError, setValue, watch } = useForm<updateProfileFormValues>({
-    defaultValues: {
-      aboutMe: '',
-      city: '',
-      country: '',
-      dateOfBirth: undefined,
-      firstName: '',
-      lastName: '',
-      userName: meData?.userName,
-    },
-    mode: 'onSubmit',
-    resolver: zodResolver(updateProfileSchema(t)),
-  })
+  const { control, handleSubmit, reset, setError, setValue, watch } =
+    useForm<updateProfileFormValues>({
+      defaultValues: {
+        aboutMe: '',
+        city: '',
+        country: '',
+        dateOfBirth: undefined,
+        firstName: '',
+        lastName: '',
+        userName: meData?.userName,
+      },
+      mode: 'onSubmit',
+      resolver: zodResolver(updateProfileSchema(t)),
+    })
 
   const {
     arrowDownPressed,

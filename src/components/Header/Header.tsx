@@ -2,7 +2,14 @@ import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
-import { Button, FlagRussia, FlagUnitedKingdom, OutlineBell, Select, SelectItem } from '@robur_/ui-kit'
+import {
+  Button,
+  FlagRussia,
+  FlagUnitedKingdom,
+  OutlineBell,
+  Select,
+  SelectItem,
+} from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -43,7 +50,8 @@ export const Header = () => {
         </button>
       )}
       <div className={s.options}>
-        {!currentUserId || (noProfile && <p className={s.readOnlyNotification}>{t.meta.readOnlyNotification}</p>)}
+        {!currentUserId ||
+          (noProfile && <p className={s.readOnlyNotification}>{t.meta.readOnlyNotification}</p>)}
 
         {data && (
           <button className={s.notifications} type={'button'}>
@@ -51,7 +59,11 @@ export const Header = () => {
           </button>
         )}
         <div className={s.langSelect}>
-          <Select defaultValue={locale} onValueChange={localeChangeHandler} placeholder={'Pick language'}>
+          <Select
+            defaultValue={locale}
+            onValueChange={localeChangeHandler}
+            placeholder={'Pick language'}
+          >
             <SelectItem value={'en'}>
               <div className={s.langOption}>
                 <FlagUnitedKingdom className={s.flag} />

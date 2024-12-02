@@ -79,7 +79,9 @@ export const AvatarDialog = ({ setAvatar, setAvatarProgress }: AvatarDialogProps
 
   useEffect(() => {
     if (shouldClick) {
-      const fileInput = document.querySelector('input[type="file"][id^="avatar_loader-"]') as HTMLInputElement
+      const fileInput = document.querySelector(
+        'input[type="file"][id^="avatar_loader-"]'
+      ) as HTMLInputElement
 
       if (fileInput) {
         fileInput.click()
@@ -99,7 +101,13 @@ export const AvatarDialog = ({ setAvatar, setAvatarProgress }: AvatarDialogProps
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <Button className={s.openModalButton} disabled={!!profileError} fullWidth type={'button'} variant={'outlined'}>
+        <Button
+          className={s.openModalButton}
+          disabled={!!profileError}
+          fullWidth
+          type={'button'}
+          variant={'outlined'}
+        >
           {setOpenModalButtonText(profileError)}
         </Button>
       </Dialog.Trigger>

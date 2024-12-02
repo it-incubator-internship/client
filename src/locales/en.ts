@@ -46,7 +46,8 @@ export const en: LocaleType = {
         throttleSubtitleStart: 'Please wait ',
         title: 'Email sent',
       },
-      subtitle: 'Looks like the verification link has expired. Not to worry, we can send the link again',
+      subtitle:
+        'Looks like the verification link has expired. Not to worry, we can send the link again',
       title: 'Resend link',
     },
   },
@@ -59,7 +60,8 @@ export const en: LocaleType = {
     cropping: {
       original: 'Original',
     },
-    errorFileSize: 'The selected file exceeds the maximum allowed size of 10MB. Please choose a smaller file.',
+    errorFileSize:
+      'The selected file exceeds the maximum allowed size of 10MB. Please choose a smaller file.',
     errorFileType: 'The selected file type is not supported. Please upload a PNG or JPEG image.',
     errorMaxPhotos: 'You can upload a maximum of 5 photos.',
     filterDescription: 'Click here and filter new Photo',
@@ -116,7 +118,8 @@ export const en: LocaleType = {
     },
     recaptchaLabel: 'I’m not a robot',
     subtitleInitial: 'Enter your email address and we will send you further instructions',
-    subtitleSuccess: 'The link has been sent by email. If you don’t receive an email send link again',
+    subtitleSuccess:
+      'The link has been sent by email. If you don’t receive an email send link again',
     title: 'Forgot password',
   },
   formErrors: {
@@ -149,7 +152,8 @@ export const en: LocaleType = {
     userName: 'User name must contain only letters A-Z, a-z, 0-9',
   },
   meta: {
-    defaultDescriptionText: 'The Inctagram social network is a limitless communication of people all over the world',
+    defaultDescriptionText:
+      'The Inctagram social network is a limitless communication of people all over the world',
     readOnlyNotification:
       'View mode. To access full functionality, please fill out and save the required fields in your profile settings.',
   },
@@ -172,7 +176,8 @@ export const en: LocaleType = {
       buttonTitle: 'Yes',
       text: 'Do you really want to delete your profile photo?',
     },
-    saveAvatarServerError: 'Unable to upload the avatar. If the issue persists, please contact our support team.',
+    saveAvatarServerError:
+      'Unable to upload the avatar. If the issue persists, please contact our support team.',
   },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',
@@ -235,7 +240,8 @@ export const en: LocaleType = {
       throttleSubtitleStart: 'Please wait ',
       title: 'Email sent',
     },
-    subtitle: 'Looks like the verification link has expired. Not to worry, we can send the link again',
+    subtitle:
+      'Looks like the verification link has expired. Not to worry, we can send the link again',
     title: 'Email verification link expired',
   },
 }

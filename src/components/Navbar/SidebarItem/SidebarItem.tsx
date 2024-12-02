@@ -25,7 +25,11 @@ export const SidebarItem = <T extends ElementType = typeof Link>(props: SidebarI
   const disabledClasses = disabled ? s.TagDisabled : ''
 
   return (
-    <Component className={clsx(s.Tag, disabledClasses, isSelected && s.selectedTag)} href={href} {...rest}>
+    <Component
+      className={clsx(s.Tag, disabledClasses, isSelected && s.selectedTag)}
+      href={href}
+      {...rest}
+    >
       <Icon aria-hidden={'true'} className={s.Svg} />
       {children}
     </Component>

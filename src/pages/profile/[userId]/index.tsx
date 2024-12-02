@@ -43,30 +43,26 @@ const USER_ACHIEVEMENTS = {
   countPublications: '2 764',
 }
 
-export const getServerSideProps = wrapper.getServerSideProps(store => async (context: GetServerSidePropsContext) => {
-  const userId = context.query?.userId
-  let posts
+export const getServerSideProps = wrapper.getServerSideProps(
+  store => async (context: GetServerSidePropsContext) => {
+    const userId = context.query?.userId
+    let posts
 
-  if (userId) {
-    const response = await store.dispatch(getUserPosts.initiate({ userId: userId as string }))
+    if (userId) {
+      const response = await store.dispatch(getUserPosts.initiate({ userId: userId as string }))
 
-    posts = response?.data
-  }
+      posts = response?.data
+    }
 
-  if (!posts) {
+    await Promise.all(store.dispatch(getRunningQueriesThunk()))
+
     return {
-      notFound: true,
+      props: {
+        posts,
+      },
     }
   }
-
-  await Promise.all(store.dispatch(getRunningQueriesThunk()))
-
-  return {
-    props: {
-      posts,
-    },
-  }
-})
+)
 
 const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
@@ -168,7 +164,11 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, 
         })
 
         return (
-          <Link className={s.photoItem} href={`${PATH.PROFILE}/${userId}/post/${post.postId}`} key={post.postId}>
+          <Link
+            className={s.photoItem}
+            href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
+            key={post.postId}
+          >
             <Image
               alt={`User photo ${post.postId}`}
               height={228}
