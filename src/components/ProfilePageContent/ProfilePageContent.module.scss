@@ -22,7 +22,7 @@
 }
 
 .textArea {
-  margin-top: 24px;
+  margin-top: 15px;
 
   textarea {
     height: 84px;
@@ -31,4 +31,13 @@
 
 .submitBtn {
   margin-left: auto;
+}
+
+.locationInputWrapper {
+  display: flex;
+  column-gap: 24px;
+}
+
+.colorDanger {
+  color: var(--color-danger-500);
 }

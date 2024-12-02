@@ -14,9 +14,7 @@ export const en: LocaleType = {
     password: 'Password',
     passwordConfirmation: 'Password confirmation',
     policy: 'Privacy Policy',
-    sentConfirmationLink(responseEmail: string) {
-      return `We have sent a link to confirm your email to ${responseEmail}`
-    },
+    sentConfirmationLink: 'We have sent a link to confirm your email to:',
     signIn: 'Sign in',
     signUp: 'Sign Up',
     terms: 'Terms of Service',
@@ -88,6 +86,11 @@ export const en: LocaleType = {
     logOut: 'Log out',
     terminateOtherSessions: 'Terminate all other session',
   },
+  emailConfirmed: {
+    buttonText: 'Sign In',
+    text: 'Your email has been confirmed',
+    title: 'Congratulations!',
+  },
   english: 'English',
   errors: {
     401: 'Incorrect login or password',
@@ -146,11 +149,13 @@ export const en: LocaleType = {
       'Password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
     required: 'This field is required',
     termsAgreement: 'Please, mark the checkbox, if you agree to our terms',
-    userName: 'User name must contain only letters A-Z, a-z, А-Я, а-я, 0-9',
+    userName: 'User name must contain only letters A-Z, a-z, 0-9',
   },
   meta: {
     defaultDescriptionText:
       'The Inctagram social network is a limitless communication of people all over the world',
+    readOnlyNotification:
+      'View mode. To access full functionality, please fill out and save the required fields in your profile settings.',
   },
   myProfile: {
     addComment: 'Add a Comment...',
@@ -165,11 +170,21 @@ export const en: LocaleType = {
     publish: 'Publish',
     time: 'Hours ago',
   },
+  myProfileAvatar: {
+    deleteDialog: {
+      buttonRejectionTitle: 'No',
+      buttonTitle: 'Yes',
+      text: 'Do you really want to delete your profile photo?',
+    },
+    saveAvatarServerError:
+      'Unable to upload the avatar. If the issue persists, please contact our support team.',
+  },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',
     aboutMe: 'About me',
     accountManagement: 'Account management',
     addProfilePhoto: 'Add a profile photo',
+    addProfilePhotoBlocked: 'Add a profile photo is not available in view mode.',
     clickHereAddProfilePhoto: 'Click here add profile photo',
     dateOfBirth: 'Date of birth',
     devices: 'Devices',
@@ -215,5 +230,18 @@ export const en: LocaleType = {
     signUp: 'Sign Up',
     termsOfServices: 'Terms of Service',
     userName: 'Username',
+  },
+  verificationLinkExpired: {
+    button: 'Resend verification link',
+    modal: {
+      buttonTitle: 'OK',
+      subtitle: 'We have sent a link to confirm your email to ',
+      throttleSubtitleEnd: ' seconds before trying to send the link again.',
+      throttleSubtitleStart: 'Please wait ',
+      title: 'Email sent',
+    },
+    subtitle:
+      'Looks like the verification link has expired. Not to worry, we can send the link again',
+    title: 'Email verification link expired',
   },
 }
