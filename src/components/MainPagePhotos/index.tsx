@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
 import { NextPageWithLayout } from '@/pages/_app'
 import { Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
+import initLineClamp from '@/utils/clampBlocks'
 import clsx from 'clsx'
 import Image from 'next/image'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -34,6 +35,10 @@ export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts 
     setCurrentPost(post)
     setOpen(true)
   }
+
+  useEffect(() => {
+    initLineClamp.init()
+  }, [])
 
   return (
     <>
@@ -79,7 +84,15 @@ export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts 
                   })}
                 <div className={'swiper-pagination swiper-pagination--custom'}></div>
               </Swiper>
-              <div className={s.description}>{post.description}</div>
+              <div className={'clamp-block'}>
+                <div className={clsx(s.description, 'clamp-content')}>{post.description}</div>
+                <button className={'clamp-more'} type={'button'}>
+                  Show more
+                </button>
+                <button className={'clamp-less'} type={'button'}>
+                  Hide
+                </button>
+              </div>
             </div>
           )
         })}

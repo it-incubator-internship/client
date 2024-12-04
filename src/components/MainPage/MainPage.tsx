@@ -16,9 +16,6 @@ const MainPage = ({ posts, usersCount }: Props) => {
     <div className={s.mainPage}>
       {usersCount && <UsersBar usersCount={usersCount} />}
       {posts ? <MainPagePhotos posts={posts} /> : <div>There is no any data...</div>}
-      {/*{currentPost && (*/}
-      {/*  <PostDialog post={currentPost} profileData={profileData} userId={userId as string} />*/}
-      {/*)}*/}
     </div>
   )
 }
