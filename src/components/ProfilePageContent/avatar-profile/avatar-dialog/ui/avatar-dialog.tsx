@@ -16,11 +16,16 @@ import { Button } from '@robur_/ui-kit'
 import s from './avatar-dialog.module.scss'
 
 type AvatarDialogProps = {
+  avatarProgress: string
   setAvatar: (avatar: any) => void
   setAvatarProgress: (picture: any) => void
 }
 
-export const AvatarDialog = ({ setAvatar, setAvatarProgress }: AvatarDialogProps) => {
+export const AvatarDialog = ({
+  avatarProgress,
+  setAvatar,
+  setAvatarProgress,
+}: AvatarDialogProps) => {
   const t = useTranslation()
   const { data } = useMeQuery()
   const currentUserId = data?.userId
@@ -103,7 +108,7 @@ export const AvatarDialog = ({ setAvatar, setAvatarProgress }: AvatarDialogProps
       <Dialog.Trigger asChild>
         <Button
           className={s.openModalButton}
-          disabled={!!profileError}
+          disabled={!!profileError || avatarProgress === 'loading'}
           fullWidth
           type={'button'}
           variant={'outlined'}
