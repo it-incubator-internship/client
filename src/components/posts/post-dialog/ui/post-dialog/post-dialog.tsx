@@ -3,7 +3,14 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import * as Dialog from '@radix-ui/react-dialog'
-import { BookmarkOutline, Button, HeartOutline, Input, PaperPlaneOutline, ScrollAreaComponent } from '@robur_/ui-kit'
+import {
+  BookmarkOutline,
+  Button,
+  HeartOutline,
+  Input,
+  PaperPlaneOutline,
+  ScrollAreaComponent,
+} from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -13,20 +20,34 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import s from './post-dialog.module.scss'
 
 type Props = {
+  isOpen: boolean
+  isPostSpecificPage: boolean
   post: Post | undefined
   profileData: EditProfileResponse | undefined
+  setOpen?: (flag: boolean) => void
   userId: string
 }
-export const PostDialog = ({ post, profileData, userId }: Props) => {
+export const PostDialog = ({
+  isOpen,
+  isPostSpecificPage,
+  post,
+  profileData,
+  setOpen,
+  userId,
+}: Props) => {
   const router = useRouter()
   const t = useTranslation()
 
   const handleClickOverlay = () => {
-    router.push(`${PATH.PROFILE}/${userId}`)
+    if (isPostSpecificPage) {
+      router.push(`${PATH.PROFILE}/${userId}`)
+    } else {
+      setOpen && setOpen(false)
+    }
   }
 
   return (
-    <Dialog.Root onOpenChange={handleClickOverlay} open>
+    <Dialog.Root onOpenChange={handleClickOverlay} open={isOpen}>
       <Dialog.Portal>
         <Dialog.Overlay className={s.DialogOverlay} />
         <Dialog.Content className={s.DialogContent}>

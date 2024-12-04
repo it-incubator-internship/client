@@ -132,7 +132,13 @@ const ProfilePost: NextPageWithLayout<Props> = ({ currentPost, posts }) => {
       </div>
       {posts ? <PublicationsPhoto posts={posts.posts} /> : <div>There is no any data...</div>}
       {currentPost && (
-        <PostDialog post={currentPost} profileData={profileData} userId={userId as string} />
+        <PostDialog
+          isOpen
+          isPostSpecificPage
+          post={currentPost}
+          profileData={profileData}
+          userId={userId as string}
+        />
       )}
     </div>
   )
