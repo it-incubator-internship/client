@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { AvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-dialog'
+import { SpinnerLocal } from '@/components/SpinnerLocal/SpinnerLocal'
 import { useTranslation } from '@/hooks/useTranslation'
 import {
   useDeleteAvatarFromServerMutation,
@@ -63,7 +64,7 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
 
   const handleModalWithConfirm = () => {
     setAvatarProgress('none')
-    deleteAvatar()
+    avatar ? setAvatar(null) : deleteAvatar()
   }
 
   return (
@@ -81,8 +82,12 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
           ) : (
             <div>
               {avatarProgress === 'loading' && (
-                <img alt={'your avatar'} height={192} src={avatar} width={192} />
+                <>
+                  <SpinnerLocal className={s.spinnerLocal} />
+                  <img alt={'your avatar'} height={192} src={avatar} width={192} />
+                </>
               )}
+
               {avatarProgress === 'success' && (
                 <>
                   <button className={s.removeAvatarBtn} onClick={openRemoveModal} type={'button'}>
@@ -99,7 +104,11 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
             </div>
           )}
         </div>
-        <AvatarDialog setAvatar={setAvatar} setAvatarProgress={setAvatarProgress} />
+        <AvatarDialog
+          avatarProgress={avatarProgress}
+          setAvatar={setAvatar}
+          setAvatarProgress={setAvatarProgress}
+        />
       </div>
       <Modal
         buttonRejectionTitle={t.myProfileAvatar.deleteDialog.buttonRejectionTitle}

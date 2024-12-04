@@ -53,6 +53,10 @@
 
 .openModalButton {
   text-align: center;
+
+  &:disabled {
+    cursor: default;
+  }
 }
 
 
