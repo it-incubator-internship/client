@@ -91,6 +91,9 @@
 }
 
 .comments {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
   padding: 24px 24px 8px;
 }
 
@@ -118,13 +121,13 @@
 }
 
 .iconBtn {
-    cursor: pointer;
-    flex: 0 0 24px;
+  cursor: pointer;
+  flex: 0 0 24px;
 
-    svg {
-      width: 24px;
-      height: 24px;
-    }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .bottom {
@@ -155,6 +158,11 @@
 .input {
   background-color: transparent;
   border: none;
+}
+
+.title {
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-m);
 }
 
 @keyframes overlay-show {

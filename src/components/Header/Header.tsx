@@ -1,15 +1,10 @@
+import { useEffect } from 'react'
+
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
-import {
-  Button,
-  FlagRussia,
-  FlagUnitedKingdom,
-  OutlineBell,
-  Select,
-  SelectItem,
-} from '@robur_/ui-kit'
+import { Button, FlagRussia, FlagUnitedKingdom, OutlineBell, Select, SelectItem } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -17,9 +12,20 @@ import { useRouter } from 'next/router'
 import s from './Header.module.scss'
 
 export const Header = () => {
+  const t = useTranslation()
   const { asPath, locale, pathname, push, query } = useRouter()
   const { data } = useMeQuery()
   const currentUserId = data?.userId
+  const storageLocale = localStorage.getItem('currentLocale')
+
+  useEffect(() => {
+    if (storageLocale) {
+      const locale = JSON.parse(storageLocale)
+
+      void push(asPath, asPath, { locale })
+    }
+  }, [])
+
   let noProfile = false
   const { error: profileError } = useGetProfileQuery({ id: currentUserId as string })
 
@@ -28,8 +34,6 @@ export const Header = () => {
   }
 
   const isHomePage = pathname === '/'
-
-  const t = useTranslation()
 
   const logoClickHandler = () => {
     push('/')
@@ -50,8 +54,7 @@ export const Header = () => {
         </button>
       )}
       <div className={s.options}>
-        {!currentUserId ||
-          (noProfile && <p className={s.readOnlyNotification}>{t.meta.readOnlyNotification}</p>)}
+        {!currentUserId || (noProfile && <p className={s.readOnlyNotification}>{t.meta.readOnlyNotification}</p>)}
 
         {data && (
           <button className={s.notifications} type={'button'}>
@@ -60,7 +63,7 @@ export const Header = () => {
         )}
         <div className={s.langSelect}>
           <Select
-            defaultValue={locale}
+            defaultValue={storageLocale ? JSON.parse(storageLocale) : locale}
             onValueChange={localeChangeHandler}
             placeholder={'Pick language'}
           >

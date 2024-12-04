@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 
 import { AvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-dialog'
+import { SpinnerLocal } from '@/components/SpinnerLocal/SpinnerLocal'
 import { useTranslation } from '@/hooks/useTranslation'
-import {
-  useDeleteAvatarFromServerMutation,
-  useLazyGetProfileQuery,
-} from '@/services/profile/profile-api'
+import { useDeleteAvatarFromServerMutation, useLazyGetProfileQuery } from '@/services/profile/profile-api'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import { Close, Modal } from '@robur_/ui-kit'
 import Image from 'next/image'
@@ -63,7 +61,7 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
 
   const handleModalWithConfirm = () => {
     setAvatarProgress('none')
-    deleteAvatar()
+    avatar ? setAvatar(null) : deleteAvatar()
   }
 
   return (
@@ -71,29 +69,30 @@ export const AvatarProfile = ({ currentUserId, profileData }: AvatarProfileProps
       <div className={s.photoSection}>
         <div className={s.userPhoto}>
           {avatarProgress === 'none' ? (
-            <Image
-              alt={'User Avatar'}
-              className={s.avatarImage}
-              height={208}
-              src={'/default-avatar.jpg'}
-              width={208}
-            />
+            <>
+              <Image
+                alt={'User Avatar'}
+                className={s.avatarImage}
+                height={208}
+                src={'/default-avatar.jpg'}
+                width={208}
+              />
+            </>
           ) : (
             <div>
               {avatarProgress === 'loading' && (
-                <img alt={'your avatar'} height={192} src={avatar} width={192} />
+                <>
+                  <SpinnerLocal className={s.spinnerLocal} />
+                  <img alt={'your avatar'} height={192} src={avatar} width={192} />
+                </>
               )}
+
               {avatarProgress === 'success' && (
                 <>
                   <button className={s.removeAvatarBtn} onClick={openRemoveModal} type={'button'}>
                     <Close />
                   </button>
-                  <img
-                    alt={'your avatar'}
-                    height={192}
-                    src={profileData?.originalAvatarUrl}
-                    width={192}
-                  />
+                  <img alt={'your avatar'} height={192} src={profileData?.originalAvatarUrl} width={192} />
                 </>
               )}
             </div>

@@ -3,7 +3,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import * as Dialog from '@radix-ui/react-dialog'
-import { BookmarkOutline, Button, HeartOutline, Input, PaperPlaneOutline } from '@robur_/ui-kit'
+import { BookmarkOutline, Button, HeartOutline, Input, PaperPlaneOutline, ScrollAreaComponent } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -75,18 +75,22 @@ export const PostDialog = ({ post, profileData, userId }: Props) => {
                   />
                 )}
                 {profileData && (
-                  <span>
+                  <span className={s.title}>
                     {profileData.firstName} {profileData.lastName}
                   </span>
                 )}
               </div>
-              <div className={s.comments}>
-                <div>Message 1</div>
-                <div>Message 2</div>
-                <div>Message 3</div>
-                <div>Message 4</div>
-                <div>Message 5</div>
-              </div>
+              <ScrollAreaComponent>
+                <div className={s.comments}>
+                  <div>{`${profileData?.firstName} ${profileData?.lastName}: ${post?.description}`}</div>
+                  <div>Answer 1</div>
+                  <div>Answer 2</div>
+                  <div>Answer 3</div>
+                  <div>Answer 4</div>
+                  <div>Answer 5</div>
+                  <div>Answer 6</div>
+                </div>
+              </ScrollAreaComponent>
               <div className={s.bottom}>
                 <div className={s.feed}>
                   <div className={s.options}>
