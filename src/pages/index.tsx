@@ -1,8 +1,5 @@
-import Spinner from '@/components/Spinner/Spinner'
-import UsersBar from '@/components/UsersBar/UsersBar'
-import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
-import { PATH } from '@/consts/route-paths'
-import { useMeQuery } from '@/services/auth/authApi'
+import MainPage from '@/components/MainPage/MainPage'
+import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import {
   getPosts,
   getRunningQueriesThunk as getRunningPostQueriesThunk,
@@ -14,7 +11,6 @@ import {
 } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
 import { GetServerSidePropsContext } from 'next'
-import { useRouter } from 'next/router'
 
 type Props = {
   posts: Post[]
@@ -48,26 +44,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
 )
 
 function Home({ posts, usersCount }: Props) {
-  const { data, isLoading } = useMeQuery()
-  const router = useRouter()
+  // const { data, isLoading } = useMeQuery()
+  // const router = useRouter()
+  //
+  // if (!isLoading && !data) {
+  //   void router.replace(PATH.LOGIN)
+  // }
+  //
+  // if (isLoading) {
+  //   return <Spinner />
+  // }
 
-  if (!isLoading && !data) {
-    void router.replace(PATH.LOGIN)
-  }
-
-  if (isLoading) {
-    return <Spinner />
-  }
-
-  console.log('posts', posts)
-  console.log('usersCount', usersCount)
-
-  return (
-    <div style={{ display: 'grid', height: '100vh', placeItems: 'center', width: '100%' }}>
-      {usersCount && <UsersBar usersCount={usersCount} />}
-    </div>
-  )
+  return <MainPage posts={posts} usersCount={usersCount} />
 }
 
-Home.getLayout = getCombinedLayout
+Home.getLayout = getHeaderLayout
 export default Home

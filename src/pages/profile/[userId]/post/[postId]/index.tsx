@@ -1,5 +1,6 @@
 import { ReactElement, ReactNode } from 'react'
 
+import { PublicationsPhoto } from '@/components/PublicationsPhoto'
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
@@ -28,11 +29,6 @@ type ProfileStatsProps = {
   countFollowers?: string
   countFollowing?: string
   countPublications?: string
-}
-
-type PublicationsPhotoProps = {
-  // publicImages?: string[]
-  posts: Post[]
 }
 
 const USER_ACHIEVEMENTS = {
@@ -165,30 +161,6 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
         <div>{USER_ACHIEVEMENTS.countPublications} </div>
         <span className={s.statsItemName}> {t.myProfile.publications} </span>
       </p>
-    </div>
-  )
-}
-
-const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts }) => {
-  return (
-    <div className={s.photoGrid}>
-      {posts.map(post => {
-        const imagePreview = post.images.find(item => {
-          return item.originalImageUrl
-        })
-
-        return (
-          <div className={s.photoItem} key={post.postId}>
-            <Image
-              alt={`User photo ${post.postId}`}
-              height={228}
-              layout={'responsive'}
-              src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
-              width={234}
-            />
-          </div>
-        )
-      })}
     </div>
   )
 }
