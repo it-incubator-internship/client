@@ -12,6 +12,14 @@ export type Post = {
   userId: string
 }
 
+export type getUsersTotalCountResponse = {
+  totalCount: number
+}
+
+export type getPostsResponse = {
+  posts: Post[]
+}
+
 export type getUserPostsResponse = {
   lastCursor: string
   posts: Post[]
