@@ -46,13 +46,10 @@ export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts 
     <>
       <div className={s.photoGrid}>
         {posts.map(post => {
-          const imagePreview = post.images.find(item => {
-            return item.originalImageUrl
-          })
-
           return (
             <div className={s.photoItem} key={post.postId}>
               <Swiper
+                className={s.swiperContainer}
                 modules={[Pagination, Navigation]}
                 navigation
                 pagination={{
@@ -77,7 +74,7 @@ export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts 
                             alt={`User photo ${post.postId}`}
                             height={240}
                             layout={'responsive'}
-                            src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
+                            src={image.originalImageUrl || '/photo-default-1.png'}
                             width={234}
                           />
                         </button>
