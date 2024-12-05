@@ -47,3 +47,10 @@
 .bulletActiveClass {
   background-color: var(--color-accent-500);
 }
+
+.date {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: 16px;
+  color: var(--color-light-900);
+}

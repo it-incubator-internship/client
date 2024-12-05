@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 
 import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
+import { useTranslation } from '@/hooks/useTranslation'
 import { NextPageWithLayout } from '@/pages/_app'
 import { Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import initLineClamp from '@/utils/clampBlocks'
+import convertDate from '@/utils/convertDate'
 import clsx from 'clsx'
 import Image from 'next/image'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -24,7 +26,7 @@ type MainPagePhotosProps = {
   posts: Post[]
 }
 export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts }) => {
-  console.log(posts)
+  const t = useTranslation()
   const [open, setOpen] = useState(false)
   const [currentPost, setCurrentPost] = useState<Post | null>(null)
   const [currentPostProfileData, setCurrentPostProfileData] = useState<
@@ -84,15 +86,18 @@ export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts 
                   })}
                 <div className={'swiper-pagination swiper-pagination--custom'}></div>
               </Swiper>
-              <div className={'clamp-block'}>
-                <div className={clsx(s.description, 'clamp-content')}>{post.description}</div>
-                <button className={'clamp-more'} type={'button'}>
-                  Show more
-                </button>
-                <button className={'clamp-less'} type={'button'}>
-                  Hide
-                </button>
-              </div>
+              <div className={s.date}>{convertDate.timePassedFromDate(post.createdAt, t)}</div>
+              {post.description && (
+                <div className={'clamp-block'}>
+                  <div className={clsx(s.description, 'clamp-content')}>{post.description}</div>
+                  <button className={'clamp-more'} type={'button'}>
+                    Show more
+                  </button>
+                  <button className={'clamp-less'} type={'button'}>
+                    Hide
+                  </button>
+                </div>
+              )}
             </div>
           )
         })}
