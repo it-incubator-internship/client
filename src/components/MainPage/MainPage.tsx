@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { MainPagePhotos } from '@/components/MainPagePhotos'
 import UsersBar from '@/components/UsersBar/UsersBar'
 import { Post } from '@/services/posts/posts-types'

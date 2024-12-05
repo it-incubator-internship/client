@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 
-import { SidebarItem } from '@/components/Navbar/SidebarItem/SidebarItem'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
@@ -10,7 +9,6 @@ import {
   FlagRussia,
   FlagUnitedKingdom,
   OutlineBell,
-  Person,
   Select,
   SelectItem,
 } from '@robur_/ui-kit'
@@ -63,9 +61,11 @@ export const Header = () => {
         </button>
       )}
       <div className={s.options}>
-        <Link href={`${PATH.PROFILE}/${currentUserId}`}>
-          <span>{t.nav.myProfile}</span>
-        </Link>
+        {data && (
+          <Link className={s.link} href={`${PATH.PROFILE}/${currentUserId}`}>
+            <span>{t.nav.myProfile}</span>
+          </Link>
+        )}
 
         {!currentUserId ||
           (noProfile && <p className={s.readOnlyNotification}>{t.meta.readOnlyNotification}</p>)}
