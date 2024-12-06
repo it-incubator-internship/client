@@ -49,8 +49,6 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
-
-  border-bottom: 1px solid var(--color-dark-100);
 }
 
 .container {
@@ -118,13 +116,13 @@
 }
 
 .iconBtn {
-    cursor: pointer;
-    flex: 0 0 24px;
+  cursor: pointer;
+  flex: 0 0 24px;
 
-    svg {
-      width: 24px;
-      height: 24px;
-    }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .bottom {
@@ -177,4 +175,78 @@
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
+}
+
+// Удаление поста
+
+.userPostHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-dark-100);
+}
+
+.moreHorizontalButton {
+  cursor: pointer;
+  margin-right: 18px;
+  font-size: 32px;
+  color: var(--color-light-100);
+
+  &:hover {
+    color: var(--color-accent-500);
+  }
+
+  &:active {
+    color: var(--color-accent-500);
+  }
+
+  &[data-state='open'] {
+    color: var(--color-accent-500);
+  }
+}
+
+.menuContent {
+  position: relative;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+
+  margin-top: -10px;
+  padding: 12px;
+
+  color: var(--color-light-100);
+
+  background-color: var(--color-dark-500);
+  border: 1px solid var(--color-dark-100);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+}
+
+.menuItem {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: left;
+  text-decoration-skip-ink: none;
+
+  transition: background-color 0.2s;
+
+  &:hover {
+    color: var(--color-light-500);
+    border: none;
+  }
+
+  &:first-child {
+    padding-bottom: 12px;
+  }
+}
+
+.menuItemIcon {
+  padding-right: 12px;
+  font-size: 24px;
 }

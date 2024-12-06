@@ -202,6 +202,13 @@ export const ru = {
     statistics: 'Статистика',
     yes: 'Да',
   },
+  post: {
+    deletePost: 'Удалить пост',
+    editPost: 'Редактировать пост',
+    no: 'Нет',
+    sureWantDeletePost: 'Вы уверены, что хотите удалить этот пост?',
+    yes: 'Да',
+  },
   russian: 'Русский',
   signUp: {
     and: 'и',

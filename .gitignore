@@ -37,3 +37,6 @@ next-env.d.ts
 
 .idea
 .env
+/src/pages/1-test/index.tsx
+/src/pages/1-test/test.module.scss
+/src/pages/1-test/tets-api.ts

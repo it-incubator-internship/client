@@ -202,6 +202,13 @@ export const en: LocaleType = {
     statistics: 'Statistics',
     yes: 'Yes',
   },
+  post: {
+    deletePost: 'Delete Post',
+    editPost: 'Edit Post',
+    no: 'No',
+    sureWantDeletePost: 'Are you sure you want to delete this post?',
+    yes: 'Yes',
+  },
   russian: 'Russian',
   signUp: {
     and: 'and',
