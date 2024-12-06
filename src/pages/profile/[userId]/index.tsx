@@ -1,15 +1,19 @@
-import { ReactElement, ReactNode, useRef } from 'react'
+import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { getRunningQueriesThunk, getUserPosts } from '@/services/posts/posts-api'
+import {
+  getRunningQueriesThunk,
+  getUserPosts,
+  useLazyGetUserPostsQuery,
+} from '@/services/posts/posts-api'
 import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
-import { Button, ScrollAreaComponent } from '@robur_/ui-kit'
+import { Button } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Image from 'next/image'
@@ -47,9 +51,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store => async (context: GetServerSidePropsContext) => {
     const userId = context.query?.userId
     let posts
+    const lastCursor = String('')
 
     if (userId) {
-      const response = await store.dispatch(getUserPosts.initiate({ userId: userId as string }))
+      const response = await store.dispatch(
+        getUserPosts.initiate({ lastCursor, userId: userId as string })
+      )
 
       posts = response?.data
     }
@@ -70,8 +77,9 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
   const currentUserName = meData?.userName
   const { userId } = useParams()
 
-  console.log('initial posts', posts)
+  // console.log('initial posts', posts)
 
+  const { lastCursor } = posts
   const t = useTranslation()
 
   const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(
@@ -79,7 +87,16 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
     { skip: !userId }
   )
 
-  if (!userId || startIsLoading || isLoadingProfile) {
+  const [getUserPosts, { isLoading: isPostsLoading }] = useLazyGetUserPostsQuery()
+
+  /*
+  {
+    lastCursor,
+    userId: userId as string,
+  }
+   */
+
+  if (!userId || startIsLoading || isLoadingProfile || isPostsLoading) {
     return <Spinner />
   }
 
@@ -155,8 +172,40 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
     </div>
   )
 }
+
 const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, userId }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
+  const element = scrollAreaRef.current
+  const [mouseOver, setmouseOver] = useState(false)
+
+  useEffect(() => {
+
+    const handleWheel = (event: WheelEvent) => {
+      const { deltaY } = event
+
+      if (deltaY > 0) {
+        console.log(' deltaY down: ', deltaY)
+        // scrollContainer.scrollBy(0, 100) // Прокрутка down на 100px
+      } else {
+        console.log(' deltaY up: ', deltaY)
+        // scrollContainer.scrollBy(0, -100) // Прокрутка up на 100px
+      }
+    }
+
+    if (element) {
+      // element.addEventListener('mouseover', handleMouseOver)
+      // element.addEventListener('mouseout', handleMouseOut)
+      element.addEventListener('wheel', handleWheel)
+    }
+
+    return () => {
+      if (element) {
+        // element.removeEventListener('mouseover', handleMouseOver)
+        // element.removeEventListener('mouseout', handleMouseOut)
+        element.removeEventListener('wheel', handleWheel)
+      }
+    }
+  }, [])
 
   return (
     <div className={s.photoGrid} ref={scrollAreaRef}>
