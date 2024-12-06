@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react'
+import { ReactElement, ReactNode, useRef } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
@@ -9,7 +9,7 @@ import { getRunningQueriesThunk, getUserPosts } from '@/services/posts/posts-api
 import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
-import { Button } from '@robur_/ui-kit'
+import { Button, ScrollAreaComponent } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Image from 'next/image'
@@ -156,8 +156,10 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
   )
 }
 const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, userId }) => {
+  const scrollAreaRef = useRef<HTMLDivElement>(null)
+
   return (
-    <div className={s.photoGrid}>
+    <div className={s.photoGrid} ref={scrollAreaRef}>
       {posts.map(post => {
         const imagePreview = post.images.find(item => {
           return item.originalImageUrl
