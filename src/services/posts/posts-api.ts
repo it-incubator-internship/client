@@ -14,6 +14,7 @@ export const postsApi = inctagramApi.injectEndpoints({
       }),
     }),
     getUserPost: builder.query<Post, { postId: string }>({
+      providesTags: ['Post'],
       query: ({ postId }) => ({
         method: 'GET',
         url: `/v1/post/${postId}/post`,
@@ -26,6 +27,7 @@ export const postsApi = inctagramApi.injectEndpoints({
       }),
     }),
     uploadPostPhotos: builder.mutation<void, uploadPhotosARgs>({
+      invalidatesTags: ['Post'],
       query: ({ photos, postId }) => ({
         body: photos,
         method: 'POST',
