@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
+import { ReactElement, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
@@ -33,6 +33,7 @@ type ProfileStatsProps = {
 }
 
 type PublicationsPhotoProps = {
+  lastCursor?: string
   posts: Post[]
   userId: string
 }
@@ -51,12 +52,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
   store => async (context: GetServerSidePropsContext) => {
     const userId = context.query?.userId
     let posts
-    const lastCursor = String('')
 
     if (userId) {
-      const response = await store.dispatch(
-        getUserPosts.initiate({ lastCursor, userId: userId as string })
-      )
+      const response = await store.dispatch(getUserPosts.initiate({ userId: userId as string }))
 
       posts = response?.data
     }
@@ -87,16 +85,7 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
     { skip: !userId }
   )
 
-  const [getUserPosts, { isLoading: isPostsLoading }] = useLazyGetUserPostsQuery()
-
-  /*
-  {
-    lastCursor,
-    userId: userId as string,
-  }
-   */
-
-  if (!userId || startIsLoading || isLoadingProfile || isPostsLoading) {
+  if (!userId || startIsLoading || isLoadingProfile) {
     return <Spinner />
   }
 
@@ -130,7 +119,7 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
         )}
       </div>
       {posts.posts ? (
-        <PublicationsPhoto posts={posts.posts} userId={userId as string} />
+        <PublicationsPhoto lastCursor={lastCursor} posts={posts.posts} userId={userId as string} />
       ) : (
         <div>There is no any data...</div>
       )}
@@ -173,35 +162,59 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
   )
 }
 
-const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, userId }) => {
+const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
+  lastCursor,
+  posts,
+  userId,
+}) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
-  const element = scrollAreaRef.current
-  const [mouseOver, setmouseOver] = useState(false)
+
+  const [getUserPosts] = useLazyGetUserPostsQuery()
+  const [currentCursor, setCurrentCursor] = useState<null | string>(null)
 
   useEffect(() => {
+    const element = scrollAreaRef.current
 
-    const handleWheel = (event: WheelEvent) => {
+    const handleWheel = async (event: WheelEvent) => {
       const { deltaY } = event
 
       if (deltaY > 0) {
-        console.log(' deltaY down: ', deltaY)
-        // scrollContainer.scrollBy(0, 100) // Прокрутка down на 100px
+        console.log('deltaY down: ', deltaY)
+
+        try {
+          const res = await getUserPosts({
+            lastCursor: currentCursor ? currentCursor : (lastCursor as string),
+            userId: userId as string,
+          })
+
+          console.log('Response: ', res)
+
+          const { lastCursor: newLastCursor, posts: addedPosts } = res.data as getUserPostsResponse
+
+          console.log(' newLastCursor: ', newLastCursor)
+          console.log(' posts[posts.length - 1].postId: ', )
+
+          if (newLastCursor !== posts[posts.length - 1].postId) {
+            posts.push(...addedPosts)
+            setCurrentCursor(newLastCursor)
+            setTimeout(() => {
+              element?.scrollBy(0, 305) // Прокрутка вниз на 100px
+            }, 10)
+          }
+        } catch (error) {
+          console.error('Error fetching posts: ', error)
+        }
       } else {
-        console.log(' deltaY up: ', deltaY)
-        // scrollContainer.scrollBy(0, -100) // Прокрутка up на 100px
+        console.log('deltaY up: ', deltaY)
       }
     }
 
     if (element) {
-      // element.addEventListener('mouseover', handleMouseOver)
-      // element.addEventListener('mouseout', handleMouseOut)
       element.addEventListener('wheel', handleWheel)
     }
 
     return () => {
       if (element) {
-        // element.removeEventListener('mouseover', handleMouseOver)
-        // element.removeEventListener('mouseout', handleMouseOut)
         element.removeEventListener('wheel', handleWheel)
       }
     }

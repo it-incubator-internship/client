@@ -20,8 +20,8 @@ export const postsApi = inctagramApi.injectEndpoints({
         url: `/v1/post/${postId}/post`,
       }),
     }),
-    getUserPosts: builder.query<getUserPostsResponse, { lastCursor: string; userId: string }>({
-      query: ({ lastCursor, userId }) => ({
+    getUserPosts: builder.query<getUserPostsResponse, { lastCursor?: string; userId: string }>({
+      query: ({ lastCursor = '', userId }) => ({
         method: 'GET',
         url: `/v1/post/${userId}?cursor=${lastCursor}`,
       }),
