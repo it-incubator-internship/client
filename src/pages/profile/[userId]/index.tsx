@@ -202,7 +202,8 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
           console.log('posts[posts.length - 1].postId: ', posts[posts.length - 1].postId)
           console.log(' addedPosts: ', addedPosts)
 
-          if (newLastCursor !== posts[posts.length - 1].postId) {
+          if (newLastCursor) {
+          // if (newLastCursor !== posts[posts.length - 1].postId) {
             posts.push(...addedPosts)
             setCurrentCursor(newLastCursor)
           }
@@ -229,7 +230,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
         element.removeEventListener('wheel', handleWheel)
       }
     }
-  }, [])
+  }, [currentCursor])
 
   return (
     <div className={s.photoGrid} ref={scrollAreaRef}>
