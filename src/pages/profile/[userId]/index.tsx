@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
@@ -170,14 +170,19 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   const scrollAreaRef = useRef<HTMLDivElement>(null)
 
   const [getUserPosts] = useLazyGetUserPostsQuery()
-  const [currentCursor, setCurrentCursor] = useState<null | string>(null)
+  const [currentCursor, setCurrentCursor] = useState<null | string>('')
 
   useEffect(() => {
     const element = scrollAreaRef.current
 
+    const image = element?.querySelector('[class*="profile_photoItem"]')
+    const height = image?.getBoundingClientRect().height
     const handleWheel = async (event: WheelEvent) => {
+      event.preventDefault()
       const { deltaY } = event
+      const scrollHeight = (height as number) + 12
 
+      console.log(' scrollHeight: ', scrollHeight)
       if (deltaY > 0) {
         console.log('deltaY down: ', deltaY)
 
@@ -187,25 +192,31 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
             userId: userId as string,
           })
 
+          console.log(' currentCursor: ', currentCursor)
           console.log('Response: ', res)
+          console.log(' element: ', element)
 
           const { lastCursor: newLastCursor, posts: addedPosts } = res.data as getUserPostsResponse
 
           console.log(' newLastCursor: ', newLastCursor)
-          console.log(' posts[posts.length - 1].postId: ', )
+          console.log('posts[posts.length - 1].postId: ', posts[posts.length - 1].postId)
+          console.log(' addedPosts: ', addedPosts)
 
           if (newLastCursor !== posts[posts.length - 1].postId) {
             posts.push(...addedPosts)
             setCurrentCursor(newLastCursor)
-            setTimeout(() => {
-              element?.scrollBy(0, 305) // Прокрутка вниз на 100px
-            }, 10)
           }
         } catch (error) {
           console.error('Error fetching posts: ', error)
         }
+        setTimeout(() => {
+          element?.scrollBy(0, scrollHeight) // Прокрутка вниз на 100px
+        }, 10)
       } else {
         console.log('deltaY up: ', deltaY)
+        setTimeout(() => {
+          element?.scrollBy(0, -scrollHeight) // Прокрутка вниз на 100px
+        }, 10)
       }
     }
 
