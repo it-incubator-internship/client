@@ -219,7 +219,9 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
 
           if (newLastCursor) {
             setCurrentAddedPosts(addedPosts)
+
             posts.push(...addedPosts)
+
             setCurrentCursor(newLastCursor)
           } else {
             setCurrentAddedPosts([])
