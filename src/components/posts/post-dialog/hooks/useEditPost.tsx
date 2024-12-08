@@ -9,6 +9,7 @@ import { Post } from '@/services/posts/posts-types'
 import { customErrorHandler } from '@/utils/customErrorHandler'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
+import { useMeQuery } from "@/services/auth/authApi";
 const modalName = {
   MODAL_CURRENT_POST: 'modalCurrentPost',
   MODAL_EDIT_POST: 'modalEditPost',
@@ -21,6 +22,7 @@ type Props = {
   userId: string
 }
 export const useEditPost = ({ post, userId }: Props) => {
+  const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const [currentModal, setCurrentModal] = useState<ModalState>(modalName.MODAL_CURRENT_POST)
   const [postDescription, setPostDescription] = useState(post?.description)
   const [isModalConfirmCloseEditPost, setModalConfirmCloseEditPost] = useState(false)
@@ -62,7 +64,7 @@ export const useEditPost = ({ post, userId }: Props) => {
     setModalConfirmCloseEditPost(true)
   }
   const handleClickEditingPost = () => {
-    handleOpenEditingPost()
+    meData && handleOpenEditingPost()
   }
   const childrenModal = () => {
     return <div>{t.postEdition.modalConfirmCloseEditionPost.text}</div>
