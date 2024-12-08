@@ -1,16 +1,13 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import Spinner from '@/components/Spinner/Spinner'
+import { useEditPost } from '@/components/posts/post-dialog/hooks/useEditPost'
 import { commonVariables } from '@/consts/common-variables'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { editPostFormValues, editPostSchema } from '@/schemas/editPostSchema'
-import {
-  getUserPosts,
-  useGetUserPostQuery,
-  useGetUserPostsQuery,
-  useUpdatePostMutation
-} from "@/services/posts/posts-api";
+import { useUpdatePostMutation } from '@/services/posts/posts-api'
 import { Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import { customErrorHandler } from '@/utils/customErrorHandler'
@@ -40,106 +37,27 @@ type Props = {
   profileData: EditProfileResponse | undefined
   userId: string
 }
-const modalName = {
-  MODAL_CURRENT_POST: 'modalCurrentPost',
-  MODAL_EDIT_POST: 'modalEditPost',
-} as const
 
-type ZodKeys = keyof editPostFormValues
-type ModalState = (typeof modalName)[keyof typeof modalName] | null
 export const PostDialog = ({ post, profileData, userId }: Props) => {
-  const router = useRouter()
-  const t = useTranslation()
-  const [currentModal, setCurrentModal] = useState<ModalState>(modalName.MODAL_CURRENT_POST)
-  const [postDescription, setPostDescription] = useState(post?.description)
-  const [isModalConfirmCloseEditPost, setModalConfirmCloseEditPost] = useState(false)
-  // const { refetch } = useGetUserPostsQuery(
-  //   { userId: router.query.userId as string },
-  //   { skip: !router.query.userId }
-  // )
-  const [updatePost] = useUpdatePostMutation()
-  const { control, handleSubmit, reset, setError, setValue, watch } = useForm<editPostFormValues>({
-    defaultValues: {
-      titleFormEditPost: post?.description,
-    },
-    mode: 'onSubmit',
-    resolver: zodResolver(editPostSchema(t)),
-  })
-  const postEditionValue = watch('titleFormEditPost')
-  const initialTitleValue = post?.description
+  const {
+    control,
+    currentModal,
+    getModalArgs,
+    handleClickEditingPost,
+    handleClickOverlayPost,
+    handleClickOverlayPostEdit,
+    handleFormSubmit,
+    handleSubmit,
+    isLoadingUpdatePost,
+    isModalConfirmCloseEditPost,
+    modalName,
+    postDescription,
+    postEditionValue,
+    t,
+  } = useEditPost({ post, userId })
 
-  const hasValueChanged = postEditionValue === initialTitleValue
-
-  const handleOpenEditingPost = () => {
-    setCurrentModal(modalName.MODAL_EDIT_POST as ModalState)
-  }
-
-  const handleOpenCurrentPost = () => {
-    setCurrentModal(modalName.MODAL_CURRENT_POST as ModalState)
-  }
-  const handleClickCloseModalPost = () => {
-    setModalConfirmCloseEditPost(false)
-    handleOpenCurrentPost()
-  }
-  const handleClickOverlayPost = () => {
-    router.push(`${PATH.PROFILE}/${userId}`)
-  }
-  const handleClickOverlayPostEdit = async () => {
-    if (hasValueChanged) {
-      handleOpenCurrentPost()
-
-      return
-    }
-    setModalConfirmCloseEditPost(true)
-  }
-  const handleClickEditingPost = () => {
-    handleOpenEditingPost()
-  }
-  const childrenModal = () => {
-    return <div>{t.postEdition.modalConfirmCloseEditionPost.text}</div>
-  }
-
-  const getModalArgs = () => {
-    return {
-      buttonRejectionTitle: t.postEdition.modalConfirmCloseEditionPost.buttonRejectionTitle,
-      buttonTitle: t.postEdition.modalConfirmCloseEditionPost.buttonTitle,
-      children: childrenModal(),
-      onClose: () => setModalConfirmCloseEditPost(false),
-      onCloseWithApproval: handleClickCloseModalPost,
-      onCloseWithoutApproval: () => setModalConfirmCloseEditPost(false),
-      open: isModalConfirmCloseEditPost,
-      title: t.postEdition.modalConfirmCloseEditionPost.titleModalWithConfirm,
-      withConfirmation: true,
-    }
-  }
-  const handleFormSubmit = async (dataForm: editPostFormValues) => {
-    console.log('dataForm post', dataForm)
-    console.log('router post', router.query)
-    if (hasValueChanged) {
-      return
-    }
-    if (!router.query.postId) {
-      console.error('Post ID is missing')
-
-      return
-    }
-
-    try {
-      await updatePost({
-        description: dataForm?.titleFormEditPost as string,
-        id: 'router.query.postId as string',
-      }).unwrap()
-      setPostDescription(dataForm?.titleFormEditPost)
-      handleOpenCurrentPost()
-    } catch (error: unknown) {
-      console.log('ошибка ', error)
-      customErrorHandler<ZodKeys>({
-        error,
-        setError,
-        //specificField: 'titleFormEditPost',
-        translations: t,
-      })
-    }
+  if (isLoadingUpdatePost) {
+    return <Spinner />
   }
 
   return (
