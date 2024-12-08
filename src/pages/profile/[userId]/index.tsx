@@ -179,7 +179,11 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
     const height = image?.getBoundingClientRect().height
     const handleWheel = async (event: WheelEvent) => {
       event.preventDefault()
+
       const { deltaY } = event
+
+      element?.scrollBy(0, deltaY * 0.00002)
+
       const scrollHeight = (height as number) + 12
 
       console.log(' scrollHeight: ', scrollHeight)
@@ -192,18 +196,9 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
             userId: userId as string,
           })
 
-          console.log(' currentCursor: ', currentCursor)
-          console.log('Response: ', res)
-          console.log(' element: ', element)
-
           const { lastCursor: newLastCursor, posts: addedPosts } = res.data as getUserPostsResponse
 
-          console.log(' newLastCursor: ', newLastCursor)
-          console.log('posts[posts.length - 1].postId: ', posts[posts.length - 1].postId)
-          console.log(' addedPosts: ', addedPosts)
-
           if (newLastCursor) {
-          // if (newLastCursor !== posts[posts.length - 1].postId) {
             posts.push(...addedPosts)
             setCurrentCursor(newLastCursor)
           }
@@ -211,13 +206,13 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
           console.error('Error fetching posts: ', error)
         }
         setTimeout(() => {
-          element?.scrollBy(0, scrollHeight) // Прокрутка вниз на 100px
-        }, 10)
+          element?.scrollBy(0, scrollHeight)
+        }, 40)
       } else {
         console.log('deltaY up: ', deltaY)
         setTimeout(() => {
-          element?.scrollBy(0, -scrollHeight) // Прокрутка вниз на 100px
-        }, 10)
+          element?.scrollBy(0, -scrollHeight)
+        }, 40)
       }
     }
 
