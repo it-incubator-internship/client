@@ -217,6 +217,16 @@ export const ru = {
     statistics: 'Статистика',
     yes: 'Да',
   },
+  postEdition: {
+    modalConfirmCloseEditionPost: {
+      buttonRejectionTitle: 'Нет',
+      buttonTitle: 'Да',
+      text: 'Вы действительно хотите закрыть редактирование поста? Если вы закроете изменения, они не сохранятся.',
+      titleModalWithConfirm: 'Закрыть публикацию',
+    },
+    titleFormEditPost: 'Добавьте описание публикации',
+    titleHeaderModalEditPost: 'Редактирование публикации',
+  },
   russian: 'Русский',
   signUp: {
     and: 'и',

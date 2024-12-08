@@ -59,7 +59,8 @@ export const en: LocaleType = {
     cropping: {
       original: 'Original',
     },
-    errorFileSize: 'The selected file exceeds the maximum allowed size of 10MB. Please choose a smaller file.',
+    errorFileSize:
+      'The selected file exceeds the maximum allowed size of 10MB. Please choose a smaller file.',
     errorFileType: 'The selected file type is not supported. Please upload a PNG or JPEG image.',
     errorMaxPhotos: 'You can upload a maximum of 5 photos.',
     filterDescription: 'Click here and filter new Photo',
@@ -211,6 +212,16 @@ export const en: LocaleType = {
     search: 'Search',
     statistics: 'Statistics',
     yes: 'Yes',
+  },
+  postEdition: {
+    modalConfirmCloseEditionPost: {
+      buttonRejectionTitle: 'No',
+      buttonTitle: 'Yes',
+      text: 'Do you really want to close the edition of the publication? If you close changes won’t be saved.',
+      titleModalWithConfirm: 'Close post',
+    },
+    titleFormEditPost: 'Add a post description',
+    titleHeaderModalEditPost: 'Edit post',
   },
   russian: 'Russian',
   signUp: {
