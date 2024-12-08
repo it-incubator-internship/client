@@ -14,18 +14,20 @@ export const postsApi = inctagramApi.injectEndpoints({
       }),
     }),
     getUserPost: builder.query<Post, { postId: string }>({
+      providesTags: ['Post'],
       query: ({ postId }) => ({
         method: 'GET',
         url: `/v1/post/${postId}/post`,
       }),
     }),
-    getUserPosts: builder.query<getUserPostsResponse, { userId: string }>({
-      query: ({ userId }) => ({
+    getUserPosts: builder.query<getUserPostsResponse, { lastCursor?: string; userId: string }>({
+      query: ({ lastCursor = '', userId }) => ({
         method: 'GET',
-        url: `/v1/post/${userId}`,
+        url: `/v1/post/${userId}?cursor=${lastCursor}`,
       }),
     }),
     uploadPostPhotos: builder.mutation<void, uploadPhotosARgs>({
+      invalidatesTags: ['Post'],
       query: ({ photos, postId }) => ({
         body: photos,
         method: 'POST',
@@ -44,5 +46,6 @@ export const {
   useCreatePostMutation,
   useGetUserPostQuery,
   useGetUserPostsQuery,
+  useLazyGetUserPostsQuery,
   useUploadPostPhotosMutation,
 } = postsApi
