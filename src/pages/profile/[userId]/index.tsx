@@ -172,35 +172,57 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   const [getUserPosts] = useLazyGetUserPostsQuery()
   const [currentCursor, setCurrentCursor] = useState<null | string>('')
 
+  const [currentAddedPosts, setCurrentAddedPosts] = useState<Post[]>(posts)
+
   useEffect(() => {
     const element = scrollAreaRef.current
 
     const image = element?.querySelector('[class*="profile_photoItem"]')
-    const height = image?.getBoundingClientRect().height
+
+    // let timeoutId: ReturnType<typeof setTimeout>
     const handleWheel = async (event: WheelEvent) => {
       event.preventDefault()
 
       const { deltaY } = event
 
-      element?.scrollBy(0, deltaY * 0.00002)
+      // clearTimeout(timeoutId) // Очистка предыдущего таймера
+      // timeoutId = setTimeout(() => {
+      //   const element = scrollAreaRef.current
+      //
+      //   if (element) {
+      //     element.scrollTop += Math.abs(deltaY) * 0.03
+      //   }
+      // }, 50)
 
-      const scrollHeight = (height as number) + 12
+      const height = image?.getBoundingClientRect().height
+      const verticalGap = 12
+      const scrollHeight = (height as number) + verticalGap
 
       console.log(' scrollHeight: ', scrollHeight)
       if (deltaY > 0) {
         console.log('deltaY down: ', deltaY)
 
         try {
-          const res = await getUserPosts({
-            lastCursor: currentCursor ? currentCursor : (lastCursor as string),
-            userId: userId as string,
-          })
+          let res
 
-          const { lastCursor: newLastCursor, posts: addedPosts } = res.data as getUserPostsResponse
+          if (currentAddedPosts.length !== 0) {
+            // console.log(' currentAddedPosts: ', currentAddedPosts)
+            res = await getUserPosts({
+              lastCursor: currentCursor ? currentCursor : (lastCursor as string),
+              userId: userId as string,
+            })
+          }
+          // debugger
+          const { lastCursor: newLastCursor, posts: addedPosts } = res?.data as getUserPostsResponse
+
+          console.log(' addedPosts: ', addedPosts)
 
           if (newLastCursor) {
+            setCurrentAddedPosts(addedPosts)
             posts.push(...addedPosts)
             setCurrentCursor(newLastCursor)
+          } else {
+            setCurrentAddedPosts([])
           }
         } catch (error) {
           console.error('Error fetching posts: ', error)
@@ -221,11 +243,12 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
     }
 
     return () => {
+      // clearTimeout(timeoutId)
       if (element) {
         element.removeEventListener('wheel', handleWheel)
       }
     }
-  }, [currentCursor])
+  }, [currentCursor, currentAddedPosts])
 
   return (
     <div className={s.photoGrid} ref={scrollAreaRef}>
