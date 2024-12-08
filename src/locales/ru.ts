@@ -255,6 +255,11 @@ export const ru = {
     statistics: 'Статистика',
     yes: 'Да',
   },
+  other: {
+    noData: 'Нет данных...',
+    showLess: 'спрятать',
+    showMore: 'показать больше',
+  },
   russian: 'Русский',
   signUp: {
     and: 'и',

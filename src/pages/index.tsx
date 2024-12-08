@@ -4,7 +4,7 @@ import {
   getPosts,
   getRunningQueriesThunk as getRunningPostQueriesThunk,
 } from '@/services/posts/posts-api'
-import { Post } from '@/services/posts/posts-types'
+import { PostWithOwner } from '@/services/posts/posts-types'
 import {
   getRunningQueriesThunk as getRunningProfileQueriesThunk,
   getUsersCount,
@@ -13,21 +13,18 @@ import { wrapper } from '@/services/store'
 import { GetServerSidePropsContext } from 'next'
 
 type Props = {
-  posts: Post[]
+  posts: PostWithOwner[]
   usersCount: number
 }
 export const getServerSideProps = wrapper.getServerSideProps(
   store => async (context: GetServerSidePropsContext) => {
-    let posts
-    let usersCount
-
     const postsResponse = await store.dispatch(getPosts.initiate({ pageNumber: 1, pageSize: 4 }))
 
-    posts = postsResponse?.data
+    const posts = postsResponse?.data
 
     const usersCountResponse = await store.dispatch(getUsersCount.initiate())
 
-    usersCount = usersCountResponse?.data?.totalCount
+    const usersCount = usersCountResponse?.data?.totalCount
 
     await Promise.all([
       store.dispatch(getRunningPostQueriesThunk()),
@@ -44,17 +41,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 )
 
 function Home({ posts, usersCount }: Props) {
-  // const { data, isLoading } = useMeQuery()
-  // const router = useRouter()
-  //
-  // if (!isLoading && !data) {
-  //   void router.replace(PATH.LOGIN)
-  // }
-  //
-  // if (isLoading) {
-  //   return <Spinner />
-  // }
-
   return <MainPage posts={posts} usersCount={usersCount} />
 }
 

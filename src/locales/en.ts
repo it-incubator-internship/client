@@ -257,6 +257,11 @@ export const en: LocaleType = {
     statistics: 'Statistics',
     yes: 'Yes',
   },
+  other: {
+    noData: 'There is no any data...',
+    showLess: 'Hide',
+    showMore: 'Show more',
+  },
   russian: 'Russian',
   signUp: {
     and: 'and',

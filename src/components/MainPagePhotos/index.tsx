@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 
 import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
+import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { NextPageWithLayout } from '@/pages/_app'
-import { Post } from '@/services/posts/posts-types'
-import { EditProfileResponse } from '@/services/profile/profile-types'
+import { PostWithOwner } from '@/services/posts/posts-types'
 import initLineClamp from '@/utils/clampBlocks'
 import convertDate from '@/utils/convertDate'
 import clsx from 'clsx'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -23,17 +24,14 @@ import s from './mainPagePhotos.module.scss'
 
 type MainPagePhotosProps = {
   // publicImages?: string[]
-  posts: Post[]
+  posts: Array<PostWithOwner>
 }
 export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts }) => {
   const t = useTranslation()
   const [open, setOpen] = useState(false)
-  const [currentPost, setCurrentPost] = useState<Post | null>(null)
-  const [currentPostProfileData, setCurrentPostProfileData] = useState<
-    EditProfileResponse | undefined
-  >(undefined)
+  const [currentPost, setCurrentPost] = useState<PostWithOwner | null>(null)
 
-  const openPostHandler = (post: Post) => {
+  const openPostHandler = (post: PostWithOwner) => {
     setCurrentPost(post)
     setOpen(true)
   }
@@ -83,15 +81,30 @@ export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts 
                   })}
                 <div className={'swiper-pagination swiper-pagination--custom'}></div>
               </Swiper>
+              <Link className={s.user} href={`${PATH.PROFILE}/${post.userId}`}>
+                {post.owner.smallAvatarUrl && (
+                  <Image
+                    alt={'User Avatar'}
+                    className={s.avatarImage}
+                    height={36}
+                    layout={'intrinsic'}
+                    src={post.owner.smallAvatarUrl}
+                    width={36}
+                  />
+                )}
+                <span>
+                  {post.owner.firstName} {post.owner.lastName}
+                </span>
+              </Link>
               <div className={s.date}>{convertDate.timePassedFromDate(post.createdAt, t)}</div>
               {post.description && (
                 <div className={'clamp-block'}>
                   <div className={clsx(s.description, 'clamp-content')}>{post.description}</div>
                   <button className={'clamp-more'} type={'button'}>
-                    Show more
+                    {t.other.showMore}
                   </button>
                   <button className={'clamp-less'} type={'button'}>
-                    Hide
+                    {t.other.showLess}
                   </button>
                 </div>
               )}
@@ -103,8 +116,8 @@ export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts 
         <PostDialog
           isOpen={open}
           isPostSpecificPage={false}
+          owner={currentPost.owner}
           post={currentPost}
-          profileData={currentPostProfileData}
           setOpen={setOpen}
           userId={currentPost.userId}
         />

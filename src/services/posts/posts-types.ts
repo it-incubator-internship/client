@@ -4,6 +4,12 @@ export type Images = {
   smallImageUrl: string
 }
 
+export type Owner = {
+  firstName: string
+  lastName: string
+  smallAvatarUrl: string
+}
+
 export type Post = {
   createdAt: string
   description: string
@@ -11,6 +17,8 @@ export type Post = {
   postId: string
   userId: string
 }
+
+export type PostWithOwner = { owner: Owner } & Post
 
 export type getUsersTotalCountResponse = {
   totalCount: number

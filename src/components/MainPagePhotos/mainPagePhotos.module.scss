@@ -12,7 +12,25 @@
       height: 240px !important;
       object-fit: cover;
     }
+
+    img.avatarImage {
+      width: 36px;
+      height: 36px !important;
+      object-fit: cover;
+    }
   }
+}
+
+.user {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  margin-bottom: 24px;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
 }
 
 .swiperContainer {
@@ -30,7 +48,7 @@
   max-height: 504px;
 }
 
-.imageContainer{
+.imageContainer {
   cursor: pointer;
   width: 100%;
 }
@@ -57,3 +75,5 @@
   line-height: 16px;
   color: var(--color-light-900);
 }
+
+

@@ -1,7 +1,7 @@
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { Post } from '@/services/posts/posts-types'
+import { Owner, Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import convertDate from '@/utils/convertDate'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -24,14 +24,16 @@ import s from './post-dialog.module.scss'
 type Props = {
   isOpen: boolean
   isPostSpecificPage: boolean
+  owner?: Owner
   post: Post | undefined
-  profileData: EditProfileResponse | undefined
+  profileData?: EditProfileResponse | undefined
   setOpen?: (flag: boolean) => void
   userId: string
 }
 export const PostDialog = ({
   isOpen,
   isPostSpecificPage,
+  owner,
   post,
   profileData,
   setOpen,
@@ -40,6 +42,19 @@ export const PostDialog = ({
   const { data: me } = useMeQuery()
   const router = useRouter()
   const t = useTranslation()
+  let userAvatar = '/default-avatar.jpg'
+  let userFirstName
+  let userLastName
+
+  if (profileData) {
+    userAvatar = profileData.smallAvatarUrl
+    userFirstName = profileData.firstName
+    userLastName = profileData.lastName
+  } else if (owner) {
+    userAvatar = owner.smallAvatarUrl
+    userFirstName = owner.firstName
+    userLastName = owner.lastName
+  }
 
   const handleClickOverlay = () => {
     if (isPostSpecificPage) {
@@ -88,25 +103,27 @@ export const PostDialog = ({
             </div>
             <div className={s.main}>
               <div className={s.user}>
-                {profileData && profileData.smallAvatarUrl && (
+                {userAvatar && (
                   <Image
                     alt={'User Avatar'}
                     className={s.avatarImage}
                     height={36}
                     layout={'intrinsic'}
-                    src={profileData?.smallAvatarUrl}
+                    src={userAvatar}
                     width={36}
                   />
                 )}
-                {profileData && (
+                {userFirstName && (
                   <span className={s.title}>
-                    {profileData.firstName} {profileData.lastName}
+                    {userFirstName} {userLastName}
                   </span>
                 )}
               </div>
               <ScrollAreaComponent>
                 <div className={s.comments}>
-                  <div>{`${profileData?.firstName} ${profileData?.lastName}: ${post?.description}`}</div>
+                  {post?.description && userFirstName && (
+                    <div>{`${userFirstName} ${userLastName}: ${post?.description}`}</div>
+                  )}
                   <div>Answer 1</div>
                   <div>Answer 2</div>
                   <div>Answer 3</div>
