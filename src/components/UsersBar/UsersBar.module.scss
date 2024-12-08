@@ -1,0 +1,43 @@
+.usersBar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	margin: 0 0 36px;
+	padding: 12px 24px;
+
+	font-size: var(--font-size-l);
+	font-weight: var(--font-weight-bold);
+	line-height: 24px;
+	color: var(--color-light-100);
+
+
+	background-color: var(--color-dark-500);
+	border: 1px solid var(--color-dark-300);
+	border-radius: 2px;
+
+}
+
+
+.count {
+	display: flex;
+	padding: 8px;
+	background-color: var(--color-dark-700);
+	border: 1px solid var(--color-dark-300);
+}
+
+
+.number {
+	display: grid;
+	place-items: center;
+
+	width: 32px;
+	height: 24px;
+	padding: 0 4px;
+
+	border-right: 1px solid var(--color-dark-300);
+
+	&:last-child {
+		border-right: none;
+	}
+}

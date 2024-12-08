@@ -6,7 +6,7 @@ import { NextPage } from 'next'
 const MainLayout: NextPage<PropsWithChildren> = ({ children }) => {
   return (
     <>
-      <HeadMeta title={'Inctagram'} />
+      <HeadMeta title={'Navaibe'} />
       {children}
     </>
   )

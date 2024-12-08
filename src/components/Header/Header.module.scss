@@ -78,3 +78,9 @@
 .readOnlyNotification {
   color: aqua;
 }
+
+.link:hover,
+.link:focus {
+  color: var(--color-accent-500);
+  transition: color 0.3s ease
+}

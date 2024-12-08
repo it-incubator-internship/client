@@ -1,3 +1,5 @@
+import { postsApi } from '@/services/posts/posts-api'
+import { getUsersTotalCountResponse } from '@/services/posts/posts-types'
 import { Storage } from '@/utils/storage'
 
 import { inctagramApi } from '../inctagramApi'
@@ -82,12 +84,17 @@ export const profileApi = inctagramApi.injectEndpoints({
         url: `/v1/localization/countries`,
       }),
     }),
-
     getProfile: builder.query<EditProfileResponse, { id: string }>({
       providesTags: ['Profile'],
       query: args => ({
         method: 'GET',
         url: `/v1/user/profile/${args.id}`,
+      }),
+    }),
+    getUsersCount: builder.query<getUsersTotalCountResponse, void>({
+      query: args => ({
+        method: 'GET',
+        url: `/v1/user/counts`,
       }),
     }),
     sendAvatarToServer: builder.mutation<void, any>({
@@ -99,6 +106,13 @@ export const profileApi = inctagramApi.injectEndpoints({
     }),
   }),
 })
+
+export const { getUsersCount } = profileApi.endpoints
+
+export const {
+  util: { getRunningQueriesThunk },
+} = profileApi
+
 export const {
   useDeleteAvatarFromServerMutation,
   useEditProfileMutation,
