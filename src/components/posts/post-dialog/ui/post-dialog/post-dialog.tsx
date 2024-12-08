@@ -5,7 +5,12 @@ import { commonVariables } from '@/consts/common-variables'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { editPostFormValues, editPostSchema } from '@/schemas/editPostSchema'
-import { useUpdatePostMutation } from '@/services/posts/posts-api'
+import {
+  getUserPosts,
+  useGetUserPostQuery,
+  useGetUserPostsQuery,
+  useUpdatePostMutation
+} from "@/services/posts/posts-api";
 import { Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import { customErrorHandler } from '@/utils/customErrorHandler'
@@ -40,12 +45,18 @@ const modalName = {
   MODAL_EDIT_POST: 'modalEditPost',
 } as const
 
+type ZodKeys = keyof editPostFormValues
 type ModalState = (typeof modalName)[keyof typeof modalName] | null
 export const PostDialog = ({ post, profileData, userId }: Props) => {
   const router = useRouter()
   const t = useTranslation()
   const [currentModal, setCurrentModal] = useState<ModalState>(modalName.MODAL_CURRENT_POST)
+  const [postDescription, setPostDescription] = useState(post?.description)
   const [isModalConfirmCloseEditPost, setModalConfirmCloseEditPost] = useState(false)
+  // const { refetch } = useGetUserPostsQuery(
+  //   { userId: router.query.userId as string },
+  //   { skip: !router.query.userId }
+  // )
   const [updatePost] = useUpdatePostMutation()
   const { control, handleSubmit, reset, setError, setValue, watch } = useForm<editPostFormValues>({
     defaultValues: {
@@ -112,21 +123,22 @@ export const PostDialog = ({ post, profileData, userId }: Props) => {
 
       return
     }
-    const postId = router.query.postId as string
-    const desrPost = dataForm?.titleFormEditPost as string
 
     try {
-
-      const res = await updatePost({
-        description: desrPost,
-        id: postId,
-      })
-      //
-      //   // openModal(variantModal.successfulSaveProfile)
+      await updatePost({
+        description: dataForm?.titleFormEditPost as string,
+        id: 'router.query.postId as string',
+      }).unwrap()
+      setPostDescription(dataForm?.titleFormEditPost)
+      handleOpenCurrentPost()
     } catch (error: unknown) {
       console.log('ошибка ', error)
-      //   //   //customErrorHandler<ZodKeys>({ error, setError, translations: t })
-      //   //   //openModal(variantModals.failedSaveProfile)
+      customErrorHandler<ZodKeys>({
+        error,
+        setError,
+        //specificField: 'titleFormEditPost',
+        translations: t,
+      })
     }
   }
 
@@ -193,7 +205,7 @@ export const PostDialog = ({ post, profileData, userId }: Props) => {
                   </div>
                   <ScrollAreaComponent>
                     <div className={s.comments}>
-                      <div>{`${profileData?.firstName} ${profileData?.lastName}: ${post?.description}`}</div>
+                      <div>{`${profileData?.firstName} ${profileData?.lastName}: ${postDescription}`}</div>
                       <div>Answer 1</div>
                       <div>Answer 2</div>
                       <div>Answer 3</div>

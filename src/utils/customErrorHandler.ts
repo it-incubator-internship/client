@@ -7,7 +7,15 @@ type Props = {
   specificField?: null | string
   translations: LocaleType
 }
-
+/*
+{
+    "statusCode": 400,
+    "inTry": "HttpException",
+    "error": "Validation failed (uuid is expected)",
+    "errorObj": null,
+    "info": "Check your request! /ᐠ-ꞈ-ᐟ\\"
+}
+ */
 export const customErrorHandler = <T>({
   error,
   setError,
@@ -15,7 +23,7 @@ export const customErrorHandler = <T>({
   translations,
 }: Props) => {
   const errors = (error as ErrorType<T>).data?.fields
-
+console.log('error custom', error)
   if (errors) {
     errors.forEach((error: FieldError<T>) => {
       setError(error.field, {
@@ -29,6 +37,11 @@ export const customErrorHandler = <T>({
     if (error instanceof Error) {
       errorMessage = `Native error: ${error.message}`
     } else if ((error as AuthError)?.data) {
+      // const responseData = (error as AuthError)?.data
+      // switch (responseData?.statusCode) {
+      //   case 400: errorMessage = translations.errors.
+      // }
+      console.log('error: ', error)
       errorMessage = translations.errors['401']
       // errorMessage = (error as AuthError)?.data?.error
     }
