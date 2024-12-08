@@ -164,7 +164,7 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
 
 const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   lastCursor,
-  posts,
+  posts: initialPosts,
   userId,
 }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
@@ -172,59 +172,53 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   const [getUserPosts] = useLazyGetUserPostsQuery()
   const [currentCursor, setCurrentCursor] = useState<null | string>('')
 
-  const [currentAddedPosts, setCurrentAddedPosts] = useState<Post[]>(posts)
+  const [lastAddedPosts, setLastAddedPosts] = useState<Post[]>(initialPosts)
+
+  const [posts, setPosts] = useState<Post[]>(initialPosts || [])
 
   useEffect(() => {
     const element = scrollAreaRef.current
 
     const image = element?.querySelector('[class*="profile_photoItem"]')
 
-    // let timeoutId: ReturnType<typeof setTimeout>
     const handleWheel = async (event: WheelEvent) => {
       event.preventDefault()
 
       const { deltaY } = event
 
-      // clearTimeout(timeoutId) // Очистка предыдущего таймера
-      // timeoutId = setTimeout(() => {
-      //   const element = scrollAreaRef.current
-      //
-      //   if (element) {
-      //     element.scrollTop += Math.abs(deltaY) * 0.03
-      //   }
-      // }, 50)
-
       const height = image?.getBoundingClientRect().height
       const verticalGap = 12
       const scrollHeight = (height as number) + verticalGap
 
-      console.log(' scrollHeight: ', scrollHeight)
+      // console.log(' scrollHeight: ', scrollHeight)
       if (deltaY > 0) {
-        console.log('deltaY down: ', deltaY)
+        // console.log('deltaY down: ', deltaY)
 
         try {
           let res
 
-          if (currentAddedPosts.length !== 0) {
-            // console.log(' currentAddedPosts: ', currentAddedPosts)
+          if (lastAddedPosts.length !== 0) {
             res = await getUserPosts({
               lastCursor: currentCursor ? currentCursor : (lastCursor as string),
               userId: userId as string,
             })
           }
-          // debugger
+
           const { lastCursor: newLastCursor, posts: addedPosts } = res?.data as getUserPostsResponse
 
-          console.log(' addedPosts: ', addedPosts)
-
           if (newLastCursor) {
-            setCurrentAddedPosts(addedPosts)
+            setLastAddedPosts(addedPosts)
 
-            posts.push(...addedPosts)
+            setPosts(prevPosts => {
+              const existingPostIds = new Set(prevPosts.map(post => post.postId))
+              const uniquePosts = addedPosts.filter(post => !existingPostIds.has(post.postId))
+
+              return [...prevPosts, ...uniquePosts]
+            })
 
             setCurrentCursor(newLastCursor)
           } else {
-            setCurrentAddedPosts([])
+            setLastAddedPosts([])
           }
         } catch (error) {
           console.error('Error fetching posts: ', error)
@@ -233,7 +227,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
           element?.scrollBy(0, scrollHeight)
         }, 40)
       } else {
-        console.log('deltaY up: ', deltaY)
+        // console.log('deltaY up: ', deltaY)
         setTimeout(() => {
           element?.scrollBy(0, -scrollHeight)
         }, 40)
@@ -245,12 +239,11 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
     }
 
     return () => {
-      // clearTimeout(timeoutId)
       if (element) {
         element.removeEventListener('wheel', handleWheel)
       }
     }
-  }, [currentCursor, currentAddedPosts])
+  }, [currentCursor, lastAddedPosts])
 
   return (
     <div className={s.photoGrid} ref={scrollAreaRef}>
