@@ -17,7 +17,7 @@
     "@radix-ui/react-slider": "^1.2.1",
     "@radix-ui/react-visually-hidden": "^1.1.0",
     "@reduxjs/toolkit": "^2.2.7",
-    "@robur_/ui-kit": "^0.0.44",
+    "@robur_/ui-kit": "^0.0.45",
     "@types/ua-parser-js": "^0.7.39",
     "async-mutex": "^0.5.0",
     "clsx": "^2.1.1",

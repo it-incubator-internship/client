@@ -71,13 +71,6 @@ export const ProfilePageContent = () => {
     return <Spinner />
   }
 
-  const setRequiredLabel = (mainText: string) => (
-    <>
-      {mainText}
-      <span className={s.colorDanger}>*</span>
-    </>
-  )
-
   return (
     <form className={s.form} onSubmit={handleSubmit(handleFormSubmit)}>
       <div className={s.formContainer}>
@@ -86,60 +79,72 @@ export const ProfilePageContent = () => {
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
-            label={setRequiredLabel(t.myProfileSettings.userName)}
+            label={t.myProfileSettings.userName}
+            markedAsRequired
             name={'userName'}
           />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
-            label={setRequiredLabel(t.myProfileSettings.firstName)}
+            label={t.myProfileSettings.firstName}
+            markedAsRequired
             name={'firstName'}
           />
           <FormInput
             containerClassName={s.inputContainer}
             control={control}
-            label={setRequiredLabel(t.myProfileSettings.lastName)}
+            label={t.myProfileSettings.lastName}
+            markedAsRequired
             name={'lastName'}
           />
           <FormDatePicker
             control={control}
-            label={setRequiredLabel(t.myProfileSettings.dateOfBirth)}
+            label={t.myProfileSettings.dateOfBirth}
+            markedAsRequired
             name={'dateOfBirth'}
             years={years}
           />
-          <div className={s.locationInputWrapper}>
-            <FormCombobox
-              control={control}
-              getDataForCombobox={setGetDataForCountry}
-              isLoading={isCountriesLoading}
-              label={setRequiredLabel(t.myProfileSettings.selectYourCountry)}
-              name={Terra.country}
-              onInputClick={getCountriesFromLocalStorage}
-              options={countriesValues ?? []}
-              setValue={value => setValue(Terra.country, value)}
-            />
-            <FormCombobox
-              control={control}
-              disabled={!countryValue}
-              getDataForCombobox={setGetDataForCity}
-              isLoading={isCitiesLoading}
-              label={setRequiredLabel(t.myProfileSettings.selectYourCity)}
-              name={Terra.city}
-              onInputClick={() => handleClickInputCity()}
-              options={citiesValues ?? []}
-              requestItemOnKeyDown={() => {
-                if (!arrowDownPressed) {
-                  handleClickInputCity()
-                  setArrowDownPressed(true)
-                }
-              }}
-              setValue={value => setValue(Terra.city, value)}
-            />
+          <div style={{ display: 'flex', gap: '24px' }}>
+            <div style={{ flexGrow: 1 }}>
+              <div>{t.myProfileSettings.selectYourCountry}</div>
+              <FormCombobox
+                control={control}
+                getDataForCombobox={setGetDataForCountry}
+                isLoading={isCountriesLoading}
+                markedAsRequired
+                name={Terra.country}
+                onInputClick={getCountriesFromLocalStorage}
+                options={countriesValues ?? []}
+                setValue={value => setValue(Terra.country, value)}
+              />
+            </div>
+            <div style={{ flexGrow: 1 }}>
+              <div>{t.myProfileSettings.selectYourCity}</div>
+
+              <FormCombobox
+                control={control}
+                disabled={!countryValue}
+                getDataForCombobox={setGetDataForCity}
+                isLoading={isCitiesLoading}
+                markedAsRequired
+                name={Terra.city}
+                onInputClick={() => handleClickInputCity()}
+                options={citiesValues ?? []}
+                requestItemOnKeyDown={() => {
+                  if (!arrowDownPressed) {
+                    handleClickInputCity()
+                    setArrowDownPressed(true)
+                  }
+                }}
+                setValue={value => setValue(Terra.city, value)}
+              />
+            </div>
           </div>
           <FormTextarea
             className={s.textArea}
             control={control}
             name={'aboutMe'}
+            placeholder={'Text-area'}
             titleLabel={t.myProfileSettings.aboutMe}
           />
         </div>
