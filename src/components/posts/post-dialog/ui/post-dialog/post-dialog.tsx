@@ -5,6 +5,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { useDeletePostMutation } from '@/services/posts/posts-api'
 import { Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
+import { showErrorToast, showSuccessToast } from '@/utils/toastConfig'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import {
@@ -58,8 +59,10 @@ export const PostDialog = ({ post, profileData, userId }: Props) => {
       try {
         await deletePost({ postId: post.postId }).unwrap()
         setModalOpen(false)
+        showSuccessToast(t.createPost.postDeleted)
         handleClickOverlay()
       } catch (error) {
+        showErrorToast(t.createPost.postNotDeleted)
         console.error('Failed to delete post:', error)
       }
     }
