@@ -80,6 +80,44 @@ export const ru = {
     titleModalSavedDraft:
       'Вы действительно хотите закрыть создание публикации? Если вы закроете, все будет удалено.',
   },
+  dateTexts: {
+    daysAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} день назад`
+        case 'few':
+          return `${count} дня назад`
+        case 'many':
+          return `${count} дней назад`
+      }
+    },
+    hoursAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} час назад`
+        case 'few':
+          return `${count} часа назад`
+        case 'many':
+          return `${count} часов назад`
+      }
+    },
+    minAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} минуту назад`
+        case 'few':
+          return `${count} минуты назад`
+        case 'many':
+          return `${count} минут назад`
+      }
+    },
+  },
   devices: {
     activeSessions: 'Активные сессии',
     currentDevice: 'Текущее устройство',
@@ -216,6 +254,11 @@ export const ru = {
     search: 'Поиск',
     statistics: 'Статистика',
     yes: 'Да',
+  },
+  other: {
+    noData: 'Нет данных...',
+    showLess: 'спрятать',
+    showMore: 'показать больше',
   },
   russian: 'Русский',
   signUp: {

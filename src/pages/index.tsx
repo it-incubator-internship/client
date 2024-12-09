@@ -1,27 +1,48 @@
-import Spinner from '@/components/Spinner/Spinner'
-import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
-import { PATH } from '@/consts/route-paths'
-import { useMeQuery } from '@/services/auth/authApi'
-import { useRouter } from 'next/router'
+import MainPage from '@/components/MainPage/MainPage'
+import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
+import {
+  getPosts,
+  getRunningQueriesThunk as getRunningPostQueriesThunk,
+} from '@/services/posts/posts-api'
+import { PostWithOwner } from '@/services/posts/posts-types'
+import {
+  getRunningQueriesThunk as getRunningProfileQueriesThunk,
+  getUsersCount,
+} from '@/services/profile/profile-api'
+import { wrapper } from '@/services/store'
+import { GetServerSidePropsContext } from 'next'
 
-function Home() {
-  const { data, isLoading } = useMeQuery()
-  const router = useRouter()
+type Props = {
+  posts: PostWithOwner[]
+  usersCount: number
+}
+export const getServerSideProps = wrapper.getServerSideProps(
+  store => async (context: GetServerSidePropsContext) => {
+    const postsResponse = await store.dispatch(getPosts.initiate({ pageNumber: 1, pageSize: 4 }))
 
-  if (!isLoading && !data) {
-    void router.replace(PATH.LOGIN)
+    const posts = postsResponse?.data
+
+    const usersCountResponse = await store.dispatch(getUsersCount.initiate())
+
+    const usersCount = usersCountResponse?.data?.totalCount
+
+    await Promise.all([
+      store.dispatch(getRunningPostQueriesThunk()),
+      store.dispatch(getRunningProfileQueriesThunk()),
+    ])
+
+    return {
+      props: {
+        posts,
+        usersCount,
+      },
+    }
   }
+)
 
-  if (isLoading) {
-    return <Spinner />
-  }
-
-  return (
-    <div style={{ display: 'grid', height: '100vh', placeItems: 'center', width: '100%' }}>
-      <h2>HOME PAGE</h2>
-    </div>
-  )
+function Home({ posts, usersCount }: Props) {
+  return <MainPage posts={posts} usersCount={usersCount} />
 }
 
-Home.getLayout = getCombinedLayout
+Home.getLayout = getHeaderLayout
 export default Home
