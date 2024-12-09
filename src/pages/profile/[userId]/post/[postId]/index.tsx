@@ -2,10 +2,11 @@ import { ReactElement, ReactNode } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
+import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { getRunningQueriesThunk, getUserPosts } from '@/services/posts/posts-api'
+import { getRunningQueriesThunk, getUserPost, getUserPosts } from '@/services/posts/posts-api'
 import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
@@ -15,8 +16,9 @@ import { GetServerSidePropsContext, NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useRouter } from 'next/router'
 
-import s from '../profile.module.scss'
+import s from '../../../profile.module.scss'
 
 type NextPageWithLayout<P = {}> = {
   getLayout?: (page: ReactElement) => ReactNode
@@ -29,12 +31,8 @@ type ProfileStatsProps = {
 }
 
 type PublicationsPhotoProps = {
+  // publicImages?: string[]
   posts: Post[]
-  userId: string
-}
-
-type Props = {
-  posts: getUserPostsResponse
 }
 
 const USER_ACHIEVEMENTS = {
@@ -43,10 +41,17 @@ const USER_ACHIEVEMENTS = {
   countPublications: '2 764',
 }
 
+type Props = {
+  currentPost: Post
+  posts: getUserPostsResponse
+}
+
 export const getServerSideProps = wrapper.getServerSideProps(
   store => async (context: GetServerSidePropsContext) => {
     const userId = context.query?.userId
+    const postId = context.query?.postId
     let posts
+    let currentPost
 
     if (userId) {
       const response = await store.dispatch(getUserPosts.initiate({ userId: userId as string }))
@@ -54,23 +59,34 @@ export const getServerSideProps = wrapper.getServerSideProps(
       posts = response?.data
     }
 
+    if (postId) {
+      const response = await store.dispatch(getUserPost.initiate({ postId: postId as string }))
+
+      currentPost = response?.data
+    }
+
+    if (!currentPost) {
+      return {
+        notFound: true,
+      }
+    }
+
     await Promise.all(store.dispatch(getRunningQueriesThunk()))
 
     return {
       props: {
+        currentPost,
         posts,
       },
     }
   }
 )
 
-const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
+const ProfilePost: NextPageWithLayout<Props> = ({ currentPost, posts }) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
-  const currentUserName = meData?.userName
+  const router = useRouter()
   const { userId } = useParams()
-
-  console.log('initial posts', posts)
 
   const t = useTranslation()
 
@@ -83,22 +99,28 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
     return <Spinner />
   }
 
+  if (!isLoadingProfile && !profileData) {
+    void router.replace(PATH.NOT_FOUND)
+  }
+
   return (
     <div className={s.profile}>
       <div className={s.header}>
         <div className={s.avatar}>
-          <Image
-            alt={'User Avatar'}
-            className={s.avatarImage}
-            height={204}
-            layout={'intrinsic'}
-            src={profileData?.originalAvatarUrl || '/default-avatar.jpg'}
-            width={204}
-          />
+          {profileData && (
+            <Image
+              alt={'User Avatar'}
+              className={s.avatarImage}
+              height={204}
+              layout={'intrinsic'}
+              src={profileData?.originalAvatarUrl || '/default-avatar.jpg'}
+              width={204}
+            />
+          )}
         </div>
         <div className={s.info}>
           <div className={s.profileUrl}>
-            <h1>{currentUserName}</h1>
+            <h1>{profileData?.userName}</h1>
           </div>
           <ProfileStats />
 
@@ -112,10 +134,9 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
           </Button>
         )}
       </div>
-      {posts.posts ? (
-        <PublicationsPhoto posts={posts.posts} userId={userId as string} />
-      ) : (
-        <div>There is no any data...</div>
+      {posts ? <PublicationsPhoto posts={posts.posts} /> : <div>There is no any data...</div>}
+      {currentPost && (
+        <PostDialog post={currentPost} profileData={profileData} userId={userId as string} />
       )}
     </div>
   )
@@ -123,39 +144,32 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
 
 const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
   const t = useTranslation()
-  const { data: meData } = useMeQuery()
-  const currentUserId = meData?.userId
-  const { error: profileError } = useGetProfileQuery({ id: currentUserId as string })
-  let noProfile = false
-
-  if (profileError && 'status' in profileError && profileError.status === 404) {
-    noProfile = true
-  }
 
   return (
     <div className={s.stats}>
       <p className={clsx(s.statsItem, s.statsFollowing)}>
         <a href={'#'}>
-          <div>{!noProfile ? USER_ACHIEVEMENTS.countFollowing : '0'}</div>
-          <span className={s.statsItemName}> {t.myProfile.following} </span>
+          <div>{USER_ACHIEVEMENTS.countFollowing}</div>
+          <span className={s.statsItemName}> {t.myProfile.following} </span>{' '}
         </a>
       </p>
 
       <p className={clsx(s.statsItem, s.statsFollowers)}>
         <a href={'#'}>
-          <div>{!noProfile ? USER_ACHIEVEMENTS.countFollowers : '0'}</div>
+          <div>{USER_ACHIEVEMENTS.countFollowers}</div>
           <span className={s.statsItemName}> {t.myProfile.followers} </span>
         </a>
       </p>
 
       <p className={clsx(s.statsItem, s.statsPublications)}>
-        <div>{!noProfile ? USER_ACHIEVEMENTS.countPublications : '0'} </div>
+        <div>{USER_ACHIEVEMENTS.countPublications} </div>
         <span className={s.statsItemName}> {t.myProfile.publications} </span>
       </p>
     </div>
   )
 }
-const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, userId }) => {
+
+const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts }) => {
   return (
     <div className={s.photoGrid}>
       {posts.map(post => {
@@ -164,11 +178,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, 
         })
 
         return (
-          <Link
-            className={s.photoItem}
-            href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
-            key={post.postId}
-          >
+          <div className={s.photoItem} key={post.postId}>
             <Image
               alt={`User photo ${post.postId}`}
               height={228}
@@ -176,13 +186,13 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, 
               src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
               width={234}
             />
-          </Link>
+          </div>
         )
       })}
     </div>
   )
 }
 
-Profile.getLayout = getCombinedLayout
+ProfilePost.getLayout = getCombinedLayout
 
-export default Profile
+export default ProfilePost

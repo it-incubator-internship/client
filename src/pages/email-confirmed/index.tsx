@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
+import { useTranslation } from '@/hooks/useTranslation'
 import { useRegistrationConfirmationMutation } from '@/services/auth/authApi'
 import { Button } from '@robur_/ui-kit'
 import Image from 'next/image'
@@ -12,6 +13,7 @@ import src from '../../../public/email-confirmed.png'
 
 export default function EmailConfirmed() {
   const router = useRouter()
+  const t = useTranslation()
   const code = router.query.code
   const [registrationConfirmation, { isLoading }] = useRegistrationConfirmationMutation()
 
@@ -36,7 +38,7 @@ export default function EmailConfirmed() {
     resData()
   }, [])
   const handleOnClick = () => {
-    router.replace('/sign-in')
+    void router.replace('/sign-in')
   }
 
   if (isLoading) {
@@ -49,9 +51,9 @@ export default function EmailConfirmed() {
     <div className={s.container}>
       <div className={s.outerWrapper}>
         <div className={s.innerWrapper}>
-          <h1 className={s.title}>Congratulations!</h1>
-          <p className={s.text}>Your email has been confirmed</p>
-          <Button onClick={handleOnClick}>Sign in</Button>
+          <h1 className={s.title}>{t.emailConfirmed.title}</h1>
+          <p className={s.text}>{t.emailConfirmed.text}</p>
+          <Button onClick={handleOnClick}>{t.emailConfirmed.buttonText}</Button>
         </div>
         <Image alt={'email sent'} className={s.image} src={src} />
       </div>

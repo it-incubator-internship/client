@@ -6,24 +6,45 @@ import { AvatarHeader } from '@/components/ProfilePageContent/avatar-profile/ava
 import { AvatarSelector } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-selector'
 import { ErrorMessage } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/error-message'
 import { useTranslation } from '@/hooks/useTranslation'
-import { useSendAvatarToServerMutation } from '@/services/profile/profile-api'
+import { useMeQuery } from '@/services/auth/authApi'
+import { useGetProfileQuery, useSendAvatarToServerMutation } from '@/services/profile/profile-api'
 import { base64ImgToFormData } from '@/utils/base64ImgToFormData'
+import { showErrorToast } from '@/utils/toastConfig'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Button } from '@robur_/ui-kit'
 
 import s from './avatar-dialog.module.scss'
 
 type AvatarDialogProps = {
+  avatarProgress: string
+  setAvatar: (avatar: any) => void
   setAvatarProgress: (picture: any) => void
 }
 
-export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
+export const AvatarDialog = ({
+  avatarProgress,
+  setAvatar,
+  setAvatarProgress,
+}: AvatarDialogProps) => {
+  const t = useTranslation()
+  const { data } = useMeQuery()
+  const currentUserId = data?.userId
+  const { error: profileError } = useGetProfileQuery({ id: currentUserId as string })
+
   const [shouldClick, setShouldClick] = useState(false)
 
   const { dispatch, state, validateFile } = useAvatarDialog()
   const { isError, isFileLoad, isPreview } = state
 
-  const [sendAvatarToServer] = useSendAvatarToServerMutation()
+  const [sendAvatarToServer, { isError: sendAvatarError }] = useSendAvatarToServerMutation()
+
+  useEffect(() => {
+    if (sendAvatarError) {
+      setAvatarProgress('none')
+      resetAvatar()
+      showErrorToast(t.myProfileAvatar.saveAvatarServerError)
+    }
+  }, [sendAvatarError])
 
   const resetAvatar = () => {
     dispatch({ type: 'RESET' })
@@ -31,6 +52,7 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
 
   const handleSaveAndClose = async () => {
     if (isPreview) {
+      setAvatar(isPreview)
       setAvatarProgress('loading')
       const convertedAvatarImg = base64ImgToFormData(isPreview)
 
@@ -72,13 +94,26 @@ export const AvatarDialog = ({ setAvatarProgress }: AvatarDialogProps) => {
       setShouldClick(false)
     }
   }, [shouldClick])
-  const t = useTranslation()
+
+  const setOpenModalButtonText = (profileError: any) => {
+    if (!profileError) {
+      return t.myProfileSettings.addProfilePhoto
+    } else {
+      return t.myProfileSettings.addProfilePhotoBlocked
+    }
+  }
 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <Button fullWidth type={'button'} variant={'outlined'}>
-          {t.myProfileSettings.addProfilePhoto}
+        <Button
+          className={s.openModalButton}
+          disabled={!!profileError || avatarProgress === 'loading'}
+          fullWidth
+          type={'button'}
+          variant={'outlined'}
+        >
+          {setOpenModalButtonText(profileError)}
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>

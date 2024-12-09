@@ -4,6 +4,7 @@ import { CreatePostDialog } from '@/components/posts/create/ui/create-post-dialo
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLogoutMutation, useMeQuery } from '@/services/auth/authApi'
+import { useGetProfileQuery } from '@/services/profile/profile-api'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -25,10 +26,18 @@ type Props = {
 }
 export const Navbar = ({ className }: Props) => {
   const t = useTranslation()
-  const { data } = useMeQuery()
+  const { data: meData } = useMeQuery()
+  const currentUserId = meData?.userId
+  const currentUserName = meData?.userName
+  let noProfile = false
 
   const [logout] = useLogoutMutation()
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const { error: profileError } = useGetProfileQuery({ id: currentUserId as string })
+
+  if (profileError && 'status' in profileError && profileError.status === 404) {
+    noProfile = true
+  }
 
   function handleModalOpened() {
     setModalIsOpen(true)
@@ -49,24 +58,24 @@ export const Navbar = ({ className }: Props) => {
           <span>{t.nav.home}</span>
         </SidebarItem>
         <CreatePostDialog>
-          <SidebarItem Icon={PlusSquareOutline} as={'div'} href={''}>
+          <SidebarItem Icon={PlusSquareOutline} as={'div'} disabled={noProfile} href={''}>
             <button type={'button'}>{t.nav.create}</button>
           </SidebarItem>
         </CreatePostDialog>
-        <SidebarItem Icon={Person} href={`${PATH.PROFILE}/${data?.userId}`}>
+        <SidebarItem Icon={Person} href={`${PATH.PROFILE}/${currentUserId}`}>
           <span>{t.nav.myProfile}</span>
         </SidebarItem>
-        <SidebarItem Icon={MessageCircleOutline} href={PATH.MESSAGES}>
+        <SidebarItem Icon={MessageCircleOutline} disabled={noProfile} href={PATH.MESSAGES}>
           <span>{t.nav.messenger}</span>
         </SidebarItem>
-        <SidebarItem Icon={Search} href={PATH.SEARCH}>
+        <SidebarItem Icon={Search} disabled={noProfile} href={PATH.SEARCH}>
           <span>{t.nav.search}</span>
         </SidebarItem>
         <div style={{ marginTop: '60px' }}>
-          <SidebarItem Icon={TrendingUpOutline} href={PATH.STATISTICS}>
+          <SidebarItem Icon={TrendingUpOutline} disabled={noProfile} href={PATH.STATISTICS}>
             <span>{t.nav.statistics}</span>
           </SidebarItem>
-          <SidebarItem Icon={BookmarkOutline} href={PATH.BOOKMARKS}>
+          <SidebarItem Icon={BookmarkOutline} disabled={noProfile} href={PATH.BOOKMARKS}>
             <span>{t.nav.favorites}</span>
           </SidebarItem>
         </div>
@@ -91,7 +100,7 @@ export const Navbar = ({ className }: Props) => {
         title={t.nav.logout}
         withConfirmation
       >
-        <p>{`${t.nav.areYouWantToLogOut} ${data?.userName}?`}</p>
+        <p>{`${t.nav.areYouWantToLogOut} ${currentUserName}?`}</p>
       </Modal>
     </nav>
   )

@@ -1,15 +1,12 @@
+import { commonVariables } from '@/consts/common-variables'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export type ImageType = {
+  filter?: string
   id: number
   img: string
+  type: string
 }
-
-export const FILE_VALIDATION_CONFIG = {
-  allowedFileTypes: ['image/png', 'image/jpeg'],
-  maxFileSize: 10 * 1024 * 1024,
-}
-// 'image/webp'
 
 export type CreatePostState = {
   croppedImages: ImageType[]
@@ -17,6 +14,8 @@ export type CreatePostState = {
   images: ImageType[]
   page: number
   photoUploadError: string
+  postDescription: string
+  postDescriptionError: string
 }
 
 const initialState: CreatePostState = {
@@ -25,6 +24,8 @@ const initialState: CreatePostState = {
   images: [] as ImageType[],
   page: 0,
   photoUploadError: '',
+  postDescription: '',
+  postDescriptionError: '',
 }
 
 export const createPostSlice = createSlice({
@@ -47,15 +48,17 @@ export const createPostSlice = createSlice({
 
       if (index !== -1) {
         state.croppedImages[index].img = img
+        state.croppedImages[index].type = state.images[index].type
       }
     },
     setDraftData: (state, action: PayloadAction<CreatePostState>) => {
       return action.payload
     },
-    setImage: (state, action: PayloadAction<{ img: string }>) => {
+    setImage: (state, action: PayloadAction<{ img: string; type: string }>) => {
       const newImage: ImageType = {
         id: state.images.length,
         img: action.payload.img,
+        type: action.payload.type,
       }
 
       state.images.push(newImage)
@@ -72,6 +75,17 @@ export const createPostSlice = createSlice({
     setPhotoUploadError: (state, action: PayloadAction<{ uploadError: string }>) => {
       state.photoUploadError = action.payload.uploadError
     },
+    setPostDescription: (
+      state,
+      action: PayloadAction<{ description: string; errorText: string }>
+    ) => {
+      if (action.payload.description.length > commonVariables.POST_DESCRIPTION_LIMIT) {
+        state.postDescriptionError = action.payload.errorText
+      } else {
+        state.postDescriptionError = ''
+      }
+      state.postDescription = action.payload.description
+    },
   },
 })
 
@@ -87,4 +101,5 @@ export const {
   setImageFilter,
   setPage,
   setPhotoUploadError,
+  setPostDescription,
 } = createPostSlice.actions

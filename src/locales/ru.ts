@@ -1,4 +1,4 @@
-import { pluralizeEn, pluralizeRu } from '@/utils/createPluralize'
+import { pluralizeRu } from '@/utils/createPluralize'
 
 export const ru = {
   and: 'и',
@@ -13,9 +13,7 @@ export const ru = {
     password: 'Пароль',
     passwordConfirmation: 'Подтверждение пароля',
     policy: 'Политикой',
-    sentConfirmationLink(responseEmail: string) {
-      return `Мы отправили ссылку для подтверждения почты на адрес: ${responseEmail}`
-    },
+    sentConfirmationLink: 'Мы отправили ссылку для подтверждения почты на адрес:',
     signIn: 'Войти',
     signUp: 'Зарегистрироваться',
     terms: 'Правилами',
@@ -54,6 +52,7 @@ export const ru = {
   createPost: {
     addPhotoDescription: 'Нажмите сюда, чтобы добавить новое фото',
     addPhotoTitle: 'Добавить фото',
+    addPublicationTitle: 'Добавить описание поста',
     cropDescription: 'Нажмите сюда, чтобы обрезать новое фото',
     cropTitle: 'Обрезать фото',
     cropping: {
@@ -67,6 +66,9 @@ export const ru = {
     filterDescription: 'Нажмите сюда, чтобы добавить фильтры для фото',
     filterTitle: 'Добавить фильтр',
     openDraft: 'Открыть черновик',
+    postCreated: 'Пост был удачно создан. Он скоро отобразиться в вашем профиле',
+    postDescriptionError: 'Текст описания поста должен быть не более 500 символов',
+    postNotCreated: 'Что-то пошло не так. Пост не был создан',
     publishDescription: 'Нажмите сюда, чтобы опубликовать новое фото',
     publishTitle: 'Опубликовать',
     selectFromComputer: 'Выбрать на этом компьютере',
@@ -83,6 +85,11 @@ export const ru = {
     currentDevice: 'Текущее устройство',
     logOut: 'Выйти',
     terminateOtherSessions: 'Закрыть все сессии кроме текущей',
+  },
+  emailConfirmed: {
+    buttonText: 'Войти',
+    text: 'Ваш email успешно подтвержден',
+    title: 'Поздравляем!',
   },
   english: 'Английский',
   errors: {
@@ -142,24 +149,42 @@ export const ru = {
       'Пароль может содержать символы: a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
     required: 'Поле обязательно',
     termsAgreement: 'Пожалуйста, поставьте галочку, что Вы согласны с нашими правилами',
-    userName: 'Имя пользователя должно содержать только буквы A-Z, a-z, А-Я, а-я, 0-9.',
+    userName: 'Имя пользователя должно содержать только буквы A-Z, a-z, 0-9.',
   },
   meta: {
     defaultDescriptionText:
       'Социальная сеть The Inctagram это безлимитная коммуникация людей по всему миру',
+    readOnlyNotification:
+      'Режим просмотра. Для перехода к полной функциональности заполните и сохраните обязательные поля в настройках профиля.',
   },
   myProfile: {
+    addComment: 'Добавить комментарий...',
+    answer: 'Ответить',
     followers: 'Подписчики',
     following: 'Подписки',
     initialUrlProfile: 'Url пользователя',
+    like: 'Нравится',
+    postModalTitle: 'Просмотр поста',
     profileSettings: 'Настройки профиля',
     publications: 'Публикации',
+    publish: 'Опубликовать',
+    time: 'Часов назад',
+  },
+  myProfileAvatar: {
+    deleteDialog: {
+      buttonRejectionTitle: 'Нет',
+      buttonTitle: 'Да',
+      text: 'Вы действительно хотите удалить фото профиля?',
+    },
+    saveAvatarServerError:
+      'Не удалось загрузить аватарку. Если проблема повторяется, пожалуйста, свяжитесь с нашей службой поддержки',
   },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'Пользователь младше 13 лет не может создать профиль.',
     aboutMe: 'Обо мне',
     accountManagement: 'Управление учетными записями',
     addProfilePhoto: 'Добавьте фото профиля',
+    addProfilePhotoBlocked: 'Добавление фото профиля недоступно в режиме просмотра',
     clickHereAddProfilePhoto: 'Нажмите здесь, чтобы добавить фотографию профиля',
     dateOfBirth: 'Дата рождения',
     devices: 'Устройства',
@@ -205,6 +230,18 @@ export const ru = {
     signUp: 'Зарегистрироваться',
     termsOfServices: 'Правилами использования',
     userName: 'Имя пользователя',
+  },
+  verificationLinkExpired: {
+    button: 'Получить заново',
+    modal: {
+      buttonTitle: 'Хорошо',
+      subtitle: 'Инструкции успешно отправлены на ваш адрес ',
+      throttleSubtitleEnd: ' секунд перед следующей попыткой.',
+      throttleSubtitleStart: 'Пожалуйста, подождите ',
+      title: 'Письмо отправлено',
+    },
+    subtitle: 'Кажется, прошло слишком много времени и срок действия ссылки истек',
+    title: 'Срок действия ссылки истек',
   },
 }
 

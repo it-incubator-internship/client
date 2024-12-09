@@ -26,8 +26,7 @@ type Props = {
 }
 
 export const CreatePostDialog = ({ children }: Props) => {
-  const t = useTranslation()
-  const { getModalArgs, handleClickOverlay, isDialogOpen, isModalDraftSavedOpen } =
+  const { closeAllModals, getModalArgs, handleClickOverlay, isDialogOpen, isModalDraftSavedOpen } =
     useSaveDraftCreatePost()
   const currentPage = useAppSelector(state => state.createPost.page)
   const { checkSpecificDraftExists } = useSaveDraftCreatePost()
@@ -46,7 +45,10 @@ export const CreatePostDialog = ({ children }: Props) => {
     { content: <CreatePostAddPhoto />, header: <CreatePostDialogAddPhotoHeader /> },
     { content: <CreatePostCrop />, header: <CreatePostDialogCropHeader /> },
     { content: <CreatePostFilter />, header: <CreatePostDialogFilterHeader /> },
-    { content: <CreatePostPublish />, header: <CreatePostDialogPublishHeader /> },
+    {
+      content: <CreatePostPublish />,
+      header: <CreatePostDialogPublishHeader closeHandler={closeAllModals} />,
+    },
   ]
 
   return (

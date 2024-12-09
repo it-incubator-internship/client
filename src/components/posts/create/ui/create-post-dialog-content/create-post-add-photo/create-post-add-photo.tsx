@@ -2,12 +2,12 @@ import { ChangeEvent, useEffect, useState } from 'react'
 
 import { ErrorMessage } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/error-message'
 import {
-  FILE_VALIDATION_CONFIG,
   nextPage,
   setImage,
   setPhotoUploadError,
 } from '@/components/posts/create/model/create-post-slice'
 import { FileUploader } from '@/components/posts/create/ui/fileUploader'
+import { FILE_VALIDATION_CONFIG } from '@/consts/common-variables'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppDispatch, useAppSelector } from '@/services/store'
 import { Button, ImageOutline } from '@robur_/ui-kit'
@@ -61,7 +61,7 @@ export const CreatePostAddPhoto = () => {
         const fileURL = await URL.createObjectURL(file)
 
         if (fileURL) {
-          dispatch(setImage({ img: fileURL }))
+          dispatch(setImage({ img: fileURL, type: file.type }))
           dispatch(nextPage())
         }
       }

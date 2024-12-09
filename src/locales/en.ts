@@ -14,9 +14,7 @@ export const en: LocaleType = {
     password: 'Password',
     passwordConfirmation: 'Password confirmation',
     policy: 'Privacy Policy',
-    sentConfirmationLink(responseEmail: string) {
-      return `We have sent a link to confirm your email to ${responseEmail}`
-    },
+    sentConfirmationLink: 'We have sent a link to confirm your email to:',
     signIn: 'Sign in',
     signUp: 'Sign Up',
     terms: 'Terms of Service',
@@ -48,26 +46,28 @@ export const en: LocaleType = {
         throttleSubtitleStart: 'Please wait ',
         title: 'Email sent',
       },
-      subtitle:
-        'Looks like the verification link has expired. Not to worry, we can send the link again',
+      subtitle: 'Looks like the verification link has expired. Not to worry, we can send the link again',
       title: 'Resend link',
     },
   },
   createPost: {
     addPhotoDescription: 'Click here and add new Photo',
     addPhotoTitle: 'Add Photo',
+    addPublicationTitle: 'Add post description',
     cropDescription: 'Click here and crop new Photo',
     cropTitle: 'Cropping',
     cropping: {
       original: 'Original',
     },
-    errorFileSize:
-      'The selected file exceeds the maximum allowed size of 10MB. Please choose a smaller file.',
+    errorFileSize: 'The selected file exceeds the maximum allowed size of 10MB. Please choose a smaller file.',
     errorFileType: 'The selected file type is not supported. Please upload a PNG or JPEG image.',
     errorMaxPhotos: 'You can upload a maximum of 5 photos.',
     filterDescription: 'Click here and filter new Photo',
     filterTitle: 'Filters',
     openDraft: 'Open draft',
+    postCreated: 'Post has been created successfully. It will appear in your profile soon',
+    postDescriptionError: 'Post description must be 500 symbols length or less',
+    postNotCreated: 'Something went wrong, new post has not been created',
     publishDescription: 'Click here and publish new Photo',
     publishTitle: 'Publication',
     selectFromComputer: 'Select from computer',
@@ -83,6 +83,11 @@ export const en: LocaleType = {
     currentDevice: 'Current device',
     logOut: 'Log out',
     terminateOtherSessions: 'Terminate all other session',
+  },
+  emailConfirmed: {
+    buttonText: 'Sign In',
+    text: 'Your email has been confirmed',
+    title: 'Congratulations!',
   },
   english: 'English',
   errors: {
@@ -111,8 +116,7 @@ export const en: LocaleType = {
     },
     recaptchaLabel: 'I’m not a robot',
     subtitleInitial: 'Enter your email address and we will send you further instructions',
-    subtitleSuccess:
-      'The link has been sent by email. If you don’t receive an email send link again',
+    subtitleSuccess: 'The link has been sent by email. If you don’t receive an email send link again',
     title: 'Forgot password',
   },
   formErrors: {
@@ -142,24 +146,40 @@ export const en: LocaleType = {
       'Password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
     required: 'This field is required',
     termsAgreement: 'Please, mark the checkbox, if you agree to our terms',
-    userName: 'User name must contain only letters A-Z, a-z, А-Я, а-я, 0-9',
+    userName: 'User name must contain only letters A-Z, a-z, 0-9',
   },
   meta: {
-    defaultDescriptionText:
-      'The Inctagram social network is a limitless communication of people all over the world',
+    defaultDescriptionText: 'The Inctagram social network is a limitless communication of people all over the world',
+    readOnlyNotification:
+      'View mode. To access full functionality, please fill out and save the required fields in your profile settings.',
   },
   myProfile: {
+    addComment: 'Add a Comment...',
+    answer: 'Answer',
     followers: 'Followers',
     following: 'Following',
     initialUrlProfile: 'UrlProfile',
+    like: 'Like',
+    postModalTitle: 'Post view',
     profileSettings: 'Profile settings',
     publications: 'Publications',
+    publish: 'Publish',
+    time: 'Hours ago',
+  },
+  myProfileAvatar: {
+    deleteDialog: {
+      buttonRejectionTitle: 'No',
+      buttonTitle: 'Yes',
+      text: 'Do you really want to delete your profile photo?',
+    },
+    saveAvatarServerError: 'Unable to upload the avatar. If the issue persists, please contact our support team.',
   },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',
     aboutMe: 'About me',
     accountManagement: 'Account management',
     addProfilePhoto: 'Add a profile photo',
+    addProfilePhotoBlocked: 'Add a profile photo is not available in view mode.',
     clickHereAddProfilePhoto: 'Click here add profile photo',
     dateOfBirth: 'Date of birth',
     devices: 'Devices',
@@ -205,5 +225,17 @@ export const en: LocaleType = {
     signUp: 'Sign Up',
     termsOfServices: 'Terms of Service',
     userName: 'Username',
+  },
+  verificationLinkExpired: {
+    button: 'Resend verification link',
+    modal: {
+      buttonTitle: 'OK',
+      subtitle: 'We have sent a link to confirm your email to ',
+      throttleSubtitleEnd: ' seconds before trying to send the link again.',
+      throttleSubtitleStart: 'Please wait ',
+      title: 'Email sent',
+    },
+    subtitle: 'Looks like the verification link has expired. Not to worry, we can send the link again',
+    title: 'Email verification link expired',
   },
 }
