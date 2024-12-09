@@ -1,11 +1,15 @@
-import { ReactElement, ReactNode } from 'react'
+import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import Spinner from '@/components/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { getRunningQueriesThunk, getUserPosts } from '@/services/posts/posts-api'
+import {
+  getRunningQueriesThunk,
+  getUserPosts,
+  useLazyGetUserPostsQuery,
+} from '@/services/posts/posts-api'
 import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
@@ -29,6 +33,7 @@ type ProfileStatsProps = {
 }
 
 type PublicationsPhotoProps = {
+  lastCursor?: string
   posts: Post[]
   userId: string
 }
@@ -70,8 +75,9 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
   const currentUserName = meData?.userName
   const { userId } = useParams()
 
-  console.log('initial posts', posts)
+  // console.log('initial posts', posts)
 
+  const { lastCursor } = posts
   const t = useTranslation()
 
   const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(
@@ -113,7 +119,7 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
         )}
       </div>
       {posts.posts ? (
-        <PublicationsPhoto posts={posts.posts} userId={userId as string} />
+        <PublicationsPhoto lastCursor={lastCursor} posts={posts.posts} userId={userId as string} />
       ) : (
         <div>There is no any data...</div>
       )}
@@ -155,9 +161,92 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
     </div>
   )
 }
-const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, userId }) => {
+
+const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
+  lastCursor,
+  posts: initialPosts,
+  userId,
+}) => {
+  const scrollAreaRef = useRef<HTMLDivElement>(null)
+
+  const [getUserPosts] = useLazyGetUserPostsQuery()
+  const [currentCursor, setCurrentCursor] = useState<null | string>('')
+
+  const [lastAddedPosts, setLastAddedPosts] = useState<Post[]>(initialPosts)
+
+  const [posts, setPosts] = useState<Post[]>(initialPosts || [])
+
+  useEffect(() => {
+    const element = scrollAreaRef.current
+
+    const image = element?.querySelector('[class*="profile_photoItem"]')
+
+    const handleWheel = async (event: WheelEvent) => {
+      event.preventDefault()
+
+      const { deltaY } = event
+
+      const height = image?.getBoundingClientRect().height
+      const verticalGap = 12
+      const scrollHeight = (height as number) + verticalGap
+
+      // console.log(' scrollHeight: ', scrollHeight)
+      if (deltaY > 0) {
+        // console.log('deltaY down: ', deltaY)
+
+        try {
+          let res
+
+          if (lastAddedPosts.length !== 0) {
+            res = await getUserPosts({
+              lastCursor: currentCursor ? currentCursor : (lastCursor as string),
+              userId: userId as string,
+            })
+          }
+
+          const { lastCursor: newLastCursor, posts: addedPosts } = res?.data as getUserPostsResponse
+
+          if (newLastCursor) {
+            setLastAddedPosts(addedPosts)
+
+            setPosts(prevPosts => {
+              const existingPostIds = new Set(prevPosts.map(post => post.postId))
+              const uniquePosts = addedPosts.filter(post => !existingPostIds.has(post.postId))
+
+              return [...prevPosts, ...uniquePosts]
+            })
+
+            setCurrentCursor(newLastCursor)
+          } else {
+            setLastAddedPosts([])
+          }
+        } catch (error) {
+          console.error('Error fetching posts: ', error)
+        }
+        setTimeout(() => {
+          element?.scrollBy(0, scrollHeight)
+        }, 40)
+      } else {
+        // console.log('deltaY up: ', deltaY)
+        setTimeout(() => {
+          element?.scrollBy(0, -scrollHeight)
+        }, 40)
+      }
+    }
+
+    if (element) {
+      element.addEventListener('wheel', handleWheel)
+    }
+
+    return () => {
+      if (element) {
+        element.removeEventListener('wheel', handleWheel)
+      }
+    }
+  }, [currentCursor, lastAddedPosts])
+
   return (
-    <div className={s.photoGrid}>
+    <div className={s.photoGrid} ref={scrollAreaRef}>
       {posts.map(post => {
         const imagePreview = post.images.find(item => {
           return item.originalImageUrl
