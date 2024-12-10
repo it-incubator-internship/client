@@ -1,12 +1,11 @@
 import { useForm } from 'react-hook-form'
 
 import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
-import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { signInSchema } from '@/schemas/signInSchema'
-import { useLazyMeQuery, useLoginMutation, useMeQuery } from '@/services/auth/authApi'
+import { useLazyMeQuery, useLoginMutation } from '@/services/auth/authApi'
 import { LoginArgs } from '@/services/auth/authTypes'
 import { customErrorHandler } from '@/utils/customErrorHandler'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -25,7 +24,6 @@ type ZodKeys = keyof FormValues
 
 function SignIn() {
   const [login, { isLoading }] = useLoginMutation()
-  const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const [getMe] = useLazyMeQuery()
   const router = useRouter()
 
@@ -56,21 +54,13 @@ function SignIn() {
       if (!userId) {
         return
       } else {
-        void router.replace(`/profile-settings/${userId}`)
+        void router.replace(`${PATH.PROFILE}/${userId}`)
 
         return
       }
     } catch (error: unknown) {
       customErrorHandler<ZodKeys>({ error, setError, specificField: 'email', translations: t })
     }
-  }
-
-  if (startIsLoading) {
-    return <Spinner />
-  } else if (meData) {
-    void router.replace(`/`)
-
-    return
   }
 
   return (
