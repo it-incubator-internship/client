@@ -224,11 +224,9 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
     const diffToGetFromServer = amountOfPictureRowsToAddInEmptySpace - _ROWSGOTFROMSERVER
 
     if (diffToGetFromServer > 0) {
-
     }
 
     const handleWheel = async (event: WheelEvent) => {
-      // event.preventDefault()
 
       const { deltaY } = event
 
@@ -262,22 +260,13 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
         } catch (error) {
           console.error('Error fetching posts: ', error)
         }
-        // setTimeout(() => {
-        //   element?.scrollBy(0, scrollHeight)
-        // }, 40)
-      } else {
-        // setTimeout(() => {
-        //   element?.scrollBy(0, -scrollHeight)
-        // }, 40)
       }
     }
 
     window.addEventListener('wheel', handleWheel)
-    // window.addEventListener('scroll', handleScroll)
 
     return () => {
       window.removeEventListener('wheel', handleWheel)
-      // window.removeEventListener('scroll', handleScroll)
     }
   }, [currentCursor, lastAddedPosts])
 
