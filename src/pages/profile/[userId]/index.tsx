@@ -72,10 +72,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
   const currentUserId = meData?.userId
-  const currentUserName = meData?.userName
   const { userId } = useParams()
-
-  // console.log('initial posts', posts)
 
   const { lastCursor } = posts
   const t = useTranslation()
@@ -103,9 +100,13 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
           />
         </div>
         <div className={s.info}>
-          <div className={s.profileUrl}>
-            <h1>{currentUserName}</h1>
-          </div>
+          {profileData?.firstName && (
+            <div className={s.profileUrl}>
+              <h1>
+                {profileData.firstName} {profileData.lastName}
+              </h1>
+            </div>
+          )}
           <ProfileStats />
 
           <div className={s.description}>
@@ -121,7 +122,7 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
       {posts.posts ? (
         <PublicationsPhoto lastCursor={lastCursor} posts={posts.posts} userId={userId as string} />
       ) : (
-        <div>There is no any data...</div>
+        <div>{t.other.noData}</div>
       )}
     </div>
   )
