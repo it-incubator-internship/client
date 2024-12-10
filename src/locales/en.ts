@@ -1,5 +1,5 @@
 import { LocaleType } from '@/locales/ru'
-import { pluralizeEn } from '@/utils/createPluralize'
+import { pluralizeEn, pluralizeRu } from '@/utils/createPluralize'
 
 export const en: LocaleType = {
   and: 'and',
@@ -14,9 +14,7 @@ export const en: LocaleType = {
     password: 'Password',
     passwordConfirmation: 'Password confirmation',
     policy: 'Privacy Policy',
-    sentConfirmationLink(responseEmail: string) {
-      return `We have sent a link to confirm your email to ${responseEmail}`
-    },
+    sentConfirmationLink: 'We have sent a link to confirm your email to:',
     signIn: 'Sign in',
     signUp: 'Sign Up',
     terms: 'Terms of Service',
@@ -84,11 +82,56 @@ export const en: LocaleType = {
     titleModalSavedDraft:
       'Do you really want to close the creation of a publication? If you close everything will be deleted.',
   },
+  dateTexts: {
+    daysAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} day ago`
+        case 'few':
+          return `${count} days ago`
+        case 'many':
+          return `${count} days ago`
+      }
+    },
+    hoursAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} hour ago`
+        case 'few':
+          return `${count} hours ago`
+        case 'many':
+          return `${count} hours ago`
+      }
+    },
+    minAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      console.log('str', str)
+
+      switch (str) {
+        case 'one':
+          return `${count} min ago`
+        case 'few':
+          return `${count} min ago`
+        case 'many':
+          return `${count} min ago`
+      }
+    },
+  },
   devices: {
     activeSessions: 'Active sessions',
     currentDevice: 'Current device',
     logOut: 'Log out',
     terminateOtherSessions: 'Terminate all other session',
+  },
+  emailConfirmed: {
+    buttonText: 'Sign In',
+    text: 'Your email has been confirmed',
+    title: 'Congratulations!',
   },
   english: 'English',
   errors: {
@@ -148,11 +191,13 @@ export const en: LocaleType = {
       'Password can contain a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
     required: 'This field is required',
     termsAgreement: 'Please, mark the checkbox, if you agree to our terms',
-    userName: 'User name must contain only letters A-Z, a-z, А-Я, а-я, 0-9',
+    userName: 'User name must contain only letters A-Z, a-z, 0-9',
   },
   meta: {
     defaultDescriptionText:
       'The Inctagram social network is a limitless communication of people all over the world',
+    readOnlyNotification:
+      'View mode. To access full functionality, please fill out and save the required fields in your profile settings.',
   },
   myProfile: {
     addComment: 'Add a Comment...',
@@ -167,11 +212,21 @@ export const en: LocaleType = {
     publish: 'Publish',
     time: 'Hours ago',
   },
+  myProfileAvatar: {
+    deleteDialog: {
+      buttonRejectionTitle: 'No',
+      buttonTitle: 'Yes',
+      text: 'Do you really want to delete your profile photo?',
+    },
+    saveAvatarServerError:
+      'Unable to upload the avatar. If the issue persists, please contact our support team.',
+  },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',
     aboutMe: 'About me',
     accountManagement: 'Account management',
     addProfilePhoto: 'Add a profile photo',
+    addProfilePhotoBlocked: 'Add a profile photo is not available in view mode.',
     clickHereAddProfilePhoto: 'Click here add profile photo',
     dateOfBirth: 'Date of birth',
     devices: 'Devices',
@@ -187,7 +242,7 @@ export const en: LocaleType = {
     saveChanges: 'Save changes',
     selectFromComputer: 'Select from computer',
     selectYourCity: 'Select your city',
-    selectYourCountry: 'Select your city',
+    selectYourCountry: 'Select your country',
     userName: 'User name',
     yourSettingsAreSaved: 'Your settings are saved!',
   },
@@ -211,6 +266,11 @@ export const en: LocaleType = {
     sureWantDeletePost: 'Are you sure you want to delete this post?',
     yes: 'Yes',
   },
+  other: {
+    noData: 'There is no any data...',
+    showLess: 'Hide',
+    showMore: 'Show more',
+  },
   russian: 'Russian',
   signUp: {
     and: 'and',
@@ -224,5 +284,18 @@ export const en: LocaleType = {
     signUp: 'Sign Up',
     termsOfServices: 'Terms of Service',
     userName: 'Username',
+  },
+  verificationLinkExpired: {
+    button: 'Resend verification link',
+    modal: {
+      buttonTitle: 'OK',
+      subtitle: 'We have sent a link to confirm your email to ',
+      throttleSubtitleEnd: ' seconds before trying to send the link again.',
+      throttleSubtitleStart: 'Please wait ',
+      title: 'Email sent',
+    },
+    subtitle:
+      'Looks like the verification link has expired. Not to worry, we can send the link again',
+    title: 'Email verification link expired',
   },
 }

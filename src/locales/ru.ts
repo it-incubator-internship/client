@@ -1,4 +1,4 @@
-import { pluralizeEn, pluralizeRu } from '@/utils/createPluralize'
+import { pluralizeRu } from '@/utils/createPluralize'
 
 export const ru = {
   and: 'и',
@@ -13,9 +13,7 @@ export const ru = {
     password: 'Пароль',
     passwordConfirmation: 'Подтверждение пароля',
     policy: 'Политикой',
-    sentConfirmationLink(responseEmail: string) {
-      return `Мы отправили ссылку для подтверждения почты на адрес: ${responseEmail}`
-    },
+    sentConfirmationLink: 'Мы отправили ссылку для подтверждения почты на адрес:',
     signIn: 'Войти',
     signUp: 'Зарегистрироваться',
     terms: 'Правилами',
@@ -84,11 +82,54 @@ export const ru = {
     titleModalSavedDraft:
       'Вы действительно хотите закрыть создание публикации? Если вы закроете, все будет удалено.',
   },
+  dateTexts: {
+    daysAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} день назад`
+        case 'few':
+          return `${count} дня назад`
+        case 'many':
+          return `${count} дней назад`
+      }
+    },
+    hoursAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} час назад`
+        case 'few':
+          return `${count} часа назад`
+        case 'many':
+          return `${count} часов назад`
+      }
+    },
+    minAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} минуту назад`
+        case 'few':
+          return `${count} минуты назад`
+        case 'many':
+          return `${count} минут назад`
+      }
+    },
+  },
   devices: {
     activeSessions: 'Активные сессии',
     currentDevice: 'Текущее устройство',
     logOut: 'Выйти',
     terminateOtherSessions: 'Закрыть все сессии кроме текущей',
+  },
+  emailConfirmed: {
+    buttonText: 'Войти',
+    text: 'Ваш email успешно подтвержден',
+    title: 'Поздравляем!',
   },
   english: 'Английский',
   errors: {
@@ -148,11 +189,13 @@ export const ru = {
       'Пароль может содержать символы: a-z, A-Z, 0-9, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [  ] ^ _ ` { | } ~',
     required: 'Поле обязательно',
     termsAgreement: 'Пожалуйста, поставьте галочку, что Вы согласны с нашими правилами',
-    userName: 'Имя пользователя должно содержать только буквы A-Z, a-z, А-Я, а-я, 0-9.',
+    userName: 'Имя пользователя должно содержать только буквы A-Z, a-z, 0-9.',
   },
   meta: {
     defaultDescriptionText:
       'Социальная сеть The Inctagram это безлимитная коммуникация людей по всему миру',
+    readOnlyNotification:
+      'Режим просмотра. Для перехода к полной функциональности заполните и сохраните обязательные поля в настройках профиля.',
   },
   myProfile: {
     addComment: 'Добавить комментарий...',
@@ -167,11 +210,21 @@ export const ru = {
     publish: 'Опубликовать',
     time: 'Часов назад',
   },
+  myProfileAvatar: {
+    deleteDialog: {
+      buttonRejectionTitle: 'Нет',
+      buttonTitle: 'Да',
+      text: 'Вы действительно хотите удалить фото профиля?',
+    },
+    saveAvatarServerError:
+      'Не удалось загрузить аватарку. Если проблема повторяется, пожалуйста, свяжитесь с нашей службой поддержки',
+  },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'Пользователь младше 13 лет не может создать профиль.',
     aboutMe: 'Обо мне',
     accountManagement: 'Управление учетными записями',
     addProfilePhoto: 'Добавьте фото профиля',
+    addProfilePhotoBlocked: 'Добавление фото профиля недоступно в режиме просмотра',
     clickHereAddProfilePhoto: 'Нажмите здесь, чтобы добавить фотографию профиля',
     dateOfBirth: 'Дата рождения',
     devices: 'Устройства',
@@ -211,6 +264,11 @@ export const ru = {
     sureWantDeletePost: 'Вы уверены, что хотите удалить этот пост?',
     yes: 'Да',
   },
+  other: {
+    noData: 'Нет данных...',
+    showLess: 'спрятать',
+    showMore: 'показать больше',
+  },
   russian: 'Русский',
   signUp: {
     and: 'и',
@@ -224,6 +282,18 @@ export const ru = {
     signUp: 'Зарегистрироваться',
     termsOfServices: 'Правилами использования',
     userName: 'Имя пользователя',
+  },
+  verificationLinkExpired: {
+    button: 'Получить заново',
+    modal: {
+      buttonTitle: 'Хорошо',
+      subtitle: 'Инструкции успешно отправлены на ваш адрес ',
+      throttleSubtitleEnd: ' секунд перед следующей попыткой.',
+      throttleSubtitleStart: 'Пожалуйста, подождите ',
+      title: 'Письмо отправлено',
+    },
+    subtitle: 'Кажется, прошло слишком много времени и срок действия ссылки истек',
+    title: 'Срок действия ссылки истек',
   },
 }
 

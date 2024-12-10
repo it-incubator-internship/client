@@ -89,6 +89,9 @@
 }
 
 .comments {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
   padding: 24px 24px 8px;
 }
 
@@ -153,6 +156,11 @@
 .input {
   background-color: transparent;
   border: none;
+}
+
+.title {
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-m);
 }
 
 @keyframes overlay-show {

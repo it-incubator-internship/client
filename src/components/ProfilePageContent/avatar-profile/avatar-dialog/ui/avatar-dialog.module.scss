@@ -51,6 +51,14 @@
   margin: 0 auto;
 }
 
+.openModalButton {
+  text-align: center;
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
 
 @keyframes overlay-show {
   from {

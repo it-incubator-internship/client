@@ -1,5 +1,11 @@
 import { inctagramApi } from '../inctagramApi'
-import { Post, createPostArgs, getUserPostsResponse, uploadPhotosARgs } from './posts-types'
+import {
+  Post,
+  createPostArgs,
+  getPostsResponse,
+  getUserPostsResponse,
+  uploadPhotosARgs,
+} from './posts-types'
 
 export const postsApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
@@ -17,6 +23,12 @@ export const postsApi = inctagramApi.injectEndpoints({
       query: ({ postId }) => ({
         method: 'DELETE',
         url: `/v1/post/${postId}`,
+      }),
+    }),
+    getPosts: builder.query<getPostsResponse, { pageNumber: number; pageSize: number }>({
+      query: ({ pageNumber = 1, pageSize = 4 }) => ({
+        method: 'GET',
+        url: `/v1/post?pageSize=${pageSize}&pageNumber=${pageNumber}`,
       }),
     }),
     getUserPost: builder.query<Post, { postId: string }>({
@@ -41,7 +53,7 @@ export const postsApi = inctagramApi.injectEndpoints({
   }),
 })
 
-export const { getUserPost, getUserPosts } = postsApi.endpoints
+export const { getPosts, getUserPost, getUserPosts } = postsApi.endpoints
 
 export const {
   util: { getRunningQueriesThunk },
@@ -49,6 +61,7 @@ export const {
 export const {
   useCreatePostMutation,
   useDeletePostMutation,
+  useGetPostsQuery,
   useGetUserPostQuery,
   useGetUserPostsQuery,
   useUploadPostPhotosMutation,

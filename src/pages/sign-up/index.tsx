@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
 import Spinner from '@/components/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
-import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { signUpFormValues, signUpSchema } from '@/schemas/signUpSchema'
 import { useRegistrationMutation } from '@/services/auth/authApi'
@@ -64,8 +63,7 @@ function SignUp() {
   const args = {
     children: (
       <div>
-        <p>{t.auth.sentConfirmationLink(responseEmail)}</p>
-        <Link href={PATH.LOGIN}>{t.auth.goToSignIn}</Link>
+        <p>{`${t.auth.sentConfirmationLink} ${responseEmail}`}</p>
       </div>
     ),
     onClose: () => {
