@@ -196,18 +196,6 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
       window.scrollY
     )
 
-    // const handleScroll = () => {
-    //   const getBoundingClientRectTop = image && image.getBoundingClientRect().top
-    //   const windowScrollY = window.scrollY
-    //
-    //   console.log(
-    //     ' imageOfHeight      getBoundingClientRectTop      windowScrollY: ',
-    //     imageOfHeight,
-    //     getBoundingClientRectTop,
-    //     windowScrollY
-    //   )
-    // }
-
     const emptySpaceHeight = window.innerHeight - (getBoundingClientRectTop as number)
 
     console.log(' emptySpaceHeight: ', emptySpaceHeight)
@@ -221,45 +209,49 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
     )
 
     const _ROWSGOTFROMSERVER = 2
-    const diffToGetFromServer = amountOfPictureRowsToAddInEmptySpace - _ROWSGOTFROMSERVER
+    const diffOfRowsToGetFromServer = amountOfPictureRowsToAddInEmptySpace - _ROWSGOTFROMSERVER
 
-    if (diffToGetFromServer > 0) {
+    if (diffOfRowsToGetFromServer > 0) {
+
+    }
+
+    async function getsomemoreposts() {
+      try {
+        let res
+
+        if (lastAddedPosts.length !== 0) {
+          res = await getUserPosts({
+            lastCursor: currentCursor ? currentCursor : (lastCursor as string),
+            userId: userId as string,
+          })
+        }
+
+        const { lastCursor: newLastCursor, posts: addedPosts } = res?.data as getUserPostsResponse
+
+        // if there are still posts left
+        if (newLastCursor) {
+          setLastAddedPosts(addedPosts)
+
+          setPosts(prevPosts => {
+            const existingPostIds = new Set(prevPosts.map(post => post.postId))
+            const uniquePosts = addedPosts.filter(post => !existingPostIds.has(post.postId))
+
+            return [...prevPosts, ...uniquePosts]
+          })
+
+          setCurrentCursor(newLastCursor)
+        } else {
+          setLastAddedPosts([])
+        }
+      } catch (error) {
+        console.error('Error fetching posts: ', error)
+      }
     }
 
     const handleWheel = async (event: WheelEvent) => {
-
       const { deltaY } = event
 
       if (deltaY > 0) {
-        try {
-          let res
-
-          if (lastAddedPosts.length !== 0) {
-            res = await getUserPosts({
-              lastCursor: currentCursor ? currentCursor : (lastCursor as string),
-              userId: userId as string,
-            })
-          }
-
-          const { lastCursor: newLastCursor, posts: addedPosts } = res?.data as getUserPostsResponse
-
-          if (newLastCursor) {
-            setLastAddedPosts(addedPosts)
-
-            setPosts(prevPosts => {
-              const existingPostIds = new Set(prevPosts.map(post => post.postId))
-              const uniquePosts = addedPosts.filter(post => !existingPostIds.has(post.postId))
-
-              return [...prevPosts, ...uniquePosts]
-            })
-
-            setCurrentCursor(newLastCursor)
-          } else {
-            setLastAddedPosts([])
-          }
-        } catch (error) {
-          console.error('Error fetching posts: ', error)
-        }
       }
     }
 
