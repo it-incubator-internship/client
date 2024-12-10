@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
-import { useDeletePostMutation } from '@/services/posts/posts-api'
 import { useMeQuery } from '@/services/auth/authApi'
+import { useDeletePostMutation } from '@/services/posts/posts-api'
 import { Owner, Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import convertDate from '@/utils/convertDate'
@@ -19,8 +19,8 @@ import {
   Modal,
   MoreHorizontal,
   PaperPlaneOutline,
-  TrashOutline,
   ScrollAreaComponent,
+  TrashOutline,
 } from '@robur_/ui-kit'
 import clsx from 'clsx'
 import Image from 'next/image'
@@ -115,7 +115,6 @@ export const PostDialog = ({
               className={s.menuItem}
               onSelect={event => {
                 event.preventDefault()
-                console.log('Edit Post')
               }}
             >
               <div className={s.menuItemIcon}>
@@ -191,53 +190,59 @@ export const PostDialog = ({
                       />
                     )}
                     {userFirstName && (
-                      <spanclassName={s.title}>
+                      <span className={s.title}>
                         {userFirstName} {userLastName}
                       </span>
                     )}
                   </div>
-                  <PostActionsMenu />
+                  {me?.userId === post?.userId && <PostActionsMenu />}
                 </div>
                 <ScrollAreaComponent>
-                <div className={s.comments}>
-                  {post?.description && userFirstName && (
-                    <div>{`${userFirstName} ${userLastName}: ${post?.description}`}</div>
-                  )}
-                  <div>Answer 1</div>
-                  <div>Answer 2</div>
-                  <div>Answer 3</div>
-                  <div>Answer 4</div>
-                  <div>Answer 5</div>
-                  <div>Answer 6</div>
-                </div>
+                  <div className={s.comments}>
+                    {post?.description && userFirstName && (
+                      <div>{`${userFirstName} ${userLastName}: ${post?.description}`}</div>
+                    )}
+                    <div>Answer 1</div>
+                    <div>Answer 2</div>
+                    <div>Answer 3</div>
+                    <div>Answer 4</div>
+                    <div>Answer 5</div>
+                    <div>Answer 6</div>
+                  </div>
                 </ScrollAreaComponent>
-              <div className={s.bottom}>
+                <div className={s.bottom}>
                   <div className={s.feed}>
-                    {me && (<div className={s.options}>
-                      <div className={s.optionsBlock}>
+                    {me && (
+                      <div className={s.options}>
+                        <div className={s.optionsBlock}>
+                          <button className={s.iconBtn} type={'button'}>
+                            <HeartOutline className={s.optionsIcon} />
+                          </button>
+                          <button className={s.iconBtn} type={'button'}>
+                            <PaperPlaneOutline className={s.optionsIcon} />
+                          </button>
+                        </div>
                         <button className={s.iconBtn} type={'button'}>
-                          <HeartOutline className={s.optionsIcon} />
-                        </button>
-                        <button className={s.iconBtn} type={'button'}>
-                          <PaperPlaneOutline className={s.optionsIcon} />
+                          <BookmarkOutline className={s.optionsIcon} />
                         </button>
                       </div>
-                      <button className={s.iconBtn} type={'button'}>
-                        <BookmarkOutline className={s.optionsIcon} />
-                      </button>
-                    </div>)}
-                    <div className={s.likes}>2 243 Like</div>{post?.createdAt && (
-                    <div className={s.date}>{convertDate.toLocaleString(post.createdAt)}</div>
-                  )}</div>
-                  {me && (<div className={s.send}>
-                    <Input
-                      className={s.input}
-                      containerClassName={s.inputContainer}
-                      placeholder={t.myProfile.addComment}
-                      type={'text'}
-                    />
-                    <Button variant={'ghost'}>{t.myProfile.publish}</Button>
-                  </div>)}
+                    )}
+                    <div className={s.likes}>2 243 Like</div>
+                    {post?.createdAt && (
+                      <div className={s.date}>{convertDate.toLocaleString(post.createdAt)}</div>
+                    )}
+                  </div>
+                  {me && (
+                    <div className={s.send}>
+                      <Input
+                        className={s.input}
+                        containerClassName={s.inputContainer}
+                        placeholder={t.myProfile.addComment}
+                        type={'text'}
+                      />
+                      <Button variant={'ghost'}>{t.myProfile.publish}</Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
