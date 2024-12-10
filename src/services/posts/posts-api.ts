@@ -19,6 +19,12 @@ export const postsApi = inctagramApi.injectEndpoints({
         url: `/v1/post`,
       }),
     }),
+    deletePost: builder.mutation<void, { postId: string }>({
+      query: ({ postId }) => ({
+        method: 'DELETE',
+        url: `/v1/post/${postId}`,
+      }),
+    }),
     getPosts: builder.query<getPostsResponse, { pageNumber: number; pageSize: number }>({
       query: ({ pageNumber = 1, pageSize = 4 }) => ({
         method: 'GET',
@@ -54,6 +60,7 @@ export const {
 } = postsApi
 export const {
   useCreatePostMutation,
+  useDeletePostMutation,
   useGetPostsQuery,
   useGetUserPostQuery,
   useGetUserPostsQuery,
