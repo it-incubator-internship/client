@@ -67,8 +67,10 @@ export const ru = {
     filterTitle: 'Добавить фильтр',
     openDraft: 'Открыть черновик',
     postCreated: 'Пост был удачно создан. Он скоро отобразиться в вашем профиле',
+    postDeleted: 'Пост был удачно удалён.',
     postDescriptionError: 'Текст описания поста должен быть не более 500 символов',
     postNotCreated: 'Что-то пошло не так. Пост не был создан',
+    postNotDeleted: 'Что-то пошло не так. Пост не был удалён.',
     publishDescription: 'Нажмите сюда, чтобы опубликовать новое фото',
     publishTitle: 'Опубликовать',
     selectFromComputer: 'Выбрать на этом компьютере',
@@ -79,6 +81,44 @@ export const ru = {
     titleHeaderModalDiscardDraft: 'Отказаться',
     titleModalSavedDraft:
       'Вы действительно хотите закрыть создание публикации? Если вы закроете, все будет удалено.',
+  },
+  dateTexts: {
+    daysAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} день назад`
+        case 'few':
+          return `${count} дня назад`
+        case 'many':
+          return `${count} дней назад`
+      }
+    },
+    hoursAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} час назад`
+        case 'few':
+          return `${count} часа назад`
+        case 'many':
+          return `${count} часов назад`
+      }
+    },
+    minAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} минуту назад`
+        case 'few':
+          return `${count} минуты назад`
+        case 'many':
+          return `${count} минут назад`
+      }
+    },
   },
   devices: {
     activeSessions: 'Активные сессии',
@@ -215,6 +255,18 @@ export const ru = {
     no: 'Нет',
     search: 'Поиск',
     statistics: 'Статистика',
+    yes: 'Да',
+  },
+  other: {
+    noData: 'Нет данных...',
+    showLess: 'спрятать',
+    showMore: 'показать больше',
+  },
+  post: {
+    deletePost: 'Удалить пост',
+    editPost: 'Редактировать пост',
+    no: 'Нет',
+    sureWantDeletePost: 'Вы уверены, что хотите удалить этот пост?',
     yes: 'Да',
   },
   postEdition: {

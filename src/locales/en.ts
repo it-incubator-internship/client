@@ -1,5 +1,6 @@
+// eslint-disable-next-line import/namespace
 import { LocaleType } from '@/locales/ru'
-import { pluralizeEn } from '@/utils/createPluralize'
+import { pluralizeEn, pluralizeRu } from '@/utils/createPluralize'
 
 export const en: LocaleType = {
   and: 'and',
@@ -46,7 +47,8 @@ export const en: LocaleType = {
         throttleSubtitleStart: 'Please wait ',
         title: 'Email sent',
       },
-      subtitle: 'Looks like the verification link has expired. Not to worry, we can send the link again',
+      subtitle:
+        'Looks like the verification link has expired. Not to worry, we can send the link again',
       title: 'Resend link',
     },
   },
@@ -67,8 +69,10 @@ export const en: LocaleType = {
     filterTitle: 'Filters',
     openDraft: 'Open draft',
     postCreated: 'Post has been created successfully. It will appear in your profile soon',
+    postDeleted: 'The post was successfully deleted.',
     postDescriptionError: 'Post description must be 500 symbols length or less',
     postNotCreated: 'Something went wrong, new post has not been created',
+    postNotDeleted: 'Something went wrong. The post has not been deleted.',
     publishDescription: 'Click here and publish new Photo',
     publishTitle: 'Publication',
     selectFromComputer: 'Select from computer',
@@ -78,6 +82,46 @@ export const en: LocaleType = {
     titleHeaderModalDiscardDraft: 'Close',
     titleModalSavedDraft:
       'Do you really want to close the creation of a publication? If you close everything will be deleted.',
+  },
+  dateTexts: {
+    daysAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} day ago`
+        case 'few':
+          return `${count} days ago`
+        case 'many':
+          return `${count} days ago`
+      }
+    },
+    hoursAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      switch (str) {
+        case 'one':
+          return `${count} hour ago`
+        case 'few':
+          return `${count} hours ago`
+        case 'many':
+          return `${count} hours ago`
+      }
+    },
+    minAgo(count: number) {
+      const str = pluralizeRu(count)
+
+      console.log('str', str)
+
+      switch (str) {
+        case 'one':
+          return `${count} min ago`
+        case 'few':
+          return `${count} min ago`
+        case 'many':
+          return `${count} min ago`
+      }
+    },
   },
   devices: {
     activeSessions: 'Active sessions',
@@ -117,7 +161,8 @@ export const en: LocaleType = {
     },
     recaptchaLabel: 'I’m not a robot',
     subtitleInitial: 'Enter your email address and we will send you further instructions',
-    subtitleSuccess: 'The link has been sent by email. If you don’t receive an email send link again',
+    subtitleSuccess:
+      'The link has been sent by email. If you don’t receive an email send link again',
     title: 'Forgot password',
   },
   formErrors: {
@@ -150,7 +195,8 @@ export const en: LocaleType = {
     userName: 'User name must contain only letters A-Z, a-z, 0-9',
   },
   meta: {
-    defaultDescriptionText: 'The Inctagram social network is a limitless communication of people all over the world',
+    defaultDescriptionText:
+      'The Inctagram social network is a limitless communication of people all over the world',
     readOnlyNotification:
       'View mode. To access full functionality, please fill out and save the required fields in your profile settings.',
   },
@@ -173,7 +219,8 @@ export const en: LocaleType = {
       buttonTitle: 'Yes',
       text: 'Do you really want to delete your profile photo?',
     },
-    saveAvatarServerError: 'Unable to upload the avatar. If the issue persists, please contact our support team.',
+    saveAvatarServerError:
+      'Unable to upload the avatar. If the issue persists, please contact our support team.',
   },
   myProfileSettings: {
     aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',
@@ -213,6 +260,18 @@ export const en: LocaleType = {
     statistics: 'Statistics',
     yes: 'Yes',
   },
+  post: {
+    deletePost: 'Delete Post',
+    editPost: 'Edit Post',
+    no: 'No',
+    sureWantDeletePost: 'Are you sure you want to delete this post?',
+    yes: 'Yes',
+  },
+  other: {
+    noData: 'There is no any data...',
+    showLess: 'Hide',
+    showMore: 'Show more',
+  },
   postEdition: {
     modalConfirmCloseEditionPost: {
       buttonRejectionTitle: 'No',
@@ -246,7 +305,8 @@ export const en: LocaleType = {
       throttleSubtitleStart: 'Please wait ',
       title: 'Email sent',
     },
-    subtitle: 'Looks like the verification link has expired. Not to worry, we can send the link again',
+    subtitle:
+      'Looks like the verification link has expired. Not to worry, we can send the link again',
     title: 'Email verification link expired',
   },
 }
