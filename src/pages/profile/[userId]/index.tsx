@@ -178,22 +178,61 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
 
   useEffect(() => {
     const element = scrollAreaRef.current
-
     const image = element?.querySelector('[class*="profile_photoItem"]')
 
+    const imageHeight = image && image.getBoundingClientRect().height
+
+    const getBoundingClientRectTop = image && image.getBoundingClientRect().top
+
+    console.log(
+      ' window.innerHeight    window.outerHeight  :    ',
+      window.innerHeight,
+      window.outerHeight
+    )
+    console.log(
+      ' imageOfHeight      getBoundingClientRectTop      windowScrollY: ',
+      imageHeight,
+      getBoundingClientRectTop,
+      window.scrollY
+    )
+
+    // const handleScroll = () => {
+    //   const getBoundingClientRectTop = image && image.getBoundingClientRect().top
+    //   const windowScrollY = window.scrollY
+    //
+    //   console.log(
+    //     ' imageOfHeight      getBoundingClientRectTop      windowScrollY: ',
+    //     imageOfHeight,
+    //     getBoundingClientRectTop,
+    //     windowScrollY
+    //   )
+    // }
+
+    const emptySpaceHeight = window.innerHeight - (getBoundingClientRectTop as number)
+
+    console.log(' emptySpaceHeight: ', emptySpaceHeight)
+    const verticalGap = 12
+    const amountOfPictureRowsToAddInEmptySpace =
+      emptySpaceHeight / ((imageHeight as number) + verticalGap)
+
+    console.log(
+      ' amountOfPictureRowsToAddInEmptySpace: ',
+      Math.ceil(amountOfPictureRowsToAddInEmptySpace)
+    )
+
+    const _ROWSGOTFROMSERVER = 2
+    const diffToGetFromServer = amountOfPictureRowsToAddInEmptySpace - _ROWSGOTFROMSERVER
+
+    if (diffToGetFromServer > 0) {
+
+    }
+
     const handleWheel = async (event: WheelEvent) => {
-      event.preventDefault()
+      // event.preventDefault()
 
       const { deltaY } = event
 
-      const height = image?.getBoundingClientRect().height
-      const verticalGap = 12
-      const scrollHeight = (height as number) + verticalGap
-
-      // console.log(' scrollHeight: ', scrollHeight)
       if (deltaY > 0) {
-        // console.log('deltaY down: ', deltaY)
-
         try {
           let res
 
@@ -223,25 +262,22 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
         } catch (error) {
           console.error('Error fetching posts: ', error)
         }
-        setTimeout(() => {
-          element?.scrollBy(0, scrollHeight)
-        }, 40)
+        // setTimeout(() => {
+        //   element?.scrollBy(0, scrollHeight)
+        // }, 40)
       } else {
-        // console.log('deltaY up: ', deltaY)
-        setTimeout(() => {
-          element?.scrollBy(0, -scrollHeight)
-        }, 40)
+        // setTimeout(() => {
+        //   element?.scrollBy(0, -scrollHeight)
+        // }, 40)
       }
     }
 
-    if (element) {
-      element.addEventListener('wheel', handleWheel)
-    }
+    window.addEventListener('wheel', handleWheel)
+    // window.addEventListener('scroll', handleScroll)
 
     return () => {
-      if (element) {
-        element.removeEventListener('wheel', handleWheel)
-      }
+      window.removeEventListener('wheel', handleWheel)
+      // window.removeEventListener('scroll', handleScroll)
     }
   }, [currentCursor, lastAddedPosts])
 

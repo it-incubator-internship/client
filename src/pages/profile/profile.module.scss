@@ -110,23 +110,23 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
 
-    max-height: 456px;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
+    max-height: fit-content;
+    //overflow-y: scroll;
+    //scroll-snap-type: y mandatory;
+    //scroll-behavior: smooth;
     //scrollbar-width: thin;
 
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
+    //&::-webkit-scrollbar {
+    //  width: 8px;
+    //}
 
-    &::-webkit-scrollbar-thumb {
-      background-color: #ccc;
-      border-radius: 4px;
-    }
+    //&::-webkit-scrollbar-thumb {
+    //  background-color: #ccc;
+    //  border-radius: 4px;
+    //}
 
     .photoItem {
-      scroll-snap-align: start;
+      //scroll-snap-align: start;
       overflow: hidden;
       width: 100%;
 
