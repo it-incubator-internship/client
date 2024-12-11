@@ -1,6 +1,7 @@
 import { Fragment, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import Spinner from '@/components/Preloaders/Spinner/Spinner'
+import ThreeDotsLoader from '@/components/Preloaders/ThreeDots/ThreeDotsLoader'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -21,7 +22,6 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
 import s from '../profile.module.scss'
-import ThreeDotsLoader from '@/components/Preloaders/ThreeDots/ThreeDotsLoader'
 
 type NextPageWithLayout<P = {}> = {
   getLayout?: (page: ReactElement) => ReactNode
@@ -180,79 +180,28 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   useEffect(() => {
     const element = scrollAreaRef.current
     const image = element?.querySelector('[class*="profile_photoItem"]')
-
     const imageHeight = image && image.getBoundingClientRect().height
-
     const getBoundingClientRectTop = image && image.getBoundingClientRect().top
-
-    console.log(
-      ' window.innerHeight    window.outerHeight  :    ',
-      window.innerHeight,
-      window.outerHeight
-    )
-    console.log(
-      ' imageOfHeight      getBoundingClientRectTop      windowScrollY: ',
-      imageHeight,
-      getBoundingClientRectTop,
-      window.scrollY
-    )
 
     const emptySpaceHeight = window.innerHeight - (getBoundingClientRectTop as number)
 
-    console.log(' emptySpaceHeight: ', emptySpaceHeight)
     const verticalGap = 12
     const amountOfPictureRowsToAddInEmptySpace =
       emptySpaceHeight / ((imageHeight as number) + verticalGap) / 2
 
-    console.log(
-      ' amountOfPictureRowsToAddInEmptySpace: ',
-      Math.ceil(amountOfPictureRowsToAddInEmptySpace)
-    )
-
     //if resolution about 2560px it's neseccary to preload more posts rows
     const _ROWSGOTFROMSERVERMULTIPLEOFEIGHT = 1
     const diffOfRowsToGetFromServer =
-      amountOfPictureRowsToAddInEmptySpace - _ROWSGOTFROMSERVERMULTIPLEOFEIGHT
+      Math.ceil(amountOfPictureRowsToAddInEmptySpace) - _ROWSGOTFROMSERVERMULTIPLEOFEIGHT
 
     if (diffOfRowsToGetFromServer > 0) {
       for (let i = 0; i <= diffOfRowsToGetFromServer; i++) {
         void getSomeMorePosts()
       }
     }
+  }, [])
 
-    async function getSomeMorePosts() {
-      try {
-        let res
-
-        if (lastAddedPosts.length !== 0) {
-          res = await getUserPosts({
-            lastCursor: currentCursor ? currentCursor : (lastCursor as string),
-            userId: userId as string,
-          })
-        }
-
-        const { lastCursor: newLastCursor, posts: addedPosts } = res?.data as getUserPostsResponse
-
-        // if there are still posts left
-        if (newLastCursor) {
-          setLastAddedPosts(addedPosts)
-
-          setPosts(prevPosts => {
-            const existingPostIds = new Set(prevPosts.map(post => post.postId))
-            const uniquePosts = addedPosts.filter(post => !existingPostIds.has(post.postId))
-
-            return [...prevPosts, ...uniquePosts]
-          })
-
-          setCurrentCursor(newLastCursor)
-        } else {
-          setLastAddedPosts([])
-        }
-      } catch (error) {
-        console.error('Error fetching posts: ', error)
-      }
-    }
-
+  useEffect(() => {
     const handleWheel = async (event: WheelEvent) => {
       const { deltaY } = event
 
@@ -266,8 +215,41 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
     }
   }, [currentCursor, lastAddedPosts])
 
+  async function getSomeMorePosts() {
+    try {
+      let res
+
+      if (lastAddedPosts.length !== 0) {
+        res = await getUserPosts({
+          lastCursor: currentCursor ? currentCursor : (lastCursor as string),
+          userId: userId as string,
+        })
+      }
+
+      const { lastCursor: newLastCursor, posts: addedPosts } = res?.data as getUserPostsResponse
+
+      // if there are still posts left
+      if (newLastCursor) {
+        setLastAddedPosts(addedPosts)
+
+        setPosts(prevPosts => {
+          const existingPostIds = new Set(prevPosts.map(post => post.postId))
+          const uniquePosts = addedPosts.filter(post => !existingPostIds.has(post.postId))
+
+          return [...prevPosts, ...uniquePosts]
+        })
+
+        setCurrentCursor(newLastCursor)
+      } else {
+        setLastAddedPosts([])
+      }
+    } catch (error) {
+      console.error('Error fetching posts: ', error)
+    }
+  }
+
   return (
-    <Fragment>
+    <>
       <div className={s.photoGrid} ref={scrollAreaRef}>
         {posts.map(post => {
           const imagePreview = post.images.find(item => {
@@ -292,7 +274,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
         })}
       </div>
       {isPostsLoading && <ThreeDotsLoader />}
-    </Fragment>
+    </>
   )
 }
 
