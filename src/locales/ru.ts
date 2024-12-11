@@ -276,6 +276,7 @@ export const ru = {
       text: 'Вы действительно хотите закрыть редактирование поста? Если вы закроете изменения, они не сохранятся.',
       titleModalWithConfirm: 'Закрыть публикацию',
     },
+    publicationSuccessfullyEdited: 'Публикация успешно изменена',
     titleFormEditPost: 'Добавьте описание публикации',
     titleHeaderModalEditPost: 'Редактирование публикации',
   },

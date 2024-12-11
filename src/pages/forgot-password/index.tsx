@@ -46,7 +46,7 @@ const ForgotPassword = () => {
     'checked' | 'expired' | 'initial' | 'loading' | 'withError'
   >('initial')
 
-  //hooks
+  //modals
   const t = useTranslation()
   const { executeRecaptcha } = useGoogleReCaptcha()
   const { control, handleSubmit, reset, setError } = useForm({
