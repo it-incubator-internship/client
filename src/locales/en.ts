@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/namespace
 import { LocaleType } from '@/locales/ru'
 import { pluralizeEn, pluralizeRu } from '@/utils/createPluralize'
 
@@ -259,6 +260,11 @@ export const en: LocaleType = {
     statistics: 'Statistics',
     yes: 'Yes',
   },
+  other: {
+    noData: 'There is no any data...',
+    showLess: 'Hide',
+    showMore: 'Show more',
+  },
   post: {
     deletePost: 'Delete Post',
     editPost: 'Edit Post',
@@ -266,10 +272,16 @@ export const en: LocaleType = {
     sureWantDeletePost: 'Are you sure you want to delete this post?',
     yes: 'Yes',
   },
-  other: {
-    noData: 'There is no any data...',
-    showLess: 'Hide',
-    showMore: 'Show more',
+  postEdition: {
+    modalConfirmCloseEditionPost: {
+      buttonRejectionTitle: 'No',
+      buttonTitle: 'Yes',
+      text: 'Do you really want to close the edition of the publication? If you close changes won’t be saved.',
+      titleModalWithConfirm: 'Close post',
+    },
+    publicationSuccessfullyEdited: 'publication successfully edited',
+    titleFormEditPost: 'Add a post description',
+    titleHeaderModalEditPost: 'Edit post',
   },
   russian: 'Russian',
   signUp: {
