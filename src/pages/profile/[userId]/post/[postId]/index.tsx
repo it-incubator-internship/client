@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from 'react'
 
-import { PublicationsPhoto } from '@/components/PublicationsPhoto'
 import Spinner from '@/components/Preloaders/Spinner/Spinner'
+import { PublicationsPhoto } from '@/components/PublicationsPhoto'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
 import { PATH } from '@/consts/route-paths'

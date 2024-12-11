@@ -253,7 +253,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   }
 
   return (
-    <Fragment>
+    <>
       <div className={s.photoGrid} ref={scrollAreaRef}>
         {posts.map(post => {
           const imagePreview = post.images.find(item => {
@@ -278,7 +278,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
         })}
       </div>
       {isPostsLoading && <ThreeDotsLoader />}
-    </Fragment>
+    </>
   )
 }
 
