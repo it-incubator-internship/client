@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useResendEmailMutation } from '@/services/password-recovery/password-recovery-api'
 import { ServerError } from '@/services/password-recovery/password-recovery-types'

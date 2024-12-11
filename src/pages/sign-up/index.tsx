@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { useTranslation } from '@/hooks/useTranslation'
 import { signUpFormValues, signUpSchema } from '@/schemas/signUpSchema'

@@ -1,11 +1,16 @@
-import { ReactElement, ReactNode } from 'react'
+import { Fragment, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
+import ThreeDotsLoader from '@/components/Preloaders/ThreeDots/ThreeDotsLoader'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { getRunningQueriesThunk, getUserPosts } from '@/services/posts/posts-api'
+import {
+  getRunningQueriesThunk,
+  getUserPosts,
+  useLazyGetUserPostsQuery,
+} from '@/services/posts/posts-api'
 import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
@@ -29,6 +34,7 @@ type ProfileStatsProps = {
 }
 
 type PublicationsPhotoProps = {
+  lastCursor?: string
   posts: Post[]
   userId: string
 }
@@ -69,6 +75,7 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
   const currentUserId = meData?.userId
   const { userId } = useParams()
 
+  const { lastCursor } = posts
   const t = useTranslation()
 
   const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(
@@ -114,7 +121,7 @@ const Profile: NextPageWithLayout<Props> = ({ posts }: Props) => {
         )}
       </div>
       {posts.posts ? (
-        <PublicationsPhoto posts={posts.posts} userId={userId as string} />
+        <PublicationsPhoto lastCursor={lastCursor} posts={posts.posts} userId={userId as string} />
       ) : (
         <div>{t.other.noData}</div>
       )}
@@ -156,31 +163,122 @@ const ProfileStats: NextPageWithLayout<ProfileStatsProps> = () => {
     </div>
   )
 }
-const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({ posts, userId }) => {
-  return (
-    <div className={s.photoGrid}>
-      {posts.map(post => {
-        const imagePreview = post.images.find(item => {
-          return item.originalImageUrl
+
+const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
+  lastCursor,
+  posts: initialPosts,
+  userId,
+}) => {
+  const scrollAreaRef = useRef<HTMLDivElement>(null)
+  const [getUserPosts, { isLoading: isPostsLoading }] = useLazyGetUserPostsQuery()
+  const [currentCursor, setCurrentCursor] = useState<null | string>('')
+  const [addedPosts, setAddedPosts] = useState<Post[]>(initialPosts)
+  const [posts, setPosts] = useState<Post[]>(initialPosts || [])
+
+  useEffect(() => {
+    const element = scrollAreaRef.current
+    const image = element?.querySelector('[class*="profile_photoItem"]')
+    const imageHeight = image && image.getBoundingClientRect().height
+    const getBoundingClientRectTop = image && image.getBoundingClientRect().top
+
+    const emptySpaceHeight = window.innerHeight - (getBoundingClientRectTop as number)
+
+    const verticalGap = 12
+    const amountOfPictureRowsToAddInEmptySpace =
+      emptySpaceHeight / ((imageHeight as number) + verticalGap) / 2
+
+    //if resolution about 2560px it's neseccary to preload more posts rows
+    const _ROWSGOTFROMSERVERMULTIPLEOFEIGHT = 1
+    const diffOfRowsToGetFromServer =
+      Math.ceil(amountOfPictureRowsToAddInEmptySpace) - _ROWSGOTFROMSERVERMULTIPLEOFEIGHT
+
+    if (diffOfRowsToGetFromServer > 0) {
+      for (let i = 0; i <= diffOfRowsToGetFromServer; i++) {
+        void getSomeMorePosts()
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleWheel = async (event: WheelEvent) => {
+      const { deltaY } = event
+      // event.preventDefault()
+      // const scrollSpeed = 0.9
+
+      // Модификация deltaY для замедления
+      // const newDeltaY = deltaY * scrollSpeed
+
+      deltaY > 0 && (await getSomeMorePosts())
+    }
+
+    window.addEventListener('wheel', handleWheel)
+    // window.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel)
+    }
+  }, [currentCursor, addedPosts])
+
+  async function getSomeMorePosts() {
+    try {
+      if (addedPosts.length > 0) {
+        const res = await getUserPosts({
+          lastCursor: currentCursor ? currentCursor : (lastCursor as string),
+          userId: userId as string,
         })
 
-        return (
-          <Link
-            className={s.photoItem}
-            href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
-            key={post.postId}
-          >
-            <Image
-              alt={`User photo ${post.postId}`}
-              height={228}
-              layout={'responsive'}
-              src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
-              width={234}
-            />
-          </Link>
-        )
-      })}
-    </div>
+        const { lastCursor: newLastCursor, posts: addedPostsWithNewCursor } =
+          res?.data as getUserPostsResponse
+
+        if (newLastCursor) {
+          setAddedPosts(addedPostsWithNewCursor)
+
+          setPosts(prevPosts => {
+            const existingPostIds = new Set(prevPosts.map(post => post.postId))
+            const uniquePosts = addedPostsWithNewCursor.filter(
+              post => !existingPostIds.has(post.postId)
+            )
+
+            return [...prevPosts, ...uniquePosts]
+          })
+
+          setCurrentCursor(newLastCursor)
+        } else {
+          setAddedPosts([])
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching posts: ', error)
+    }
+  }
+
+  return (
+    <Fragment>
+      <div className={s.photoGrid} ref={scrollAreaRef}>
+        {posts.map(post => {
+          const imagePreview = post.images.find(item => {
+            return item.originalImageUrl
+          })
+
+          return (
+            <Link
+              className={s.photoItem}
+              href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
+              key={post.postId}
+            >
+              <Image
+                alt={`User photo ${post.postId}`}
+                height={228}
+                layout={'responsive'}
+                src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
+                width={234}
+              />
+            </Link>
+          )
+        })}
+      </div>
+      {isPostsLoading && <ThreeDotsLoader />}
+    </Fragment>
   )
 }
 

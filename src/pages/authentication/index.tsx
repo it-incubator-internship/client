@@ -1,4 +1,4 @@
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { PATH } from '@/consts/route-paths'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useRouter } from 'next/router'
