@@ -1,6 +1,6 @@
-import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
+import { Fragment, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -21,6 +21,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
 import s from '../profile.module.scss'
+import ThreeDotsLoader from '@/components/Preloaders/ThreeDots/ThreeDotsLoader'
 
 type NextPageWithLayout<P = {}> = {
   getLayout?: (page: ReactElement) => ReactNode
@@ -169,7 +170,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
 }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
 
-  const [getUserPosts] = useLazyGetUserPostsQuery()
+  const [getUserPosts, { isLoading: isPostsLoading }] = useLazyGetUserPostsQuery()
   const [currentCursor, setCurrentCursor] = useState<null | string>('')
 
   const [lastAddedPosts, setLastAddedPosts] = useState<Post[]>(initialPosts)
@@ -201,21 +202,25 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
     console.log(' emptySpaceHeight: ', emptySpaceHeight)
     const verticalGap = 12
     const amountOfPictureRowsToAddInEmptySpace =
-      emptySpaceHeight / ((imageHeight as number) + verticalGap)
+      emptySpaceHeight / ((imageHeight as number) + verticalGap) / 2
 
     console.log(
       ' amountOfPictureRowsToAddInEmptySpace: ',
       Math.ceil(amountOfPictureRowsToAddInEmptySpace)
     )
 
-    const _ROWSGOTFROMSERVER = 2
-    const diffOfRowsToGetFromServer = amountOfPictureRowsToAddInEmptySpace - _ROWSGOTFROMSERVER
+    //if resolution about 2560px it's neseccary to preload more posts rows
+    const _ROWSGOTFROMSERVERMULTIPLEOFEIGHT = 1
+    const diffOfRowsToGetFromServer =
+      amountOfPictureRowsToAddInEmptySpace - _ROWSGOTFROMSERVERMULTIPLEOFEIGHT
 
     if (diffOfRowsToGetFromServer > 0) {
-
+      for (let i = 0; i <= diffOfRowsToGetFromServer; i++) {
+        void getSomeMorePosts()
+      }
     }
 
-    async function getsomemoreposts() {
+    async function getSomeMorePosts() {
       try {
         let res
 
@@ -251,8 +256,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
     const handleWheel = async (event: WheelEvent) => {
       const { deltaY } = event
 
-      if (deltaY > 0) {
-      }
+      deltaY > 0 && (await getSomeMorePosts())
     }
 
     window.addEventListener('wheel', handleWheel)
@@ -263,29 +267,32 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   }, [currentCursor, lastAddedPosts])
 
   return (
-    <div className={s.photoGrid} ref={scrollAreaRef}>
-      {posts.map(post => {
-        const imagePreview = post.images.find(item => {
-          return item.originalImageUrl
-        })
+    <Fragment>
+      <div className={s.photoGrid} ref={scrollAreaRef}>
+        {posts.map(post => {
+          const imagePreview = post.images.find(item => {
+            return item.originalImageUrl
+          })
 
-        return (
-          <Link
-            className={s.photoItem}
-            href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
-            key={post.postId}
-          >
-            <Image
-              alt={`User photo ${post.postId}`}
-              height={228}
-              layout={'responsive'}
-              src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
-              width={234}
-            />
-          </Link>
-        )
-      })}
-    </div>
+          return (
+            <Link
+              className={s.photoItem}
+              href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
+              key={post.postId}
+            >
+              <Image
+                alt={`User photo ${post.postId}`}
+                height={228}
+                layout={'responsive'}
+                src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
+                width={234}
+              />
+            </Link>
+          )
+        })}
+      </div>
+      {isPostsLoading && <ThreeDotsLoader />}
+    </Fragment>
   )
 }
 

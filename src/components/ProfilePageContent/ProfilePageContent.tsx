@@ -15,7 +15,7 @@ import { useRouter } from 'next/router'
 
 import s from './ProfilePageContent.module.scss'
 
-import Spinner from '../Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 
 export const ProfilePageContent = () => {
   const router = useRouter()

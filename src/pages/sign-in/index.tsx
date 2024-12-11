@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 
 import { SocialMediaAuth } from '@/components/SocialMediaAuth/SocialMediaAuth'
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'

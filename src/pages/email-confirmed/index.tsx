@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useRegistrationConfirmationMutation } from '@/services/auth/authApi'
 import { Button } from '@robur_/ui-kit'

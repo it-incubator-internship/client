@@ -1,4 +1,4 @@
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { NewPasswordForm } from '@/components/create-password/new-password-form/new-password-form'
 import { PasswordLinkExpired } from '@/components/create-password/password-link-expired/password-link-expired'
 import { getHeaderLayout } from '@/components/layouts/HeaderLayout/HeaderLayout'
