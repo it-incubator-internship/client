@@ -1,6 +1,7 @@
-import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
+import { Fragment, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
+import ThreeDotsLoader from '@/components/Preloaders/ThreeDots/ThreeDotsLoader'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -169,107 +170,115 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   userId,
 }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
-
-  const [getUserPosts] = useLazyGetUserPostsQuery()
+  const [getUserPosts, { isLoading: isPostsLoading }] = useLazyGetUserPostsQuery()
   const [currentCursor, setCurrentCursor] = useState<null | string>('')
-
-  const [lastAddedPosts, setLastAddedPosts] = useState<Post[]>(initialPosts)
-
+  const [addedPosts, setAddedPosts] = useState<Post[]>(initialPosts)
   const [posts, setPosts] = useState<Post[]>(initialPosts || [])
 
   useEffect(() => {
     const element = scrollAreaRef.current
-
     const image = element?.querySelector('[class*="profile_photoItem"]')
+    const imageHeight = image && image.getBoundingClientRect().height
+    const getBoundingClientRectTop = image && image.getBoundingClientRect().top
 
-    const handleWheel = async (event: WheelEvent) => {
-      event.preventDefault()
+    const emptySpaceHeight = window.innerHeight - (getBoundingClientRectTop as number)
 
-      const { deltaY } = event
+    const verticalGap = 12
+    const amountOfPictureRowsToAddInEmptySpace =
+      emptySpaceHeight / ((imageHeight as number) + verticalGap) / 2
 
-      const height = image?.getBoundingClientRect().height
-      const verticalGap = 12
-      const scrollHeight = (height as number) + verticalGap
+    //if resolution about 2560px it's neseccary to preload more posts rows
+    const _ROWSGOTFROMSERVERMULTIPLEOFEIGHT = 1
+    const diffOfRowsToGetFromServer =
+      Math.ceil(amountOfPictureRowsToAddInEmptySpace) - _ROWSGOTFROMSERVERMULTIPLEOFEIGHT
 
-      // console.log(' scrollHeight: ', scrollHeight)
-      if (deltaY > 0) {
-        // console.log('deltaY down: ', deltaY)
-
-        try {
-          let res
-
-          if (lastAddedPosts.length !== 0) {
-            res = await getUserPosts({
-              lastCursor: currentCursor ? currentCursor : (lastCursor as string),
-              userId: userId as string,
-            })
-          }
-
-          const { lastCursor: newLastCursor, posts: addedPosts } = res?.data as getUserPostsResponse
-
-          if (newLastCursor) {
-            setLastAddedPosts(addedPosts)
-
-            setPosts(prevPosts => {
-              const existingPostIds = new Set(prevPosts.map(post => post.postId))
-              const uniquePosts = addedPosts.filter(post => !existingPostIds.has(post.postId))
-
-              return [...prevPosts, ...uniquePosts]
-            })
-
-            setCurrentCursor(newLastCursor)
-          } else {
-            setLastAddedPosts([])
-          }
-        } catch (error) {
-          console.error('Error fetching posts: ', error)
-        }
-        setTimeout(() => {
-          element?.scrollBy(0, scrollHeight)
-        }, 40)
-      } else {
-        // console.log('deltaY up: ', deltaY)
-        setTimeout(() => {
-          element?.scrollBy(0, -scrollHeight)
-        }, 40)
+    if (diffOfRowsToGetFromServer > 0) {
+      for (let i = 0; i <= diffOfRowsToGetFromServer; i++) {
+        void getSomeMorePosts()
       }
     }
+  }, [])
 
-    if (element) {
-      element.addEventListener('wheel', handleWheel)
+  useEffect(() => {
+    const handleWheel = async (event: WheelEvent) => {
+      const { deltaY } = event
+      // event.preventDefault()
+      // const scrollSpeed = 0.9
+
+      // Модификация deltaY для замедления
+      // const newDeltaY = deltaY * scrollSpeed
+
+      deltaY > 0 && (await getSomeMorePosts())
     }
+
+    window.addEventListener('wheel', handleWheel)
+    // window.addEventListener('wheel', handleWheel, { passive: false })
 
     return () => {
-      if (element) {
-        element.removeEventListener('wheel', handleWheel)
-      }
+      window.removeEventListener('wheel', handleWheel)
     }
-  }, [currentCursor, lastAddedPosts])
+  }, [currentCursor, addedPosts])
 
-  return (
-    <div className={s.photoGrid} ref={scrollAreaRef}>
-      {posts.map(post => {
-        const imagePreview = post.images.find(item => {
-          return item.originalImageUrl
+  async function getSomeMorePosts() {
+    try {
+      if (addedPosts.length > 0) {
+        const res = await getUserPosts({
+          lastCursor: currentCursor ? currentCursor : (lastCursor as string),
+          userId: userId as string,
         })
 
-        return (
-          <Link
-            className={s.photoItem}
-            href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
-            key={post.postId}
-          >
-            <Image
-              alt={`User photo ${post.postId}`}
-              height={228}
-              layout={'responsive'}
-              src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
-              width={234}
-            />
-          </Link>
-        )
-      })}
-    </div>
+        const { lastCursor: newLastCursor, posts: addedPostsWithNewCursor } =
+          res?.data as getUserPostsResponse
+
+        if (newLastCursor) {
+          setAddedPosts(addedPostsWithNewCursor)
+
+          setPosts(prevPosts => {
+            const existingPostIds = new Set(prevPosts.map(post => post.postId))
+            const uniquePosts = addedPostsWithNewCursor.filter(
+              post => !existingPostIds.has(post.postId)
+            )
+
+            return [...prevPosts, ...uniquePosts]
+          })
+
+          setCurrentCursor(newLastCursor)
+        } else {
+          setAddedPosts([])
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching posts: ', error)
+    }
+  }
+
+  return (
+    <Fragment>
+      <div className={s.photoGrid} ref={scrollAreaRef}>
+        {posts.map(post => {
+          const imagePreview = post.images.find(item => {
+            return item.originalImageUrl
+          })
+
+          return (
+            <Link
+              className={s.photoItem}
+              href={`${PATH.PROFILE}/${userId}/post/${post.postId}`}
+              key={post.postId}
+            >
+              <Image
+                alt={`User photo ${post.postId}`}
+                height={228}
+                layout={'responsive'}
+                src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
+                width={234}
+              />
+            </Link>
+          )
+        })}
+      </div>
+      {isPostsLoading && <ThreeDotsLoader />}
+    </Fragment>
   )
 }
 
