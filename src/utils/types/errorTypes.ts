@@ -17,3 +17,11 @@ export type AuthError = {
     statusCode: number
   }
 }
+
+export type ErrorEditPost = {
+  error: string
+  errorObj: null
+  inTry: string
+  info: string
+  statusCode: number
+}

@@ -257,6 +257,11 @@ export const ru = {
     statistics: 'Статистика',
     yes: 'Да',
   },
+  other: {
+    noData: 'Нет данных...',
+    showLess: 'спрятать',
+    showMore: 'показать больше',
+  },
   post: {
     deletePost: 'Удалить пост',
     editPost: 'Редактировать пост',
@@ -264,10 +269,16 @@ export const ru = {
     sureWantDeletePost: 'Вы уверены, что хотите удалить этот пост?',
     yes: 'Да',
   },
-  other: {
-    noData: 'Нет данных...',
-    showLess: 'спрятать',
-    showMore: 'показать больше',
+  postEdition: {
+    modalConfirmCloseEditionPost: {
+      buttonRejectionTitle: 'Нет',
+      buttonTitle: 'Да',
+      text: 'Вы действительно хотите закрыть редактирование поста? Если вы закроете изменения, они не сохранятся.',
+      titleModalWithConfirm: 'Закрыть публикацию',
+    },
+    publicationSuccessfullyEdited: 'Публикация успешно изменена',
+    titleFormEditPost: 'Добавьте описание публикации',
+    titleHeaderModalEditPost: 'Редактирование публикации',
   },
   russian: 'Русский',
   signUp: {

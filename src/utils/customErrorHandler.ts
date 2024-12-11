@@ -7,7 +7,6 @@ type Props = {
   specificField?: null | string
   translations: LocaleType
 }
-
 export const customErrorHandler = <T>({
   error,
   setError,
