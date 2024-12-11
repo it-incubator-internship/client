@@ -169,12 +169,9 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   userId,
 }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
-
   const [getUserPosts, { isLoading: isPostsLoading }] = useLazyGetUserPostsQuery()
   const [currentCursor, setCurrentCursor] = useState<null | string>('')
-
-  const [lastAddedPosts, setLastAddedPosts] = useState<Post[]>(initialPosts)
-
+  const [addedPosts, setAddedPosts] = useState<Post[]>(initialPosts)
   const [posts, setPosts] = useState<Post[]>(initialPosts || [])
 
   useEffect(() => {
@@ -204,44 +201,50 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   useEffect(() => {
     const handleWheel = async (event: WheelEvent) => {
       const { deltaY } = event
+      // event.preventDefault()
+      // const scrollSpeed = 0.9
+
+      // Модификация deltaY для замедления
+      // const newDeltaY = deltaY * scrollSpeed
 
       deltaY > 0 && (await getSomeMorePosts())
     }
 
     window.addEventListener('wheel', handleWheel)
+    // window.addEventListener('wheel', handleWheel, { passive: false })
 
     return () => {
       window.removeEventListener('wheel', handleWheel)
     }
-  }, [currentCursor, lastAddedPosts])
+  }, [currentCursor, addedPosts])
 
   async function getSomeMorePosts() {
     try {
-      let res
-
-      if (lastAddedPosts.length !== 0) {
-        res = await getUserPosts({
+      if (addedPosts.length > 0) {
+        const res = await getUserPosts({
           lastCursor: currentCursor ? currentCursor : (lastCursor as string),
           userId: userId as string,
         })
-      }
 
-      const { lastCursor: newLastCursor, posts: addedPosts } = res?.data as getUserPostsResponse
+        const { lastCursor: newLastCursor, posts: addedPostsWithNewCursor } =
+          res?.data as getUserPostsResponse
 
-      // if there are still posts left
-      if (newLastCursor) {
-        setLastAddedPosts(addedPosts)
+        if (newLastCursor) {
+          setAddedPosts(addedPostsWithNewCursor)
 
-        setPosts(prevPosts => {
-          const existingPostIds = new Set(prevPosts.map(post => post.postId))
-          const uniquePosts = addedPosts.filter(post => !existingPostIds.has(post.postId))
+          setPosts(prevPosts => {
+            const existingPostIds = new Set(prevPosts.map(post => post.postId))
+            const uniquePosts = addedPostsWithNewCursor.filter(
+              post => !existingPostIds.has(post.postId)
+            )
 
-          return [...prevPosts, ...uniquePosts]
-        })
+            return [...prevPosts, ...uniquePosts]
+          })
 
-        setCurrentCursor(newLastCursor)
-      } else {
-        setLastAddedPosts([])
+          setCurrentCursor(newLastCursor)
+        } else {
+          setAddedPosts([])
+        }
       }
     } catch (error) {
       console.error('Error fetching posts: ', error)
@@ -249,7 +252,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   }
 
   return (
-    <>
+    <Fragment>
       <div className={s.photoGrid} ref={scrollAreaRef}>
         {posts.map(post => {
           const imagePreview = post.images.find(item => {
@@ -274,7 +277,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
         })}
       </div>
       {isPostsLoading && <ThreeDotsLoader />}
-    </>
+    </Fragment>
   )
 }
 
