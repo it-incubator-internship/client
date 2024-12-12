@@ -270,7 +270,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
                 alt={`User photo ${post.postId}`}
                 height={228}
                 layout={'responsive'}
-                src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
+                src={imagePreview?.originalImageUrl || '/photo-default.jpg'}
                 width={234}
               />
             </Link>
