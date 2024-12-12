@@ -63,19 +63,31 @@ export const MainPagePhotos: NextPageWithLayout<MainPagePhotosProps> = ({ posts 
                   post.images.map(image => {
                     return (
                       <SwiperSlide className={s.slide} key={image.id}>
-                        <button
-                          className={s.imageContainer}
-                          onClick={() => openPostHandler(post)}
-                          type={'button'}
-                        >
-                          <Image
-                            alt={`User photo ${post.postId}`}
-                            height={240}
-                            layout={'responsive'}
-                            src={image.originalImageUrl || '/photo-default-1.png'}
-                            width={234}
-                          />
-                        </button>
+                        {image.originalImageUrl ? (
+                          <button
+                            className={s.imageContainer}
+                            onClick={() => openPostHandler(post)}
+                            type={'button'}
+                          >
+                            <Image
+                              alt={`User photo ${post.postId}`}
+                              height={240}
+                              layout={'responsive'}
+                              src={image.originalImageUrl}
+                              width={234}
+                            />
+                          </button>
+                        ) : (
+                          <span>
+                            <Image
+                              alt={`User photo ${post.postId}`}
+                              height={240}
+                              layout={'responsive'}
+                              src={'/photo-default.jpg'}
+                              width={234}
+                            />
+                          </span>
+                        )}
                       </SwiperSlide>
                     )
                   })}

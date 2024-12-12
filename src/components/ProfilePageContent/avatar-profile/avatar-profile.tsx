@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { AvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-dialog'
 import { SpinnerLocal } from '@/components/Preloaders/SpinnerLocal/SpinnerLocal'
+import { AvatarDialog } from '@/components/ProfilePageContent/avatar-profile/avatar-dialog/ui/avatar-dialog'
 import { useTranslation } from '@/hooks/useTranslation'
 import {
   useDeleteAvatarFromServerMutation,

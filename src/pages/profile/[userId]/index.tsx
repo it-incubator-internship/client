@@ -253,7 +253,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
   }
 
   return (
-    <Fragment>
+    <>
       <div className={s.photoGrid} ref={scrollAreaRef}>
         {posts.map(post => {
           const imagePreview = post.images.find(item => {
@@ -270,7 +270,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
                 alt={`User photo ${post.postId}`}
                 height={228}
                 layout={'responsive'}
-                src={imagePreview?.originalImageUrl || '/photo-default-1.png'}
+                src={imagePreview?.originalImageUrl || '/photo-default.jpg'}
                 width={234}
               />
             </Link>
@@ -278,7 +278,7 @@ const PublicationsPhoto: NextPageWithLayout<PublicationsPhotoProps> = ({
         })}
       </div>
       {isPostsLoading && <ThreeDotsLoader />}
-    </Fragment>
+    </>
   )
 }
 

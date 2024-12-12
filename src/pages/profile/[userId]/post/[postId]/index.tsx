@@ -1,13 +1,18 @@
 import { ReactElement, ReactNode } from 'react'
 
-import { PublicationsPhoto } from '@/components/PublicationsPhoto'
 import Spinner from '@/components/Preloaders/Spinner/Spinner'
+import { PublicationsPhoto } from '@/components/PublicationsPhoto'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { getRunningQueriesThunk, getUserPost, getUserPosts, postsApi } from "@/services/posts/posts-api";
+import {
+  getRunningQueriesThunk,
+  getUserPost,
+  getUserPosts,
+  postsApi,
+} from '@/services/posts/posts-api'
 import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
