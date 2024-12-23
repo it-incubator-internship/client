@@ -3,6 +3,7 @@ import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageC
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { useTranslation } from '@/hooks/useTranslation'
 import { TabContent, Tabs } from '@robur_/ui-kit'
+import { AccountManagement } from "@/components/AccountManagement/AccountManagement";
 
 function ProfileEdit() {
   const t = useTranslation()
@@ -15,7 +16,7 @@ function ProfileEdit() {
         tabs={[
           { title: t.myProfileSettings.generalInformation, value: 'information' },
           { title: t.myProfileSettings.devices, value: 'devices' },
-          { disabled: true, title: t.myProfileSettings.accountManagement, value: 'account' },
+          { title: t.myProfileSettings.accountManagement, value: 'account' },
           { disabled: true, title: t.myProfileSettings.myPayments, value: 'payments' },
         ]}
       >
@@ -26,7 +27,7 @@ function ProfileEdit() {
           <TabContent value={'devices'}>
             <Devices />
           </TabContent>
-          <TabContent value={'account'}>Content about Account Management</TabContent>
+          <TabContent value={'account'}><AccountManagement /></TabContent>
           <TabContent value={'payments'}>Content about My payments</TabContent>
         </>
       </Tabs>
