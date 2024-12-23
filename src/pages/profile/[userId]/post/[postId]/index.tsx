@@ -1,13 +1,13 @@
 import { ReactElement, ReactNode } from 'react'
 
 import { PublicationsPhoto } from '@/components/PublicationsPhoto'
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { PostDialog } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useMeQuery } from '@/services/auth/authApi'
-import { getRunningQueriesThunk, getUserPost, getUserPosts } from '@/services/posts/posts-api'
+import { getRunningQueriesThunk, getUserPost, getUserPosts, postsApi } from "@/services/posts/posts-api";
 import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
@@ -54,12 +54,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
       posts = response?.data
     }
-
     if (postId) {
       const response = await store.dispatch(getUserPost.initiate({ postId: postId as string }))
 
       currentPost = response?.data
     }
+    await store.dispatch(postsApi.endpoints.getUserPost.initiate({ postId: postId as string }))
 
     if (!currentPost) {
       return {
@@ -83,7 +83,6 @@ const ProfilePost: NextPageWithLayout<Props> = ({ currentPost, posts }) => {
   const currentUserId = meData?.userId
   const router = useRouter()
   const { userId } = useParams()
-
   const t = useTranslation()
 
   const { data: profileData, isLoading: isLoadingProfile } = useGetProfileQuery(

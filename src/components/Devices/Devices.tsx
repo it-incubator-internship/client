@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 
 import { BraveIcon, ChromeIcon, FireFoxIcon, SafariIcon, YandexIcon } from '@/assets/components'
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { useTranslation } from '@/hooks/useTranslation'
 import {
   useCloseAllSessionsMutation,

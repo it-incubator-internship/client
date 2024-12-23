@@ -2,6 +2,7 @@ import { inctagramApi } from '../inctagramApi'
 import {
   Post,
   createPostArgs,
+  editPostArgs,
   getPostsResponse,
   getUserPostsResponse,
   uploadPhotosARgs,
@@ -32,18 +33,29 @@ export const postsApi = inctagramApi.injectEndpoints({
       }),
     }),
     getUserPost: builder.query<Post, { postId: string }>({
+      providesTags: ['Post'],
       query: ({ postId }) => ({
         method: 'GET',
         url: `/v1/post/${postId}/post`,
       }),
     }),
-    getUserPosts: builder.query<getUserPostsResponse, { userId: string }>({
-      query: ({ userId }) => ({
+    getUserPosts: builder.query<getUserPostsResponse, { lastCursor?: string; userId: string }>({
+      query: ({ lastCursor = '', userId }) => ({
         method: 'GET',
-        url: `/v1/post/${userId}`,
+        url: `/v1/post/${userId}?cursor=${lastCursor}`,
       }),
     }),
+    updatePost: builder.mutation<{ id: string }, editPostArgs>({
+      query: ({ description, id }) => {
+        return {
+          body: { description },
+          method: 'PUT',
+          url: `/v1/post/${id}`,
+        }
+      },
+    }),
     uploadPostPhotos: builder.mutation<void, uploadPhotosARgs>({
+      invalidatesTags: ['Post'],
       query: ({ photos, postId }) => ({
         body: photos,
         method: 'POST',
@@ -54,7 +66,6 @@ export const postsApi = inctagramApi.injectEndpoints({
 })
 
 export const { getPosts, getUserPost, getUserPosts } = postsApi.endpoints
-
 export const {
   util: { getRunningQueriesThunk },
 } = postsApi
@@ -64,5 +75,7 @@ export const {
   useGetPostsQuery,
   useGetUserPostQuery,
   useGetUserPostsQuery,
+  useLazyGetUserPostsQuery,
+  useUpdatePostMutation,
   useUploadPostPhotosMutation,
 } = postsApi

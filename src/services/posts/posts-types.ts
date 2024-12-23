@@ -42,3 +42,8 @@ export type uploadPhotosARgs = {
   photos: any
   postId: string
 }
+
+export type editPostArgs = {
+  description: string
+  id: string
+}
