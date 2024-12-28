@@ -1,0 +1,48 @@
+.cardImage {
+  width: 120px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.linkCard {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+
+  padding: 0;
+
+  background-color: transparent;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+  margin-right: 2px;
+
+  color: inherit;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.buttonCell {
+  text-align: center;
+}
+
+.disabled {
+  pointer-events: none;
+
+  svg {
+    color: var(--color-dark-100);
+  }
+}

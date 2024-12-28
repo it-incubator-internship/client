@@ -1,4 +1,5 @@
 import { Devices } from '@/components/Devices/Devices'
+import { MyPayments } from '@/components/MyPayments/MyPayments'
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -16,7 +17,7 @@ function ProfileEdit() {
           { title: t.myProfileSettings.generalInformation, value: 'information' },
           { title: t.myProfileSettings.devices, value: 'devices' },
           { disabled: true, title: t.myProfileSettings.accountManagement, value: 'account' },
-          { disabled: true, title: t.myProfileSettings.myPayments, value: 'payments' },
+          { title: t.myProfileSettings.myPayments, value: 'payments' },
         ]}
       >
         <>
@@ -27,7 +28,9 @@ function ProfileEdit() {
             <Devices />
           </TabContent>
           <TabContent value={'account'}>Content about Account Management</TabContent>
-          <TabContent value={'payments'}>Content about My payments</TabContent>
+          <TabContent value={'payments'}>
+            <MyPayments />
+          </TabContent>
         </>
       </Tabs>
     </div>
