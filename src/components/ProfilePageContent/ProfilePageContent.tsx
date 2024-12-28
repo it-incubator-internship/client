@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { AvatarProfile } from '@/components/ProfilePageContent/avatar-profile/avatar-profile'
 import { useCountriesAndCities } from '@/components/ProfilePageContent/hooks/useCountriesAndCities'
 import { useProfileForm } from '@/components/ProfilePageContent/hooks/useProfileForm'
@@ -14,8 +15,6 @@ import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@
 import { useRouter } from 'next/router'
 
 import s from './ProfilePageContent.module.scss'
-
-import Spinner from '@/components/Preloaders/Spinner/Spinner'
 
 export const ProfilePageContent = () => {
   const router = useRouter()

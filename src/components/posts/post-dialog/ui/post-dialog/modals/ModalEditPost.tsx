@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import Spinner from '@/components/Spinner/Spinner'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { modalName } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
 import { commonVariables } from '@/consts/common-variables'
 import { useTranslation } from '@/hooks/useTranslation'

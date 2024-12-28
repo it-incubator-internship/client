@@ -1,6 +1,6 @@
-import { modalName } from "@/components/posts/post-dialog/ui/post-dialog/post-dialog";
-import { Owner, Post } from "@/services/posts/posts-types";
-import { EditProfileResponse } from "@/services/profile/profile-types";
+import { modalName } from '@/components/posts/post-dialog/ui/post-dialog/post-dialog'
+import { Owner, Post } from '@/services/posts/posts-types'
+import { EditProfileResponse } from '@/services/profile/profile-types'
 
 export type ModalState = (typeof modalName)[keyof typeof modalName] | null
 type BaseProps = {
