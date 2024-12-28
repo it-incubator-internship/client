@@ -50,17 +50,15 @@ export const ModalViewPost = ({
 }: Props) => {
   const { data: me } = useMeQuery()
   const t = useTranslation()
-  let userFirstName
+  const userFirstName = profileData?.firstName || owner?.firstName
   let userLastName
   let userAvatar = '/default-avatar.jpg'
 
   if (profileData) {
     userAvatar = profileData.smallAvatarUrl
-    userFirstName = profileData.firstName
     userLastName = profileData.lastName
   } else if (owner) {
     userAvatar = owner.smallAvatarUrl
-    userFirstName = owner.firstName
     userLastName = owner.lastName
   }
   const PostActionsMenu = () => {
