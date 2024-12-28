@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 
 import { BraveIcon, ChromeIcon, FireFoxIcon, SafariIcon, YandexIcon } from '@/assets/components'
 import Spinner from '@/components/Preloaders/Spinner/Spinner'

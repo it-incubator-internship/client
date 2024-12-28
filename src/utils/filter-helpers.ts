@@ -69,7 +69,6 @@ async function getFilteredImg(imageSrc: string, filter: string = 'none'): Promis
       return item.name === filter
     })?.filter || 'none'
 
-  console.log('ctx.filter', ctx.filter)
   ctx.drawImage(image, 0, 0)
 
   return canvas.toDataURL('image/jpeg')
@@ -88,8 +87,6 @@ export const saveFilteredImage = async (images: ImageType[]): Promise<ImageType[
         }
       })
     )
-
-    console.log('updatedImages', updatedImages)
 
     return updatedImages as ImageType[]
   } catch (e) {

@@ -111,8 +111,6 @@ export const en: LocaleType = {
     minAgo(count: number) {
       const str = pluralizeRu(count)
 
-      console.log('str', str)
-
       switch (str) {
         case 'one':
           return `${count} min ago`
@@ -124,7 +122,7 @@ export const en: LocaleType = {
     },
   },
   devices: {
-    activeSessions: 'Active sessions',
+    activeSessions: 'Other active sessions',
     currentDevice: 'Current device',
     logOut: 'Log out',
     terminateOtherSessions: 'Terminate all other session',

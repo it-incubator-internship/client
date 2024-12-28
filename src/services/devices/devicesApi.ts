@@ -33,6 +33,17 @@ const devicesApi = inctagramApi.injectEndpoints({
           url: `/v1/sessions`,
         }
       },
+      transformResponse: (rawData: unknown): DevicesType[] => {
+        if (Array.isArray(rawData)) {
+          const uniqueData = Array.from(
+            new Map((rawData as DevicesType[]).map(item => [item.ip, item])).values()
+          )
+
+          return (uniqueData as DevicesType[]).reverse()
+        }
+
+        return []
+      },
     }),
   }),
 })

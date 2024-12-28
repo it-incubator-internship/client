@@ -41,8 +41,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 )
 
 function Home({ posts, usersCount }: Props) {
-  console.log('posts', posts)
-
   return <MainPage posts={posts} usersCount={usersCount} />
 }
 

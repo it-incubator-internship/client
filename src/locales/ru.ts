@@ -121,7 +121,7 @@ export const ru = {
     },
   },
   devices: {
-    activeSessions: 'Активные сессии',
+    activeSessions: 'Другие активные сессии',
     currentDevice: 'Текущее устройство',
     logOut: 'Выйти',
     terminateOtherSessions: 'Закрыть все сессии кроме текущей',
