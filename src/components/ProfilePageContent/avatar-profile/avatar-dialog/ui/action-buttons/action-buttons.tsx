@@ -1,6 +1,6 @@
 import { useTranslation } from '@/hooks/useTranslation'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Button } from '@robur_/ui-kit'
+import { Button } from '@demorest49de/ui-kit'
 
 import s from './action-buttons.module.scss'
 

@@ -16,7 +16,7 @@ import {
   Search,
   Sidebar,
   TrendingUpOutline,
-} from '@robur_/ui-kit'
+} from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 
 import { SidebarItem } from './SidebarItem/SidebarItem'

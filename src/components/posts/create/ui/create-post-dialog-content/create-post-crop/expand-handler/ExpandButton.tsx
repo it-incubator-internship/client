@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import { Button, ExpandOutline, Label } from '@robur_/ui-kit'
+import { Button, ExpandOutline, Label } from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 
 import s from '@/components/posts/create/ui/create-post-dialog-content/create-post-crop/create-post-crop.module.scss'

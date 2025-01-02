@@ -2,7 +2,7 @@ import { nextPage, prevPage } from '@/components/posts/create/model/create-post-
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppDispatch } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
-import { ArrowIosBackOutline, Button } from '@robur_/ui-kit'
+import { ArrowIosBackOutline, Button } from '@demorest49de/ui-kit'
 
 import s from './create-post-dialog-filter-header.module.scss'
 

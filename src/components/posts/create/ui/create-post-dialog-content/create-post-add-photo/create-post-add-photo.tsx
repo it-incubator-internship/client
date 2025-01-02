@@ -10,7 +10,7 @@ import { FileUploader } from '@/components/posts/create/ui/fileUploader'
 import { FILE_VALIDATION_CONFIG } from '@/consts/common-variables'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppDispatch, useAppSelector } from '@/services/store'
-import { Button, ImageOutline } from '@robur_/ui-kit'
+import { Button, ImageOutline } from '@demorest49de/ui-kit'
 
 import s from './create-post-add-photo.module.scss'
 

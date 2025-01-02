@@ -8,7 +8,7 @@ import {
   useLazyGetProfileQuery,
 } from '@/services/profile/profile-api'
 import { EditProfileResponse } from '@/services/profile/profile-types'
-import { Close, Modal } from '@robur_/ui-kit'
+import { Close, Modal } from '@demorest49de/ui-kit'
 import Image from 'next/image'
 
 import s from './avatar-profile.module.scss'

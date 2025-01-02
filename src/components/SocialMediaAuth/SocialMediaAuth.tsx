@@ -1,4 +1,4 @@
-import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@robur_/ui-kit'
+import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@demorest49de/ui-kit'
 
 import s from './SocialMediaAuth.module.scss'
 

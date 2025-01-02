@@ -10,7 +10,7 @@ import { useRegistrationMutation } from '@/services/auth/authApi'
 import { RegistrationArgs } from '@/services/auth/authTypes'
 import { customErrorHandler } from '@/utils/customErrorHandler'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, FormCheckbox, FormInput, Label, Modal } from '@robur_/ui-kit'
+import { Button, Card, FormCheckbox, FormInput, Label, Modal } from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
 

@@ -7,7 +7,7 @@ import { saveFilteredImage } from '@/utils/filter-helpers'
 import { getBinaryImageData } from '@/utils/getBinaryImageData'
 import { showErrorToast, showSuccessToast } from '@/utils/toastConfig'
 import * as Dialog from '@radix-ui/react-dialog'
-import { ArrowIosBackOutline, Button } from '@robur_/ui-kit'
+import { ArrowIosBackOutline, Button } from '@demorest49de/ui-kit'
 
 import s from './create-post-dialog-publish-header.module.scss'
 

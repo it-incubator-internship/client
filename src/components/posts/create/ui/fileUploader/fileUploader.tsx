@@ -1,6 +1,6 @@
 import { ChangeEvent, MouseEvent, ReactNode, useRef } from 'react'
 
-import { Button } from '@robur_/ui-kit'
+import { Button } from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 
 import s from './fileUploader.module.scss'

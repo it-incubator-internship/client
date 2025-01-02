@@ -8,7 +8,7 @@ import {
   useCloseSessionMutation,
   useGetSessionsQuery,
 } from '@/services/devices/devicesApi'
-import { Button, Card, LogOut } from '@robur_/ui-kit'
+import { Button, Card, LogOut } from '@demorest49de/ui-kit'
 import Image from 'next/image'
 import { UAParser } from 'ua-parser-js'
 

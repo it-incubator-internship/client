@@ -14,7 +14,7 @@ import {
 import { Post, getUserPostsResponse } from '@/services/posts/posts-types'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { wrapper } from '@/services/store'
-import { Button } from '@robur_/ui-kit'
+import { Button } from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Image from 'next/image'

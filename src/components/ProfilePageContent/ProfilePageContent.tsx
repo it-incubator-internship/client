@@ -11,7 +11,7 @@ import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { Terra } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
+import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@demorest49de/ui-kit'
 import { useRouter } from 'next/router'
 
 import s from './ProfilePageContent.module.scss'

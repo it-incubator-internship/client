@@ -15,7 +15,7 @@ import {
   PaperPlaneOutline,
   ScrollAreaComponent,
   TrashOutline,
-} from '@robur_/ui-kit'
+} from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 import Image from 'next/image'
 import { Navigation, Pagination } from 'swiper/modules'

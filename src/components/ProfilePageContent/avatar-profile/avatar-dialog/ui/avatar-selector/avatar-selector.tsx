@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react'
 
-import { ImageOutline } from '@robur_/ui-kit'
+import { ImageOutline } from '@demorest49de/ui-kit'
 import dynamic from 'next/dynamic'
 
 import s from './avatar-selector.module.scss'

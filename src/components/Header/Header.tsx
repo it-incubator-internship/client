@@ -11,7 +11,7 @@ import {
   OutlineBell,
   Select,
   SelectItem,
-} from '@robur_/ui-kit'
+} from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'

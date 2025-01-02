@@ -1,6 +1,6 @@
 import { useTranslation } from '@/hooks/useTranslation'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Close } from '@robur_/ui-kit'
+import { Close } from '@demorest49de/ui-kit'
 
 import s from './avatar-header.module.scss'
 

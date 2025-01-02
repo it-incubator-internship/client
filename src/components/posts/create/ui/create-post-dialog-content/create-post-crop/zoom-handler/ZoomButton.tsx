@@ -5,7 +5,7 @@ import RangeSlider from '@/components/posts/create/ui/create-post-dialog-content
 import * as Dialog from '@radix-ui/react-dialog'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
-import { Button, MaximizeOutline } from '@robur_/ui-kit'
+import { Button, MaximizeOutline } from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 
 import s2 from '../create-post-crop.module.scss'

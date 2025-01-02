@@ -15,7 +15,7 @@ import {
 import { useTranslation } from '@/hooks/useTranslation'
 import { useAppSelector } from '@/services/store'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Modal } from '@robur_/ui-kit'
+import { Modal } from '@demorest49de/ui-kit'
 
 import s from './create-post-dialog.module.scss'
 

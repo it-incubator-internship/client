@@ -9,7 +9,7 @@ import { useDeletePostMutation } from '@/services/posts/posts-api'
 import { Owner, Post } from '@/services/posts/posts-types'
 import { EditProfileResponse } from '@/services/profile/profile-types'
 import { showErrorToast, showSuccessToast } from '@/utils/toastConfig'
-import { Modal } from '@robur_/ui-kit'
+import { Modal } from '@demorest49de/ui-kit'
 import { useRouter } from 'next/router'
 
 export const modalName = {

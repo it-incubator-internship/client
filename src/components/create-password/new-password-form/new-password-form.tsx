@@ -10,7 +10,7 @@ import { useChangePasswordMutation } from '@/services/password-recovery/password
 import { ServerError } from '@/services/password-recovery/password-recovery-types'
 import { showErrorToast } from '@/utils/toastConfig'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, FormInput, Modal } from '@robur_/ui-kit'
+import { Button, Card, FormInput, Modal } from '@demorest49de/ui-kit'
 import Router from 'next/router'
 import { z } from 'zod'
 

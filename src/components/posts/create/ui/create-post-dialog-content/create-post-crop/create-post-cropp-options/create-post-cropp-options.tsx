@@ -4,7 +4,7 @@ import AspectRatio1to1 from '@/assets/AspectRatio1to1'
 import AspectRatio4to5 from '@/assets/AspectRatio4to5'
 import AspectRatio16to9 from '@/assets/AspectRatio16to9'
 import ImageOutline from '@/assets/ImageOutline'
-import { Button } from '@robur_/ui-kit'
+import { Button } from '@demorest49de/ui-kit'
 import clsx from 'clsx'
 import { nanoid } from 'nanoid'
 

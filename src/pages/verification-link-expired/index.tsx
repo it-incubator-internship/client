@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useRegistrationResendingMutation } from '@/services/auth/authApi'
-import { Button, Modal } from '@robur_/ui-kit'
+import { Button, Modal } from '@demorest49de/ui-kit'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 

@@ -13,7 +13,7 @@ import '@/styles/index.scss'
 import '@/styles/nprogress.scss'
 import '@/styles/toastStyles.scss'
 import '@/styles/swiperStyles.scss'
-import '@robur_/ui-kit/style.css'
+import '@demorest49de/ui-kit/style.css'
 import 'react-toastify/dist/ReactToastify.css'
 import '@/styles/cropper.css'
 
