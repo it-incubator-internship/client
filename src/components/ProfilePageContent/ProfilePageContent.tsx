@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import Spinner from '@/components/Preloaders/Spinner/Spinner'
@@ -8,10 +9,19 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { updateProfileFormValues, updateProfileSchema } from '@/schemas/updateProfileSchema'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
-import { Terra } from '@/services/profile/profile-types'
+import { Terra, TransformedType } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
+import {
+  Button,
+  FormDatePicker,
+  FormInput,
+  FormTextarea,
+  RadixFormCombobox,
+} from '@demorest49de/ui-kit'
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { OptionsType } from '@demorest49de/ui-kit/dist/components/ui/radix-ui/combobox/form-combobox'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@demorest49de/ui-kit'
 import { useRouter } from 'next/router'
 
 import s from './ProfilePageContent.module.scss'
@@ -27,6 +37,9 @@ export const ProfilePageContent = () => {
     { skip: !currentUserId }
   )
 
+  const [countriesF, setCountriesF] = useState<TransformedType[]>([])
+  const [citiesF, setCitiesF] = useState<TransformedType[]>([])
+
   const { control, handleSubmit, reset, setError, setValue, watch } =
     useForm<updateProfileFormValues>({
       defaultValues: {
@@ -39,7 +52,9 @@ export const ProfilePageContent = () => {
         userName: meData?.userName,
       },
       mode: 'onSubmit',
-      resolver: zodResolver(updateProfileSchema(t)),
+      resolver: zodResolver(
+        updateProfileSchema(t, countriesF as TransformedType[], citiesF as TransformedType[])
+      ),
     })
 
   const {
@@ -65,6 +80,11 @@ export const ProfilePageContent = () => {
     router,
     setError,
   })
+
+  useEffect(() => {
+    countriesValues && setCountriesF(countriesValues)
+    citiesValues && setCitiesF(citiesValues)
+  }, [citiesValues, countriesValues])
 
   if (startIsLoading || isLoadingProfile || isLoadingEditProfile) {
     return <Spinner />
@@ -106,37 +126,37 @@ export const ProfilePageContent = () => {
           <div style={{ display: 'flex', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>
               <div>{t.myProfileSettings.selectYourCountry}</div>
-              <FormCombobox
+              <RadixFormCombobox
                 control={control}
-                getDataForCombobox={setGetDataForCountry}
+                dataForComboboxHandler={setGetDataForCountry}
                 isLoading={isCountriesLoading}
                 markedAsRequired
                 name={Terra.country}
                 onInputClick={getCountriesFromLocalStorage}
-                options={countriesValues ?? []}
-                setValue={value => setValue(Terra.country, value)}
+                options={countriesValues as OptionsType[]}
+                setValue={value => setValue(Terra.country, value as string)}
               />
             </div>
             <div style={{ flexGrow: 1 }}>
               <div>{t.myProfileSettings.selectYourCity}</div>
 
-              <FormCombobox
-                control={control}
-                disabled={!countryValue}
-                getDataForCombobox={setGetDataForCity}
-                isLoading={isCitiesLoading}
-                markedAsRequired
-                name={Terra.city}
-                onInputClick={() => handleClickInputCity()}
-                options={citiesValues ?? []}
-                requestItemOnKeyDown={() => {
-                  if (!arrowDownPressed) {
-                    handleClickInputCity()
-                    setArrowDownPressed(true)
-                  }
-                }}
-                setValue={value => setValue(Terra.city, value)}
-              />
+              {/*<FormCombobox*/}
+              {/*  options={citiesValues}*/}
+              {/*  name={Terra.city}*/}
+              {/*  control={control}*/}
+              {/*  setValue={value => setValue(Terra.city, value)}*/}
+              {/*  disabled={!countryValue}*/}
+              {/*  getDataForCombobox={setGetDataForCity}*/}
+              {/*  onInputClick={() => handleCity()}*/}
+              {/*  isLoading={isCitiesLoading}*/}
+              {/*  markedAsRequired*/}
+              {/*  requestItemOnKeyDown={() => {*/}
+              {/*    if (!arrowDownPressed) {*/}
+              {/*      handleCity()*/}
+              {/*      setArrowDownPressed(true)*/}
+              {/*    }*/}
+              {/*  }}*/}
+              {/*/>*/}
             </div>
           </div>
           <FormTextarea
