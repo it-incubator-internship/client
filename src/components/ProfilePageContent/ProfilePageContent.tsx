@@ -67,8 +67,8 @@ export const ProfilePageContent = () => {
     isCitiesLoading,
     isCountriesLoading,
     setArrowDownPressed,
-    setGetDataForCity,
-    setGetDataForCountry,
+    setSelectedCity,
+    setSelectedCountry,
   } = useCountriesAndCities({ profileData, router, setValue, watch })
 
   const { handleFormSubmit, isLoadingEditProfile, modalJSX } = useProfileForm({
@@ -128,35 +128,34 @@ export const ProfilePageContent = () => {
               <div>{t.myProfileSettings.selectYourCountry}</div>
               <RadixFormCombobox
                 control={control}
-                dataForComboboxHandler={setGetDataForCountry}
+                dataForComboboxHandler={setSelectedCountry}
                 isLoading={isCountriesLoading}
                 markedAsRequired
                 name={Terra.country}
                 onInputClick={getCountriesFromLocalStorage}
-                options={countriesValues as OptionsType[]}
+                options={(countriesValues as OptionsType[]) || []}
                 setValue={value => setValue(Terra.country, value as string)}
               />
             </div>
             <div style={{ flexGrow: 1 }}>
               <div>{t.myProfileSettings.selectYourCity}</div>
-
-              {/*<FormCombobox*/}
-              {/*  options={citiesValues}*/}
-              {/*  name={Terra.city}*/}
-              {/*  control={control}*/}
-              {/*  setValue={value => setValue(Terra.city, value)}*/}
-              {/*  disabled={!countryValue}*/}
-              {/*  getDataForCombobox={setGetDataForCity}*/}
-              {/*  onInputClick={() => handleCity()}*/}
-              {/*  isLoading={isCitiesLoading}*/}
-              {/*  markedAsRequired*/}
-              {/*  requestItemOnKeyDown={() => {*/}
-              {/*    if (!arrowDownPressed) {*/}
-              {/*      handleCity()*/}
-              {/*      setArrowDownPressed(true)*/}
-              {/*    }*/}
-              {/*  }}*/}
-              {/*/>*/}
+              <RadixFormCombobox
+                control={control}
+                dataForComboboxHandler={setSelectedCity}
+                disabled={!countryValue}
+                isLoading={isCitiesLoading}
+                markedAsRequired
+                name={Terra.city}
+                onInputClick={() => handleClickInputCity()}
+                options={(citiesValues as OptionsType[]) || []}
+                // requestItemOnKeyDown={() => {
+                //   if (!arrowDownPressed) {
+                //     handleCity()
+                //     setArrowDownPressed(true)
+                //   }
+                // }}
+                setValue={value => setValue(Terra.city, value as string)}
+              />
             </div>
           </div>
           <FormTextarea

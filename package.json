@@ -11,7 +11,7 @@
     "open-browser": "node open-browser.js"
   },
   "dependencies": {
-    "@demorest49de/ui-kit": "^0.0.68",
+    "@demorest49de/ui-kit": "^0.0.70",
     "@emotion/styled": "^11.13.0",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-dialog": "^1.1.2",
