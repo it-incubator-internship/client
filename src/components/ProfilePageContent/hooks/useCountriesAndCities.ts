@@ -24,13 +24,12 @@ type Props = {
 }
 
 export const useCountriesAndCities = ({ profileData, router, setValue, watch }: Props) => {
-  const [getCountries, { isError: isCountryError, isLoading: isCountriesLoading }] =
-    useLazyGetCountriesQuery()
-  const [getCities, { isError: isCityError, isLoading: isCitiesLoading }] = useLazyGetCitiesQuery()
-  const [countriesValues, setCountriesValues] = useState<TransformedType[]>([])
+  const [getCountries, { isLoading: isCountriesLoading }] = useLazyGetCountriesQuery()
+  const [getCities, { isLoading: isCitiesLoading }] = useLazyGetCitiesQuery()
+  const [countriesValues, setCountriesValues] = useState<TransformedType[] | null>([])
   const [citiesValues, setCitiesValues] = useState<TransformedType[] | null>([])
-  const [dataForCountry, setGetDataForCountry] = useState<TransformedType | null>(null)
-  const [dataForCity, setGetDataForCity] = useState<TransformedType | null>(null)
+  const [userSelectedCountry, setUserSelectedCountry] = useState<TransformedType | null>(null)
+  const [selectedCity, setUserSelectedCity] = useState<TransformedType | null>(null)
   const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
   const storage = new Storage()
 
@@ -71,19 +70,26 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
 
     const countryObject = countries.find(country => country?.label === profileData?.country)
 
-    setGetDataForCountry(countryObject as TransformedType)
+    // setSelectedCountry(countryObject as TransformedType)
     handleClickInputCity(countryObject)
 
     setCountriesValues(countries)
-    setCitiesValues(null)
+    // setCitiesValues(null)
   }
 
   const handleClickInputCity = (countryObject: TransformedType = null) => {
-    const dataObject = countryObject || dataForCountry
     const currentLocale = getCurrentLocale()
+    const storedCities = storage.getItem(currentLocale?.city as string)
+    const cities = JSON.parse(storedCities as string)
 
-    if (dataObject?.value.id) {
-      getCities({ id: dataObject?.value.id as number })
+    if (cities.length > 0 && cities[0].value.id === countryObject?.value.id) {
+      setCitiesValues(cities)
+
+      return
+    }
+
+    if (countryObject?.value.id) {
+      getCities({ id: countryObject?.value.id as number })
         .unwrap()
         .then(data => {
           const cities = transformDataCity(data)
@@ -93,6 +99,7 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
           setCityToLocalStorage(cities, currentLocale as CurrentLocaleType)
         })
         .catch((error: any) => {
+          // eslint-disable-next-line
           console.log(error)
         })
     }
@@ -122,7 +129,7 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
   useEffect(() => {
     setArrowDownPressed(false)
     setCitiesValues(null)
-  }, [dataForCountry])
+  }, [userSelectedCountry])
 
   return {
     arrowDownPressed,
@@ -133,8 +140,9 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
     handleClickInputCity,
     isCitiesLoading,
     isCountriesLoading,
+    selectedCountry: userSelectedCountry,
     setArrowDownPressed,
-    setGetDataForCity,
-    setGetDataForCountry,
+    setUserSelectedCity,
+    setUserSelectedCountry,
   }
 }

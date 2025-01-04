@@ -67,8 +67,8 @@ export const ProfilePageContent = () => {
     isCitiesLoading,
     isCountriesLoading,
     setArrowDownPressed,
-    setSelectedCity,
-    setSelectedCountry,
+    setUserSelectedCity,
+    setUserSelectedCountry,
   } = useCountriesAndCities({ profileData, router, setValue, watch })
 
   const { handleFormSubmit, isLoadingEditProfile, modalJSX } = useProfileForm({
@@ -123,12 +123,12 @@ export const ProfilePageContent = () => {
             name={'dateOfBirth'}
             years={years}
           />
-          <div style={{ display: 'flex', gap: '24px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>
               <div>{t.myProfileSettings.selectYourCountry}</div>
               <RadixFormCombobox
                 control={control}
-                dataForComboboxHandler={setSelectedCountry}
+                dataForComboboxHandler={setUserSelectedCountry}
                 isLoading={isCountriesLoading}
                 markedAsRequired
                 name={Terra.country}
@@ -141,7 +141,7 @@ export const ProfilePageContent = () => {
               <div>{t.myProfileSettings.selectYourCity}</div>
               <RadixFormCombobox
                 control={control}
-                dataForComboboxHandler={setSelectedCity}
+                dataForComboboxHandler={setUserSelectedCity}
                 disabled={!countryValue}
                 isLoading={isCitiesLoading}
                 markedAsRequired
