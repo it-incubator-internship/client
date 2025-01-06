@@ -1,19 +1,16 @@
 .container{
-  .containerCard {
+  .blockPaymentButtons{
     display: flex;
-    flex-direction: column;
-
-    width: 100%;
-
-    background-color: var(--color-dark-500);
-    border-color: var(--color-dark-100);
-  }
-  .title {
-    margin: 30px 0 6px;
-
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-    color: var(--color-light-100);
+    padding: 20px 0;
+    justify-content: flex-end;
+    gap: 20px;
+    .svg {
+      width: 94px;
+      height: 64px;
+      background-color: #0a6638;
+    }
+    .blockPaymentOr{
+      padding-top: 20px;
+    }
   }
 }

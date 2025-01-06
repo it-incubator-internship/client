@@ -226,6 +226,18 @@ export const en: LocaleType = {
     aUserUnder13CannotCreateProfile: 'A user under 13 cannot create a profile.',
     aboutMe: 'About me',
     accountManagement: 'Account management',
+    accountManagementPayment: {
+      modalRequestError: {
+        text: 'The transaction failed. Please write to support',
+        textButton: 'Back to payment',
+        title: 'Error',
+      },
+      modalRequestSuccess: {
+        text: 'Subscription successful!',
+        textButton: 'Ок',
+        title: 'Success',
+      },
+    },
     addProfilePhoto: 'Add a profile photo',
     addProfilePhotoBlocked: 'Add a profile photo is not available in view mode.',
     clickHereAddProfilePhoto: 'Click here add profile photo',

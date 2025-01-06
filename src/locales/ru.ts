@@ -1,4 +1,5 @@
 import { pluralizeRu } from '@/utils/createPluralize'
+import { AccountManagement } from "@/components/AccountManagement/AccountManagement";
 
 export const ru = {
   and: 'и',
@@ -223,6 +224,18 @@ export const ru = {
     aUserUnder13CannotCreateProfile: 'Пользователь младше 13 лет не может создать профиль.',
     aboutMe: 'Обо мне',
     accountManagement: 'Управление учетными записями',
+    accountManagementPayment: {
+      modalRequestError: {
+        text: 'Транзакция не удалась. Пожалуйста, напишите в поддержку',
+        textButton: 'Ок',
+        title: 'Успешно',
+      },
+      modalRequestSuccess: {
+        text: 'Подписка прошла успешно!',
+        textButton: 'Вернуться к оплате',
+        title: 'Ошибка',
+      },
+    },
     addProfilePhoto: 'Добавьте фото профиля',
     addProfilePhotoBlocked: 'Добавление фото профиля недоступно в режиме просмотра',
     clickHereAddProfilePhoto: 'Нажмите здесь, чтобы добавить фотографию профиля',
