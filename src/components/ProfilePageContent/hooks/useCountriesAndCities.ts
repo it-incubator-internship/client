@@ -29,8 +29,7 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
   const [countriesValues, setCountriesValues] = useState<TransformedType[] | null>([])
   const [citiesValues, setCitiesValues] = useState<TransformedType[] | null>([])
   const [userSelectedCountry, setUserSelectedCountry] = useState<TransformedType | null>(null)
-  const [selectedCity, setUserSelectedCity] = useState<TransformedType | null>(null)
-  const [arrowDownPressed, setArrowDownPressed] = useState<boolean>(false)
+  const [userSelectedCity, setUserSelectedCity] = useState<TransformedType | null>(null)
   const storage = new Storage()
 
   const getCountriesFromLocalStorage = () => {
@@ -70,11 +69,9 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
 
     const countryObject = countries.find(country => country?.label === profileData?.country)
 
-    // setSelectedCountry(countryObject as TransformedType)
     handleClickInputCity(countryObject)
 
     setCountriesValues(countries)
-    // setCitiesValues(null)
   }
 
   const handleClickInputCity = (countryObject: TransformedType = null) => {
@@ -82,7 +79,7 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
     const storedCities = storage.getItem(currentLocale?.city as string)
     const cities = JSON.parse(storedCities as string)
 
-    if (cities.length > 0 && cities[0].value.id === countryObject?.value.id) {
+    if (cities?.length > 0 && cities[0].value.id === countryObject?.value.id) {
       setCitiesValues(cities)
 
       return
@@ -96,7 +93,7 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
 
           setCitiesValues(cities)
 
-          setCityToLocalStorage(cities, currentLocale as CurrentLocaleType)
+          setCityToLS(cities, currentLocale as CurrentLocaleType)
         })
         .catch((error: any) => {
           // eslint-disable-next-line
@@ -105,7 +102,7 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
     }
   }
 
-  function setCityToLocalStorage(cities: TransformedType[], currentLocale: CurrentLocaleType) {
+  function setCityToLS(cities: TransformedType[], currentLocale: CurrentLocaleType) {
     const citiesStringified = JSON.stringify(cities)
 
     storage.setItem(currentLocale?.city as string, citiesStringified)
@@ -127,12 +124,10 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
   }, [countryValue])
 
   useEffect(() => {
-    setArrowDownPressed(false)
-    setCitiesValues(null)
+    // setCitiesValues(null)
   }, [userSelectedCountry])
 
   return {
-    arrowDownPressed,
     citiesValues,
     countriesValues,
     countryValue,
@@ -140,9 +135,8 @@ export const useCountriesAndCities = ({ profileData, router, setValue, watch }: 
     handleClickInputCity,
     isCitiesLoading,
     isCountriesLoading,
-    selectedCountry: userSelectedCountry,
-    setArrowDownPressed,
     setUserSelectedCity,
     setUserSelectedCountry,
+    userSelectedCountry,
   }
 }

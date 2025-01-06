@@ -58,7 +58,6 @@ export const ProfilePageContent = () => {
     })
 
   const {
-    arrowDownPressed,
     citiesValues,
     countriesValues,
     countryValue,
@@ -66,9 +65,9 @@ export const ProfilePageContent = () => {
     handleClickInputCity,
     isCitiesLoading,
     isCountriesLoading,
-    setArrowDownPressed,
     setUserSelectedCity,
     setUserSelectedCountry,
+    userSelectedCountry,
   } = useCountriesAndCities({ profileData, router, setValue, watch })
 
   const { handleFormSubmit, isLoadingEditProfile, modalJSX } = useProfileForm({
@@ -146,14 +145,8 @@ export const ProfilePageContent = () => {
                 isLoading={isCitiesLoading}
                 markedAsRequired
                 name={Terra.city}
-                onInputClick={() => handleClickInputCity()}
+                onInputClick={() => handleClickInputCity(userSelectedCountry)}
                 options={(citiesValues as OptionsType[]) || []}
-                // requestItemOnKeyDown={() => {
-                //   if (!arrowDownPressed) {
-                //     handleCity()
-                //     setArrowDownPressed(true)
-                //   }
-                // }}
                 setValue={value => setValue(Terra.city, value as string)}
               />
             </div>
