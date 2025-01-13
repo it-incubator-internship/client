@@ -5,6 +5,7 @@ import { RequestErrorModal } from '@/components/AccountManagement/modal/RequestE
 import { SuccessModal } from '@/components/AccountManagement/modal/SuccessModal'
 import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { SelectionGroup } from '@/components/SelectionGroup/SelectionGroup'
+import { ACCOUNT_TYPE, ACCOUNT_TYPES, AUTO_RENEWAL, SUBSCRIPTION_OPTIONS, SUBSRIPTION_TYPE } from "@/consts/payments";
 import { useTranslation } from '@/hooks/useTranslation'
 import { accountManagementSchema, accountTypeFormValues } from '@/schemas/accountManagementSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -12,35 +13,20 @@ import { FormCheckbox, FormRadioGroup, PaypalSvgrepoCom4, StripeSvgrepoCom4 } fr
 import { useRouter } from 'next/router'
 
 import s from './AccountManagement.module.scss'
-export const ACCOUNT_TYPES = {
-  BUSINESS: { label: 'business', value: 'Business' },
-  PERSONAL: { label: 'personal', value: 'Personal' },
-} as const
-export const SUBSCRIPTION_OPTIONS = {
-  ONE_DAY: {
-    label: '$10 per 1 Day',
-    value: '1_day',
-  },
-  ONE_MONTH: {
-    label: '$100 per Month',
-    value: '1_month',
-  },
-  SEVEN_DAYS: {
-    label: '$50 per 7 Days',
-    value: '7_day',
-  },
-} as const
+
 type SubscriptionOptionLabel =
   (typeof SUBSCRIPTION_OPTIONS)[keyof typeof SUBSCRIPTION_OPTIONS]['label']
-type accountType = {
-  selectedAccount: 'business' | 'personal' | undefined
-  selectedSubscriptionType: '$10 per 1 Day' | '$50 per 7 Days' | '$100 per Month' | undefined
+type AccountType = (typeof ACCOUNT_TYPES)[keyof typeof ACCOUNT_TYPES]['label']
+type AccountTypeState = {
+  autoRenewal: boolean
+  selectedAccount: AccountType | undefined
+  selectedSubscriptionType: SubscriptionOptionLabel | undefined
 }
-export type AccountType = (typeof ACCOUNT_TYPES)[keyof typeof ACCOUNT_TYPES]
 export const AccountManagement = () => {
-  const [accountType, setAccountType] = useState<accountType>({
-    selectedAccount: 'personal',
-    selectedSubscriptionType: '$10 per 1 Day',
+  const [accountType, setAccountType] = useState<AccountTypeState>({
+    autoRenewal: false,
+    selectedAccount: ACCOUNT_TYPES.PERSONAL.label,
+    selectedSubscriptionType: SUBSCRIPTION_OPTIONS.ONE_DAY.label,
   })
   const t = useTranslation()
   const {
@@ -63,8 +49,8 @@ export const AccountManagement = () => {
   const [loading, setLoading] = useState(false)
   const [modalRequestSuccess, setModalRequestSuccess] = useState(false)
   const [modalRequestError, setModalRequestError] = useState(false)
-  const watchedSubscriptionType = watch('subscriptionType')
-  const watchedAutoRenewal = watch('autoRenewal')
+  const watchedSubscriptionType = watch(SUBSRIPTION_TYPE)
+  const watchedAutoRenewal = watch(AUTO_RENEWAL)
   const currentAccountTypeBusiness = accountType.selectedAccount === ACCOUNT_TYPES.BUSINESS.label
 
   useEffect(() => {
@@ -87,22 +73,21 @@ export const AccountManagement = () => {
     setTimeout(() => {
       setLoading(false)
       // Условие для эмуляции успешного или неудачного результата
-      if (data.subscriptionType) {
+      if (data.subscriptionType === 10) {
         setModalRequestSuccess(true)
         setAccountWithSubscription(true)
       } else {
         setModalRequestError(true)
-        setAccountWithSubscription(false)
       }
     }, 2000)
   }
-  const onChangeValueAccountType = (newValue: 'business' | 'personal') => {
+  const onChangeValueAccountType = (newValue: AccountType) => {
     setAccountType({ ...accountType, selectedAccount: newValue })
-    setValue('accountType', newValue)
+    setValue(ACCOUNT_TYPE, newValue)
   }
   const onChangeSubscriptionType = (newValue: SubscriptionOptionLabel) => {
     setAccountType({ ...accountType, selectedSubscriptionType: newValue })
-    setValue('subscriptionType', newValue)
+    setValue(SUBSRIPTION_TYPE, newValue)
   }
 
   function handleModalSuccessClose() {
@@ -134,7 +119,7 @@ export const AccountManagement = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {currentAccountTypeBusiness && (
           <div className={s.AutoRenewalCheckbox}>
-            <FormCheckbox control={control} name={'autoRenewal'}>
+            <FormCheckbox control={control} name={AUTO_RENEWAL}>
               <span> {t.myProfileSettings.accountManagementPayment.autoRenewal}</span>
             </FormCheckbox>
           </div>
@@ -144,7 +129,7 @@ export const AccountManagement = () => {
             control={control}
             disabled={accountWithSubscription}
             error={errors?.accountType}
-            name={'accountType'}
+            name={ACCOUNT_TYPE}
             onValueChange={onChangeValueAccountType}
             options={[
               { label: ACCOUNT_TYPES.PERSONAL.label, value: ACCOUNT_TYPES.PERSONAL.value },
@@ -158,7 +143,7 @@ export const AccountManagement = () => {
               <FormRadioGroup
                 control={control}
                 error={errors?.subscriptionType}
-                name={'subscriptionType'}
+                name={SUBSRIPTION_TYPE}
                 onValueChange={onChangeSubscriptionType}
                 options={[
                   {
