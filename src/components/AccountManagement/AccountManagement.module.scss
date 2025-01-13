@@ -13,4 +13,15 @@
       padding-top: 20px;
     }
   }
+  .blockCurrentSubscription {
+    display: flex;
+    gap: 30px;
+    .blockData {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .AutoRenewalCheckbox{
+    margin-top: 20px;
+  }
 }

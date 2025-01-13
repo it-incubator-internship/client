@@ -227,6 +227,11 @@ export const en: LocaleType = {
     aboutMe: 'About me',
     accountManagement: 'Account management',
     accountManagementPayment: {
+      accountType: 'Account type:',
+      autoRenewal: 'Auto-Renewal',
+      currentSubscription: 'Current Subscription:',
+      errorSelected: 'A variant must be selected',
+      expire: 'Expire at',
       modalRequestError: {
         text: 'The transaction failed. Please write to support',
         textButton: 'Back to payment',
@@ -237,6 +242,8 @@ export const en: LocaleType = {
         textButton: 'Ок',
         title: 'Success',
       },
+      nextPayment: 'Next payment',
+      subscriptionCosts: 'Your subscription costs:',
     },
     addProfilePhoto: 'Add a profile photo',
     addProfilePhotoBlocked: 'Add a profile photo is not available in view mode.',

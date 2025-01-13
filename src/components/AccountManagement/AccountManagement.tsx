@@ -1,12 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { RequestErrorModal } from '@/components/AccountManagement/modal/RequestErrorModal'
+import { SuccessModal } from '@/components/AccountManagement/modal/SuccessModal'
+import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { SelectionGroup } from '@/components/SelectionGroup/SelectionGroup'
-import { Button, FormRadioGroup, Modal, PaypalSvgrepoCom4, StripeSvgrepoCom4 } from "@robur_/ui-kit";
+import { useTranslation } from '@/hooks/useTranslation'
+import { accountManagementSchema, accountTypeFormValues } from '@/schemas/accountManagementSchema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FormCheckbox, FormRadioGroup, PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@robur_/ui-kit'
+import { useRouter } from 'next/router'
 
 import s from './AccountManagement.module.scss'
-import { useTranslation } from "@/hooks/useTranslation";
-import Spinner from "@/components/Preloaders/Spinner/Spinner";
 export const ACCOUNT_TYPES = {
   BUSINESS: { label: 'business', value: 'Business' },
   PERSONAL: { label: 'personal', value: 'Personal' },
@@ -25,58 +30,120 @@ export const SUBSCRIPTION_OPTIONS = {
     value: '7_day',
   },
 } as const
-
+type SubscriptionOptionLabel =
+  (typeof SUBSCRIPTION_OPTIONS)[keyof typeof SUBSCRIPTION_OPTIONS]['label']
+type accountType = {
+  selectedAccount: 'business' | 'personal' | undefined
+  selectedSubscriptionType: '$10 per 1 Day' | '$50 per 7 Days' | '$100 per Month' | undefined
+}
 export type AccountType = (typeof ACCOUNT_TYPES)[keyof typeof ACCOUNT_TYPES]
 export const AccountManagement = () => {
-  //const [accountType, setAccountType] = useState<null | typeof accountType>(null)
-  const { control, handleSubmit, setValue, watch } = useForm({
-    defaultValues: {
-      accountType: '',
-      subscriptionType: '',
-    },
+  const [accountType, setAccountType] = useState<accountType>({
+    selectedAccount: 'personal',
+    selectedSubscriptionType: '$10 per 1 Day',
   })
-  const [subscriptionStatus, setSubscriptionStatus] = useState<'error' | 'none' | 'success'>('none')
+  const t = useTranslation()
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+  } = useForm<accountTypeFormValues>({
+    defaultValues: {
+      accountType: ACCOUNT_TYPES.PERSONAL.label,
+      autoRenewal: false,
+      subscriptionType: SUBSCRIPTION_OPTIONS.ONE_DAY.label,
+    },
+    resolver: zodResolver(accountManagementSchema(t)),
+  })
+  const router = useRouter()
+  const [accountWithSubscription, setAccountWithSubscription] = useState(false)
   const [loading, setLoading] = useState(false)
   const [modalRequestSuccess, setModalRequestSuccess] = useState(false)
   const [modalRequestError, setModalRequestError] = useState(false)
-  const watchedAccountType = watch('accountType')
+  const watchedSubscriptionType = watch('subscriptionType')
+  const watchedAutoRenewal = watch('autoRenewal')
+  const currentAccountTypeBusiness = accountType.selectedAccount === ACCOUNT_TYPES.BUSINESS.label
 
-  const currentAccountType = watchedAccountType === ACCOUNT_TYPES.BUSINESS.label
-  const t = useTranslation()
+  useEffect(() => {
+    if (currentAccountTypeBusiness) {
+      reset({
+        accountType: ACCOUNT_TYPES.BUSINESS.label,
+        autoRenewal: watchedAutoRenewal,
+        subscriptionType: watchedSubscriptionType,
+      })
+    }
+  }, [currentAccountTypeBusiness, reset, router.locale])
+
   const onSubmit = (data: any) => {
+    if (!currentAccountTypeBusiness) {
+      return
+    }
     console.log('Форма отправлена:', data)
     setLoading(true)
     // Эмуляция отправки данных
     setTimeout(() => {
       setLoading(false)
       // Условие для эмуляции успешного или неудачного результата
-      if (data.subscriptionType === 10) {
-        setSubscriptionStatus('success')
+      if (data.subscriptionType) {
         setModalRequestSuccess(true)
+        setAccountWithSubscription(true)
       } else {
-        setSubscriptionStatus('error')
         setModalRequestError(true)
-        setLoading(false)
+        setAccountWithSubscription(false)
       }
     }, 2000)
   }
-  const onChangeValueAccountType = (newValue: string) => {
+  const onChangeValueAccountType = (newValue: 'business' | 'personal') => {
+    setAccountType({ ...accountType, selectedAccount: newValue })
     setValue('accountType', newValue)
   }
-  const onChangeSubscriptionType = (newValue: string) => {
+  const onChangeSubscriptionType = (newValue: SubscriptionOptionLabel) => {
+    setAccountType({ ...accountType, selectedSubscriptionType: newValue })
     setValue('subscriptionType', newValue)
   }
 
-  function handleModalClosed() {
-    modalRequestSuccess ? setModalRequestSuccess(false) : setModalRequestError(false)
+  function handleModalSuccessClose() {
+    setModalRequestSuccess(false)
+  }
+  function handleModalRequestErrorClose() {
+    setModalRequestError(false)
+  }
+  if (loading) {
+    return <Spinner />
   }
 
   return (
     <div className={s.container}>
+      {accountWithSubscription && (
+        <SelectionGroup title={t.myProfileSettings.accountManagementPayment.currentSubscription}>
+          <section className={s.blockCurrentSubscription}>
+            <div className={s.blockData}>
+              <p>{t.myProfileSettings.accountManagementPayment.expire}</p>
+              <p>11.02.2025</p>
+            </div>
+            <div className={s.blockData}>
+              <p>{t.myProfileSettings.accountManagementPayment.nextPayment}</p>
+              <p>11.03.2025</p>
+            </div>
+          </section>
+        </SelectionGroup>
+      )}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <SelectionGroup title={'Account type'}>
+        {currentAccountTypeBusiness && (
+          <div className={s.AutoRenewalCheckbox}>
+            <FormCheckbox control={control} name={'autoRenewal'}>
+              <span> {t.myProfileSettings.accountManagementPayment.autoRenewal}</span>
+            </FormCheckbox>
+          </div>
+        )}
+        <SelectionGroup title={t.myProfileSettings.accountManagementPayment.accountType}>
           <FormRadioGroup
             control={control}
+            disabled={accountWithSubscription}
+            error={errors?.accountType}
             name={'accountType'}
             onValueChange={onChangeValueAccountType}
             options={[
@@ -85,12 +152,12 @@ export const AccountManagement = () => {
             ]}
           />
         </SelectionGroup>
-        {loading && <Spinner />}
-        {currentAccountType && (
+        {currentAccountTypeBusiness && (
           <>
-            <SelectionGroup title={'Your subscription costs:'}>
+            <SelectionGroup title={t.myProfileSettings.accountManagementPayment.subscriptionCosts}>
               <FormRadioGroup
                 control={control}
+                error={errors?.subscriptionType}
                 name={'subscriptionType'}
                 onValueChange={onChangeSubscriptionType}
                 options={[
@@ -121,27 +188,12 @@ export const AccountManagement = () => {
           </>
         )}
       </form>
-      {subscriptionStatus === 'success' && (
-        <Modal
-          buttonTitle={t.myProfileSettings.accountManagementPayment.modalRequestSuccess.textButton}
-          fullwidthButton
-          onClose={handleModalClosed}
-          open={modalRequestSuccess}
-          title={t.myProfileSettings.accountManagementPayment.modalRequestSuccess.title}
-        >
-          {t.myProfileSettings.accountManagementPayment.modalRequestSuccess.text}
-        </Modal>
+      {modalRequestSuccess && (
+        <SuccessModal onClose={handleModalSuccessClose} open={modalRequestSuccess} />
       )}
-      {subscriptionStatus === 'error' && (
-        <Modal
-          buttonTitle={t.myProfileSettings.accountManagementPayment.modalRequestError.textButton}
-          fullwidthButton
-          onClose={handleModalClosed}
-          open={modalRequestError}
-          title={t.myProfileSettings.accountManagementPayment.modalRequestError.title}
-        >
-          {t.myProfileSettings.accountManagementPayment.modalRequestError.text}
-        </Modal>
+
+      {modalRequestError && (
+        <RequestErrorModal onClose={handleModalRequestErrorClose} open={modalRequestError} />
       )}
     </div>
   )

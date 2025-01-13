@@ -225,16 +225,23 @@ export const ru = {
     aboutMe: 'Обо мне',
     accountManagement: 'Управление учетными записями',
     accountManagementPayment: {
+      accountType: 'Тип аккаунта:',
+      autoRenewal: 'Автоматическое продление',
+      currentSubscription: 'Текущая подписка:',
+      errorSelected: 'Необходимо выбрать вариант',
+      expire: 'Срок действия истекает',
       modalRequestError: {
         text: 'Транзакция не удалась. Пожалуйста, напишите в поддержку',
-        textButton: 'Ок',
-        title: 'Успешно',
-      },
-      modalRequestSuccess: {
-        text: 'Подписка прошла успешно!',
         textButton: 'Вернуться к оплате',
         title: 'Ошибка',
       },
+      modalRequestSuccess: {
+        text: 'Оплата прошла успешно!',
+        textButton: 'Ок',
+        title: 'Успешно',
+      },
+      nextPayment: 'Следующий платеж',
+      subscriptionCosts: 'Стоимость вашей подписки:',
     },
     addProfilePhoto: 'Добавьте фото профиля',
     addProfilePhotoBlocked: 'Добавление фото профиля недоступно в режиме просмотра',
