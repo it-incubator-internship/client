@@ -11,13 +11,7 @@ import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { Terra, TransformedType } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
-import {
-  Button,
-  FormDatePicker,
-  FormInput,
-  FormTextarea,
-  RadixFormCombobox,
-} from '@demorest49de/ui-kit'
+import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@demorest49de/ui-kit'
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import { OptionsType } from '@demorest49de/ui-kit/dist/components/ui/radix-ui/combobox/form-combobox'
@@ -125,7 +119,7 @@ export const ProfilePageContent = () => {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
             <div style={{ flexGrow: 1 }}>
               <div>{t.myProfileSettings.selectYourCountry}</div>
-              <RadixFormCombobox
+              <FormCombobox
                 control={control}
                 dataForComboboxHandler={setUserSelectedCountry}
                 isLoading={isCountriesLoading}
@@ -138,7 +132,7 @@ export const ProfilePageContent = () => {
             </div>
             <div style={{ flexGrow: 1 }}>
               <div>{t.myProfileSettings.selectYourCity}</div>
-              <RadixFormCombobox
+              <FormCombobox
                 control={control}
                 dataForComboboxHandler={setUserSelectedCity}
                 disabled={!countryValue}
