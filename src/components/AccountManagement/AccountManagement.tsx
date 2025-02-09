@@ -81,12 +81,11 @@ export const AccountManagement = () => {
       }
     }, 2000)
   }
-  //comment~!
-  const onChangeValueAccountType = (newValue: AccountType) => {
+  const handleChangeValueAccountType = (newValue: AccountType) => {
     setAccountType({ ...accountType, selectedAccount: newValue })
     setValue(ACCOUNT_TYPE, newValue)
   }
-  const onChangeSubscriptionType = (newValue: SubscriptionOptionLabel) => {
+  const handleChangeSubscriptionType = (newValue: SubscriptionOptionLabel) => {
     setAccountType({ ...accountType, selectedSubscriptionType: newValue })
     setValue(SUBSRIPTION_TYPE, newValue)
   }
@@ -131,7 +130,7 @@ export const AccountManagement = () => {
             disabled={accountWithSubscription}
             error={errors?.accountType}
             name={ACCOUNT_TYPE}
-            onValueChange={onChangeValueAccountType}
+            onValueChange={handleChangeValueAccountType}
             options={[
               { label: ACCOUNT_TYPES.PERSONAL.label, value: ACCOUNT_TYPES.PERSONAL.value },
               { label: ACCOUNT_TYPES.BUSINESS.label, value: ACCOUNT_TYPES.BUSINESS.value },
@@ -145,7 +144,7 @@ export const AccountManagement = () => {
                 control={control}
                 error={errors?.subscriptionType}
                 name={SUBSRIPTION_TYPE}
-                onValueChange={onChangeSubscriptionType}
+                onValueChange={handleChangeSubscriptionType}
                 options={[
                   {
                     label: SUBSCRIPTION_OPTIONS.ONE_DAY.label,
