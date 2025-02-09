@@ -73,7 +73,7 @@ export const AccountManagement = () => {
     setTimeout(() => {
       setLoading(false)
       // Условие для эмуляции успешного или неудачного результата
-      if (data.subscriptionType === 10) {
+      if (data.subscriptionType) {
         setModalRequestSuccess(true)
         setAccountWithSubscription(true)
       } else {
@@ -81,6 +81,7 @@ export const AccountManagement = () => {
       }
     }, 2000)
   }
+  //comment~!
   const onChangeValueAccountType = (newValue: AccountType) => {
     setAccountType({ ...accountType, selectedAccount: newValue })
     setValue(ACCOUNT_TYPE, newValue)
