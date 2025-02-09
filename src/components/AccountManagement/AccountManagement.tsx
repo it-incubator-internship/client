@@ -63,11 +63,12 @@ export const AccountManagement = () => {
     }
   }, [currentAccountTypeBusiness, reset, router.locale])
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: any, event) => {
     if (!currentAccountTypeBusiness) {
       return
     }
     console.log('Форма отправлена:', data)
+    console.log('event:', event.nativeEvent.submitter.name)
     setLoading(true)
     // Эмуляция отправки данных
     setTimeout(() => {
@@ -162,11 +163,11 @@ export const AccountManagement = () => {
               />
             </SelectionGroup>
             <div className={s.blockPaymentButtons}>
-              <button type={'submit'}>
+              <button name={'Paypal'} type={'submit'}>
                 <PaypalSvgrepoCom4 className={s.svg} />
               </button>
               <span className={s.blockPaymentOr}>{'or'}</span>
-              <button type={'submit'}>
+              <button name={'Stripe'} type={'submit'}>
                 <StripeSvgrepoCom4 className={s.svg} />
               </button>
             </div>
