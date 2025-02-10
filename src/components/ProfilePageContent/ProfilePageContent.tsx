@@ -127,7 +127,7 @@ export const ProfilePageContent = () => {
                 name={Terra.country}
                 onInputClick={getCountriesFromLocalStorage}
                 options={(countriesValues as OptionsType[]) || []}
-                setValue={value => setValue(Terra.country, value as string)}
+                setValue={(value: string) => setValue(Terra.country, value as string)}
               />
             </div>
             <div style={{ flexGrow: 1 }}>
@@ -141,7 +141,7 @@ export const ProfilePageContent = () => {
                 name={Terra.city}
                 onInputClick={() => handleClickInputCity(userSelectedCountry)}
                 options={(citiesValues as OptionsType[]) || []}
-                setValue={value => setValue(Terra.city, value as string)}
+                setValue={(value: string) => setValue(Terra.city, value as string)}
               />
             </div>
           </div>
