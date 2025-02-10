@@ -11,7 +11,7 @@ import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
 import { Terra, TransformedType } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
-import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@demorest49de/ui-kit'
+import { Button, FormCombobox, FormInput, FormTextarea } from '@demorest49de/ui-kit'
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import { OptionsType } from '@demorest49de/ui-kit/dist/components/ui/radix-ui/combobox/form-combobox'
