@@ -14,6 +14,11 @@ import {
 } from '@/consts/payments'
 import { useTranslation } from '@/hooks/useTranslation'
 import { accountManagementSchema, accountTypeFormValues } from '@/schemas/accountManagementSchema'
+import {
+  useGetTariffPlanesQuery,
+  useLazyGetPaymentLinkByTariffIdQuery,
+} from '@/services/profile/profile-api'
+import { PaymentTariffsReturnType, PaymentType } from '@/services/profile/profile-types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormCheckbox, FormRadioGroup, PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
@@ -34,6 +39,10 @@ export const AccountManagement = () => {
     selectedAccount: ACCOUNT_TYPES.PERSONAL.label,
     selectedSubscriptionType: SUBSCRIPTION_OPTIONS.ONE_DAY.label,
   })
+  const { data: tariffsData, isLoading: isTariffsLoading } = useGetTariffPlanesQuery()
+  const [getPaytmentLink, { isLoading: isGetPaymentLinkLoading }] =
+    useLazyGetPaymentLinkByTariffIdQuery()
+
   const t = useTranslation()
   const {
     control,
@@ -58,6 +67,7 @@ export const AccountManagement = () => {
   const watchedSubscriptionType = watch(SUBSRIPTION_TYPE)
   const watchedAutoRenewal = watch(AUTO_RENEWAL)
   const currentAccountTypeBusiness = accountType.selectedAccount === ACCOUNT_TYPES.BUSINESS.label
+  let options: PaymentType[] | undefined
 
   useEffect(() => {
     if (currentAccountTypeBusiness) {
@@ -69,24 +79,69 @@ export const AccountManagement = () => {
     }
   }, [currentAccountTypeBusiness, reset, router.locale])
 
-  const onSubmit = (data: any, event: any) => {
+  if (isTariffsLoading) {
+    return <Spinner />
+  }
+
+  if (tariffsData) {
+    options = tariffsData?.reduce(
+      (acc: PaymentType[], current: PaymentTariffsReturnType): PaymentType[] => {
+        if (!acc.some(item => item.period === current.period)) {
+          acc.push({
+            label: `$${123} per ${current.period} Day`,
+            period: current.period,
+            price: 123,
+            value: `${current.period}_day`,
+          })
+        }
+
+        return acc
+      },
+      []
+    )
+  }
+
+  const onSubmit = async (data: any, event: any) => {
     if (!currentAccountTypeBusiness) {
       return
     }
-    console.log('Форма отправлена:', data)
-    console.log('event:', event.nativeEvent.submitter.name)
-    setLoading(true)
-    // Эмуляция отправки данных
-    setTimeout(() => {
-      setLoading(false)
-      // Условие для эмуляции успешного или неудачного результата
-      if (data.subscriptionType) {
-        setModalRequestSuccess(true)
-        setAccountWithSubscription(true)
-      } else {
-        setModalRequestError(true)
+
+    const paymentOption = options?.find(option => {
+      return option.label === data.subscriptionType
+    })?.period
+    const submitter = event.nativeEvent.submitter
+    const paymentSystem = submitter?.dataset.option
+    const tariffId = tariffsData?.find(tariff => {
+      return tariff.period === paymentOption && tariff.paymentSystem === paymentSystem
+    })?.tariffId
+
+    if (tariffId) {
+      try {
+        setLoading(true)
+        const res = await getPaytmentLink(tariffId)
+        const paymentLink = res?.data?.paymentLink
+
+        if (paymentLink) {
+          document.location = paymentLink
+        }
+      } catch (e) {
+        console.dir(e)
+      } finally {
+        setLoading(false)
       }
-    }, 2000)
+    }
+
+    // // Эмуляция отправки данных
+    // setTimeout(() => {
+    //   setLoading(false)
+    //   // Условие для эмуляции успешного или неудачного результата
+    //   if (data.subscriptionType) {
+    //     setModalRequestSuccess(true)
+    //     setAccountWithSubscription(true)
+    //   } else {
+    //     setModalRequestError(true)
+    //   }
+    // }, 2000)
   }
   const handleChangeValueAccountType = (newValue: AccountType) => {
     setAccountType({ ...accountType, selectedAccount: newValue })
@@ -144,7 +199,7 @@ export const AccountManagement = () => {
             ]}
           />
         </SelectionGroup>
-        {currentAccountTypeBusiness && (
+        {currentAccountTypeBusiness && options && (
           <>
             <SelectionGroup title={t.myProfileSettings.accountManagementPayment.subscriptionCosts}>
               <FormRadioGroup
@@ -152,28 +207,15 @@ export const AccountManagement = () => {
                 error={errors?.subscriptionType}
                 name={SUBSRIPTION_TYPE}
                 onValueChange={handleChangeSubscriptionType}
-                options={[
-                  {
-                    label: SUBSCRIPTION_OPTIONS.ONE_DAY.label,
-                    value: SUBSCRIPTION_OPTIONS.ONE_DAY.value,
-                  },
-                  {
-                    label: SUBSCRIPTION_OPTIONS.SEVEN_DAYS.label,
-                    value: SUBSCRIPTION_OPTIONS.SEVEN_DAYS.value,
-                  },
-                  {
-                    label: SUBSCRIPTION_OPTIONS.ONE_MONTH.label,
-                    value: SUBSCRIPTION_OPTIONS.ONE_MONTH.value,
-                  },
-                ]}
+                options={options}
               />
             </SelectionGroup>
             <div className={s.blockPaymentButtons}>
-              <button name={'Paypal'} type={'submit'}>
+              <button data-option={'paypal'} name={'Paypal'} type={'submit'}>
                 <PaypalSvgrepoCom4 className={s.svg} />
               </button>
               <span className={s.blockPaymentOr}>{'or'}</span>
-              <button name={'Stripe'} type={'submit'}>
+              <button data-option={'stripe'} name={'Stripe'} type={'submit'}>
                 <StripeSvgrepoCom4 className={s.svg} />
               </button>
             </div>

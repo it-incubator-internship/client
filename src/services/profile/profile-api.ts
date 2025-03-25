@@ -9,6 +9,7 @@ import {
   CountryReturnType,
   EditProfileArgs,
   EditProfileResponse,
+  PaymentTariffsReturnType,
   TransformedType,
 } from './profile-types'
 
@@ -79,9 +80,15 @@ export const profileApi = inctagramApi.injectEndpoints({
         transformDataCountry(data, 'ru')
         transformDataCountry(data, 'en')
       },
-      query: args => ({
+      query: () => ({
         method: 'GET',
         url: `/v1/localization/countries`,
+      }),
+    }),
+    getPaymentLinkByTariffId: builder.query<{ paymentLink: string }, number>({
+      query: tariffId => ({
+        method: 'GET',
+        url: `/v1/payments/payment-link/${tariffId}`,
       }),
     }),
     getProfile: builder.query<EditProfileResponse, { id: string }>({
@@ -91,8 +98,14 @@ export const profileApi = inctagramApi.injectEndpoints({
         url: `/v1/user/profile/${args.id}`,
       }),
     }),
+    getTariffPlanes: builder.query<PaymentTariffsReturnType[], void>({
+      query: () => ({
+        method: 'GET',
+        url: `/v1/payments/tariff-plans`,
+      }),
+    }),
     getUsersCount: builder.query<getUsersTotalCountResponse, void>({
-      query: args => ({
+      query: () => ({
         method: 'GET',
         url: `/v1/user/counts`,
       }),
@@ -117,8 +130,10 @@ export const {
   useDeleteAvatarFromServerMutation,
   useEditProfileMutation,
   useGetProfileQuery,
+  useGetTariffPlanesQuery,
   useLazyGetCitiesQuery,
   useLazyGetCountriesQuery,
+  useLazyGetPaymentLinkByTariffIdQuery,
   useLazyGetProfileQuery,
   useSendAvatarToServerMutation,
 } = profileApi
