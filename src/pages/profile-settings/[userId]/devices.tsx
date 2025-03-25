@@ -2,7 +2,7 @@ import { ProfilePageSettings } from '@/components/ProfilePageSettings/ProfilePag
 import { getCombinedLayout } from '@/components/layouts/CombinedLayout/CombinedLayout'
 
 function ProfileEdit() {
-  return <ProfilePageSettings />
+  return <ProfilePageSettings page={'devices'} />
 }
 
 ProfileEdit.getLayout = getCombinedLayout

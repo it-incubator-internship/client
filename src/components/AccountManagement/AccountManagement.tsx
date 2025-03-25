@@ -5,7 +5,13 @@ import { RequestErrorModal } from '@/components/AccountManagement/modal/RequestE
 import { SuccessModal } from '@/components/AccountManagement/modal/SuccessModal'
 import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { SelectionGroup } from '@/components/SelectionGroup/SelectionGroup'
-import { ACCOUNT_TYPE, ACCOUNT_TYPES, AUTO_RENEWAL, SUBSCRIPTION_OPTIONS, SUBSRIPTION_TYPE } from "@/consts/payments";
+import {
+  ACCOUNT_TYPE,
+  ACCOUNT_TYPES,
+  AUTO_RENEWAL,
+  SUBSCRIPTION_OPTIONS,
+  SUBSRIPTION_TYPE,
+} from '@/consts/payments'
 import { useTranslation } from '@/hooks/useTranslation'
 import { accountManagementSchema, accountTypeFormValues } from '@/schemas/accountManagementSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -63,7 +69,7 @@ export const AccountManagement = () => {
     }
   }, [currentAccountTypeBusiness, reset, router.locale])
 
-  const onSubmit = (data: any, event) => {
+  const onSubmit = (data: any, event: any) => {
     if (!currentAccountTypeBusiness) {
       return
     }
