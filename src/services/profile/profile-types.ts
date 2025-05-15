@@ -76,3 +76,16 @@ export type PaymentType = {
   price?: number
   value: string
 }
+
+export type TariffType = {
+  id: number
+  name: string
+  period: number
+  price: number
+}
+
+export type SubscriptionType = {
+  subscriptionCreatedAt: string
+  subscriptionEndAt: string
+  tariffPlan: TariffType
+}

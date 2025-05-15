@@ -232,6 +232,11 @@ export const en: LocaleType = {
       currentSubscription: 'Current Subscription:',
       errorSelected: 'A variant must be selected',
       expire: 'Expire at',
+      modalCreatePayment: {
+        text: 'Auto-renewal will be enabled with this payment. You can disable it anytime in your profile settings',
+        textButton: 'OK',
+        title: 'Create payment',
+      },
       modalRequestError: {
         text: 'The transaction failed. Please write to support',
         textButton: 'Back to payment',

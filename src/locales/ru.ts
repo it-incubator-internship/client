@@ -1,5 +1,5 @@
+import { AccountManagement } from '@/components/AccountManagement/AccountManagement'
 import { pluralizeRu } from '@/utils/createPluralize'
-import { AccountManagement } from "@/components/AccountManagement/AccountManagement";
 
 export const ru = {
   and: 'и',
@@ -230,6 +230,11 @@ export const ru = {
       currentSubscription: 'Текущая подписка:',
       errorSelected: 'Необходимо выбрать вариант',
       expire: 'Срок действия истекает',
+      modalCreatePayment: {
+        text: 'Автопродление будет включено для этого платежа. Вы можете отключить его в любой момент из своего профиля',
+        textButton: 'OK',
+        title: 'Оплата подписки',
+      },
       modalRequestError: {
         text: 'Транзакция не удалась. Пожалуйста, напишите в поддержку',
         textButton: 'Вернуться к оплате',

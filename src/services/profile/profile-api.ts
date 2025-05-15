@@ -10,6 +10,7 @@ import {
   EditProfileArgs,
   EditProfileResponse,
   PaymentTariffsReturnType,
+  SubscriptionType,
   TransformedType,
 } from './profile-types'
 
@@ -85,6 +86,12 @@ export const profileApi = inctagramApi.injectEndpoints({
         url: `/v1/localization/countries`,
       }),
     }),
+    getMyCurrentSubscription: builder.query<SubscriptionType, void>({
+      query: () => ({
+        method: 'GET',
+        url: `/v1/payments/my-current-subscription`,
+      }),
+    }),
     getPaymentLinkByTariffId: builder.query<{ paymentLink: string }, number>({
       query: tariffId => ({
         method: 'GET',
@@ -129,6 +136,7 @@ export const {
 export const {
   useDeleteAvatarFromServerMutation,
   useEditProfileMutation,
+  useGetMyCurrentSubscriptionQuery,
   useGetProfileQuery,
   useGetTariffPlanesQuery,
   useLazyGetCitiesQuery,

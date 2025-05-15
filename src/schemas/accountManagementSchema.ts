@@ -6,7 +6,6 @@ export const accountManagementSchema = (t: LocaleType) => {
     accountType: z
       .string({ message: t.myProfileSettings.accountManagementPayment.errorSelected })
       .optional(),
-    autoRenewal: z.boolean().optional(),
     subscriptionType: z.string({
       message: t.myProfileSettings.accountManagementPayment.errorSelected,
     }),
