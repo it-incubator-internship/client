@@ -230,6 +230,11 @@ export const ru = {
       currentSubscription: 'Текущая подписка:',
       errorSelected: 'Необходимо выбрать вариант',
       expire: 'Срок действия истекает',
+      modalCancelSubscription: {
+        text: 'Автопродление будет выключено. Вы уверены?',
+        textButton: 'OK',
+        title: 'Отмена автопродления',
+      },
       modalCreatePayment: {
         text: 'Автопродление будет включено для этого платежа. Вы можете отключить его в любой момент из своего профиля',
         textButton: 'OK',

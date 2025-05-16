@@ -42,6 +42,13 @@ const transformDataCountry = (data: CountryReturnType[], locale: string) => {
 
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
+    cancelSubscription: builder.mutation<void, void>({
+      query: file => ({
+        body: file,
+        method: 'POST',
+        url: `/v1/payments/cancel-my-current-subscription`,
+      }),
+    }),
     deleteAvatarFromServer: builder.mutation<void, void>({
       query: () => ({
         method: 'DELETE',
@@ -134,6 +141,7 @@ export const {
 } = profileApi
 
 export const {
+  useCancelSubscriptionMutation,
   useDeleteAvatarFromServerMutation,
   useEditProfileMutation,
   useGetMyCurrentSubscriptionQuery,

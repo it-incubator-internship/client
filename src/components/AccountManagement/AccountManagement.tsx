@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { CancelSubscriptionModal } from '@/components/AccountManagement/modal/CancelSubscriptionModal'
 import { CreatePaymentModal } from '@/components/AccountManagement/modal/CreatePaymentModal'
 import { RequestErrorModal } from '@/components/AccountManagement/modal/RequestErrorModal'
 import { SuccessModal } from '@/components/AccountManagement/modal/SuccessModal'
@@ -15,6 +16,7 @@ import {
 import { useTranslation } from '@/hooks/useTranslation'
 import { accountManagementSchema, accountTypeFormValues } from '@/schemas/accountManagementSchema'
 import {
+  useCancelSubscriptionMutation,
   useGetMyCurrentSubscriptionQuery,
   useGetTariffPlanesQuery,
   useLazyGetPaymentLinkByTariffIdQuery,
@@ -40,6 +42,7 @@ export const AccountManagement = () => {
   })
   const { data: tariffsData, isLoading: isTariffsLoading } = useGetTariffPlanesQuery()
   const { data: subscriptionData } = useGetMyCurrentSubscriptionQuery()
+  const [cancelSubscription] = useCancelSubscriptionMutation()
   const [getPaymentLink] = useLazyGetPaymentLinkByTariffIdQuery()
 
   const t = useTranslation()
@@ -58,10 +61,10 @@ export const AccountManagement = () => {
     resolver: zodResolver(accountManagementSchema(t)),
   })
   const router = useRouter()
-  const [accountWithSubscription, setAccountWithSubscription] = useState(false)
   const [loading, setLoading] = useState(false)
   const [paymentSystem, setPaymentSystem] = useState(null)
   const [createPaymentModalOpened, setCreatePaymentModalOpened] = useState(false)
+  const [cancelSubscriptionModalOpened, setCancelSubscriptionModalOpened] = useState(false)
   const [modalRequestSuccess, setModalRequestSuccess] = useState(false)
   const [modalRequestError, setModalRequestError] = useState(false)
   const watchedSubscriptionType = watch(SUBSRIPTION_TYPE)
@@ -158,7 +161,11 @@ export const AccountManagement = () => {
   }
 
   const handleChangeAutoRenewal = () => {
-    alert('change autoRenewal')
+    setCancelSubscriptionModalOpened(true)
+  }
+
+  function handleCancelSubscriptionModalClose() {
+    setCancelSubscriptionModalOpened(false)
   }
 
   function handleCreateModalClose() {
@@ -176,7 +183,7 @@ export const AccountManagement = () => {
 
   return (
     <div className={s.container}>
-      {accountWithSubscription && (
+      {subscriptionData && (
         <SelectionGroup title={t.myProfileSettings.accountManagementPayment.currentSubscription}>
           <section className={s.blockCurrentSubscription}>
             <div className={s.blockData}>
@@ -190,7 +197,7 @@ export const AccountManagement = () => {
           </section>
         </SelectionGroup>
       )}
-      {currentAccountTypeBusiness && (
+      {subscriptionData && currentAccountTypeBusiness && (
         <div className={s.AutoRenewalCheckbox}>
           <Checkbox checked onCheckedChange={handleChangeAutoRenewal} type={'button'}>
             <span> {t.myProfileSettings.accountManagementPayment.autoRenewal}</span>
@@ -201,7 +208,7 @@ export const AccountManagement = () => {
         <SelectionGroup title={t.myProfileSettings.accountManagementPayment.accountType}>
           <FormRadioGroup
             control={control}
-            disabled={accountWithSubscription}
+            disabled={!!subscriptionData}
             error={errors?.accountType}
             name={ACCOUNT_TYPE}
             onValueChange={handleChangeValueAccountType}
@@ -246,6 +253,14 @@ export const AccountManagement = () => {
           </>
         )}
       </form>
+      {cancelSubscriptionModalOpened && (
+        <CancelSubscriptionModal
+          onApprove={cancelSubscription}
+          onClose={handleCancelSubscriptionModalClose}
+          open={cancelSubscriptionModalOpened}
+        />
+      )}
+
       {createPaymentModalOpened && (
         <CreatePaymentModal
           onApprove={handleSubmit(onSubmit)}
