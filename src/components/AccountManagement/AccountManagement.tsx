@@ -22,6 +22,7 @@ import {
   useLazyGetPaymentLinkByTariffIdQuery,
 } from '@/services/profile/profile-api'
 import { PaymentTariffsReturnType, PaymentType } from '@/services/profile/profile-types'
+import convertDate from '@/utils/convertDate'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox, FormRadioGroup, PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
@@ -80,6 +81,13 @@ export const AccountManagement = () => {
     }
   }, [currentAccountTypeBusiness, reset, router.locale])
 
+  useEffect(() => {
+    setAccountType({
+      selectedAccount: ACCOUNT_TYPES.BUSINESS.label,
+      selectedSubscriptionType: undefined,
+    })
+  }, [subscriptionData])
+
   if (isTariffsLoading) {
     return <Spinner />
   }
@@ -117,8 +125,6 @@ export const AccountManagement = () => {
     const paymentOption = options?.find(option => {
       return option.label === data.subscriptionType
     })?.period
-    // const submitter = event.nativeEvent.submitter
-    // const paymentSystem = submitter?.dataset.option
     const tariffId = tariffsData?.find(tariff => {
       return tariff.period === paymentOption && tariff.paymentSystem === paymentSystem
     })?.tariffId
@@ -188,18 +194,22 @@ export const AccountManagement = () => {
           <section className={s.blockCurrentSubscription}>
             <div className={s.blockData}>
               <p>{t.myProfileSettings.accountManagementPayment.expire}</p>
-              <p>11.02.2025</p>
+              <p>{convertDate.toLocaleString(subscriptionData.subscriptionCreatedAt)}</p>
             </div>
             <div className={s.blockData}>
               <p>{t.myProfileSettings.accountManagementPayment.nextPayment}</p>
-              <p>11.03.2025</p>
+              <p>{convertDate.toLocaleString(subscriptionData.subscriptionEndAt)}</p>
             </div>
           </section>
         </SelectionGroup>
       )}
       {subscriptionData && currentAccountTypeBusiness && (
         <div className={s.AutoRenewalCheckbox}>
-          <Checkbox checked onCheckedChange={handleChangeAutoRenewal} type={'button'}>
+          <Checkbox
+            checked={subscriptionData.isRenewal}
+            onCheckedChange={handleChangeAutoRenewal}
+            type={'button'}
+          >
             <span> {t.myProfileSettings.accountManagementPayment.autoRenewal}</span>
           </Checkbox>
         </div>

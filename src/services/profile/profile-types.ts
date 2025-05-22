@@ -85,6 +85,7 @@ export type TariffType = {
 }
 
 export type SubscriptionType = {
+  isRenewal: boolean
   subscriptionCreatedAt: string
   subscriptionEndAt: string
   tariffPlan: TariffType
