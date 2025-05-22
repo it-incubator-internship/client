@@ -13,6 +13,7 @@ import {
   SUBSCRIPTION_OPTIONS,
   SUBSRIPTION_TYPE,
 } from '@/consts/payments'
+import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { accountManagementSchema, accountTypeFormValues } from '@/schemas/accountManagementSchema'
 import {
@@ -26,7 +27,7 @@ import convertDate from '@/utils/convertDate'
 import { showErrorToast, showSuccessToast } from '@/utils/toastConfig'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox, FormRadioGroup, PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@robur_/ui-kit'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 
 import s from './AccountManagement.module.scss'
@@ -64,16 +65,24 @@ export const AccountManagement = () => {
     resolver: zodResolver(accountManagementSchema(t)),
   })
   const router = useRouter()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const params = useParams()
+  const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [paymentSystem, setPaymentSystem] = useState(null)
   const [createPaymentModalOpened, setCreatePaymentModalOpened] = useState(false)
   const [cancelSubscriptionModalOpened, setCancelSubscriptionModalOpened] = useState(false)
-  const [modalRequestSuccess, setModalRequestSuccess] = useState(false)
-  const [modalRequestError, setModalRequestError] = useState(false)
   const watchedSubscriptionType = watch(SUBSRIPTION_TYPE)
   const currentAccountTypeBusiness = accountType.selectedAccount === ACCOUNT_TYPES.BUSINESS.label
+  const [paymentResult, setPaymentResult] = useState('')
   let options: PaymentType[] | undefined
+
+  useEffect(() => {
+    const paymentResult = searchParams.get('payment_result')
+
+    if (paymentResult) {
+      setPaymentResult(paymentResult)
+    }
+  }, [])
 
   useEffect(() => {
     if (currentAccountTypeBusiness) {
@@ -189,12 +198,15 @@ export const AccountManagement = () => {
   function handleCreateModalClose() {
     setCreatePaymentModalOpened(false)
   }
-  function handleModalSuccessClose() {
-    setModalRequestSuccess(false)
+  function handleModalPaymentResultClose() {
+    const newSearchParams = new URLSearchParams(searchParams.toString())
+
+    newSearchParams.delete('payment_result')
+    // router.replace(`${PATH.PROFILE_EDIT}/${params.userId}/account?${newSearchParams.toString()}`)
+    router.push(`${PATH.PROFILE_EDIT}/${params.userId}/account`)
+    setPaymentResult('')
   }
-  function handleModalRequestErrorClose() {
-    setModalRequestError(false)
-  }
+
   if (loading) {
     return <Spinner />
   }
@@ -292,12 +304,15 @@ export const AccountManagement = () => {
         />
       )}
 
-      {modalRequestSuccess && (
-        <SuccessModal onClose={handleModalSuccessClose} open={modalRequestSuccess} />
+      {paymentResult === 'success' && (
+        <SuccessModal onClose={handleModalPaymentResultClose} open={paymentResult === 'success'} />
       )}
 
-      {modalRequestError && (
-        <RequestErrorModal onClose={handleModalRequestErrorClose} open={modalRequestError} />
+      {paymentResult === 'error' && (
+        <RequestErrorModal
+          onClose={handleModalPaymentResultClose}
+          open={paymentResult === 'error'}
+        />
       )}
     </div>
   )
