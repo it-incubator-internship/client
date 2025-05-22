@@ -233,6 +233,8 @@ export const en: LocaleType = {
       errorSelected: 'A variant must be selected',
       expire: 'Expire at',
       modalCancelSubscription: {
+        error: 'Some error happened. Auto-renewal has not been canceled',
+        success: 'Auto-renewal has been successfully canceled',
         text: 'Auto-renewal will be disabled. Are you sure?',
         textButton: 'OK',
         title: 'Cancel auto-renewal',

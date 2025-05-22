@@ -67,6 +67,7 @@ export type PaymentTariffsReturnType = {
   name: string
   paymentSystem: string
   period: number
+  price: number
   tariffId: number
 }
 

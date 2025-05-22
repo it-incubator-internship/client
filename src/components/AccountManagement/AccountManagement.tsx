@@ -23,8 +23,10 @@ import {
 } from '@/services/profile/profile-api'
 import { PaymentTariffsReturnType, PaymentType } from '@/services/profile/profile-types'
 import convertDate from '@/utils/convertDate'
+import { showErrorToast, showSuccessToast } from '@/utils/toastConfig'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox, FormRadioGroup, PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@robur_/ui-kit'
+import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 
 import s from './AccountManagement.module.scss'
@@ -62,6 +64,7 @@ export const AccountManagement = () => {
     resolver: zodResolver(accountManagementSchema(t)),
   })
   const router = useRouter()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [paymentSystem, setPaymentSystem] = useState(null)
   const [createPaymentModalOpened, setCreatePaymentModalOpened] = useState(false)
@@ -97,9 +100,9 @@ export const AccountManagement = () => {
       (acc: PaymentType[], current: PaymentTariffsReturnType): PaymentType[] => {
         if (!acc.some(item => item.period === current.period)) {
           acc.push({
-            label: `$${123} per ${current.period} Day`,
+            label: `$${current.price} per ${current.period} Day`,
             period: current.period,
-            price: 123,
+            price: current.price,
             value: `${current.period}_day`,
           })
         }
@@ -115,6 +118,15 @@ export const AccountManagement = () => {
 
     setPaymentSystem(paymentSystem)
     setCreatePaymentModalOpened(true)
+  }
+
+  const cancelSubscriptionHandler = async () => {
+    try {
+      await cancelSubscription()
+      showSuccessToast(t.myProfileSettings.accountManagementPayment.modalCancelSubscription.success)
+    } catch (e) {
+      showErrorToast(t.myProfileSettings.accountManagementPayment.modalCancelSubscription.error)
+    }
   }
 
   const onSubmit = async (data: any) => {
@@ -207,6 +219,7 @@ export const AccountManagement = () => {
         <div className={s.AutoRenewalCheckbox}>
           <Checkbox
             checked={subscriptionData.isRenewal}
+            disabled={!subscriptionData.isRenewal}
             onCheckedChange={handleChangeAutoRenewal}
             type={'button'}
           >
@@ -265,7 +278,7 @@ export const AccountManagement = () => {
       </form>
       {cancelSubscriptionModalOpened && (
         <CancelSubscriptionModal
-          onApprove={cancelSubscription}
+          onApprove={cancelSubscriptionHandler}
           onClose={handleCancelSubscriptionModalClose}
           open={cancelSubscriptionModalOpened}
         />
