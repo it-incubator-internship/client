@@ -62,3 +62,32 @@ export type CityReturnType = {
   country_id: number
   title_ru: string
 }
+
+export type PaymentTariffsReturnType = {
+  name: string
+  paymentSystem: string
+  period: number
+  price: number
+  tariffId: number
+}
+
+export type PaymentType = {
+  label: string
+  period?: number
+  price?: number
+  value: string
+}
+
+export type TariffType = {
+  id: number
+  name: string
+  period: number
+  price: number
+}
+
+export type SubscriptionType = {
+  isRenewal: boolean
+  subscriptionCreatedAt: string
+  subscriptionEndAt: string
+  tariffPlan: TariffType
+}

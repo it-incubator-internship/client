@@ -9,6 +9,8 @@ import {
   CountryReturnType,
   EditProfileArgs,
   EditProfileResponse,
+  PaymentTariffsReturnType,
+  SubscriptionType,
   TransformedType,
 } from './profile-types'
 
@@ -40,6 +42,13 @@ const transformDataCountry = (data: CountryReturnType[], locale: string) => {
 
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
+    cancelSubscription: builder.mutation<void, void>({
+      query: file => ({
+        body: file,
+        method: 'POST',
+        url: `/v1/payments/cancel-my-current-subscription`,
+      }),
+    }),
     deleteAvatarFromServer: builder.mutation<void, void>({
       query: () => ({
         method: 'DELETE',
@@ -79,9 +88,21 @@ export const profileApi = inctagramApi.injectEndpoints({
         transformDataCountry(data, 'ru')
         transformDataCountry(data, 'en')
       },
-      query: args => ({
+      query: () => ({
         method: 'GET',
         url: `/v1/localization/countries`,
+      }),
+    }),
+    getMyCurrentSubscription: builder.query<SubscriptionType, void>({
+      query: () => ({
+        method: 'GET',
+        url: `/v1/payments/my-current-subscription`,
+      }),
+    }),
+    getPaymentLinkByTariffId: builder.query<{ paymentLink: string }, number>({
+      query: tariffId => ({
+        method: 'GET',
+        url: `/v1/payments/payment-link/${tariffId}`,
       }),
     }),
     getProfile: builder.query<EditProfileResponse, { id: string }>({
@@ -91,8 +112,14 @@ export const profileApi = inctagramApi.injectEndpoints({
         url: `/v1/user/profile/${args.id}`,
       }),
     }),
+    getTariffPlanes: builder.query<PaymentTariffsReturnType[], void>({
+      query: () => ({
+        method: 'GET',
+        url: `/v1/payments/tariff-plans`,
+      }),
+    }),
     getUsersCount: builder.query<getUsersTotalCountResponse, void>({
-      query: args => ({
+      query: () => ({
         method: 'GET',
         url: `/v1/user/counts`,
       }),
@@ -114,11 +141,15 @@ export const {
 } = profileApi
 
 export const {
+  useCancelSubscriptionMutation,
   useDeleteAvatarFromServerMutation,
   useEditProfileMutation,
+  useGetMyCurrentSubscriptionQuery,
   useGetProfileQuery,
+  useGetTariffPlanesQuery,
   useLazyGetCitiesQuery,
   useLazyGetCountriesQuery,
+  useLazyGetPaymentLinkByTariffIdQuery,
   useLazyGetProfileQuery,
   useSendAvatarToServerMutation,
 } = profileApi

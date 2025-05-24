@@ -1,0 +1,30 @@
+.container{
+  .blockPaymentButtons{
+    display: flex;
+    padding: 20px 0;
+    justify-content: flex-end;
+    gap: 20px;
+    button {
+      cursor: pointer;
+    }
+    .svg {
+      width: 94px;
+      height: 64px;
+      background-color: #0a6638;
+    }
+    .blockPaymentOr{
+      padding-top: 20px;
+    }
+  }
+  .blockCurrentSubscription {
+    display: flex;
+    gap: 30px;
+    .blockData {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .AutoRenewalCheckbox{
+    margin-top: 20px;
+  }
+}

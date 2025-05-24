@@ -1,3 +1,4 @@
+import { AccountManagement } from '@/components/AccountManagement/AccountManagement'
 import { pluralizeRu } from '@/utils/createPluralize'
 
 export const ru = {
@@ -223,6 +224,37 @@ export const ru = {
     aUserUnder13CannotCreateProfile: 'Пользователь младше 13 лет не может создать профиль.',
     aboutMe: 'Обо мне',
     accountManagement: 'Управление учетными записями',
+    accountManagementPayment: {
+      accountType: 'Тип аккаунта:',
+      autoRenewal: 'Автоматическое продление',
+      currentSubscription: 'Текущая подписка:',
+      errorSelected: 'Необходимо выбрать вариант',
+      expire: 'Срок действия истекает',
+      modalCancelSubscription: {
+        error: 'Ошибка отключения автопродления',
+        success: 'Автопродление успешно отменено',
+        text: 'Автопродление будет выключено. Вы уверены?',
+        textButton: 'OK',
+        title: 'Отмена автопродления',
+      },
+      modalCreatePayment: {
+        text: 'Автопродление будет включено для этого платежа. Вы можете отключить его в любой момент из своего профиля',
+        textButton: 'OK',
+        title: 'Оплата подписки',
+      },
+      modalRequestError: {
+        text: 'Транзакция не удалась. Пожалуйста, напишите в поддержку',
+        textButton: 'Вернуться к оплате',
+        title: 'Ошибка',
+      },
+      modalRequestSuccess: {
+        text: 'Оплата прошла успешно!',
+        textButton: 'Ок',
+        title: 'Успешно',
+      },
+      nextPayment: 'Следующий платеж',
+      subscriptionCosts: 'Стоимость вашей подписки:',
+    },
     addProfilePhoto: 'Добавьте фото профиля',
     addProfilePhotoBlocked: 'Добавление фото профиля недоступно в режиме просмотра',
     clickHereAddProfilePhoto: 'Нажмите здесь, чтобы добавить фотографию профиля',
