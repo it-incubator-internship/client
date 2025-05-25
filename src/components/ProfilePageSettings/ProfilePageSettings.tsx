@@ -6,6 +6,7 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { TabContent, Tabs } from '@robur_/ui-kit'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
+import { MyPayments } from "@/components/MyPayments/MyPayments";
 
 type Props = {
   page?: string
@@ -41,7 +42,7 @@ export const ProfilePageSettings = ({ page }: Props) => {
           { title: t.myProfileSettings.generalInformation, value: 'information' },
           { title: t.myProfileSettings.devices, value: 'devices' },
           { title: t.myProfileSettings.accountManagement, value: 'account' },
-          { disabled: true, title: t.myProfileSettings.myPayments, value: 'payments' },
+          { title: t.myProfileSettings.myPayments, value: 'payments' },
         ]}
       >
         <>
@@ -54,7 +55,9 @@ export const ProfilePageSettings = ({ page }: Props) => {
           <TabContent value={'account'}>
             <AccountManagement />
           </TabContent>
-          <TabContent value={'payments'}>Content about My payments</TabContent>
+          <TabContent value={'payments'}>
+            <MyPayments />
+          </TabContent>
         </>
       </Tabs>
     </div>

@@ -8,10 +8,9 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { updateProfileFormValues, updateProfileSchema } from '@/schemas/updateProfileSchema'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetProfileQuery } from '@/services/profile/profile-api'
-import { Terra } from '@/services/profile/profile-types'
 import { years } from '@/utils/profileUtils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, FormCombobox, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
+import { Button, FormDatePicker, FormInput, FormTextarea } from '@robur_/ui-kit'
 import { useRouter } from 'next/router'
 
 import s from './ProfilePageContent.module.scss'
@@ -103,42 +102,43 @@ export const ProfilePageContent = () => {
             name={'dateOfBirth'}
             years={years}
           />
-          <div style={{ display: 'flex', gap: '24px' }}>
-            <div style={{ flexGrow: 1 }}>
-              <div>{t.myProfileSettings.selectYourCountry}</div>
-              <FormCombobox
-                control={control}
-                getDataForCombobox={setGetDataForCountry}
-                isLoading={isCountriesLoading}
-                markedAsRequired
-                name={Terra.country}
-                onInputClick={getCountriesFromLocalStorage}
-                options={countriesValues ?? []}
-                setValue={value => setValue(Terra.country, value)}
-              />
-            </div>
-            <div style={{ flexGrow: 1 }}>
-              <div>{t.myProfileSettings.selectYourCity}</div>
-
-              <FormCombobox
-                control={control}
-                disabled={!countryValue}
-                getDataForCombobox={setGetDataForCity}
-                isLoading={isCitiesLoading}
-                markedAsRequired
-                name={Terra.city}
-                onInputClick={() => handleClickInputCity()}
-                options={citiesValues ?? []}
-                requestItemOnKeyDown={() => {
-                  if (!arrowDownPressed) {
-                    handleClickInputCity()
-                    setArrowDownPressed(true)
-                  }
-                }}
-                setValue={value => setValue(Terra.city, value)}
-              />
-            </div>
-          </div>
+          {/*<div style={{ display: 'flex', gap: '24px' }}>*/}
+          {/*  <div style={{ flexGrow: 1 }}>*/}
+          {/*    <div>{t.myProfileSettings.selectYourCountry}</div>*/}
+          {/*    <FormCombobox*/}
+          {/*      control={control as any}*/}
+          {/*      getDataForCombobox={setGetDataForCountry}*/}
+          {/*      isLoading={isCountriesLoading}*/}
+          {/*      markedAsRequired*/}
+          {/*      name={Terra.country}*/}
+          {/*      onInputClick={getCountriesFromLocalStorage}*/}
+          {/*      // @ts-ignore*/}
+          {/*      options={countriesValues ?? []}*/}
+          {/*      setValue={value => setValue(Terra.country, value as string)}*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*  <div style={{ flexGrow: 1 }}>*/}
+          {/*    <div>{t.myProfileSettings.selectYourCity}</div>*/}
+          {/*    <FormCombobox*/}
+          {/*      control={control as any}*/}
+          {/*      disabled={!countryValue}*/}
+          {/*      getDataForCombobox={setGetDataForCity}*/}
+          {/*      isLoading={isCitiesLoading}*/}
+          {/*      markedAsRequired*/}
+          {/*      name={Terra.city}*/}
+          {/*      onInputClick={() => handleClickInputCity()}*/}
+          {/*      // @ts-ignore*/}
+          {/*      options={citiesValues ?? []}*/}
+          {/*      requestItemOnKeyDown={() => {*/}
+          {/*        if (!arrowDownPressed) {*/}
+          {/*          handleClickInputCity()*/}
+          {/*          setArrowDownPressed(true)*/}
+          {/*        }*/}
+          {/*      }}*/}
+          {/*      setValue={value => setValue(Terra.city, value as string)}*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*</div>*/}
           <FormTextarea
             className={s.textArea}
             control={control}

@@ -20,5 +20,5 @@ export const inctagramApi = createApi({
     }
   },
   reducerPath: 'inctagramApi',
-  tagTypes: ['Me', 'Sessions', 'Profile', 'Post'],
+  tagTypes: ['Me', 'Sessions', 'Profile', 'Post', 'Subscription'],
 })
