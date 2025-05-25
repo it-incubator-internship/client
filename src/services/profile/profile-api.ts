@@ -43,6 +43,7 @@ const transformDataCountry = (data: CountryReturnType[], locale: string) => {
 export const profileApi = inctagramApi.injectEndpoints({
   endpoints: builder => ({
     cancelSubscription: builder.mutation<void, void>({
+      invalidatesTags: ['Subscription'],
       query: file => ({
         body: file,
         method: 'POST',
@@ -94,6 +95,7 @@ export const profileApi = inctagramApi.injectEndpoints({
       }),
     }),
     getMyCurrentSubscription: builder.query<SubscriptionType, void>({
+      providesTags: ['Subscription'],
       query: () => ({
         method: 'GET',
         url: `/v1/payments/my-current-subscription`,
