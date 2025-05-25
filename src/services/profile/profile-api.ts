@@ -8,11 +8,11 @@ import {
   CountryLocale,
   CountryReturnType,
   EditProfileArgs,
-  EditProfileResponse,
+  EditProfileResponse, MyPaymentsPaginationArgs, PaymentsResponse,
   PaymentTariffsReturnType,
   SubscriptionType,
-  TransformedType,
-} from './profile-types'
+  TransformedType
+} from "./profile-types";
 
 const transformDataCountry = (data: CountryReturnType[], locale: string) => {
   const countryEn: Array<TransformedType> = []
@@ -99,6 +99,18 @@ export const profileApi = inctagramApi.injectEndpoints({
         url: `/v1/payments/my-current-subscription`,
       }),
     }),
+    getMyPayments: builder.query<PaymentsResponse, MyPaymentsPaginationArgs>({
+      query: ({ pageNumber, pageSize, sortBy, sortDirection }) => ({
+        method: 'GET',
+        params: {
+          pageNumber,
+          pageSize,
+          sortBy,
+          sortDirection,
+        },
+        url: `/v1/payments/my-payments`,
+      }),
+    }),
     getPaymentLinkByTariffId: builder.query<{ paymentLink: string }, number>({
       query: tariffId => ({
         method: 'GET',
@@ -145,6 +157,7 @@ export const {
   useDeleteAvatarFromServerMutation,
   useEditProfileMutation,
   useGetMyCurrentSubscriptionQuery,
+  useGetMyPaymentsQuery,
   useGetProfileQuery,
   useGetTariffPlanesQuery,
   useLazyGetCitiesQuery,
