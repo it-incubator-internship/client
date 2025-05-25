@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { SortableTh } from '@/components/MyPayments/SortableTh'
 import Spinner from '@/components/Preloaders/Spinner/Spinner'
 import { useMeQuery } from '@/services/auth/authApi'
 import { useGetMyPaymentsQuery } from '@/services/profile/profile-api'
@@ -9,11 +10,10 @@ import styles from './MyPayments.module.scss'
 
 export const MyPayments = () => {
   const { data: meData, isLoading: startIsLoading } = useMeQuery()
-  const currentUserId = meData?.userId
 
   const [pagePagination, setPagePagination] = useState({
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 5,
   })
 
   const [sortMyPayments, setSortMyPayments] = useState({
@@ -23,7 +23,7 @@ export const MyPayments = () => {
 
   const { data: myPayments, isLoading: isLoadingMyPayments } = useGetMyPaymentsQuery(
     { ...pagePagination, ...sortMyPayments },
-    { skip: !currentUserId }
+    { skip: !meData }
   )
 
   if (startIsLoading || isLoadingMyPayments || !myPayments) {
@@ -32,30 +32,59 @@ export const MyPayments = () => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Date of Payment</th>
-              <th>End date of subscription</th>
-              <th>Price</th>
-              <th>Subscription Type</th>
-              <th>Payment Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            {myPayments?.items.map((row, idx) => (
-              <tr key={idx}>
-                <td>{row.dateOfPayment}</td>
-                <td>{row.endDateOfSubscription}</td>
-                <td>${row.price}</td>
-                <td>{row.subscriptionType}</td>
-                <td>{row.paymentType}</td>
+      {!myPayments.items || myPayments.items.length === 0 ? (
+        <div>No subscriptions found</div>
+      ) : (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <SortableTh
+                  field={'dateOfPayment'}
+                  label={'Date of Payment'}
+                  setSort={setSortMyPayments}
+                  sort={sortMyPayments}
+                />
+                <SortableTh
+                  field={'endDateOfSubscription'}
+                  label={'End date of subscription'}
+                  setSort={setSortMyPayments}
+                  sort={sortMyPayments}
+                />
+                <SortableTh
+                  field={'price'}
+                  label={'Price'}
+                  setSort={setSortMyPayments}
+                  sort={sortMyPayments}
+                />
+                <SortableTh
+                  field={'subscriptionType'}
+                  label={'Subscription Type'}
+                  setSort={setSortMyPayments}
+                  sort={sortMyPayments}
+                />
+                <SortableTh
+                  field={'paymentType'}
+                  label={'Payment Type'}
+                  setSort={setSortMyPayments}
+                  sort={sortMyPayments}
+                />
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {myPayments?.items.map((row, idx) => (
+                <tr key={idx}>
+                  <td>{row.dateOfPayment}</td>
+                  <td>{row.endDateOfSubscription}</td>
+                  <td>${row.price}</td>
+                  <td>{row.subscriptionType}</td>
+                  <td>{row.paymentType}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <Pagination
         className={styles.pagination}

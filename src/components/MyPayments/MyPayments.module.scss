@@ -1,8 +1,6 @@
 .wrapper {
   padding: 20px;
-  color: white;
-  //background-color: #0d1117;
-  //font-family: Arial, sans-serif;
+  color: var(--color-light-100);
 }
 
 .tabs {
@@ -11,9 +9,7 @@
   margin-bottom: 20px;
 
   button {
-    //background: transparent;
     border: none;
-    //color: gray;
     font-weight: bold;
     cursor: pointer;
 
@@ -24,13 +20,13 @@
 
   .activeTab {
     color: white;
-    border-bottom: 2px solid #3f8cff;
+    border-bottom: 2px solid var(--color-light-100);
   }
 }
 
 .tableWrapper {
   overflow-x: auto;
-  border: 1px solid #171717;
+  border: 1px solid var(--color-dark-500);
   border-radius: 8px;
 }
 
@@ -38,10 +34,12 @@
   width: 100%;
   border-collapse: collapse;
 
-  th, td {
+  th,
+  td {
     padding: 12px;
     text-align: left;
   }
+
   td {
     font-weight: 400;
     font-size: 14px;
@@ -49,7 +47,7 @@
   }
 
   thead {
-    background-color: #171717;
+    background-color: var(--color-dark-500);
 
     th {
       font-weight: 600;
@@ -60,46 +58,16 @@
 
   tbody {
     tr {
-      border-top: 1px solid #333;
+      border-top: 1px solid var(--color-dark-100);
 
       &:hover {
-        background-color: #1a1a1a;
+        background-color: var(--color-dark-300);
       }
     }
   }
 }
 
 .pagination {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-top: 20px;
-  font-size: 14px;
-
-  button {
-    margin: 0 4px;
-    //background: transparent;
-    color: white;
-    border: 1px solid #555;
-    padding: 4px 8px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #3f8cff;
-    }
-  }
-  .activePage {
-    color: #0d0d0d;
-    width: 24px;
-    height: 24px;
-    border-radius: 2px;
-  }
-  select {
-    margin: 0 6px;
-    padding: 2px;
-    //background-color: #0d1117;
-    color: white;
-    border: 1px solid #444;
-  }
+  padding: 10px;
 }
-
