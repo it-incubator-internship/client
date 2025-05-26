@@ -97,7 +97,7 @@ export const MyPayments = () => {
         }
         onPageSizeChange={size =>
           setPagePagination({
-            pageNumber: 1, // всегда сбрасываем на первую страницу при смене размера
+            pageNumber: 1,
             pageSize: size,
           })
         }
