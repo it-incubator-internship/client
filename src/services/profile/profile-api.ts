@@ -8,11 +8,13 @@ import {
   CountryLocale,
   CountryReturnType,
   EditProfileArgs,
-  EditProfileResponse, MyPaymentsPaginationArgs, PaymentsResponse,
+  EditProfileResponse,
+  MyPaymentsPaginationArgs,
   PaymentTariffsReturnType,
+  PaymentsResponse,
   SubscriptionType,
-  TransformedType
-} from "./profile-types";
+  TransformedType,
+} from './profile-types'
 
 const transformDataCountry = (data: CountryReturnType[], locale: string) => {
   const countryEn: Array<TransformedType> = []
