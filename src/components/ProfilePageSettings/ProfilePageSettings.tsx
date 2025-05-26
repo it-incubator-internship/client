@@ -1,5 +1,6 @@
 import { AccountManagement } from '@/components/AccountManagement/AccountManagement'
 import { Devices } from '@/components/Devices/Devices'
+import { MyPayments } from '@/components/MyPayments/MyPayments'
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -26,6 +27,9 @@ export const ProfilePageSettings = ({ page }: Props) => {
       case 'information':
         router.push(`${PATH.PROFILE_EDIT}/${params.userId}`)
         break
+      case 'payments':
+        router.push(`${PATH.PROFILE_EDIT}/${params.userId}/payments`)
+        break
       default:
         router.push(`${PATH.PROFILE_EDIT}/${params.userId}`)
     }
@@ -41,7 +45,7 @@ export const ProfilePageSettings = ({ page }: Props) => {
           { title: t.myProfileSettings.generalInformation, value: 'information' },
           { title: t.myProfileSettings.devices, value: 'devices' },
           { title: t.myProfileSettings.accountManagement, value: 'account' },
-          { disabled: true, title: t.myProfileSettings.myPayments, value: 'payments' },
+          { title: t.myProfileSettings.myPayments, value: 'payments' },
         ]}
       >
         <>
@@ -54,7 +58,9 @@ export const ProfilePageSettings = ({ page }: Props) => {
           <TabContent value={'account'}>
             <AccountManagement />
           </TabContent>
-          <TabContent value={'payments'}>Content about My payments</TabContent>
+          <TabContent value={'payments'}>
+            <MyPayments />
+          </TabContent>
         </>
       </Tabs>
     </div>

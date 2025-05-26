@@ -22,6 +22,29 @@ export type EditProfileResponse = {
   userName: string
 }
 
+export type MyPaymentsPaginationArgs = {
+  pageNumber: number
+  pageSize: number
+  sortBy: string
+  sortDirection: string
+}
+
+type PaymentItem = {
+  dateOfPayment: string
+  endDateOfSubscription: string
+  paymentType: string
+  price: number
+  subscriptionType: string
+}
+
+export type PaymentsResponse = {
+  items: PaymentItem[]
+  page: number
+  pageSize: number
+  pagesCount: number
+  totalCount: number
+}
+
 export type CountryReturnType = {
   country_id: number
   title_en: string
