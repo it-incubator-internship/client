@@ -1,12 +1,12 @@
 import { AccountManagement } from '@/components/AccountManagement/AccountManagement'
 import { Devices } from '@/components/Devices/Devices'
+import { MyPayments } from '@/components/MyPayments/MyPayments'
 import { ProfilePageContent } from '@/components/ProfilePageContent/ProfilePageContent'
 import { PATH } from '@/consts/route-paths'
 import { useTranslation } from '@/hooks/useTranslation'
 import { TabContent, Tabs } from '@robur_/ui-kit'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
-import { MyPayments } from "@/components/MyPayments/MyPayments";
 
 type Props = {
   page?: string
@@ -26,6 +26,9 @@ export const ProfilePageSettings = ({ page }: Props) => {
         break
       case 'information':
         router.push(`${PATH.PROFILE_EDIT}/${params.userId}`)
+        break
+      case 'payments':
+        router.push(`${PATH.PROFILE_EDIT}/${params.userId}/payments`)
         break
       default:
         router.push(`${PATH.PROFILE_EDIT}/${params.userId}`)
